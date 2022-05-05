@@ -109,12 +109,13 @@ public class Ghost extends Creature {
 	}
 
 	private void computeTargetTile(GameModel game) {
-		if (state == GhostState.EATEN) {
+		switch (state) {
+
+		case EATEN -> {
 			target = new Vector2(13, 14);
-			return;
 		}
 
-		if (state == GhostState.FRIGHTENED) {
+		case FRIGHTENED -> {
 			List<Direction> directions = Arrays.asList(Direction.values());
 			Collections.shuffle(directions);
 			for (Direction direction : directions) {
@@ -126,7 +127,7 @@ public class Ghost extends Creature {
 			}
 		}
 
-		if (state == GhostState.SCATTERING) {
+		case SCATTERING -> {
 			target = switch (id) {
 			case GameModel.BLINKY -> new Vector2(25, 0);
 			case GameModel.PINKY -> new Vector2(2, 0);
@@ -134,35 +135,36 @@ public class Ghost extends Creature {
 			case GameModel.CLYDE -> new Vector2(0, 34);
 			default -> null;
 			};
-			return;
 		}
 
-		// state == GhostState.CHASING:
-		var pacTile = game.pac.tile();
-		var moveDir = game.pac.moveDir;
+		case CHASING -> {
+			var moveDir = game.pac.moveDir;
 
-		switch (id) {
-		case GameModel.BLINKY -> {
-			target = pacTile;
-		}
-		case GameModel.PINKY -> {
-			Vector2 pacPlus4 = pacTile.plus(moveDir.vector.times(4));
-			if (moveDir == Direction.UP) {
-				pacPlus4 = pacPlus4.plus(new Vector2(-4, 0));
+			switch (id) {
+			case GameModel.BLINKY -> {
+				target = game.pac.tile();
 			}
-			target = pacPlus4;
-		}
-		case GameModel.INKY -> {
-			Vector2 pacPlus2 = pacTile.plus(moveDir.vector.times(2));
-			if (moveDir == Direction.UP) {
-				pacPlus2 = pacPlus2.plus(new Vector2(-2, 0));
+			case GameModel.PINKY -> {
+				Vector2 pacPlus4 = game.pac.tile().plus(moveDir.vector.times(4));
+				if (moveDir == Direction.UP) {
+					pacPlus4 = pacPlus4.plus(new Vector2(-4, 0));
+				}
+				target = pacPlus4;
 			}
-			Vector2 blinkyTile = game.ghosts[GameModel.BLINKY].tile();
-			target = pacPlus2.times(2).minus(blinkyTile);
+			case GameModel.INKY -> {
+				Vector2 pacPlus2 = game.pac.tile().plus(moveDir.vector.times(2));
+				if (moveDir == Direction.UP) {
+					pacPlus2 = pacPlus2.plus(new Vector2(-2, 0));
+				}
+				Vector2 blinkyTile = game.ghosts[GameModel.BLINKY].tile();
+				target = pacPlus2.times(2).minus(blinkyTile);
+			}
+			case GameModel.CLYDE -> {
+				target = tile().dist(game.pac.tile()) < 8 ? new Vector2(0, 34) : game.pac.tile();
+			}
+			}
 		}
-		case GameModel.CLYDE -> {
-			target = tile().dist(pacTile) < 8 ? new Vector2(0, 34) : pacTile;
-		}
+
 		}
 	}
 
