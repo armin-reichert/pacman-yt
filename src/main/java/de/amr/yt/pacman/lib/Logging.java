@@ -1,7 +1,7 @@
 /*
 MIT License
 
-Copyright (c) 2021 Armin Reichert
+Copyright (c) 2022 Armin Reichert
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -20,7 +20,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
- */
+*/
 package de.amr.yt.pacman.lib;
 
 import java.time.LocalTime;
@@ -34,7 +34,7 @@ import java.time.format.DateTimeFormatter;
 public class Logging {
 
 	public static final DateTimeFormatter TIME_FORMAT = DateTimeFormatter.ofPattern("HH:mm:ss.SSS");
-	
+
 	public static void log(String msg, Object... args) {
 		String timestamp = TIME_FORMAT.format(LocalTime.now());
 		String message = String.format(msg, args);
