@@ -115,6 +115,8 @@ public class GameController {
 
 	private void init() {
 		game.setLevelNumber(1);
+		game.levelSymbols.clear();
+		game.levelSymbols.add(game.bonusSymbol);
 		game.pac.lives = 3;
 		enterState(GameState.INIT_LEVEL);
 	}
@@ -230,7 +232,8 @@ public class GameController {
 		}
 
 		else if (game.stateTimer == sec(5)) {
-			if (--game.pac.lives > 0) {
+			--game.pac.lives;
+			if (game.pac.lives > 0) {
 				enterState(GameState.READY);
 			} else {
 				for (Ghost ghost : game.ghosts) {
@@ -261,6 +264,7 @@ public class GameController {
 			game.mazeFlashing = false;
 			game.pac.visible = false;
 			game.setLevelNumber(game.levelNumber + 1);
+			game.levelSymbols.add(game.bonusSymbol);
 			enterState(GameState.INIT_LEVEL);
 		}
 	}

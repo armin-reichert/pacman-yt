@@ -158,7 +158,17 @@ public class GameWindow extends JFrame {
 		}
 
 		for (int i = 0; i < game.pac.lives; ++i) {
-			g.drawImage(ss.liveCount, 1 + 2 * i * World.TS, 34 * World.TS, null);
+			g.drawImage(ss.liveCount, (1 + 2 * i) * World.TS, 34 * World.TS, null);
+		}
+
+		int numSymbols = game.levelSymbols.size();
+		int numDisplayed = Math.min(numSymbols, 7);
+		int offset = numSymbols > 7 ? numSymbols - 7 : 0;
+		for (int i = 0; i < numDisplayed; ++i) {
+			int x = (World.COLS - 3) * World.TS - 2 * i * World.TS;
+			int y = (World.ROWS - 2) * World.TS;
+			int symbol = game.levelSymbols.get(i + offset);
+			g.drawImage(ss.bonusSymbols.get(symbol), x, y, null);
 		}
 	}
 

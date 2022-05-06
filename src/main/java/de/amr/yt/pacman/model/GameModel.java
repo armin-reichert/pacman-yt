@@ -25,6 +25,7 @@ package de.amr.yt.pacman.model;
 
 import static de.amr.yt.pacman.controller.GameController.sec;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -82,11 +83,14 @@ public class GameModel {
 	public int ghostFrightenedSeconds;
 	public int numFlashes;
 
+	public final List<Integer> levelSymbols = new ArrayList<>();
+
 	public GameModel() {
 		world = new World();
 		pac = new PacMan();
 		ghosts = new Ghost[] { new Ghost(BLINKY), new Ghost(PINKY), new Ghost(INKY), new Ghost(CLYDE) };
 		setLevelNumber(1);
+		levelSymbols.add(bonusSymbol);
 	}
 
 	private void setLevel(Object... data) {
