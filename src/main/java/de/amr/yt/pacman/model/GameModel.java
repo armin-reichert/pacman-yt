@@ -92,6 +92,9 @@ public class GameModel {
 	}
 
 	public void setLevelNumber(int n) {
+		if (n < 1) {
+			throw new IllegalArgumentException("Level number must at least be 1");
+		}
 		this.levelNumber = n;
 		switch (levelNumber) {
 		case 1 -> {

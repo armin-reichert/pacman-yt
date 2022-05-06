@@ -114,6 +114,7 @@ public class GameController {
 	}
 
 	private void init() {
+		game.setLevelNumber(1);
 		game.pac.lives = 3;
 		enterState(GameState.INIT_LEVEL);
 	}
@@ -260,6 +261,7 @@ public class GameController {
 		else if (game.stateTimer == sec(3)) {
 			game.mazeFlashing = false;
 			game.pac.visible = false;
+			game.setLevelNumber(game.levelNumber + 1);
 			enterState(GameState.INIT_LEVEL);
 		}
 	}
