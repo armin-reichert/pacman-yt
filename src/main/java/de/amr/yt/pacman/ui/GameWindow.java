@@ -134,7 +134,7 @@ public class GameWindow extends JFrame {
 			if (game.state == GameState.PLAYING) {
 				state = game.chasing ? "CHASING" : "SCATTERING";
 			}
-			g.drawString(state + " " + game.stateTimer, 120, 16);
+			g.drawString(state + " " + game.stateTimer, 8, 24);
 			for (Ghost ghost : game.ghosts) {
 				drawGhostTarget(g, ghost);
 				drawGhostState(g, ghost);
@@ -143,8 +143,8 @@ public class GameWindow extends JFrame {
 
 		g.setColor(Color.WHITE);
 		g.setFont(arcadeFont);
-		g.drawString("SCORE " + game.score, 8, 16);
-		g.drawString("L" + game.levelNumber, 100, 16);
+		g.drawString("SCORE " + game.score, 8, 8);
+		g.drawString("LEVEL " + game.levelNumber, 140, 8);
 
 		if (game.state == GameState.READY) {
 			g.setColor(Color.YELLOW);
