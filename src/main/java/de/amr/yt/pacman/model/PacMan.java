@@ -92,7 +92,7 @@ public class PacMan extends Creature {
 				losingPower = true;
 			}
 			if (--powerTime == 0) {
-				game.onPowerStateComplete();
+				game.onPacPowerEnding();
 			}
 		}
 	}

@@ -26,6 +26,7 @@ package de.amr.yt.pacman.model;
 import static de.amr.yt.pacman.controller.GameController.sec;
 
 import java.util.List;
+import java.util.Random;
 
 import de.amr.yt.pacman.controller.GameState;
 import de.amr.yt.pacman.lib.Direction;
@@ -43,9 +44,9 @@ public class GameModel {
 	public static final int CHERRIES = 0, STRAWBERRY = 1, PEACH = 2, APPLE = 3, GRAPES = 4, GALAXIAN = 5, BELL = 6,
 			KEY = 7;
 
-	public World world;
-	public PacMan pac;
-	public Ghost[] ghosts;
+	public final World world;
+	public final PacMan pac;
+	public final Ghost[] ghosts;
 
 	public int bonus; // active bonus index or -1 if inactive
 	public int bonusTimer;
@@ -85,7 +86,6 @@ public class GameModel {
 		world = new World();
 		pac = new PacMan();
 		ghosts = new Ghost[] { new Ghost(BLINKY), new Ghost(PINKY), new Ghost(INKY), new Ghost(CLYDE) };
-		bonus = -1;
 		setLevelNumber(1);
 	}
 
@@ -149,6 +149,9 @@ public class GameModel {
 
 	public void reset() {
 		attackTimer = 0;
+		bonus = -1;
+		bonusTimer = 0;
+		bonusEaten = false;
 		chasing = false;
 		powerPelletsBlinking = false;
 		ghostsKilledByPowerPill = 0;
@@ -194,7 +197,7 @@ public class GameModel {
 		ghosts[CLYDE].state = GhostState.SCATTERING;
 	}
 
-	public void onPowerStateComplete() {
+	public void onPacPowerEnding() {
 		for (Ghost ghost : ghosts) {
 			if (ghost.state != GhostState.EATEN) {
 				ghost.state = chasing ? GhostState.CHASING : GhostState.SCATTERING;
@@ -205,7 +208,7 @@ public class GameModel {
 	public void checkBonus() {
 		if (world.eatenFoodCount == 70 || world.eatenFoodCount == 170) {
 			bonus = bonusSymbol;
-			bonusTimer = sec(10);
+			bonusTimer = sec(9 + new Random().nextDouble());
 			bonusEaten = false;
 		}
 	}
@@ -238,9 +241,9 @@ public class GameModel {
 
 	public void checkPacKilledByGhost() {
 		if (pac.powerTime == 0) {
-			Vector2 tile = pac.tile();
+			Vector2 pacTile = pac.tile();
 			for (Ghost ghost : ghosts) {
-				if (ghost.tile().equals(tile)) {
+				if (ghost.tile().equals(pacTile)) {
 					pac.dead = true;
 					return;
 				}
