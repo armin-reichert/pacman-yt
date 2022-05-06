@@ -49,9 +49,8 @@ public class GameModel {
 	public World world;
 	public PacMan pac;
 	public Ghost[] ghosts;
-	public int score;
 
-	public int bonus;
+	public int bonus; // active bonus index or -1 if inactive
 	public int bonusTimer;
 	public boolean bonusEaten;
 
@@ -59,12 +58,15 @@ public class GameModel {
 	public long stateTimer;
 	public long ticks;
 	public int attackTimer;
-	public List<Integer> scatterStartTicks = List.of(0, sec(27), sec(54), sec(79));
-	public List<Integer> chaseStartTicks = List.of(sec(7), sec(34), sec(59), sec(84));
+
+	public List<Integer> scatterStartTicks;
+	public List<Integer> chaseStartTicks;
+
 	public boolean chasing;
 	public boolean mazeFlashing;
 	public boolean powerPelletsBlinking;
 	public int ghostsKilledByPowerPill;
+	public int score;
 
 	public int levelNumber; // 1,2,...
 
@@ -134,6 +136,17 @@ public class GameModel {
 		     20 -> setLevel(KEY,        1.00f, 0.95f, 0.50f, 120, 1.00f, 60, 1.05f, 0.00f, 0.00f, 0, 0);
 		default -> setLevel(KEY,        0.90f, 0.95f, 0.50f, 120, 1.00f, 60, 1.05f, 0.00f, 0.00f, 0, 0);
 		//@formatter:on
+		}
+
+		if (levelNumber == 1) {
+			scatterStartTicks = List.of(0, sec(27), sec(54), sec(79));
+			chaseStartTicks = List.of(sec(7), sec(34), sec(59), sec(84));
+		} else if (levelNumber <= 4) {
+			scatterStartTicks = List.of(0, sec(27), sec(54), sec(1092));
+			chaseStartTicks = List.of(sec(7), sec(34), sec(59), sec(1092) + 1);
+		} else {
+			scatterStartTicks = List.of(0, sec(25), sec(50), sec(1092));
+			chaseStartTicks = List.of(sec(5), sec(30), sec(55), sec(1092) + 1);
 		}
 	}
 
