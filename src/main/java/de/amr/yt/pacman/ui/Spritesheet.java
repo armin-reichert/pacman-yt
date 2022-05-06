@@ -105,7 +105,7 @@ public class Spritesheet {
 					800, s(2, 8), //
 					1600, s(3, 8));
 
-			bonusSymbols = List.of(s(3, 2), s(3, 3), s(3, 4), s(3, 5), s(3, 6), s(3, 7), s(3, 8));
+			bonusSymbols = List.of(s(2, 3), s(3, 3), s(4, 3), s(5, 3), s(6, 3), s(7, 3), s(8, 3));
 
 			bonusValues = Map.of( //
 					100, s(0, 9), //
