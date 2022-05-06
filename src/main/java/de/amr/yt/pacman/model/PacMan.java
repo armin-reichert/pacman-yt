@@ -77,7 +77,7 @@ public class PacMan extends Creature {
 		for (Ghost ghost : game.ghosts) {
 			if (ghost.state == GhostState.CHASING || ghost.state == GhostState.SCATTERING) {
 				ghost.state = GhostState.FRIGHTENED;
-				ghost.speed = ghost.frightenedSpeed;
+				ghost.speed = game.frightenedGhostSpeed;
 			}
 		}
 		game.ghostsKilledByPowerPill = 0;

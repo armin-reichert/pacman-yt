@@ -45,11 +45,6 @@ public class Ghost extends Creature {
 	public long eatenTimer;
 	public int eatenValue;
 
-	public float normalSpeed = 1.0f;
-	public float frightenedSpeed = 0.55f;
-	public float eatenSpeed = 2.0f;
-	public float tunnelSpeed = 0.5f;
-
 	public Ghost(int id) {
 		this.id = id;
 		canReverse = false;
@@ -79,13 +74,13 @@ public class Ghost extends Creature {
 
 	private void updateSpeed(GameModel game) {
 		if (state == GhostState.EATEN) {
-			speed = eatenTimer > 0 ? 0 : eatenSpeed;
+			speed = eatenTimer > 0 ? 0 : game.eatenGhostSpeed;
 		} else if (game.world.isTunnel(tile())) {
-			speed = tunnelSpeed;
+			speed = game.tunnelGhostSpeed;
 		} else if (state == GhostState.FRIGHTENED) {
-			speed = frightenedSpeed;
+			speed = game.frightenedGhostSpeed;
 		} else {
-			speed = normalSpeed;
+			speed = game.normalGhostSpeed;
 		}
 	}
 

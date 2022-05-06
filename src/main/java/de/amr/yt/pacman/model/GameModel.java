@@ -62,6 +62,11 @@ public class GameModel {
 	public boolean powerPelletsBlinking;
 	public int ghostsKilledByPowerPill;
 
+	public float normalGhostSpeed = 1.0f;
+	public float frightenedGhostSpeed = 0.55f;
+	public float eatenGhostSpeed = 2.0f;
+	public float tunnelGhostSpeed = 0.5f;
+
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder("GameModel[\n");
