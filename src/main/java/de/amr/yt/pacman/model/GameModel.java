@@ -91,265 +91,50 @@ public class GameModel {
 		setLevelNumber(1);
 	}
 
+	private void setLevelData(Object... data) {
+		bonusSymbol = (int) data[0];
+		playerSpeed = (float) data[1] * BASE_SPEED;
+		ghostSpeed = (float) data[2] * BASE_SPEED;
+		ghostSpeedTunnel = (float) data[3] * BASE_SPEED;
+		elroy1DotsLeft = (int) data[4];
+		elroy1Speed = (float) data[5] * BASE_SPEED;
+		elroy2DotsLeft = (int) data[6];
+		elroy2Speed = (float) data[7] * BASE_SPEED;
+		playerSpeedPowered = (float) data[8] * BASE_SPEED;
+		ghostSpeedFrightened = (float) data[9] * BASE_SPEED;
+		ghostFrightenedSeconds = (int) data[10];
+		numFlashes = (int) data[11];
+	}
+
 	public void setLevelNumber(int n) {
 		if (n < 1) {
 			throw new IllegalArgumentException("Level number must at least be 1");
 		}
 		this.levelNumber = n;
 		switch (levelNumber) {
-		case 1 -> {
-			bonusSymbol = CHERRIES;
-			playerSpeed = 0.8f * BASE_SPEED;
-			ghostSpeed = 0.75f * BASE_SPEED;
-			ghostSpeedTunnel = 0.4f * BASE_SPEED;
-			elroy1DotsLeft = 20;
-			elroy1Speed = 0.8f * BASE_SPEED;
-			elroy2DotsLeft = 10;
-			elroy2Speed = 0.85f * BASE_SPEED;
-			playerSpeedPowered = 0.9f * BASE_SPEED;
-			ghostSpeedFrightened = 0.5f * BASE_SPEED;
-			ghostFrightenedSeconds = 6;
-			numFlashes = 5;
-		}
-		case 2 -> {
-			bonusSymbol = STRAWBERRY;
-			playerSpeed = 0.9f * BASE_SPEED;
-			ghostSpeed = 0.85f * BASE_SPEED;
-			ghostSpeedTunnel = 0.45f * BASE_SPEED;
-			elroy1DotsLeft = 30;
-			elroy1Speed = 0.9f * BASE_SPEED;
-			elroy2DotsLeft = 15;
-			elroy2Speed = 0.95f * BASE_SPEED;
-			playerSpeedPowered = 0.95f * BASE_SPEED;
-			ghostSpeedFrightened = 0.55f * BASE_SPEED;
-			ghostFrightenedSeconds = 5;
-			numFlashes = 5;
-		}
-		case 3 -> {
-			bonusSymbol = PEACH;
-			playerSpeed = 0.9f * BASE_SPEED;
-			ghostSpeed = 0.85f * BASE_SPEED;
-			ghostSpeedTunnel = 0.45f * BASE_SPEED;
-			elroy1DotsLeft = 40;
-			elroy1Speed = 0.9f * BASE_SPEED;
-			elroy2DotsLeft = 20;
-			elroy2Speed = 0.95f * BASE_SPEED;
-			playerSpeedPowered = 0.95f * BASE_SPEED;
-			ghostSpeedFrightened = 0.55f * BASE_SPEED;
-			ghostFrightenedSeconds = 4;
-			numFlashes = 5;
-		}
-		case 4 -> {
-			bonusSymbol = PEACH;
-			playerSpeed = 0.9f * BASE_SPEED;
-			ghostSpeed = 0.85f * BASE_SPEED;
-			ghostSpeedTunnel = 0.45f * BASE_SPEED;
-			elroy1DotsLeft = 40;
-			elroy1Speed = 0.9f * BASE_SPEED;
-			elroy2DotsLeft = 20;
-			elroy2Speed = 0.95f * BASE_SPEED;
-			playerSpeedPowered = 0.95f * BASE_SPEED;
-			ghostSpeedFrightened = 0.55f * BASE_SPEED;
-			ghostFrightenedSeconds = 3;
-			numFlashes = 5;
-		}
-		case 5 -> {
-			bonusSymbol = APPLE;
-			playerSpeed = 1.0f * BASE_SPEED;
-			ghostSpeed = 0.95f * BASE_SPEED;
-			ghostSpeedTunnel = 0.50f * BASE_SPEED;
-			elroy1DotsLeft = 40;
-			elroy1Speed = 1.0f * BASE_SPEED;
-			elroy2DotsLeft = 20;
-			elroy2Speed = 1.05f * BASE_SPEED;
-			playerSpeedPowered = 1.0f * BASE_SPEED;
-			ghostSpeedFrightened = 0.60f * BASE_SPEED;
-			ghostFrightenedSeconds = 2;
-			numFlashes = 5;
-		}
-		case 6 -> {
-			bonusSymbol = APPLE;
-			playerSpeed = 1.0f * BASE_SPEED;
-			ghostSpeed = 0.95f * BASE_SPEED;
-			ghostSpeedTunnel = 0.50f * BASE_SPEED;
-			elroy1DotsLeft = 50;
-			elroy1Speed = 1.0f * BASE_SPEED;
-			elroy2DotsLeft = 25;
-			elroy2Speed = 1.05f * BASE_SPEED;
-			playerSpeedPowered = 1.0f * BASE_SPEED;
-			ghostSpeedFrightened = 0.60f * BASE_SPEED;
-			ghostFrightenedSeconds = 5;
-			numFlashes = 5;
-		}
-		case 7, 8 -> {
-			bonusSymbol = GRAPES;
-			playerSpeed = 1.0f * BASE_SPEED;
-			ghostSpeed = 0.95f * BASE_SPEED;
-			ghostSpeedTunnel = 0.50f * BASE_SPEED;
-			elroy1DotsLeft = 50;
-			elroy1Speed = 1.0f * BASE_SPEED;
-			elroy2DotsLeft = 25;
-			elroy2Speed = 1.05f * BASE_SPEED;
-			playerSpeedPowered = 1.0f * BASE_SPEED;
-			ghostSpeedFrightened = 0.60f * BASE_SPEED;
-			ghostFrightenedSeconds = 2;
-			numFlashes = 5;
-		}
-		case 9 -> {
-			bonusSymbol = GALAXIAN;
-			playerSpeed = 1.0f * BASE_SPEED;
-			ghostSpeed = 0.95f * BASE_SPEED;
-			ghostSpeedTunnel = 0.50f * BASE_SPEED;
-			elroy1DotsLeft = 60;
-			elroy1Speed = 1.0f * BASE_SPEED;
-			elroy2DotsLeft = 30;
-			elroy2Speed = 1.05f * BASE_SPEED;
-			playerSpeedPowered = 1.0f * BASE_SPEED;
-			ghostSpeedFrightened = 0.60f * BASE_SPEED;
-			ghostFrightenedSeconds = 1;
-			numFlashes = 3;
-		}
-		case 10 -> {
-			bonusSymbol = GALAXIAN;
-			playerSpeed = 1.0f * BASE_SPEED;
-			ghostSpeed = 0.95f * BASE_SPEED;
-			ghostSpeedTunnel = 0.50f * BASE_SPEED;
-			elroy1DotsLeft = 60;
-			elroy1Speed = 1.0f * BASE_SPEED;
-			elroy2DotsLeft = 30;
-			elroy2Speed = 1.05f * BASE_SPEED;
-			playerSpeedPowered = 1.0f * BASE_SPEED;
-			ghostSpeedFrightened = 0.60f * BASE_SPEED;
-			ghostFrightenedSeconds = 5;
-			numFlashes = 5;
-		}
-		case 11 -> {
-			bonusSymbol = BELL;
-			playerSpeed = 1.0f * BASE_SPEED;
-			ghostSpeed = 0.95f * BASE_SPEED;
-			ghostSpeedTunnel = 0.50f * BASE_SPEED;
-			elroy1DotsLeft = 60;
-			elroy1Speed = 1.0f * BASE_SPEED;
-			elroy2DotsLeft = 30;
-			elroy2Speed = 1.05f * BASE_SPEED;
-			playerSpeedPowered = 1.0f * BASE_SPEED;
-			ghostSpeedFrightened = 0.60f * BASE_SPEED;
-			ghostFrightenedSeconds = 2;
-			numFlashes = 5;
-		}
-		case 12 -> {
-			bonusSymbol = BELL;
-			playerSpeed = 1.0f * BASE_SPEED;
-			ghostSpeed = 0.95f * BASE_SPEED;
-			ghostSpeedTunnel = 0.50f * BASE_SPEED;
-			elroy1DotsLeft = 80;
-			elroy1Speed = 1.0f * BASE_SPEED;
-			elroy2DotsLeft = 40;
-			elroy2Speed = 1.05f * BASE_SPEED;
-			playerSpeedPowered = 1.0f * BASE_SPEED;
-			ghostSpeedFrightened = 0.60f * BASE_SPEED;
-			ghostFrightenedSeconds = 1;
-			numFlashes = 3;
-		}
-		case 13 -> {
-			bonusSymbol = KEY;
-			playerSpeed = 1.0f * BASE_SPEED;
-			ghostSpeed = 0.95f * BASE_SPEED;
-			ghostSpeedTunnel = 0.50f * BASE_SPEED;
-			elroy1DotsLeft = 80;
-			elroy1Speed = 1.0f * BASE_SPEED;
-			elroy2DotsLeft = 40;
-			elroy2Speed = 1.05f * BASE_SPEED;
-			playerSpeedPowered = 1.0f * BASE_SPEED;
-			ghostSpeedFrightened = 0.60f * BASE_SPEED;
-			ghostFrightenedSeconds = 1;
-			numFlashes = 3;
-		}
-		case 14 -> {
-			bonusSymbol = KEY;
-			playerSpeed = 1.0f * BASE_SPEED;
-			ghostSpeed = 0.95f * BASE_SPEED;
-			ghostSpeedTunnel = 0.50f * BASE_SPEED;
-			elroy1DotsLeft = 80;
-			elroy1Speed = 1.0f * BASE_SPEED;
-			elroy2DotsLeft = 40;
-			elroy2Speed = 1.05f * BASE_SPEED;
-			playerSpeedPowered = 1.0f * BASE_SPEED;
-			ghostSpeedFrightened = 0.60f * BASE_SPEED;
-			ghostFrightenedSeconds = 3;
-			numFlashes = 5;
-		}
-		case 15, 16 -> {
-			bonusSymbol = KEY;
-			playerSpeed = 1.0f * BASE_SPEED;
-			ghostSpeed = 0.95f * BASE_SPEED;
-			ghostSpeedTunnel = 0.50f * BASE_SPEED;
-			elroy1DotsLeft = 100;
-			elroy1Speed = 1.0f * BASE_SPEED;
-			elroy2DotsLeft = 50;
-			elroy2Speed = 1.05f * BASE_SPEED;
-			playerSpeedPowered = 1.0f * BASE_SPEED;
-			ghostSpeedFrightened = 0.60f * BASE_SPEED;
-			ghostFrightenedSeconds = 1;
-			numFlashes = 3;
-		}
-		case 17 -> {
-			bonusSymbol = KEY;
-			playerSpeed = 1.0f * BASE_SPEED;
-			ghostSpeed = 0.95f * BASE_SPEED;
-			ghostSpeedTunnel = 0.50f * BASE_SPEED;
-			elroy1DotsLeft = 100;
-			elroy1Speed = 1.0f * BASE_SPEED;
-			elroy2DotsLeft = 50;
-			elroy2Speed = 1.05f * BASE_SPEED;
-			playerSpeedPowered = 0;
-			ghostSpeedFrightened = 0;
-			ghostFrightenedSeconds = 0;
-			numFlashes = 0;
-		}
-		case 18 -> {
-			bonusSymbol = KEY;
-			playerSpeed = 1.0f * BASE_SPEED;
-			ghostSpeed = 0.95f * BASE_SPEED;
-			ghostSpeedTunnel = 0.50f * BASE_SPEED;
-			elroy1DotsLeft = 100;
-			elroy1Speed = 1.0f * BASE_SPEED;
-			elroy2DotsLeft = 50;
-			elroy2Speed = 1.05f * BASE_SPEED;
-			playerSpeedPowered = 1.0f * BASE_SPEED;
-			ghostSpeedFrightened = 0.6f * BASE_SPEED;
-			ghostFrightenedSeconds = 1;
-			numFlashes = 3;
-		}
-		case 19, 20 -> {
-			bonusSymbol = KEY;
-			playerSpeed = 1.0f * BASE_SPEED;
-			ghostSpeed = 0.95f * BASE_SPEED;
-			ghostSpeedTunnel = 0.50f * BASE_SPEED;
-			elroy1DotsLeft = 120;
-			elroy1Speed = 1.0f * BASE_SPEED;
-			elroy2DotsLeft = 60;
-			elroy2Speed = 1.05f * BASE_SPEED;
-			playerSpeedPowered = 0.0f * BASE_SPEED;
-			ghostSpeedFrightened = 0.0f * BASE_SPEED;
-			ghostFrightenedSeconds = 0;
-			numFlashes = 0;
-		}
-		/* 21... */
-		default -> {
-			bonusSymbol = KEY;
-			playerSpeed = 0.90f * BASE_SPEED;
-			ghostSpeed = 0.95f * BASE_SPEED;
-			ghostSpeedTunnel = 0.50f * BASE_SPEED;
-			elroy1DotsLeft = 120;
-			elroy1Speed = 1.0f * BASE_SPEED;
-			elroy2DotsLeft = 60;
-			elroy2Speed = 1.05f * BASE_SPEED;
-			playerSpeedPowered = 0.0f * BASE_SPEED;
-			ghostSpeedFrightened = 0.0f * BASE_SPEED;
-			ghostFrightenedSeconds = 0;
-			numFlashes = 0;
-		}
+		//@formatter:off
+		case 1 -> setLevelData(CHERRIES,   0.80f, 0.75f, 0.40f,  20, 0.80f, 10, 0.85f, 0.90f, 0.50f, 6, 5);
+		case 2 -> setLevelData(STRAWBERRY, 0.90f, 0.85f, 0.45f,  30, 0.90f, 15, 0.95f, 0.95f, 0.55f, 5, 5);
+		case 3 -> setLevelData(PEACH,      0.90f, 0.85f, 0.45f,  40, 0.90f, 20, 0.95f, 0.95f, 0.55f, 4, 5);
+		case 4 -> setLevelData(PEACH,      0.90f, 0.85f, 0.45f,  40, 0.90f, 20, 0.95f, 0.95f, 0.55f, 3, 5);
+		case 5 -> setLevelData(APPLE,      1.00f, 0.95f, 0.50f,  40, 1.00f, 20, 1.05f, 1.00f, 0.60f, 2, 5);
+		case 6 -> setLevelData(APPLE,      1.00f, 0.95f, 0.50f,  50, 1.00f, 25, 1.05f, 1.00f, 0.60f, 5, 5);
+		case 7, 8 -> setLevelData(GRAPES,  1.00f, 0.95f, 0.50f,  50, 1.00f, 25, 1.05f, 1.00f, 0.60f, 2, 5);
+		case 9 -> setLevelData(GALAXIAN,   1.00f, 0.95f, 0.50f,  60, 1.00f, 30, 1.05f, 1.00f, 0.60f, 1, 3);
+		case 10 -> setLevelData(GALAXIAN,  1.00f, 0.95f, 0.50f,  60, 1.00f, 30, 1.05f, 1.00f, 0.60f, 5, 5);
+		case 11 -> setLevelData(BELL,      1.00f, 0.95f, 0.50f,  60, 1.00f, 30, 1.05f, 1.00f, 0.60f, 2, 5);
+		case 12 -> setLevelData(BELL,      1.00f, 0.95f, 0.50f,  80, 1.00f, 40, 1.05f, 1.00f, 0.60f, 1, 3);
+		case 13 -> setLevelData(KEY,       1.00f, 0.95f, 0.50f,  80, 1.00f, 40, 1.05f, 1.00f, 0.60f, 1, 3);
+		case 14 -> setLevelData(KEY,       1.00f, 0.95f, 0.50f,  80, 1.00f, 40, 1.05f, 1.00f, 0.60f, 3, 5);
+		case 15, 
+		     16 -> setLevelData(KEY,       1.00f, 0.95f, 0.50f, 100, 1.00f, 50, 1.05f, 1.00f, 0.60f, 1, 3);
+		case 17 -> setLevelData(KEY,       1.00f, 0.95f, 0.50f, 100, 1.00f, 50, 1.05f, 0.00f, 0.00f, 0, 0);
+		case 18 -> setLevelData(KEY,       1.00f, 0.95f, 0.50f, 100, 1.00f, 50, 1.05f, 1.00f, 0.60f, 1, 3);
+		case 19, 
+		     20 -> setLevelData(KEY,       1.00f, 0.95f, 0.50f, 120, 1.00f, 60, 1.05f, 0.00f, 0.00f, 0, 0);
+		default /* 21... */
+		        -> setLevelData(KEY,       0.90f, 0.95f, 0.50f, 120, 1.00f, 60, 1.05f, 0.00f, 0.00f, 0, 0);
+		//@formatter:on
 		}
 	}
 
