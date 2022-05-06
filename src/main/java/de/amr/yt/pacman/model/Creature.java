@@ -122,14 +122,10 @@ public abstract class Creature {
 	protected boolean tryMove(World world, Direction currentDir, Direction newDir) {
 		boolean canMove = canMove(world, currentDir, newDir);
 		if (canMove) {
-			move(newDir);
+			x += newDir.vector.x * speed;
+			y += newDir.vector.y * speed;
 		}
 		return canMove;
-	}
-
-	protected void move(Direction direction) {
-		x += direction.vector.x * speed;
-		y += direction.vector.y * speed;
 	}
 
 	protected void align(Direction direction) {
@@ -150,28 +146,27 @@ public abstract class Creature {
 			if (currentDir == newDir || currentDir == newDir.opposite()) {
 				return true;
 			}
-			boolean turn = canTurn90Degrees(currentDir);
-			if (turn) {
+			boolean canTurn90 = canTurn90Degrees(currentDir);
+			if (canTurn90) {
 				align(currentDir);
 				align(newDir);
 			}
-			return turn;
-		}
-		float vx = newDir.vector.x * speed;
-		float vy = newDir.vector.y * speed;
-		switch (newDir) {
-		case UP -> {
-			return vy + offsetY() > World.HTS;
-		}
-		case DOWN -> {
-			return vy + offsetY() < World.HTS;
-		}
-		case LEFT -> {
-			return vx + offsetX() > World.HTS;
-		}
-		case RIGHT -> {
-			return vx + offsetX() < World.HTS;
-		}
+			return canTurn90;
+		} else {
+			switch (newDir) {
+			case UP -> {
+				return newDir.vector.y * speed + offsetY() > World.HTS;
+			}
+			case DOWN -> {
+				return newDir.vector.y * speed + offsetY() < World.HTS;
+			}
+			case LEFT -> {
+				return newDir.vector.x * speed + offsetX() > World.HTS;
+			}
+			case RIGHT -> {
+				return newDir.vector.x * speed + offsetX() < World.HTS;
+			}
+			}
 		}
 		return true;
 	}
