@@ -265,6 +265,9 @@ public class GameController {
 			game.pac.visible = false;
 			game.setLevelNumber(game.levelNumber + 1);
 			game.levelSymbols.add(game.bonusSymbol);
+			if (game.levelSymbols.size() == 8) {
+				game.levelSymbols.remove(0);
+			}
 			enterState(GameState.INIT_LEVEL);
 		}
 	}
