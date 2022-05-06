@@ -38,10 +38,8 @@ public class Ghost extends Creature {
 	private static final Direction[] DIR_ORDER = { Direction.UP, Direction.RIGHT, Direction.DOWN, Direction.LEFT };
 
 	public final int id;
-	public Vector2 target;
-
 	public GhostState state;
-
+	public Vector2 targetTile;
 	public long eatenTimer;
 	public int eatenValue;
 
@@ -107,7 +105,7 @@ public class Ghost extends Creature {
 		switch (state) {
 
 		case EATEN -> {
-			target = new Vector2(13, 14);
+			targetTile = new Vector2(13, 14);
 		}
 
 		case FRIGHTENED -> {
@@ -116,14 +114,14 @@ public class Ghost extends Creature {
 			for (Direction direction : directions) {
 				Vector2 neighbor = tile().neighbor(direction);
 				if (canEnter(game.world, neighbor)) {
-					target = neighbor;
+					targetTile = neighbor;
 					return;
 				}
 			}
 		}
 
 		case SCATTERING -> {
-			target = switch (id) {
+			targetTile = switch (id) {
 			case GameModel.BLINKY -> new Vector2(25, 0);
 			case GameModel.PINKY -> new Vector2(2, 0);
 			case GameModel.INKY -> new Vector2(27, 34);
@@ -133,30 +131,32 @@ public class Ghost extends Creature {
 		}
 
 		case CHASING -> {
-			var moveDir = game.pac.moveDir;
-
 			switch (id) {
 			case GameModel.BLINKY -> {
-				target = game.pac.tile();
+				targetTile = game.pac.tile();
 			}
+
 			case GameModel.PINKY -> {
-				Vector2 pacPlus4 = game.pac.tile().plus(moveDir.vector.times(4));
-				if (moveDir == Direction.UP) {
+				Vector2 pacPlus4 = game.pac.tile().plus(game.pac.moveDir.vector.times(4));
+				if (game.pac.moveDir == Direction.UP) {
 					pacPlus4 = pacPlus4.plus(new Vector2(-4, 0));
 				}
-				target = pacPlus4;
+				targetTile = pacPlus4;
 			}
+
 			case GameModel.INKY -> {
-				Vector2 pacPlus2 = game.pac.tile().plus(moveDir.vector.times(2));
-				if (moveDir == Direction.UP) {
+				Vector2 pacPlus2 = game.pac.tile().plus(game.pac.moveDir.vector.times(2));
+				if (game.pac.moveDir == Direction.UP) {
 					pacPlus2 = pacPlus2.plus(new Vector2(-2, 0));
 				}
 				Vector2 blinkyTile = game.ghosts[GameModel.BLINKY].tile();
-				target = pacPlus2.times(2).minus(blinkyTile);
+				targetTile = pacPlus2.times(2).minus(blinkyTile);
 			}
+
 			case GameModel.CLYDE -> {
-				target = tile().dist(game.pac.tile()) < 8 ? new Vector2(0, 34) : game.pac.tile();
+				targetTile = tile().dist(game.pac.tile()) < 8 ? new Vector2(0, 34) : game.pac.tile();
 			}
+
 			}
 		}
 
@@ -172,7 +172,7 @@ public class Ghost extends Creature {
 
 	private void steer(World world) {
 		Vector2 tile = tile();
-		if (target == null) {
+		if (targetTile == null) {
 			return;
 		}
 		double min = Double.MAX_VALUE;
@@ -184,7 +184,7 @@ public class Ghost extends Creature {
 			if (!canEnter(world, neighbor)) {
 				continue;
 			}
-			double dist = neighbor.dist(target);
+			double dist = neighbor.dist(targetTile);
 			if (dist < min) {
 				min = dist;
 				wishDir = direction;

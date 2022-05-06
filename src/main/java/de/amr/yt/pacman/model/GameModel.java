@@ -108,28 +108,28 @@ public class GameModel {
 		ghosts[BLINKY].wishDir = Direction.LEFT;
 		ghosts[BLINKY].moveDir = Direction.LEFT;
 		ghosts[BLINKY].animated = false;
-		ghosts[BLINKY].target = null;
+		ghosts[BLINKY].targetTile = null;
 		ghosts[BLINKY].state = GhostState.SCATTERING;
 
 		ghosts[INKY].placeAtTile(11, 17, World.HTS, 0);
 		ghosts[INKY].wishDir = Direction.UP;
 		ghosts[INKY].moveDir = Direction.UP;
 		ghosts[INKY].animated = false;
-		ghosts[INKY].target = null;
+		ghosts[INKY].targetTile = null;
 		ghosts[INKY].state = GhostState.SCATTERING;
 
 		ghosts[PINKY].placeAtTile(13, 17, World.HTS, 0);
 		ghosts[PINKY].wishDir = Direction.DOWN;
 		ghosts[PINKY].moveDir = Direction.DOWN;
 		ghosts[PINKY].animated = false;
-		ghosts[PINKY].target = null;
+		ghosts[PINKY].targetTile = null;
 		ghosts[PINKY].state = GhostState.SCATTERING;
 
 		ghosts[CLYDE].placeAtTile(15, 17, World.HTS, 0);
 		ghosts[CLYDE].wishDir = Direction.UP;
 		ghosts[CLYDE].moveDir = Direction.UP;
 		ghosts[CLYDE].animated = false;
-		ghosts[CLYDE].target = null;
+		ghosts[CLYDE].targetTile = null;
 		ghosts[CLYDE].state = GhostState.SCATTERING;
 	}
 

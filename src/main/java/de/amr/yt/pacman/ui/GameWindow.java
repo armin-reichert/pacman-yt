@@ -218,7 +218,7 @@ public class GameWindow extends JFrame {
 	}
 
 	private void drawGhostTarget(Graphics2D g, Ghost ghost) {
-		if (ghost.visible && ghost.target != null) {
+		if (ghost.visible && ghost.targetTile != null) {
 			g.setColor(switch (ghost.id) {
 			case GameModel.BLINKY -> Color.RED;
 			case GameModel.PINKY -> Color.PINK;
@@ -226,7 +226,7 @@ public class GameWindow extends JFrame {
 			case GameModel.CLYDE -> Color.ORANGE;
 			default -> null;
 			});
-			g.drawRect(ghost.target.x * World.TS + 2, ghost.target.y * World.TS + 2, 4, 4);
+			g.drawRect(ghost.targetTile.x * World.TS + 2, ghost.targetTile.y * World.TS + 2, 4, 4);
 		}
 	}
 }
