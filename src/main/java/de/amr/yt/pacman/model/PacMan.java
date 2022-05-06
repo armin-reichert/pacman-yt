@@ -25,6 +25,7 @@ package de.amr.yt.pacman.model;
 
 import static de.amr.yt.pacman.controller.GameController.sec;
 
+import de.amr.yt.pacman.lib.Logging;
 import de.amr.yt.pacman.lib.Vector2;
 
 /**
@@ -67,12 +68,13 @@ public class PacMan extends Creature {
 			move(game.world);
 			game.checkFood();
 			game.checkPacKilledByGhost();
+			game.checkGhostsKilledByPac();
 			updatePowerState(game);
 		}
 	}
 
 	public void enterPowerState(GameModel game) {
-		powerTime = sec(5);
+		powerTime = sec(game.ghostFrightenedSeconds);
 		losingPower = false;
 		for (Ghost ghost : game.ghosts) {
 			if (ghost.state == GhostState.CHASING || ghost.state == GhostState.SCATTERING) {
@@ -81,11 +83,11 @@ public class PacMan extends Creature {
 			}
 		}
 		game.ghostsKilledByPowerPill = 0;
+		Logging.log("Pac-Man gets power for %d seconds", game.ghostFrightenedSeconds);
 	}
 
 	private void updatePowerState(GameModel game) {
 		if (powerTime > 0) {
-			game.checkGhostsKilledByPac();
 			if (powerTime == sec(2)) {
 				losingPower = true;
 			}

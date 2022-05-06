@@ -205,7 +205,6 @@ public class GameController {
 			--game.bonusTimer;
 			if (game.bonusTimer == 0) {
 				game.bonus = -1;
-				game.bonusValue = 0;
 			}
 		}
 

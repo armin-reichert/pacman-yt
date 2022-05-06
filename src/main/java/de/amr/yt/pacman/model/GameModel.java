@@ -53,7 +53,6 @@ public class GameModel {
 
 	public int bonus;
 	public int bonusTimer;
-	public int bonusValue;
 	public boolean bonusEaten;
 
 	public GameState state;
@@ -191,8 +190,7 @@ public class GameModel {
 
 	public void checkBonus() {
 		if (world.eatenFoodCount == 70 || world.eatenFoodCount == 170) {
-			bonus = 0;
-			bonusValue = 100; // TODO
+			bonus = bonusSymbol;
 			bonusTimer = sec(10);
 			bonusEaten = false;
 		}
@@ -205,23 +203,22 @@ public class GameModel {
 	}
 
 	public void checkFood() {
-		Vector2 tile = pac.tile();
+		Vector2 pacTile = pac.tile();
 		int oldScore = score;
-		if (world.eatPellet(tile)) {
+		if (world.eatPellet(pacTile)) {
 			score += 10;
 			checkBonus();
 			checkExtraLife(oldScore);
-		} else if (world.eatPowerPellet(tile)) {
+		} else if (world.eatPowerPellet(pacTile)) {
 			score += 50;
 			checkBonus();
 			checkExtraLife(oldScore);
 			pac.enterPowerState(this);
 		}
-		if (bonus != -1 && !bonusEaten && tile.equals(world.bonusTile)) {
-			score += bonusValue;
+		if (bonus != -1 && !bonusEaten && pacTile.equals(world.bonusTile)) {
 			bonusTimer = sec(2);
-			bonusValue = 100;
 			bonusEaten = true;
+			score += bonusValue(bonusSymbol);
 		}
 	}
 
@@ -238,10 +235,14 @@ public class GameModel {
 	}
 
 	public void checkGhostsKilledByPac() {
+		if (pac.powerTime == 0) {
+			return;
+		}
 		Vector2 pacTile = pac.tile();
 		for (Ghost ghost : ghosts) {
 			if (ghost.state == GhostState.FRIGHTENED && ghost.tile().equals(pacTile)) {
 				ghostsKilledByPowerPill++;
+				ghost.state = GhostState.EATEN;
 				ghost.eatenTimer = sec(1);
 				ghost.eatenValue = switch (ghostsKilledByPowerPill) {
 				case 1 -> 200;
@@ -250,9 +251,22 @@ public class GameModel {
 				case 4 -> 1600;
 				default -> 0;
 				};
-				ghost.state = GhostState.EATEN;
 				score += ghost.eatenValue;
 			}
 		}
+	}
+
+	public int bonusValue(int symbol) {
+		return switch (symbol) {
+		case CHERRIES -> 100;
+		case STRAWBERRY -> 300;
+		case PEACH -> 500;
+		case APPLE -> 700;
+		case GRAPES -> 1000;
+		case GALAXIAN -> 2000;
+		case BELL -> 3000;
+		case KEY -> 5000;
+		default -> throw new IllegalArgumentException("Unknown symbol ID: " + symbol);
+		};
 	}
 }

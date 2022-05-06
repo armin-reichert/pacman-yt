@@ -118,7 +118,8 @@ public class GameWindow extends JFrame {
 		}
 
 		if (game.bonus != -1) {
-			BufferedImage sprite = game.bonusEaten ? ss.bonusValues.get(game.bonusValue) : ss.bonusSymbols.get(game.bonus);
+			int bonusValue = game.bonusValue(game.bonus);
+			BufferedImage sprite = game.bonusEaten ? ss.bonusValues.get(bonusValue) : ss.bonusSymbols.get(game.bonus);
 			g.drawImage(sprite, 13 * World.TS, 20 * World.TS - World.HTS, null);
 		}
 
