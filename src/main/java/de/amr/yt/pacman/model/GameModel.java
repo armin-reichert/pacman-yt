@@ -36,10 +36,7 @@ import de.amr.yt.pacman.lib.Vector2;
  */
 public class GameModel {
 
-	public static final int BLINKY = 0;
-	public static final int PINKY = 1;
-	public static final int INKY = 2;
-	public static final int CLYDE = 3;
+	public static final int BLINKY = 0, PINKY = 1, INKY = 2, CLYDE = 3;
 
 	public static final float BASE_SPEED = 1.25f;
 
@@ -159,7 +156,7 @@ public class GameModel {
 		pac.placeAtTile(13, 26, World.HTS, 0);
 		pac.wishDir = Direction.LEFT;
 		pac.moveDir = Direction.LEFT;
-		pac.speed = 1.25f;
+		pac.speed = playerSpeed;
 		pac.animFrame = 2;
 		pac.animated = false;
 		pac.dead = false;
@@ -167,6 +164,7 @@ public class GameModel {
 		ghosts[BLINKY].placeAtTile(13, 14, World.HTS, 0);
 		ghosts[BLINKY].wishDir = Direction.LEFT;
 		ghosts[BLINKY].moveDir = Direction.LEFT;
+		ghosts[BLINKY].speed = ghostSpeed;
 		ghosts[BLINKY].animated = false;
 		ghosts[BLINKY].targetTile = null;
 		ghosts[BLINKY].state = GhostState.SCATTERING;
@@ -174,6 +172,7 @@ public class GameModel {
 		ghosts[INKY].placeAtTile(11, 17, World.HTS, 0);
 		ghosts[INKY].wishDir = Direction.UP;
 		ghosts[INKY].moveDir = Direction.UP;
+		ghosts[INKY].speed = ghostSpeed;
 		ghosts[INKY].animated = false;
 		ghosts[INKY].targetTile = null;
 		ghosts[INKY].state = GhostState.SCATTERING;
@@ -181,6 +180,7 @@ public class GameModel {
 		ghosts[PINKY].placeAtTile(13, 17, World.HTS, 0);
 		ghosts[PINKY].wishDir = Direction.DOWN;
 		ghosts[PINKY].moveDir = Direction.DOWN;
+		ghosts[PINKY].speed = ghostSpeed;
 		ghosts[PINKY].animated = false;
 		ghosts[PINKY].targetTile = null;
 		ghosts[PINKY].state = GhostState.SCATTERING;
@@ -188,6 +188,7 @@ public class GameModel {
 		ghosts[CLYDE].placeAtTile(15, 17, World.HTS, 0);
 		ghosts[CLYDE].wishDir = Direction.UP;
 		ghosts[CLYDE].moveDir = Direction.UP;
+		ghosts[CLYDE].speed = ghostSpeed;
 		ghosts[CLYDE].animated = false;
 		ghosts[CLYDE].targetTile = null;
 		ghosts[CLYDE].state = GhostState.SCATTERING;
