@@ -72,13 +72,13 @@ public class Ghost extends Creature {
 
 	private void updateSpeed(GameModel game) {
 		if (state == GhostState.EATEN) {
-			speed = eatenTimer > 0 ? 0 : game.eatenGhostSpeed;
+			speed = eatenTimer > 0 ? 0 : 2 * game.ghostSpeed; // TODO correct?
 		} else if (game.world.isTunnel(tile())) {
-			speed = game.tunnelGhostSpeed;
+			speed = game.ghostSpeedTunnel;
 		} else if (state == GhostState.FRIGHTENED) {
-			speed = game.frightenedGhostSpeed;
+			speed = game.ghostSpeedFrightened;
 		} else {
-			speed = game.normalGhostSpeed;
+			speed = game.ghostSpeed;
 		}
 	}
 
