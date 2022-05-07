@@ -33,6 +33,7 @@ import de.amr.yt.pacman.lib.Vector2;
  */
 public class PacMan extends Creature {
 
+	public final GameModel game;
 	public int lives;
 	public int powerTime;
 	public boolean losingPower;
@@ -40,7 +41,9 @@ public class PacMan extends Creature {
 	public int dyingAnimationTimer;
 	public final int dyingAnimationDuration = sec(1.5);
 
-	public PacMan() {
+	public PacMan(GameModel game) {
+		super(game.world);
+		this.game = game;
 		canReverse = true;
 		powerTime = 0;
 		losingPower = false;
@@ -49,7 +52,7 @@ public class PacMan extends Creature {
 	}
 
 	@Override
-	protected boolean canEnter(World world, Vector2 tile) {
+	protected boolean canEnter(Vector2 tile) {
 		return !world.isBlocked(tile) && !world.isGhostHouse(tile);
 	}
 
@@ -59,21 +62,21 @@ public class PacMan extends Creature {
 				offsetX(), offsetY(), moveDir, wishDir);
 	}
 
-	public void update(GameModel game) {
+	public void update() {
 		if (dead) {
 			if (dyingAnimationTimer > 0) {
 				--dyingAnimationTimer;
 			}
 		} else {
-			move(game.world);
+			moveThroughWorld();
 			game.checkFood();
 			game.checkPacKilledByGhost();
 			game.checkGhostsKilledByPac();
-			updatePowerState(game);
+			updatePowerState();
 		}
 	}
 
-	public void enterPowerState(GameModel game) {
+	public void enterPowerState() {
 		powerTime = sec(game.ghostFrightenedSeconds);
 		losingPower = false;
 		for (Ghost ghost : game.ghosts) {
@@ -86,7 +89,7 @@ public class PacMan extends Creature {
 		Logging.log("Pac-Man gets power for %d seconds", game.ghostFrightenedSeconds);
 	}
 
-	private void updatePowerState(GameModel game) {
+	private void updatePowerState() {
 		if (powerTime > 0) {
 			if (powerTime == sec(2)) {
 				losingPower = true;

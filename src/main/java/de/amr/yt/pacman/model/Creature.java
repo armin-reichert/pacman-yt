@@ -31,6 +31,7 @@ import de.amr.yt.pacman.lib.Vector2;
  */
 public abstract class Creature {
 
+	public final World world;
 	public float x;
 	public float y;
 	public float speed;
@@ -43,7 +44,8 @@ public abstract class Creature {
 	public Direction moveDir;
 	public Direction wishDir;
 
-	public Creature() {
+	public Creature(World world) {
+		this.world = world;
 		wishDir = moveDir = Direction.LEFT;
 		animated = true;
 		visible = true;
@@ -90,15 +92,15 @@ public abstract class Creature {
 		return tileY() * World.TS + World.HTS;
 	}
 
-	public void move(World world) {
+	public void moveThroughWorld() {
 		stuck = false;
 		Vector2 tile = tile();
 		boolean success = false;
 		if (wishDir != moveDir.opposite() || canReverse) {
-			success = tryMove(world, moveDir, wishDir);
+			success = tryMove(moveDir, wishDir);
 		}
 		if (!success) {
-			success = tryMove(world, moveDir, moveDir);
+			success = tryMove(moveDir, moveDir);
 			if (!success) {
 				x = centerX();
 				y = centerY();
@@ -117,10 +119,10 @@ public abstract class Creature {
 //		Logging.log("%s", this);
 	}
 
-	protected abstract boolean canEnter(World world, Vector2 tile);
+	protected abstract boolean canEnter(Vector2 tile);
 
-	protected boolean tryMove(World world, Direction currentDir, Direction newDir) {
-		boolean canMove = canMove(world, currentDir, newDir);
+	protected boolean tryMove(Direction currentDir, Direction newDir) {
+		boolean canMove = canMove(currentDir, newDir);
 		if (canMove) {
 			move(newDir);
 		}
@@ -132,13 +134,13 @@ public abstract class Creature {
 		y += dir.vector.y * speed;
 	}
 
-	protected boolean canMove(World world, Direction currentDir, Direction newDir) {
+	protected boolean canMove(Direction currentDir, Direction newDir) {
 		Vector2 tile = tile();
 		if (tile.x < 0 || tile.x >= World.COLS) {
 			// no sidewards turn in teleport tunnel
 			return currentDir == newDir || currentDir == newDir.opposite();
 		}
-		if (canEnter(world, tile.neighbor(newDir))) {
+		if (canEnter(tile.neighbor(newDir))) {
 			if (newDir == currentDir || newDir == currentDir.opposite()) {
 				return true;
 			}

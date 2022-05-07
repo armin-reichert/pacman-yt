@@ -50,9 +50,24 @@ public class Ghost extends Creature {
 	public int eatenValue;
 
 	public Ghost(GameModel game, int id) {
+		super(game.world);
 		this.game = game;
 		this.id = id;
 		canReverse = false;
+	}
+
+	@Override
+	protected boolean canEnter(Vector2 tile) {
+		if (world.isBlocked(tile)) {
+			return false;
+		}
+		if (world.isGhostHouse(tile)) {
+			return state == GhostState.ENTERING_HOUSE || state == GhostState.LEAVING_HOUSE;
+		}
+		if (state != GhostState.FRIGHTENED && wishDir == Direction.UP && world.isOneWayDown(tile)) {
+			return false;
+		}
+		return true;
 	}
 
 	public void update() {
@@ -86,10 +101,10 @@ public class Ghost extends Creature {
 	private void moveThroughMaze() {
 		if (enteredNewTile) {
 			computeTargetTile();
-			steer(game.world);
+			steer();
 		}
 		updateSpeed();
-		move(game.world);
+		moveThroughWorld();
 	}
 
 	private void updateSpeed() {
@@ -108,20 +123,6 @@ public class Ghost extends Creature {
 		}
 	}
 
-	@Override
-	protected boolean canEnter(World world, Vector2 tile) {
-		if (world.isBlocked(tile)) {
-			return false;
-		}
-		if (world.isGhostHouse(tile)) {
-			return state == GhostState.ENTERING_HOUSE || state == GhostState.LEAVING_HOUSE;
-		}
-		if (state != GhostState.FRIGHTENED && wishDir == Direction.UP && world.isOneWayDown(tile)) {
-			return false;
-		}
-		return true;
-	}
-
 	private void computeTargetTile() {
 		switch (state) {
 
@@ -138,7 +139,7 @@ public class Ghost extends Creature {
 			Collections.shuffle(directions);
 			for (Direction direction : directions) {
 				Vector2 neighbor = tile().neighbor(direction);
-				if (canEnter(game.world, neighbor)) {
+				if (canEnter(neighbor)) {
 					targetTile = neighbor;
 					return;
 				}
@@ -252,7 +253,7 @@ public class Ghost extends Creature {
 		move(wishDir);
 	}
 
-	private void steer(World world) {
+	private void steer() {
 		Vector2 tile = tile();
 		if (targetTile == null) {
 			return;
@@ -263,7 +264,7 @@ public class Ghost extends Creature {
 				continue;
 			}
 			Vector2 neighbor = tile.neighbor(direction);
-			if (!canEnter(world, neighbor)) {
+			if (!canEnter(neighbor)) {
 				continue;
 			}
 			double dist = neighbor.dist(targetTile);

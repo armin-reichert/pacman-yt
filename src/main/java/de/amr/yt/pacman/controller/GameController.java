@@ -150,7 +150,7 @@ public class GameController {
 			ghost.visible = false;
 		}
 		game.pac.visible = false;
-		if (game.stateTimer == sec(2)) {
+		if (game.stateTimer == sec(1)) {
 			enterState(GameState.READY);
 		}
 	}
@@ -228,7 +228,7 @@ public class GameController {
 		if (move != null) {
 			game.pac.wishDir = move;
 		}
-		game.pac.update(game);
+		game.pac.update();
 		if (game.pac.dead) {
 			enterState(GameState.PACMAN_DEAD);
 			return;
@@ -248,7 +248,7 @@ public class GameController {
 	}
 
 	private void update_PACMAN_DEAD() {
-		game.pac.update(game);
+		game.pac.update();
 
 		if (game.stateTimer == 0) {
 			game.pac.animated = false;

@@ -87,7 +87,7 @@ public class GameModel {
 
 	public GameModel() {
 		world = new World();
-		pac = new PacMan();
+		pac = new PacMan(this);
 		ghosts = new Ghost[] { //
 				new Ghost(this, BLINKY), //
 				new Ghost(this, PINKY), //
@@ -238,7 +238,7 @@ public class GameModel {
 			score += 50;
 			checkBonus();
 			checkExtraLife(oldScore);
-			pac.enterPowerState(this);
+			pac.enterPowerState();
 		}
 		if (bonus != -1 && !bonusEaten && pacTile.equals(world.bonusTile)) {
 			bonusTimer = sec(2);
