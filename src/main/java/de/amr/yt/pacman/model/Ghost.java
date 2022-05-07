@@ -56,6 +56,7 @@ public class Ghost extends Creature {
 	public void update(GameModel game) {
 
 		switch (state) {
+		case LOCKED -> bounce(game);
 		case ENTERING_HOUSE -> enterGhostHouse(game);
 		case LEAVING_HOUSE -> leaveGhostHouse(game);
 		case CHASING -> {
@@ -91,7 +92,9 @@ public class Ghost extends Creature {
 	}
 
 	private void updateSpeed(GameModel game) {
-		if (state == GhostState.ENTERING_HOUSE || state == GhostState.LEAVING_HOUSE) {
+		if (state == GhostState.LOCKED) {
+			speed = 0.33f * GameModel.BASE_SPEED;
+		} else if (state == GhostState.ENTERING_HOUSE || state == GhostState.LEAVING_HOUSE) {
 			speed = game.ghostSpeedFrightened;
 		} else if (state == GhostState.EATEN) {
 			speed = eatenTimer > 0 ? 0 : 2 * game.ghostSpeed; // TODO correct?
@@ -121,12 +124,8 @@ public class Ghost extends Creature {
 	private void computeTargetTile(GameModel game) {
 		switch (state) {
 
-		case ENTERING_HOUSE -> {
-			// TODO
-		}
-
-		case LEAVING_HOUSE -> {
-			// TODO
+		case LOCKED, ENTERING_HOUSE, LEAVING_HOUSE -> {
+			targetTile = null;
 		}
 
 		case EATEN -> {
@@ -239,6 +238,19 @@ public class Ghost extends Creature {
 		} else {
 			state = GhostState.LEAVING_HOUSE;
 		}
+	}
+
+	private void bounce(GameModel game) {
+		if (id == BLINKY) {
+			return;
+		}
+		if (y >= 18 * World.TS) {
+			moveDir = wishDir = Direction.UP;
+		} else if (y <= 17 * World.TS) {
+			moveDir = wishDir = Direction.DOWN;
+		}
+		updateSpeed(game);
+		move(wishDir);
 	}
 
 	private void steer(World world) {

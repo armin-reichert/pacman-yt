@@ -24,6 +24,10 @@ SOFTWARE.
 package de.amr.yt.pacman.controller;
 
 import static de.amr.yt.pacman.lib.Logging.log;
+import static de.amr.yt.pacman.model.GameModel.BLINKY;
+import static de.amr.yt.pacman.model.GameModel.CLYDE;
+import static de.amr.yt.pacman.model.GameModel.INKY;
+import static de.amr.yt.pacman.model.GameModel.PINKY;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -146,7 +150,7 @@ public class GameController {
 			ghost.visible = false;
 		}
 		game.pac.visible = false;
-		if (game.stateTimer == sec(3)) {
+		if (game.stateTimer == sec(2)) {
 			enterState(GameState.READY);
 		}
 	}
@@ -161,14 +165,40 @@ public class GameController {
 			}
 		}
 
-		else if (game.stateTimer == sec(3)) {
+		else if (game.stateTimer == sec(5)) {
 			game.powerPelletsBlinking = true;
 			game.pac.animated = true;
 			enterState(GameState.PLAYING);
 		}
+
+		for (Ghost ghost : game.ghosts) {
+			ghost.update(game);
+		}
 	}
 
 	private void update_PLAYING() {
+		// TODO this is just mockery
+
+		if (game.ghosts[BLINKY].state == GhostState.LOCKED) {
+			if (game.stateTimer == sec(0)) {
+				game.ghosts[BLINKY].state = GhostState.SCATTERING;
+			}
+		}
+		if (game.ghosts[PINKY].state == GhostState.LOCKED) {
+			if (game.stateTimer == sec(1)) {
+				game.ghosts[PINKY].state = GhostState.LEAVING_HOUSE;
+			}
+		}
+		if (game.ghosts[INKY].state == GhostState.LOCKED) {
+			if (game.stateTimer == sec(3)) {
+				game.ghosts[INKY].state = GhostState.LEAVING_HOUSE;
+			}
+		}
+		if (game.ghosts[CLYDE].state == GhostState.LOCKED) {
+			if (game.stateTimer == sec(5)) {
+				game.ghosts[CLYDE].state = GhostState.LEAVING_HOUSE;
+			}
+		}
 
 		if (game.world.allFoodEaten()) {
 			enterState(GameState.LEVEL_COMPLETE);
