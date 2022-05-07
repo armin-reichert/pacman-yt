@@ -66,11 +66,11 @@ public abstract class Creature {
 		return new Vector2(tileX(), tileY());
 	}
 
-	private int tileX() {
+	public int tileX() {
 		return (int) (x / World.TS);
 	}
 
-	private int tileY() {
+	public int tileY() {
 		return (int) (y / World.TS);
 	}
 
@@ -122,10 +122,14 @@ public abstract class Creature {
 	protected boolean tryMove(World world, Direction currentDir, Direction newDir) {
 		boolean canMove = canMove(world, currentDir, newDir);
 		if (canMove) {
-			x += newDir.vector.x * speed;
-			y += newDir.vector.y * speed;
+			move(newDir);
 		}
 		return canMove;
+	}
+
+	protected void move(Direction dir) {
+		x += dir.vector.x * speed;
+		y += dir.vector.y * speed;
 	}
 
 	protected boolean canMove(World world, Direction currentDir, Direction newDir) {

@@ -181,12 +181,24 @@ public class Ghost extends Creature {
 		}
 	}
 
-	// TODO real implementation
 	private void leaveGhostHouse(GameModel game) {
-		placeAtTile(13, 14, World.HTS, 0);
-		wishDir = Direction.LEFT;
-		enteredNewTile = true;
-		state = game.chasing ? GhostState.CHASING : GhostState.SCATTERING;
+		int houseCenterX = game.world.ghostHouseEntryTile.x * World.TS + World.HTS;
+		if (wishDir == Direction.UP && y <= 116) {
+			wishDir = Direction.LEFT;
+			enteredNewTile = true;
+			state = game.chasing ? GhostState.CHASING : GhostState.SCATTERING;
+		} else if (Math.abs(x - houseCenterX) <= 1) {
+			wishDir = Direction.UP;
+			x = houseCenterX;
+			move(wishDir);
+//			Logging.log("Ghost id %d: y=%.2f", id, y);
+		} else if (x < houseCenterX) {
+			wishDir = Direction.RIGHT;
+			move(wishDir);
+		} else if (x > houseCenterX) {
+			wishDir = Direction.LEFT;
+			move(wishDir);
+		}
 	}
 
 	private void steer(World world) {
