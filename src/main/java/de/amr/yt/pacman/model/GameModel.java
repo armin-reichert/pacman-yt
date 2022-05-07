@@ -112,11 +112,11 @@ public class GameModel {
 		numFlashes = (int) data[11];
 	}
 
-	public void setLevelNumber(int n) {
-		if (n < 1) {
-			throw new IllegalArgumentException("Level number must at least be 1");
+	public void setLevelNumber(int number) {
+		if (number < 1) {
+			throw new IllegalArgumentException("Level number must be at least 1");
 		}
-		this.levelNumber = n;
+		this.levelNumber = number;
 		switch (levelNumber) {
 		//@formatter:off
 		case  1 -> setLevel(CHERRIES,   0.80f, 0.75f, 0.40f,  20, 0.80f, 10, 0.85f, 0.90f, 0.50f, 6, 5);

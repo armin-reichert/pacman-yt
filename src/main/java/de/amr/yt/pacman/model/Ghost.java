@@ -70,7 +70,8 @@ public class Ghost extends Creature {
 		if (world.isGhostHouse(tile)) {
 			return state == GhostState.ENTERING_HOUSE || state == GhostState.LEAVING_HOUSE;
 		}
-		if (state != GhostState.FRIGHTENED && wishDir == Direction.UP && world.isOneWayDown(tile)) {
+		if (state != GhostState.FRIGHTENED && state != GhostState.EATEN && wishDir == Direction.UP
+				&& world.isOneWayDown(tile)) {
 			return false;
 		}
 		return true;
