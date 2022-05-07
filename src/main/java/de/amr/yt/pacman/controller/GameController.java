@@ -23,6 +23,8 @@ SOFTWARE.
 */
 package de.amr.yt.pacman.controller;
 
+import static de.amr.yt.pacman.lib.Logging.log;
+
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
@@ -173,7 +175,6 @@ public class GameController {
 			return;
 		}
 
-		++game.attackTimer;
 		if (game.chaseStartTicks.contains(game.attackTimer)) {
 			for (Ghost ghost : game.ghosts) {
 				if (ghost.state == GhostState.SCATTERING) {
@@ -181,6 +182,7 @@ public class GameController {
 				}
 				game.chasing = true;
 			}
+			log("Chasing phase started");
 		} else if (game.scatterStartTicks.contains(game.attackTimer)) {
 			for (Ghost ghost : game.ghosts) {
 				if (ghost.state == GhostState.CHASING) {
@@ -188,7 +190,9 @@ public class GameController {
 				}
 				game.chasing = false;
 			}
+			log("Scattering phase started");
 		}
+		++game.attackTimer;
 
 		if (move != null) {
 			game.pac.wishDir = move;
