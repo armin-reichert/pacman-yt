@@ -60,10 +60,6 @@ public class GameWindow extends JFrame {
 		createCanvas(scale);
 		add(canvas);
 		setResizable(false);
-		pack();
-		setLocationRelativeTo(null);
-		setVisible(true);
-		requestFocus();
 	}
 
 	private void createCanvas(double scale) {

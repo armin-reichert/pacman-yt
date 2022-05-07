@@ -46,24 +46,21 @@ import de.amr.yt.pacman.ui.GameWindow;
  */
 public class GameController {
 
-	public static void main(String[] args) {
-		GameController controller = new GameController();
-		controller.startSimulation();
-	}
-
 	public static int sec(double n) {
 		return (int) (n * 60);
 	}
 
 	public final GameModel game;
-	public final GameWindow window;
-
+	public GameWindow window;
 	private final Thread simulation = new Thread(this::loop);
 	private volatile boolean running;
 	private volatile Direction move;
 
 	public GameController() {
 		game = new GameModel();
+	}
+
+	public void createAndShowUI() {
 		window = new GameWindow(game, 2.0);
 		window.addKeyListener(new KeyAdapter() {
 			@Override
@@ -84,9 +81,13 @@ public class GameController {
 				System.exit(0);
 			}
 		});
+		window.pack();
+		window.setLocationRelativeTo(null);
+		window.setVisible(true);
+		window.requestFocus();
 	}
 
-	private void startSimulation() {
+	public void startSimulation() {
 		running = true;
 		simulation.run();
 	}
