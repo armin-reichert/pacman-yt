@@ -43,33 +43,34 @@ public class Ghost extends Creature {
 	private static final Direction[] DIR_ORDER = { Direction.UP, Direction.RIGHT, Direction.DOWN, Direction.LEFT };
 
 	public final int id;
+	public final GameModel game;
 	public GhostState state;
 	public Vector2 targetTile;
 	public long eatenTimer;
 	public int eatenValue;
 
-	public Ghost(int id) {
+	public Ghost(GameModel game, int id) {
+		this.game = game;
 		this.id = id;
 		canReverse = false;
 	}
 
-	public void update(GameModel game) {
-
+	public void update() {
 		switch (state) {
-		case LOCKED -> bounce(game);
-		case ENTERING_HOUSE -> enterGhostHouse(game);
-		case LEAVING_HOUSE -> leaveGhostHouse(game);
+		case LOCKED -> bounce();
+		case ENTERING_HOUSE -> enterGhostHouse();
+		case LEAVING_HOUSE -> leaveGhostHouse();
 		case CHASING -> {
-			moveThroughMaze(game);
+			moveThroughMaze();
 		}
 		case SCATTERING -> {
-			moveThroughMaze(game);
+			moveThroughMaze();
 		}
 		case FRIGHTENED -> {
-			moveThroughMaze(game);
+			moveThroughMaze();
 		}
 		case EATEN -> {
-			moveThroughMaze(game);
+			moveThroughMaze();
 			if (eatenTimer > 0) {
 				--eatenTimer;
 			}
@@ -82,16 +83,16 @@ public class Ghost extends Creature {
 		}
 	}
 
-	private void moveThroughMaze(GameModel game) {
+	private void moveThroughMaze() {
 		if (enteredNewTile) {
-			computeTargetTile(game);
+			computeTargetTile();
 			steer(game.world);
 		}
-		updateSpeed(game);
+		updateSpeed();
 		move(game.world);
 	}
 
-	private void updateSpeed(GameModel game) {
+	private void updateSpeed() {
 		if (state == GhostState.LOCKED) {
 			speed = 0.33f * GameModel.BASE_SPEED;
 		} else if (state == GhostState.ENTERING_HOUSE || state == GhostState.LEAVING_HOUSE) {
@@ -121,7 +122,7 @@ public class Ghost extends Creature {
 		return true;
 	}
 
-	private void computeTargetTile(GameModel game) {
+	private void computeTargetTile() {
 		switch (state) {
 
 		case LOCKED, ENTERING_HOUSE, LEAVING_HOUSE -> {
@@ -187,7 +188,8 @@ public class Ghost extends Creature {
 		}
 	}
 
-	private void leaveGhostHouse(GameModel game) {
+	private void leaveGhostHouse() {
+		updateSpeed();
 		Vector2 entry = game.world.ghostHouseEntry;
 		if (wishDir == Direction.UP && y <= entry.y) {
 			// out of house
@@ -197,21 +199,18 @@ public class Ghost extends Creature {
 		} else if (Math.abs(x - entry.x) <= 1) {
 			wishDir = moveDir = Direction.UP;
 			x = entry.x;
-			updateSpeed(game);
 			move(wishDir);
 		} else if (x < entry.x) {
 			wishDir = moveDir = Direction.RIGHT;
-			updateSpeed(game);
 			move(wishDir);
 		} else if (x > entry.x) {
 			wishDir = moveDir = Direction.LEFT;
-			updateSpeed(game);
 			move(wishDir);
 		}
 	}
 
-	private void enterGhostHouse(GameModel game) {
-		updateSpeed(game);
+	private void enterGhostHouse() {
+		updateSpeed();
 		Vector2 entry = game.world.ghostHouseEntry;
 		if (y <= entry.y) {
 			// start falling down
@@ -240,7 +239,7 @@ public class Ghost extends Creature {
 		}
 	}
 
-	private void bounce(GameModel game) {
+	private void bounce() {
 		if (id == BLINKY) {
 			return;
 		}
@@ -249,7 +248,7 @@ public class Ghost extends Creature {
 		} else if (y <= 17 * World.TS) {
 			moveDir = wishDir = Direction.DOWN;
 		}
-		updateSpeed(game);
+		updateSpeed();
 		move(wishDir);
 	}
 

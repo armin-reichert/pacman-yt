@@ -88,7 +88,11 @@ public class GameModel {
 	public GameModel() {
 		world = new World();
 		pac = new PacMan();
-		ghosts = new Ghost[] { new Ghost(BLINKY), new Ghost(PINKY), new Ghost(INKY), new Ghost(CLYDE) };
+		ghosts = new Ghost[] { //
+				new Ghost(this, BLINKY), //
+				new Ghost(this, PINKY), //
+				new Ghost(this, INKY), //
+				new Ghost(this, CLYDE) };
 		setLevelNumber(1);
 		levelSymbols.add(bonusSymbol);
 	}

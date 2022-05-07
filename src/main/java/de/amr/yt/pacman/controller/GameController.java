@@ -173,7 +173,7 @@ public class GameController {
 		}
 
 		for (Ghost ghost : game.ghosts) {
-			ghost.update(game);
+			ghost.update();
 		}
 	}
 
@@ -235,7 +235,7 @@ public class GameController {
 		}
 
 		for (Ghost ghost : game.ghosts) {
-			ghost.update(game);
+			ghost.update();
 		}
 
 		if (game.bonusTimer > 0) {
