@@ -212,17 +212,31 @@ public class Ghost extends Creature {
 	}
 
 	private void enterGhostHouse(GameModel game) {
+		updateSpeed(game);
 		Vector2 entry = game.world.ghostHouseEntry;
 		if (y <= entry.y) {
+			// start falling down
 			x = entry.x;
 			wishDir = moveDir = Direction.DOWN;
-			updateSpeed(game);
 			move(wishDir);
 		} else if (y <= entry.y + 3 * World.TS) {
-			updateSpeed(game);
+			// reached bottom
 			move(wishDir);
+		} else if (id == INKY) {
+			// go left
+			wishDir = Direction.LEFT;
+			move(wishDir);
+			if (x <= entry.x - 2 * World.TS) {
+				state = GhostState.LEAVING_HOUSE;
+			}
+		} else if (id == CLYDE) {
+			// go right
+			wishDir = Direction.RIGHT;
+			move(wishDir);
+			if (x >= entry.x + 2 * World.TS) {
+				state = GhostState.LEAVING_HOUSE;
+			}
 		} else {
-			wishDir = Direction.UP;
 			state = GhostState.LEAVING_HOUSE;
 		}
 	}
