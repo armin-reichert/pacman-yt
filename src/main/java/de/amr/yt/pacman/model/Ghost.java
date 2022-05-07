@@ -23,6 +23,11 @@ SOFTWARE.
 */
 package de.amr.yt.pacman.model;
 
+import static de.amr.yt.pacman.model.GameModel.BLINKY;
+import static de.amr.yt.pacman.model.GameModel.CLYDE;
+import static de.amr.yt.pacman.model.GameModel.INKY;
+import static de.amr.yt.pacman.model.GameModel.PINKY;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -122,21 +127,21 @@ public class Ghost extends Creature {
 
 		case SCATTERING -> {
 			targetTile = switch (id) {
-			case GameModel.BLINKY -> new Vector2(25, 0);
-			case GameModel.PINKY -> new Vector2(2, 0);
-			case GameModel.INKY -> new Vector2(27, 34);
-			case GameModel.CLYDE -> new Vector2(0, 34);
+			case BLINKY -> new Vector2(25, 0);
+			case PINKY -> new Vector2(2, 0);
+			case INKY -> new Vector2(27, 34);
+			case CLYDE -> new Vector2(0, 34);
 			default -> null;
 			};
 		}
 
 		case CHASING -> {
 			switch (id) {
-			case GameModel.BLINKY -> {
+			case BLINKY -> {
 				targetTile = game.pac.tile();
 			}
 
-			case GameModel.PINKY -> {
+			case PINKY -> {
 				Vector2 pacPlus4 = game.pac.tile().plus(game.pac.moveDir.vector.times(4));
 				if (game.pac.moveDir == Direction.UP) {
 					pacPlus4 = pacPlus4.plus(new Vector2(-4, 0));
@@ -144,16 +149,16 @@ public class Ghost extends Creature {
 				targetTile = pacPlus4;
 			}
 
-			case GameModel.INKY -> {
+			case INKY -> {
 				Vector2 pacPlus2 = game.pac.tile().plus(game.pac.moveDir.vector.times(2));
 				if (game.pac.moveDir == Direction.UP) {
 					pacPlus2 = pacPlus2.plus(new Vector2(-2, 0));
 				}
-				Vector2 blinkyTile = game.ghosts[GameModel.BLINKY].tile();
+				Vector2 blinkyTile = game.ghosts[BLINKY].tile();
 				targetTile = pacPlus2.times(2).minus(blinkyTile);
 			}
 
-			case GameModel.CLYDE -> {
+			case CLYDE -> {
 				targetTile = tile().dist(game.pac.tile()) < 8 ? new Vector2(0, 34) : game.pac.tile();
 			}
 
