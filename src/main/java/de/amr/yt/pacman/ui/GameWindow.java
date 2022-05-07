@@ -76,7 +76,7 @@ public class GameWindow extends JFrame {
 				g2D.fillRect(0, 0, getWidth(), getHeight());
 				g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 				g2D.scale(scale, scale);
-				drawGame(g2D);
+				drawGameScene(g2D);
 				g2D.dispose();
 			}
 		};
@@ -99,7 +99,7 @@ public class GameWindow extends JFrame {
 		return (int) (game.ticks % duration) * frames / duration;
 	}
 
-	private void drawGame(Graphics2D g) {
+	private void drawGameScene(Graphics2D g) {
 		if (!game.mazeFlashing || frame(30, 2) == 0) {
 			g.drawImage(ss.mazeImage, 0, 3 * World.TS, null);
 		}
