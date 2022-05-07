@@ -100,8 +100,8 @@ public abstract class Creature {
 		if (!success) {
 			success = tryMove(world, moveDir, moveDir);
 			if (!success) {
-				align(Direction.LEFT);
-				align(Direction.UP);
+				x = centerX();
+				y = centerY();
 				stuck = true;
 			}
 		} else {
@@ -128,14 +128,6 @@ public abstract class Creature {
 		return canMove;
 	}
 
-	protected void align(Direction direction) {
-		if (direction.isHorizontal()) {
-			y = centerY();
-		} else {
-			x = centerX();
-		}
-	}
-
 	protected boolean canMove(World world, Direction currentDir, Direction newDir) {
 		Vector2 tile = tile();
 		if (tile.x < 0 || tile.x >= World.COLS) {
@@ -143,13 +135,13 @@ public abstract class Creature {
 			return currentDir == newDir || currentDir == newDir.opposite();
 		}
 		if (canEnter(world, tile.neighbor(newDir))) {
-			if (currentDir == newDir || currentDir == newDir.opposite()) {
+			if (newDir == currentDir || newDir == currentDir.opposite()) {
 				return true;
 			}
 			boolean canTurn90 = canTurn90Degrees(currentDir);
 			if (canTurn90) {
-				align(currentDir);
-				align(newDir);
+				x = centerX();
+				y = centerY();
 			}
 			return canTurn90;
 		} else {
