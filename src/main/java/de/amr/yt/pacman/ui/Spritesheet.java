@@ -112,10 +112,10 @@ public class Spritesheet {
 					300, s(1, 9), //
 					500, s(2, 9), //
 					700, s(3, 9), //
-					1000, s(4, 9), //
-					2000, s(4, 10), //
-					3000, s(4, 11), //
-					5000, s(4, 12));
+					1000, s(64, 144, 19, 16), //
+					2000, s(60, 160, 24, 16), //
+					3000, s(60, 176, 24, 16), //
+					5000, s(60, 192, 24, 16)); //
 
 			liveCount = s(8, 1);
 		} catch (IOException e) {
@@ -125,5 +125,9 @@ public class Spritesheet {
 
 	private BufferedImage s(int gridX, int gridY) {
 		return sheetImage.getSubimage(16 * gridX, 16 * gridY, 16, 16);
+	}
+
+	private BufferedImage s(int x, int y, int w, int h) {
+		return sheetImage.getSubimage(x, y, w, h);
 	}
 }

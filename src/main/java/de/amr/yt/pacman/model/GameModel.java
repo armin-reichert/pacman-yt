@@ -247,7 +247,8 @@ public class GameModel {
 		if (pac.powerTime == 0) {
 			Vector2 pacTile = pac.tile();
 			for (Ghost ghost : ghosts) {
-				if (ghost.tile().equals(pacTile)) {
+				if ((ghost.state == GhostState.CHASING || ghost.state == GhostState.SCATTERING)
+						&& ghost.tile().equals(pacTile)) {
 					pac.dead = true;
 					return;
 				}
