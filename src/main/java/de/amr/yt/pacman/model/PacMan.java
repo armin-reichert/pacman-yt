@@ -58,7 +58,7 @@ public class PacMan extends Creature {
 
 	@Override
 	public String toString() {
-		return String.format("PacMan[x=%.2f, y=%.2f tile=%s, offX=%.2f, offY=%.2f, moveDir=%s, wishDir=%s]", x, y, tile(),
+		return "PacMan[x=%.2f, y=%.2f tile=%s, offX=%.2f, offY=%.2f, moveDir=%s, wishDir=%s]".formatted(x, y, tile(),
 				offsetX(), offsetY(), moveDir, wishDir);
 	}
 

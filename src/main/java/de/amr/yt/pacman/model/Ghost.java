@@ -57,6 +57,12 @@ public class Ghost extends Creature {
 	}
 
 	@Override
+	public String toString() {
+		return "Ghost[id=%d, x=%.2f, y=%.2f, moveDir=%s, wishDir=%s speed=%.2f]".formatted(id, x, y, moveDir, wishDir,
+				speed);
+	}
+
+	@Override
 	protected boolean canEnter(Vector2 tile) {
 		if (world.isBlocked(tile)) {
 			return false;
@@ -270,11 +276,5 @@ public class Ghost extends Creature {
 				}
 			}
 		}
-	}
-
-	@Override
-	public String toString() {
-		return String.format("Ghost[id=%d, x=%.2f, y=%.2f, moveDir=%s, wishDir=%s speed=%.2f]", id, x, y, moveDir, wishDir,
-				speed);
 	}
 }
