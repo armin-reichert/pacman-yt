@@ -161,13 +161,14 @@ public class GameController {
 			game.pac.visible = true;
 			for (Ghost ghost : game.ghosts) {
 				ghost.visible = true;
-				ghost.animated = true;
+				ghost.animated = ghost.id != BLINKY;
 			}
 		}
 
 		else if (game.stateTimer == sec(5)) {
 			game.powerPelletsBlinking = true;
 			game.pac.animated = true;
+			game.ghosts[BLINKY].animated = true;
 			enterState(GameState.PLAYING);
 		}
 
