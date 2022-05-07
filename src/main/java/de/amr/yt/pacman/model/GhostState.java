@@ -27,5 +27,5 @@ package de.amr.yt.pacman.model;
  * @author Armin Reichert
  */
 public enum GhostState {
-	CHASING, SCATTERING, FRIGHTENED, EATEN, LEAVING_HOUSE;
+	CHASING, SCATTERING, FRIGHTENED, EATEN, LEAVING_HOUSE, ENTERING_HOUSE;
 }

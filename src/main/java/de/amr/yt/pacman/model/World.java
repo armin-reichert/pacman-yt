@@ -90,7 +90,7 @@ public class World {
 
 	public Vector2 bonusTile = new Vector2(13, 20);
 
-	public Vector2 ghostHouseEntryTile = new Vector2(13, 14);
+	public Vector2 ghostHouseEntry = new Vector2(112, 116);
 
 	public int eatenFoodCount;
 

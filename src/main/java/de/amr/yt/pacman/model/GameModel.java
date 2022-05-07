@@ -203,7 +203,7 @@ public class GameModel {
 
 	public void onPacPowerEnding() {
 		for (Ghost ghost : ghosts) {
-			if (ghost.state != GhostState.EATEN) {
+			if (ghost.state == GhostState.FRIGHTENED) {
 				ghost.state = chasing ? GhostState.CHASING : GhostState.SCATTERING;
 			}
 		}

@@ -56,6 +56,7 @@ public class Ghost extends Creature {
 	public void update(GameModel game) {
 
 		switch (state) {
+		case ENTERING_HOUSE -> enterGhostHouse(game);
 		case LEAVING_HOUSE -> leaveGhostHouse(game);
 		case CHASING -> {
 			moveThroughMaze(game);
@@ -71,8 +72,8 @@ public class Ghost extends Creature {
 			if (eatenTimer > 0) {
 				--eatenTimer;
 			}
-			if (tile().equals(game.world.ghostHouseEntryTile)) {
-				state = game.chasing ? GhostState.CHASING : GhostState.SCATTERING;
+			if (Math.abs(x - game.world.ghostHouseEntry.x) <= 1 && y == game.world.ghostHouseEntry.y) {
+				state = GhostState.ENTERING_HOUSE;
 			}
 		}
 		default -> {
@@ -90,7 +91,9 @@ public class Ghost extends Creature {
 	}
 
 	private void updateSpeed(GameModel game) {
-		if (state == GhostState.EATEN) {
+		if (state == GhostState.ENTERING_HOUSE || state == GhostState.LEAVING_HOUSE) {
+			speed = game.ghostSpeedFrightened;
+		} else if (state == GhostState.EATEN) {
 			speed = eatenTimer > 0 ? 0 : 2 * game.ghostSpeed; // TODO correct?
 		} else if (game.world.isTunnel(tile())) {
 			speed = game.ghostSpeedTunnel;
@@ -107,7 +110,7 @@ public class Ghost extends Creature {
 			return false;
 		}
 		if (world.isGhostHouse(tile)) {
-			return state == GhostState.EATEN;
+			return state == GhostState.ENTERING_HOUSE || state == GhostState.LEAVING_HOUSE;
 		}
 		if (state != GhostState.FRIGHTENED && wishDir == Direction.UP && world.isOneWayDown(tile)) {
 			return false;
@@ -117,6 +120,10 @@ public class Ghost extends Creature {
 
 	private void computeTargetTile(GameModel game) {
 		switch (state) {
+
+		case ENTERING_HOUSE -> {
+			// TODO
+		}
 
 		case LEAVING_HOUSE -> {
 			// TODO
@@ -182,22 +189,41 @@ public class Ghost extends Creature {
 	}
 
 	private void leaveGhostHouse(GameModel game) {
-		int houseCenterX = game.world.ghostHouseEntryTile.x * World.TS + World.HTS;
-		if (wishDir == Direction.UP && y <= 116) {
+		Vector2 entry = game.world.ghostHouseEntry;
+		if (wishDir == Direction.UP && y <= entry.y) {
+			// out of house
 			wishDir = Direction.LEFT;
 			enteredNewTile = true;
 			state = game.chasing ? GhostState.CHASING : GhostState.SCATTERING;
-		} else if (Math.abs(x - houseCenterX) <= 1) {
+		} else if (Math.abs(x - entry.x) <= 1) {
+			wishDir = moveDir = Direction.UP;
+			x = entry.x;
+			updateSpeed(game);
+			move(wishDir);
+		} else if (x < entry.x) {
+			wishDir = moveDir = Direction.RIGHT;
+			updateSpeed(game);
+			move(wishDir);
+		} else if (x > entry.x) {
+			wishDir = moveDir = Direction.LEFT;
+			updateSpeed(game);
+			move(wishDir);
+		}
+	}
+
+	private void enterGhostHouse(GameModel game) {
+		Vector2 entry = game.world.ghostHouseEntry;
+		if (y <= entry.y) {
+			x = entry.x;
+			wishDir = moveDir = Direction.DOWN;
+			updateSpeed(game);
+			move(wishDir);
+		} else if (y <= entry.y + 3 * World.TS) {
+			updateSpeed(game);
+			move(wishDir);
+		} else {
 			wishDir = Direction.UP;
-			x = houseCenterX;
-			move(wishDir);
-//			Logging.log("Ghost id %d: y=%.2f", id, y);
-		} else if (x < houseCenterX) {
-			wishDir = Direction.RIGHT;
-			move(wishDir);
-		} else if (x > houseCenterX) {
-			wishDir = Direction.LEFT;
-			move(wishDir);
+			state = GhostState.LEAVING_HOUSE;
 		}
 	}
 
