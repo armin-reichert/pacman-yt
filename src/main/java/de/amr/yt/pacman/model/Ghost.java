@@ -195,7 +195,6 @@ public class Ghost extends Creature {
 		if (wishDir == Direction.UP && y <= entry.y) {
 			// out of house
 			wishDir = Direction.LEFT;
-			enteredNewTile = true;
 			state = game.chasing ? GhostState.CHASING : GhostState.SCATTERING;
 		} else if (Math.abs(x - entry.x) <= 1) {
 			wishDir = moveDir = Direction.UP;
@@ -254,7 +253,6 @@ public class Ghost extends Creature {
 	}
 
 	private void steer() {
-		Vector2 tile = tile();
 		if (targetTile == null) {
 			return;
 		}
@@ -263,14 +261,13 @@ public class Ghost extends Creature {
 			if (direction == moveDir.opposite()) {
 				continue;
 			}
-			Vector2 neighbor = tile.neighbor(direction);
-			if (!canEnter(neighbor)) {
-				continue;
-			}
-			double dist = neighbor.dist(targetTile);
-			if (dist < min) {
-				min = dist;
-				wishDir = direction;
+			Vector2 neighbor = tile().neighbor(direction);
+			if (canEnter(neighbor)) {
+				double dist = neighbor.dist(targetTile);
+				if (dist < min) {
+					min = dist;
+					wishDir = direction;
+				}
 			}
 		}
 	}
