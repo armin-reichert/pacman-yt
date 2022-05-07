@@ -124,6 +124,11 @@ public class World {
 		return 10 <= tile.x && tile.x <= 17 && 15 <= tile.y && tile.y <= 19;
 	}
 
+	public boolean isOneWayDown(Vector2 tile) {
+		return (tile.x == 12 && tile.y == 13) || (tile.x == 15 && tile.y == 13) || (tile.x == 12 && tile.y == 25)
+				|| (tile.x == 15 && tile.y == 25);
+	}
+
 	public boolean isPellet(Vector2 tile) {
 		return isPellet(tile.y, tile.x);
 	}

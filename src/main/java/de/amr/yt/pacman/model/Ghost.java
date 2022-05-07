@@ -109,15 +109,10 @@ public class Ghost extends Creature {
 		if (world.isGhostHouse(tile)) {
 			return state == GhostState.EATEN;
 		}
-		if (state != GhostState.FRIGHTENED && wishDir == Direction.UP && isOneWayDown(tile)) {
+		if (state != GhostState.FRIGHTENED && wishDir == Direction.UP && world.isOneWayDown(tile)) {
 			return false;
 		}
 		return true;
-	}
-
-	private boolean isOneWayDown(Vector2 tile) {
-		return (tile.x == 12 && tile.y == 13 || tile.x == 15 && tile.y == 13 || tile.x == 12 && tile.y == 25
-				|| tile.x == 15 && tile.y == 25);
 	}
 
 	private void computeTargetTile(GameModel game) {
