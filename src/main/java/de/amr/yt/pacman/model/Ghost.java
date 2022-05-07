@@ -82,15 +82,7 @@ public class Ghost extends Creature {
 		case LOCKED -> bounce();
 		case ENTERING_HOUSE -> enterGhostHouse();
 		case LEAVING_HOUSE -> leaveGhostHouse();
-		case CHASING -> {
-			moveThroughMaze();
-		}
-		case SCATTERING -> {
-			moveThroughMaze();
-		}
-		case FRIGHTENED -> {
-			moveThroughMaze();
-		}
+		case CHASING, SCATTERING, FRIGHTENED -> moveThroughMaze();
 		case EATEN -> {
 			moveThroughMaze();
 			if (eatenTimer > 0) {
@@ -99,8 +91,6 @@ public class Ghost extends Creature {
 			if (Math.abs(x - game.world.ghostHouseEntry.x) <= 1 && y == game.world.ghostHouseEntry.y) {
 				state = GhostState.ENTERING_HOUSE;
 			}
-		}
-		default -> {
 		}
 		}
 	}
