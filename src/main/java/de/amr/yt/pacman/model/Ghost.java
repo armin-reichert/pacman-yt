@@ -63,7 +63,7 @@ public class Ghost extends Creature {
 	}
 
 	@Override
-	protected boolean canEnter(Vector2 tile) {
+	protected boolean canEnterTile(Vector2 tile) {
 		if (world.isBlocked(tile)) {
 			return false;
 		}
@@ -82,9 +82,9 @@ public class Ghost extends Creature {
 		case LOCKED -> bounce();
 		case ENTERING_HOUSE -> enterGhostHouse();
 		case LEAVING_HOUSE -> leaveGhostHouse();
-		case CHASING, SCATTERING, FRIGHTENED -> moveThroughMaze();
+		case CHASING, SCATTERING, FRIGHTENED -> wanderAround();
 		case EATEN -> {
-			moveThroughMaze();
+			wanderAround();
 			if (eatenTimer > 0) {
 				--eatenTimer;
 			}
@@ -95,10 +95,10 @@ public class Ghost extends Creature {
 		}
 	}
 
-	private void moveThroughMaze() {
+	private void wanderAround() {
 		if (enteredNewTile) {
 			computeTargetTile();
-			steer();
+			takeDirectionTowardsTarget();
 		}
 		updateSpeed();
 		moveThroughWorld();
@@ -136,7 +136,7 @@ public class Ghost extends Creature {
 			Collections.shuffle(directions);
 			for (Direction direction : directions) {
 				Vector2 neighbor = tile().neighbor(direction);
-				if (canEnter(neighbor)) {
+				if (canEnterTile(neighbor)) {
 					targetTile = neighbor;
 					return;
 				}
@@ -249,20 +249,20 @@ public class Ghost extends Creature {
 		move(wishDir);
 	}
 
-	private void steer() {
+	private void takeDirectionTowardsTarget() {
 		if (targetTile == null) {
 			return;
 		}
-		double min = Double.MAX_VALUE;
+		double minDist = Double.MAX_VALUE;
 		for (Direction direction : DIR_ORDER) {
 			if (direction == moveDir.opposite()) {
 				continue;
 			}
 			Vector2 neighbor = tile().neighbor(direction);
-			if (canEnter(neighbor)) {
+			if (canEnterTile(neighbor)) {
 				double dist = neighbor.dist(targetTile);
-				if (dist < min) {
-					min = dist;
+				if (dist < minDist) {
+					minDist = dist;
 					wishDir = direction;
 				}
 			}

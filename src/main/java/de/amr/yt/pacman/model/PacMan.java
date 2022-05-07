@@ -52,7 +52,7 @@ public class PacMan extends Creature {
 	}
 
 	@Override
-	protected boolean canEnter(Vector2 tile) {
+	protected boolean canEnterTile(Vector2 tile) {
 		return !world.isBlocked(tile) && !world.isGhostHouse(tile);
 	}
 

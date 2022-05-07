@@ -119,7 +119,7 @@ public abstract class Creature {
 //		Logging.log("%s", this);
 	}
 
-	protected abstract boolean canEnter(Vector2 tile);
+	protected abstract boolean canEnterTile(Vector2 tile);
 
 	protected boolean tryMove(Direction currentDir, Direction newDir) {
 		boolean canMove = canMove(currentDir, newDir);
@@ -140,7 +140,7 @@ public abstract class Creature {
 			// no sidewards turn in teleport tunnel
 			return currentDir == newDir || currentDir == newDir.opposite();
 		}
-		if (canEnter(tile.neighbor(newDir))) {
+		if (canEnterTile(tile.neighbor(newDir))) {
 			if (newDir == currentDir || newDir == currentDir.opposite()) {
 				return true;
 			}
