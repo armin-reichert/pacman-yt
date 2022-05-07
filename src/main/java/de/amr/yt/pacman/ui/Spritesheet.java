@@ -69,8 +69,8 @@ public class Spritesheet {
 			pac.put(DOWN, List.of(s(0, 3), s(1, 3), s(2, 0)));
 
 			pacDeadAnimation = new ArrayList<>();
-			for (int x = 3; x <= 13; ++x) {
-				pacDeadAnimation.add(s(x, 0));
+			for (int col = 3; col <= 13; ++col) {
+				pacDeadAnimation.add(s(col, 0));
 			}
 
 			EnumMap<Direction, List<BufferedImage>> redGhost = new EnumMap<>(Direction.class);
@@ -130,8 +130,8 @@ public class Spritesheet {
 		}
 	}
 
-	private BufferedImage s(int gridX, int gridY) {
-		return sheetImage.getSubimage(16 * gridX, 16 * gridY, 16, 16);
+	private BufferedImage s(int col, int row) {
+		return sheetImage.getSubimage(16 * col, 16 * row, 16, 16);
 	}
 
 	private BufferedImage s(int x, int y, int w, int h) {
