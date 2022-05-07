@@ -23,6 +23,11 @@ SOFTWARE.
 */
 package de.amr.yt.pacman.ui;
 
+import static de.amr.yt.pacman.lib.Direction.DOWN;
+import static de.amr.yt.pacman.lib.Direction.LEFT;
+import static de.amr.yt.pacman.lib.Direction.RIGHT;
+import static de.amr.yt.pacman.lib.Direction.UP;
+
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -41,6 +46,8 @@ public class Spritesheet {
 
 	public BufferedImage mazeImage;
 	public BufferedImage sheetImage;
+
+	// sprite caches
 	public EnumMap<Direction, List<BufferedImage>> pac = new EnumMap<>(Direction.class);
 	public List<BufferedImage> pacDeadAnimation;
 	public List<EnumMap<Direction, List<BufferedImage>>> ghosts = new ArrayList<>();
@@ -56,10 +63,10 @@ public class Spritesheet {
 			sheetImage = ImageIO.read(getClass().getResource("/sprites.png"));
 			mazeImage = ImageIO.read(getClass().getResource("/maze_empty.png"));
 
-			pac.put(Direction.RIGHT, List.of(s(0, 0), s(1, 0), s(2, 0)));
-			pac.put(Direction.LEFT, List.of(s(0, 1), s(1, 1), s(2, 0)));
-			pac.put(Direction.UP, List.of(s(0, 2), s(1, 2), s(2, 0)));
-			pac.put(Direction.DOWN, List.of(s(0, 3), s(1, 3), s(2, 0)));
+			pac.put(RIGHT, List.of(s(0, 0), s(1, 0), s(2, 0)));
+			pac.put(LEFT, List.of(s(0, 1), s(1, 1), s(2, 0)));
+			pac.put(UP, List.of(s(0, 2), s(1, 2), s(2, 0)));
+			pac.put(DOWN, List.of(s(0, 3), s(1, 3), s(2, 0)));
 
 			pacDeadAnimation = new ArrayList<>();
 			for (int x = 3; x <= 13; ++x) {
@@ -67,37 +74,37 @@ public class Spritesheet {
 			}
 
 			EnumMap<Direction, List<BufferedImage>> blinkySprites = new EnumMap<>(Direction.class);
-			blinkySprites.put(Direction.RIGHT, List.of(s(0, 4), s(1, 4)));
-			blinkySprites.put(Direction.LEFT, List.of(s(2, 4), s(3, 4)));
-			blinkySprites.put(Direction.UP, List.of(s(4, 4), s(5, 4)));
-			blinkySprites.put(Direction.DOWN, List.of(s(6, 4), s(7, 4)));
+			blinkySprites.put(RIGHT, List.of(s(0, 4), s(1, 4)));
+			blinkySprites.put(LEFT, List.of(s(2, 4), s(3, 4)));
+			blinkySprites.put(UP, List.of(s(4, 4), s(5, 4)));
+			blinkySprites.put(DOWN, List.of(s(6, 4), s(7, 4)));
 
 			EnumMap<Direction, List<BufferedImage>> pinkySprites = new EnumMap<>(Direction.class);
-			pinkySprites.put(Direction.RIGHT, List.of(s(0, 5), s(1, 5)));
-			pinkySprites.put(Direction.LEFT, List.of(s(2, 5), s(3, 5)));
-			pinkySprites.put(Direction.UP, List.of(s(4, 5), s(5, 5)));
-			pinkySprites.put(Direction.DOWN, List.of(s(6, 5), s(7, 5)));
+			pinkySprites.put(RIGHT, List.of(s(0, 5), s(1, 5)));
+			pinkySprites.put(LEFT, List.of(s(2, 5), s(3, 5)));
+			pinkySprites.put(UP, List.of(s(4, 5), s(5, 5)));
+			pinkySprites.put(DOWN, List.of(s(6, 5), s(7, 5)));
 
 			EnumMap<Direction, List<BufferedImage>> inkySprites = new EnumMap<>(Direction.class);
-			inkySprites.put(Direction.RIGHT, List.of(s(0, 6), s(1, 6)));
-			inkySprites.put(Direction.LEFT, List.of(s(2, 6), s(3, 6)));
-			inkySprites.put(Direction.UP, List.of(s(4, 6), s(5, 6)));
-			inkySprites.put(Direction.DOWN, List.of(s(6, 6), s(7, 6)));
+			inkySprites.put(RIGHT, List.of(s(0, 6), s(1, 6)));
+			inkySprites.put(LEFT, List.of(s(2, 6), s(3, 6)));
+			inkySprites.put(UP, List.of(s(4, 6), s(5, 6)));
+			inkySprites.put(DOWN, List.of(s(6, 6), s(7, 6)));
 
 			EnumMap<Direction, List<BufferedImage>> clydeSprites = new EnumMap<>(Direction.class);
-			clydeSprites.put(Direction.RIGHT, List.of(s(0, 7), s(1, 7)));
-			clydeSprites.put(Direction.LEFT, List.of(s(2, 7), s(3, 7)));
-			clydeSprites.put(Direction.UP, List.of(s(4, 7), s(5, 7)));
-			clydeSprites.put(Direction.DOWN, List.of(s(6, 7), s(7, 7)));
+			clydeSprites.put(RIGHT, List.of(s(0, 7), s(1, 7)));
+			clydeSprites.put(LEFT, List.of(s(2, 7), s(3, 7)));
+			clydeSprites.put(UP, List.of(s(4, 7), s(5, 7)));
+			clydeSprites.put(DOWN, List.of(s(6, 7), s(7, 7)));
 
 			ghosts = List.of(blinkySprites, pinkySprites, inkySprites, clydeSprites);
 
 			ghostFrightened = List.of(s(8, 4), s(9, 4), s(10, 4), s(11, 4));
 
-			ghostEaten.put(Direction.RIGHT, s(8, 5));
-			ghostEaten.put(Direction.LEFT, s(9, 5));
-			ghostEaten.put(Direction.UP, s(10, 5));
-			ghostEaten.put(Direction.DOWN, s(11, 5));
+			ghostEaten.put(RIGHT, s(8, 5));
+			ghostEaten.put(LEFT, s(9, 5));
+			ghostEaten.put(UP, s(10, 5));
+			ghostEaten.put(DOWN, s(11, 5));
 
 			ghostValues = Map.of( //
 					200, s(0, 8), //
