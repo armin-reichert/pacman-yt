@@ -89,6 +89,9 @@ public class World {
 	};
 
 	public Vector2 bonusTile = new Vector2(13, 20);
+
+	public Vector2 ghostHouseEntryTile = new Vector2(13, 14);
+
 	public int eatenFoodCount;
 
 	private boolean inRange(int row, int col) {

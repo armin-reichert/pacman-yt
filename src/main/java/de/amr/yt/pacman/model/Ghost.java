@@ -54,25 +54,39 @@ public class Ghost extends Creature {
 	}
 
 	public void update(GameModel game) {
-		Vector2 tile = tile();
-		if (game.world.isGhostHouse(tile)) {
-			leaveGhostHouse();
-			if (game.chasing) {
-				state = GhostState.CHASING;
-			} else {
-				state = GhostState.SCATTERING;
-			}
-		} else {
-			if (enteredNewTile) {
-				computeTargetTile(game);
-				steer(game.world);
-			}
-			updateSpeed(game);
-			move(game.world);
+
+		switch (state) {
+		case LEAVING_HOUSE -> leaveGhostHouse(game);
+		case CHASING -> {
+			moveThroughMaze(game);
 		}
-		if (eatenTimer > 0) {
-			--eatenTimer;
+		case SCATTERING -> {
+			moveThroughMaze(game);
 		}
+		case FRIGHTENED -> {
+			moveThroughMaze(game);
+		}
+		case EATEN -> {
+			moveThroughMaze(game);
+			if (eatenTimer > 0) {
+				--eatenTimer;
+			}
+			if (tile().equals(game.world.ghostHouseEntryTile)) {
+				state = game.chasing ? GhostState.CHASING : GhostState.SCATTERING;
+			}
+		}
+		default -> {
+		}
+		}
+	}
+
+	private void moveThroughMaze(GameModel game) {
+		if (enteredNewTile) {
+			computeTargetTile(game);
+			steer(game.world);
+		}
+		updateSpeed(game);
+		move(game.world);
 	}
 
 	private void updateSpeed(GameModel game) {
@@ -108,6 +122,10 @@ public class Ghost extends Creature {
 
 	private void computeTargetTile(GameModel game) {
 		switch (state) {
+
+		case LEAVING_HOUSE -> {
+			// TODO
+		}
 
 		case EATEN -> {
 			targetTile = new Vector2(13, 14);
@@ -168,11 +186,12 @@ public class Ghost extends Creature {
 		}
 	}
 
-	private void leaveGhostHouse() {
-		// TODO
+	// TODO real implementation
+	private void leaveGhostHouse(GameModel game) {
 		placeAtTile(13, 14, World.HTS, 0);
 		wishDir = Direction.LEFT;
 		enteredNewTile = true;
+		state = game.chasing ? GhostState.CHASING : GhostState.SCATTERING;
 	}
 
 	private void steer(World world) {

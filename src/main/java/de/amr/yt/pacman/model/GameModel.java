@@ -182,7 +182,7 @@ public class GameModel {
 		ghosts[INKY].speed = ghostSpeed;
 		ghosts[INKY].animated = false;
 		ghosts[INKY].targetTile = null;
-		ghosts[INKY].state = GhostState.SCATTERING;
+		ghosts[INKY].state = GhostState.LEAVING_HOUSE;
 
 		ghosts[PINKY].placeAtTile(13, 17, World.HTS, 0);
 		ghosts[PINKY].wishDir = Direction.DOWN;
@@ -190,7 +190,7 @@ public class GameModel {
 		ghosts[PINKY].speed = ghostSpeed;
 		ghosts[PINKY].animated = false;
 		ghosts[PINKY].targetTile = null;
-		ghosts[PINKY].state = GhostState.SCATTERING;
+		ghosts[PINKY].state = GhostState.LEAVING_HOUSE;
 
 		ghosts[CLYDE].placeAtTile(15, 17, World.HTS, 0);
 		ghosts[CLYDE].wishDir = Direction.UP;
@@ -198,7 +198,7 @@ public class GameModel {
 		ghosts[CLYDE].speed = ghostSpeed;
 		ghosts[CLYDE].animated = false;
 		ghosts[CLYDE].targetTile = null;
-		ghosts[CLYDE].state = GhostState.SCATTERING;
+		ghosts[CLYDE].state = GhostState.LEAVING_HOUSE;
 	}
 
 	public void onPacPowerEnding() {
