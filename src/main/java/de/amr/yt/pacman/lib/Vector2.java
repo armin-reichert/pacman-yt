@@ -69,16 +69,16 @@ public class Vector2 {
 		return x == other.x && y == other.y;
 	}
 
-	public double dist(Vector2 tile) {
-		return Math.hypot(x - tile.x, y - tile.y);
+	public double dist(Vector2 v) {
+		return Math.hypot(x - v.x, y - v.y);
 	}
 
-	public Vector2 plus(Vector2 tile) {
-		return new Vector2(x + tile.x, y + tile.y);
+	public Vector2 plus(Vector2 v) {
+		return new Vector2(x + v.x, y + v.y);
 	}
 
-	public Vector2 minus(Vector2 tile) {
-		return new Vector2(x - tile.x, y - tile.y);
+	public Vector2 minus(Vector2 v) {
+		return new Vector2(x - v.x, y - v.y);
 	}
 
 	public Vector2 times(int n) {
