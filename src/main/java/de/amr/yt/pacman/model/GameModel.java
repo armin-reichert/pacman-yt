@@ -86,6 +86,9 @@ public class GameModel {
 
 	public final List<Integer> levelSymbols = new ArrayList<>();
 
+	// debug
+	public boolean pacSafe;
+
 	public GameModel() {
 		world = new World();
 		pac = new PacMan(this);
@@ -263,6 +266,9 @@ public class GameModel {
 	}
 
 	public void checkPacKilledByGhost() {
+		if (pacSafe) {
+			return;
+		}
 		if (pac.powerCountdown == 0) {
 			Vector2 pacTile = pac.tile();
 			for (Ghost ghost : ghosts) {

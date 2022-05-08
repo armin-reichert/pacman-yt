@@ -71,6 +71,7 @@ public class GameController {
 				case KeyEvent.VK_LEFT -> move = Direction.LEFT;
 				case KeyEvent.VK_RIGHT -> move = Direction.RIGHT;
 				case KeyEvent.VK_I -> window.showInfo = !window.showInfo;
+				case KeyEvent.VK_S -> game.pacSafe = !game.pacSafe;
 				}
 			}
 		});

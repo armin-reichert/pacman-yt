@@ -132,6 +132,9 @@ public class GameWindow extends JFrame {
 				state = game.chasingPhase ? "CHASING" : "SCATTERING";
 			}
 			g.drawString(state + " " + game.stateTimer, 8, 24);
+			if (game.pacSafe) {
+				g.drawString("Pac-Man is safe", 120, 24);
+			}
 			for (Ghost ghost : game.ghosts) {
 				drawGhostTarget(g, ghost);
 				drawGhostState(g, ghost);
