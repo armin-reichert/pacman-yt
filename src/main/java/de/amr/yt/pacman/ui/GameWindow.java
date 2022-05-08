@@ -168,8 +168,8 @@ public class GameWindow extends JFrame {
 	private void drawPacMan(Graphics2D g) {
 		BufferedImage sprite = null;
 		if (game.pac.dead) {
-			if (game.pac.dyingAnimationTimer > 0) {
-				int frame = 10 - (10 * game.pac.dyingAnimationTimer / game.pac.dyingAnimationDuration);
+			if (game.pac.dyingAnimationCountdown > 0) {
+				int frame = 10 - (10 * game.pac.dyingAnimationCountdown / game.pac.dyingAnimationDuration);
 				sprite = ss.pacDeadAnimation.get(frame);
 			} else if (!game.pac.animated) {
 				sprite = ss.pac.get(game.pac.moveDir).get(2);

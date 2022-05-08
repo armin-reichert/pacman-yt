@@ -263,7 +263,7 @@ public class GameController {
 		}
 
 		else if (game.stateTimer == sec(1.5)) {
-			game.pac.dyingAnimationTimer = game.pac.dyingAnimationDuration;
+			game.pac.dyingAnimationCountdown = game.pac.dyingAnimationDuration;
 			game.pac.animated = true;
 		}
 

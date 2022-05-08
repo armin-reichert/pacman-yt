@@ -214,7 +214,7 @@ public class GameModel {
 		}
 	}
 
-	public void checkBonus() {
+	public void checkBonusAwarded() {
 		if (world.eatenFoodCount == 70 || world.eatenFoodCount == 170) {
 			bonus = bonusSymbol;
 			bonusTimer = sec(9 + new Random().nextDouble());
@@ -228,28 +228,42 @@ public class GameModel {
 		}
 	}
 
-	public void checkFood() {
+	/**
+	 * @return {@code true} if a power pellet has been found
+	 */
+	public boolean checkPelletFound() {
 		Vector2 pacTile = pac.tile();
 		int oldScore = score;
 		if (world.eatPellet(pacTile)) {
 			score += 10;
-			checkBonus();
+			checkBonusAwarded();
 			checkExtraLife(oldScore);
-		} else if (world.eatPowerPellet(pacTile)) {
-			score += 50;
-			checkBonus();
-			checkExtraLife(oldScore);
-			pac.enterPowerState();
+			return false;
 		}
-		if (bonus != -1 && !bonusEaten && pacTile.equals(world.bonusTile)) {
+		if (world.eatPowerPellet(pacTile)) {
+			score += 50;
+			checkBonusAwarded();
+			checkExtraLife(oldScore);
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * @return {@code true} if edible bonus symbol has been found
+	 */
+	public boolean checkBonusFound() {
+		if (bonus != -1 && !bonusEaten && pac.tile().equals(world.bonusTile)) {
 			bonusTimer = sec(2);
 			bonusEaten = true;
 			score += bonusValue(bonusSymbol);
+			return true;
 		}
+		return false;
 	}
 
 	public void checkPacKilledByGhost() {
-		if (pac.powerTime == 0) {
+		if (pac.powerCountdown == 0) {
 			Vector2 pacTile = pac.tile();
 			for (Ghost ghost : ghosts) {
 				if ((ghost.state == GhostState.CHASING || ghost.state == GhostState.SCATTERING)
@@ -262,7 +276,7 @@ public class GameModel {
 	}
 
 	public void checkGhostsKilledByPac() {
-		if (pac.powerTime == 0) {
+		if (pac.powerCountdown == 0) {
 			return;
 		}
 		Vector2 pacTile = pac.tile();

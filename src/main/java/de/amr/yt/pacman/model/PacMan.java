@@ -34,21 +34,17 @@ import de.amr.yt.pacman.lib.Vector2;
 public class PacMan extends Creature {
 
 	public final GameModel game;
-	public int powerTime;
 	public boolean losingPower;
 	public boolean dead;
-	public int dyingAnimationTimer;
+	public int powerCountdown;
+	public int dyingAnimationCountdown;
 	public final int dyingAnimationDuration = sec(1.5);
-	public final int powerLossDuration = sec(2);
+	public final int losingPowerDuration = sec(2);
 
 	public PacMan(GameModel game) {
 		super(game.world);
 		this.game = game;
 		canReverse = true;
-		powerTime = 0;
-		losingPower = false;
-		dead = false;
-		dyingAnimationTimer = 0;
 	}
 
 	@Override
@@ -58,7 +54,7 @@ public class PacMan extends Creature {
 
 	@Override
 	protected float currentSpeed() {
-		return powerTime == 0 ? game.playerSpeed : game.playerSpeedPowered;
+		return powerCountdown == 0 ? game.playerSpeed : game.playerSpeedPowered;
 	}
 
 	@Override
@@ -69,25 +65,28 @@ public class PacMan extends Creature {
 
 	public void update() {
 		if (dead) {
-			if (dyingAnimationTimer > 0) {
-				--dyingAnimationTimer;
+			if (dyingAnimationCountdown > 0) {
+				--dyingAnimationCountdown;
 			}
 		} else {
 			moveThroughWorld();
-			game.checkFood();
+			boolean powerPelletFound = game.checkPelletFound();
+			if (powerPelletFound) {
+				enterPowerState();
+			}
+			game.checkBonusFound();
 			game.checkPacKilledByGhost();
 			game.checkGhostsKilledByPac();
 			updatePowerState();
 		}
 	}
 
-	public void enterPowerState() {
-		powerTime = sec(game.ghostFrightenedSeconds);
+	private void enterPowerState() {
+		powerCountdown = sec(game.ghostFrightenedSeconds);
 		losingPower = false;
 		for (Ghost ghost : game.ghosts) {
 			if (ghost.state == GhostState.CHASING || ghost.state == GhostState.SCATTERING) {
 				ghost.state = GhostState.FRIGHTENED;
-				ghost.speed = game.ghostSpeedFrightened;
 			}
 		}
 		game.ghostsKilledByPowerPill = 0;
@@ -95,11 +94,11 @@ public class PacMan extends Creature {
 	}
 
 	private void updatePowerState() {
-		if (powerTime > 0) {
-			if (powerTime == powerLossDuration) {
+		if (powerCountdown > 0) {
+			if (powerCountdown == losingPowerDuration) {
 				losingPower = true;
 			}
-			if (--powerTime == 0) {
+			if (--powerCountdown == 0) {
 				losingPower = false;
 				game.onPacPowerEnding();
 			}
