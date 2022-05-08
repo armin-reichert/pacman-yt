@@ -66,6 +66,7 @@ public class GameModel {
 	public boolean powerPelletsBlinking;
 	public int ghostsKilledByPowerPill;
 	public int score;
+	public int lives;
 
 	public int levelNumber; // 1,2,...
 
@@ -223,7 +224,7 @@ public class GameModel {
 
 	public void checkExtraLife(int oldScore) {
 		if (oldScore < 10_000 && score >= 10_000) {
-			pac.lives++;
+			lives++;
 		}
 	}
 

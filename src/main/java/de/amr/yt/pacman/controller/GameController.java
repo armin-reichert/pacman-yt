@@ -124,7 +124,7 @@ public class GameController {
 		game.setLevelNumber(1);
 		game.levelSymbols.clear();
 		game.levelSymbols.add(game.bonusSymbol);
-		game.pac.lives = 3;
+		game.lives = 3;
 		enterState(GameState.INIT_LEVEL);
 	}
 
@@ -268,8 +268,8 @@ public class GameController {
 		}
 
 		else if (game.stateTimer == sec(5)) {
-			--game.pac.lives;
-			if (game.pac.lives > 0) {
+			--game.lives;
+			if (game.lives > 0) {
 				enterState(GameState.READY);
 			} else {
 				for (Ghost ghost : game.ghosts) {

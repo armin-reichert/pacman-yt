@@ -153,7 +153,7 @@ public class GameWindow extends JFrame {
 			g.drawString("GAME  OVER", 9 * World.TS, 21 * World.TS);
 		}
 
-		for (int i = 0; i < game.pac.lives; ++i) {
+		for (int i = 0; i < game.lives; ++i) {
 			g.drawImage(ss.liveCount, (1 + 2 * i) * World.TS, 34 * World.TS, null);
 		}
 

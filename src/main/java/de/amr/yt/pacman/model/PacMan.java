@@ -34,7 +34,6 @@ import de.amr.yt.pacman.lib.Vector2;
 public class PacMan extends Creature {
 
 	public final GameModel game;
-	public int lives;
 	public int powerTime;
 	public boolean losingPower;
 	public boolean dead;
