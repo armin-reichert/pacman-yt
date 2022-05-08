@@ -98,7 +98,7 @@ public class GameController {
 	}
 
 	public void startSimulation() {
-		init();
+		newGame();
 		running = true;
 		simulation = new Thread(this::loop);
 		simulation.run();
@@ -138,19 +138,19 @@ public class GameController {
 		game.stateTimer = -1;
 	}
 
-	private void init() {
+	private void newGame() {
 		game.setLevelNumber(1);
 		game.levelSymbols.clear();
 		game.levelSymbols.add(game.bonusSymbol);
 		game.lives = 3;
-		enterState(GameState.INIT_LEVEL);
+		enterState(GameState.LEVEL_STARTING);
 	}
 
 	private void update() {
 		++game.ticks;
 		++game.stateTimer;
 		switch (game.state) {
-		case INIT_LEVEL -> update_INIT_LEVEL();
+		case LEVEL_STARTING -> update_LEVEL_STARTING();
 		case READY -> update_READY();
 		case PLAYING -> update_PLAYING();
 		case PACMAN_DEAD -> update_PACMAN_DEAD();
@@ -160,11 +160,9 @@ public class GameController {
 		move = null;
 	}
 
-	private void update_INIT_LEVEL() {
+	private void update_LEVEL_STARTING() {
 		game.powerPelletsBlinking = false;
-		game.attackTimer = 0;
 		game.world.resetFood();
-		game.bonus = -1;
 		for (Ghost ghost : game.ghosts) {
 			ghost.visible = false;
 		}
@@ -192,6 +190,7 @@ public class GameController {
 			game.pac.animated = true;
 			game.ghosts[BLINKY].animated = true;
 			enterState(GameState.PLAYING);
+			return;
 		}
 
 		for (Ghost ghost : game.ghosts) {
@@ -347,7 +346,7 @@ public class GameController {
 			if (game.levelSymbols.size() == 8) {
 				game.levelSymbols.remove(0);
 			}
-			enterState(GameState.INIT_LEVEL);
+			enterState(GameState.LEVEL_STARTING);
 		}
 	}
 
@@ -361,7 +360,7 @@ public class GameController {
 		}
 
 		else if (game.stateTimer == sec(5)) {
-			init();
+			newGame();
 		}
 	}
 }
