@@ -54,6 +54,7 @@ public class Ghost extends Creature {
 		this.game = game;
 		this.id = id;
 		canReverse = false;
+		state = GhostState.LOCKED;
 	}
 
 	@Override

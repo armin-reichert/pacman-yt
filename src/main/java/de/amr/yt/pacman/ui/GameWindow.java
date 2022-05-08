@@ -34,6 +34,7 @@ import java.awt.image.BufferedImage;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 
+import de.amr.yt.pacman.controller.FPSCounter;
 import de.amr.yt.pacman.controller.GameState;
 import de.amr.yt.pacman.model.Creature;
 import de.amr.yt.pacman.model.GameModel;
@@ -48,14 +49,16 @@ public class GameWindow extends JFrame {
 
 	public boolean showInfo = true;
 
-	private GameModel game;
+	private final GameModel game;
+	private final FPSCounter fpsCounter;
 	private JComponent canvas;
 	private Font arcadeFont;
 	private Spritesheet ss = new Spritesheet();
 
-	public GameWindow(GameModel game, double scale) {
+	public GameWindow(GameModel game, FPSCounter fpsCounter, double scale) {
 		super("Pac-Man");
 		this.game = game;
+		this.fpsCounter = fpsCounter;
 		loadFonts();
 		createCanvas(scale);
 		add(canvas);
@@ -125,20 +128,7 @@ public class GameWindow extends JFrame {
 		}
 
 		if (showInfo) {
-			g.setColor(Color.WHITE);
-			g.setFont(new Font("Monospaced", Font.BOLD, 8));
-			String state = game.state + "";
-			if (game.state == GameState.PLAYING) {
-				state = game.chasingPhase ? "CHASING" : "SCATTERING";
-			}
-			g.drawString(state + " " + game.stateTimer, 8, 24);
-			if (game.pacSafe) {
-				g.drawString("Pac-Man is safe", 120, 24);
-			}
-			for (Ghost ghost : game.ghosts) {
-				drawGhostTarget(g, ghost);
-				drawGhostState(g, ghost);
-			}
+			drawInfo(g);
 		}
 
 		g.setColor(Color.WHITE);
@@ -165,6 +155,24 @@ public class GameWindow extends JFrame {
 			int y = (World.ROWS - 2) * World.TS;
 			int symbol = game.levelSymbols.get(i);
 			g.drawImage(ss.bonusSymbols.get(symbol), x, y, null);
+		}
+	}
+
+	private void drawInfo(Graphics2D g) {
+		g.setColor(Color.WHITE);
+		g.setFont(new Font("Monospaced", Font.BOLD, 8));
+		String state = game.state + "";
+		if (game.state == GameState.PLAYING) {
+			state = game.chasingPhase ? "CHASING" : "SCATTERING";
+		}
+		g.drawString(fpsCounter.getFrameRate() + " FPS", 8, 16);
+		g.drawString(state + " " + game.stateTimer, 8, 24);
+		if (game.pacSafe) {
+			g.drawString("Pac-Man is safe", 120, 24);
+		}
+		for (Ghost ghost : game.ghosts) {
+			drawGhostTarget(g, ghost);
+			drawGhostState(g, ghost);
 		}
 	}
 

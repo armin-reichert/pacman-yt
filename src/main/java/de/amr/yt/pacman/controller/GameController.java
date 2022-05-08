@@ -52,7 +52,9 @@ public class GameController {
 
 	public final GameModel game;
 	public GameWindow window;
-	private final Thread simulation = new Thread(this::loop);
+
+	private final FPSCounter fpsCounter = new FPSCounter();
+	private Thread simulation;
 	private volatile boolean running;
 	private volatile Direction move;
 
@@ -61,7 +63,7 @@ public class GameController {
 	}
 
 	public void createAndShowUI() {
-		window = new GameWindow(game, 2.0);
+		window = new GameWindow(game, fpsCounter, 2.0);
 		window.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
@@ -89,7 +91,9 @@ public class GameController {
 	}
 
 	public void startSimulation() {
+		init();
 		running = true;
+		simulation = new Thread(this::loop);
 		simulation.run();
 	}
 
@@ -104,15 +108,21 @@ public class GameController {
 	}
 
 	private void loop() {
-		init();
+		final long targetTime = 1_000_000_000 / 60;
+		fpsCounter.start();
 		while (running) {
+			long frameStart = System.nanoTime();
 			update();
 			window.repaint();
-			try {
-				Thread.sleep(15);
-			} catch (InterruptedException e) {
-				// ignore
+			long frameDuration = System.nanoTime() - frameStart;
+			if (frameDuration < targetTime) {
+				try {
+					Thread.sleep((targetTime - frameDuration) / 1_000_000);
+				} catch (InterruptedException e) {
+					// ignore
+				}
 			}
+			fpsCounter.update();
 		}
 	}
 
