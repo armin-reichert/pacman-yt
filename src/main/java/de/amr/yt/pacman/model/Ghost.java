@@ -42,6 +42,10 @@ public class Ghost extends Creature {
 
 	private static final Direction[] DIR_ORDER = { Direction.UP, Direction.RIGHT, Direction.DOWN, Direction.LEFT };
 
+	private static boolean inRange(float value, float target, float delta) {
+		return Math.abs(value - target) <= delta;
+	}
+
 	public final int id;
 	public final GameModel game;
 	public GhostState state;
@@ -83,15 +87,7 @@ public class Ghost extends Creature {
 		case ENTERING_HOUSE -> enterGhostHouse(world.houseEntry);
 		case LEAVING_HOUSE -> leaveGhostHouse(world.houseEntry);
 		case CHASING, SCATTERING, FRIGHTENED -> wanderAround();
-		case EATEN -> {
-			wanderAround();
-			if (eatenTimer > 0) {
-				--eatenTimer;
-			}
-			if (Math.abs(x - 112) <= 1 && y == 116) {
-				state = GhostState.ENTERING_HOUSE;
-			}
-		}
+		case EATEN -> returnToHouse();
 		}
 	}
 
@@ -199,7 +195,7 @@ public class Ghost extends Creature {
 			y = entry.y;
 			wishDir = Direction.LEFT;
 			state = game.chasingPhase ? GhostState.CHASING : GhostState.SCATTERING;
-		} else if (Math.abs(x - entry.x) <= 1) {
+		} else if (inRange(x, entry.x, 1)) {
 			x = entry.x;
 			wishDir = moveDir = Direction.UP;
 			move(wishDir);
@@ -236,6 +232,17 @@ public class Ghost extends Creature {
 			}
 		} else {
 			state = GhostState.LEAVING_HOUSE;
+		}
+	}
+
+	private void returnToHouse() {
+		if (inRange(x, world.houseEntry.x, 1) && y == world.houseEntry.y) {
+			state = GhostState.ENTERING_HOUSE;
+		} else {
+			wanderAround();
+			if (eatenTimer > 0) {
+				--eatenTimer;
+			}
 		}
 	}
 
