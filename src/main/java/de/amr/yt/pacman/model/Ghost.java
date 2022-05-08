@@ -83,29 +83,41 @@ public class Ghost extends Creature {
 		case ENTERING_HOUSE -> enterGhostHouse(world.houseEntry);
 		case LEAVING_HOUSE -> leaveGhostHouse(world.houseEntry);
 		case CHASING, SCATTERING, FRIGHTENED -> wanderAround();
-		case EATEN -> returnToHouse();
+		case EATEN -> returnToGhostHouse();
 		}
-	}
-
-	private Direction housePosition() {
-		return switch (id) {
-		case INKY -> Direction.LEFT;
-		case CLYDE -> Direction.RIGHT;
-		default -> null;
-		};
 	}
 
 	private void wanderAround() {
 		if (enteredNewTile) {
-			computeTargetTile();
+			targetTile = computeTargetTile();
 			takeDirectionTowardsTarget();
 		}
 		moveThroughWorld();
 	}
 
-	// TODO: some speed values are just guesses
+	private void takeDirectionTowardsTarget() {
+		if (targetTile == null) {
+			return;
+		}
+		double minDist = Double.MAX_VALUE;
+		for (Direction direction : DIR_ORDER) {
+			if (direction == moveDir.opposite()) {
+				continue;
+			}
+			Vector2 neighbor = tile().neighbor(direction);
+			if (canEnterTile(neighbor)) {
+				double dist = neighbor.dist(targetTile);
+				if (dist < minDist) {
+					minDist = dist;
+					wishDir = direction;
+				}
+			}
+		}
+	}
+
 	@Override
 	public void updateSpeed() {
+		// TODO: some speed values are just guesses
 		if (game.world.isTunnel(tile())) {
 			speed = game.ghostSpeedTunnel;
 		} else {
@@ -119,8 +131,8 @@ public class Ghost extends Creature {
 		}
 	}
 
-	private void computeTargetTile() {
-		targetTile = switch (state) {
+	private Vector2 computeTargetTile() {
+		return switch (state) {
 		case LOCKED, ENTERING_HOUSE, LEAVING_HOUSE -> null;
 		case EATEN -> world.houseEntryTile;
 		case FRIGHTENED -> computeRandomNeighborTile();
@@ -203,14 +215,14 @@ public class Ghost extends Creature {
 			move(wishDir);
 		} else if (y <= entry.y + 3 * World.TS) { // reached bottom
 			move(wishDir);
-		} else if (housePosition() == Direction.LEFT) {
+		} else if (ghostHousePosition() == Direction.LEFT) {
 			if (x <= entry.x - 2 * World.TS) {
 				state = GhostState.LEAVING_HOUSE;
 			} else {
 				wishDir = Direction.LEFT;
 				move(wishDir);
 			}
-		} else if (housePosition() == Direction.RIGHT) {
+		} else if (ghostHousePosition() == Direction.RIGHT) {
 			if (x >= entry.x + 2 * World.TS) {
 				state = GhostState.LEAVING_HOUSE;
 			} else {
@@ -222,7 +234,15 @@ public class Ghost extends Creature {
 		}
 	}
 
-	private void returnToHouse() {
+	private Direction ghostHousePosition() {
+		return switch (id) {
+		case INKY -> Direction.LEFT;
+		case CLYDE -> Direction.RIGHT;
+		default -> null;
+		};
+	}
+
+	private void returnToGhostHouse() {
 		if (inRange(x, world.houseEntry.x, 1) && y == world.houseEntry.y) {
 			state = GhostState.ENTERING_HOUSE;
 		} else {
@@ -244,25 +264,5 @@ public class Ghost extends Creature {
 		}
 		updateSpeed();
 		move(wishDir);
-	}
-
-	private void takeDirectionTowardsTarget() {
-		if (targetTile == null) {
-			return;
-		}
-		double minDist = Double.MAX_VALUE;
-		for (Direction direction : DIR_ORDER) {
-			if (direction == moveDir.opposite()) {
-				continue;
-			}
-			Vector2 neighbor = tile().neighbor(direction);
-			if (canEnterTile(neighbor)) {
-				double dist = neighbor.dist(targetTile);
-				if (dist < minDist) {
-					minDist = dist;
-					wishDir = direction;
-				}
-			}
-		}
 	}
 }
