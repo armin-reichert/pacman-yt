@@ -33,15 +33,11 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.net.URL;
-
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
 
 import de.amr.yt.pacman.lib.Direction;
 import de.amr.yt.pacman.lib.FPSCounter;
 import de.amr.yt.pacman.lib.Logging;
+import de.amr.yt.pacman.lib.Sounds;
 import de.amr.yt.pacman.model.GameModel;
 import de.amr.yt.pacman.model.Ghost;
 import de.amr.yt.pacman.model.GhostState;
@@ -54,21 +50,6 @@ public class GameController {
 
 	public static int sec(double n) {
 		return (int) (n * 60);
-	}
-
-	public static void playClip(String path) {
-		URL url = GameController.class.getResource("/sounds/" + path);
-		if (url == null) {
-			Logging.log("Could not load audio resource, path='%s'", path);
-		}
-		try {
-			Clip clip = AudioSystem.getClip();
-			AudioInputStream ais = AudioSystem.getAudioInputStream(url);
-			clip.open(ais);
-			clip.start();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 
 	public final GameModel game;
@@ -184,7 +165,7 @@ public class GameController {
 		}
 		game.pac.visible = false;
 		if (game.stateTimer == sec(1)) {
-			playClip("game_start.wav");
+			Sounds.play("game_start.wav");
 			enterState(GameState.READY);
 		}
 	}
@@ -298,7 +279,7 @@ public class GameController {
 		else if (game.stateTimer == sec(1.5)) {
 			game.pac.dyingAnimationCountdown = game.pac.dyingAnimationDuration;
 			game.pac.animated = true;
-			playClip("pacman_death.wav");
+			Sounds.play("pacman_death.wav");
 		}
 
 		else if (game.stateTimer == sec(5)) {
