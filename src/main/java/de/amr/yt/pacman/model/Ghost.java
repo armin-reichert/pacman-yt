@@ -80,8 +80,8 @@ public class Ghost extends Creature {
 	public void update() {
 		switch (state) {
 		case LOCKED -> bounce();
-		case ENTERING_HOUSE -> enterGhostHouse(112, 116);
-		case LEAVING_HOUSE -> leaveGhostHouse(112, 116);
+		case ENTERING_HOUSE -> enterGhostHouse(world.houseEntry);
+		case LEAVING_HOUSE -> leaveGhostHouse(world.houseEntry);
 		case CHASING, SCATTERING, FRIGHTENED -> wanderAround();
 		case EATEN -> {
 			wanderAround();
@@ -93,6 +93,14 @@ public class Ghost extends Creature {
 			}
 		}
 		}
+	}
+
+	private Direction housePosition() {
+		return switch (id) {
+		case INKY -> Direction.LEFT;
+		case CLYDE -> Direction.RIGHT;
+		default -> null;
+		};
 	}
 
 	private void wanderAround() {
@@ -185,48 +193,46 @@ public class Ghost extends Creature {
 		}
 	}
 
-	private void leaveGhostHouse(int entry_x, int entry_y) {
+	private void leaveGhostHouse(Vector2 entry) {
 		updateSpeed();
-		if (moveDir == Direction.UP && y <= entry_y) { // out of house
-			y = entry_y;
+		if (moveDir == Direction.UP && y <= entry.y) { // out of house
+			y = entry.y;
 			wishDir = Direction.LEFT;
 			state = game.chasingPhase ? GhostState.CHASING : GhostState.SCATTERING;
-		} else if (Math.abs(x - entry_x) <= 1) {
-			x = entry_x;
+		} else if (Math.abs(x - entry.x) <= 1) {
+			x = entry.x;
 			wishDir = moveDir = Direction.UP;
 			move(wishDir);
-		} else if (x < entry_x) {
+		} else if (x < entry.x) {
 			wishDir = moveDir = Direction.RIGHT;
 			move(wishDir);
-		} else if (x > entry_x) {
+		} else if (x > entry.x) {
 			wishDir = moveDir = Direction.LEFT;
 			move(wishDir);
 		}
 	}
 
-	private void enterGhostHouse(int entry_x, int entry_y) {
+	private void enterGhostHouse(Vector2 entry) {
 		updateSpeed();
-		if (y <= entry_y) {
-			// start falling down
-			x = entry_x;
+		if (y == entry.y) { // start falling down
+			x = entry.x;
 			wishDir = moveDir = Direction.DOWN;
 			move(wishDir);
-		} else if (y <= entry_y + 3 * World.TS) {
-			// reached bottom
+		} else if (y <= entry.y + 3 * World.TS) { // reached bottom
 			move(wishDir);
-		} else if (id == INKY) {
-			// go left
-			wishDir = Direction.LEFT;
-			move(wishDir);
-			if (x <= entry_x - 2 * World.TS) {
+		} else if (housePosition() == Direction.LEFT) {
+			if (x <= entry.x - 2 * World.TS) {
 				state = GhostState.LEAVING_HOUSE;
+			} else {
+				wishDir = Direction.LEFT;
+				move(wishDir);
 			}
-		} else if (id == CLYDE) {
-			// go right
-			wishDir = Direction.RIGHT;
-			move(wishDir);
-			if (x >= entry_x + 2 * World.TS) {
+		} else if (housePosition() == Direction.RIGHT) {
+			if (x >= entry.x + 2 * World.TS) {
 				state = GhostState.LEAVING_HOUSE;
+			} else {
+				wishDir = Direction.RIGHT;
+				move(wishDir);
 			}
 		} else {
 			state = GhostState.LEAVING_HOUSE;

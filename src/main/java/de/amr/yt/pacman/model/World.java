@@ -89,6 +89,7 @@ public class World {
 	};
 
 	public Vector2 bonusTile = new Vector2(13, 20);
+	public Vector2 houseEntry = new Vector2(112, 116); // pixel position
 
 	public int eatenFoodCount;
 
