@@ -185,7 +185,7 @@ public class GameWindow extends JFrame {
 
 	private void drawGhost(Graphics2D g, Ghost ghost) {
 		BufferedImage sprite = null;
-		if (ghost.state == GhostState.EATEN) {
+		if (ghost.state == GhostState.EATEN || ghost.state == GhostState.ENTERING_HOUSE) {
 			sprite = ghost.eatenTimer > 0 ? ss.ghostValues.get(ghost.eatenValue) : ss.ghostEaten.get(ghost.moveDir);
 		} else if (ghost.state == GhostState.FRIGHTENED) {
 			if (ghost.animated) {
