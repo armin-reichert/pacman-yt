@@ -104,19 +104,18 @@ public class Ghost extends Creature {
 		moveThroughWorld();
 	}
 
+	// TODO: some speed values are just guesses
 	private void updateSpeed() {
-		if (state == GhostState.LOCKED) {
-			speed = 0.33f * GameModel.BASE_SPEED;
-		} else if (state == GhostState.ENTERING_HOUSE || state == GhostState.LEAVING_HOUSE) {
-			speed = game.ghostSpeedFrightened;
-		} else if (state == GhostState.EATEN) {
-			speed = eatenTimer > 0 ? 0 : 2 * game.ghostSpeed; // TODO correct?
-		} else if (game.world.isTunnel(tile())) {
+		if (game.world.isTunnel(tile())) {
 			speed = game.ghostSpeedTunnel;
-		} else if (state == GhostState.FRIGHTENED) {
-			speed = game.ghostSpeedFrightened;
 		} else {
-			speed = game.ghostSpeed;
+			speed = switch (state) {
+			case LOCKED -> 0.33f * GameModel.BASE_SPEED;
+			case ENTERING_HOUSE, LEAVING_HOUSE -> game.ghostSpeedFrightened;
+			case EATEN -> eatenTimer > 0 ? 0 : 2 * game.ghostSpeed;
+			case FRIGHTENED -> game.ghostSpeedFrightened;
+			case CHASING, SCATTERING -> game.ghostSpeed;
+			};
 		}
 	}
 
