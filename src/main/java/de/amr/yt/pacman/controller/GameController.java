@@ -212,7 +212,7 @@ public class GameController {
 				if (ghost.state == GhostState.SCATTERING) {
 					ghost.state = GhostState.CHASING;
 				}
-				game.chasing = true;
+				game.chasingPhase = true;
 			}
 			log("Chasing phase started");
 		} else if (game.scatterStartTicks.contains(game.attackTimer)) {
@@ -220,7 +220,7 @@ public class GameController {
 				if (ghost.state == GhostState.CHASING) {
 					ghost.state = GhostState.SCATTERING;
 				}
-				game.chasing = false;
+				game.chasingPhase = false;
 			}
 			log("Scattering phase started");
 		}

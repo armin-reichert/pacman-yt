@@ -129,7 +129,7 @@ public class GameWindow extends JFrame {
 			g.setFont(new Font("Monospaced", Font.BOLD, 8));
 			String state = game.state + "";
 			if (game.state == GameState.PLAYING) {
-				state = game.chasing ? "CHASING" : "SCATTERING";
+				state = game.chasingPhase ? "CHASING" : "SCATTERING";
 			}
 			g.drawString(state + " " + game.stateTimer, 8, 24);
 			for (Ghost ghost : game.ghosts) {

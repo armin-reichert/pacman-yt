@@ -80,15 +80,15 @@ public class Ghost extends Creature {
 	public void update() {
 		switch (state) {
 		case LOCKED -> bounce();
-		case ENTERING_HOUSE -> enterGhostHouse();
-		case LEAVING_HOUSE -> leaveGhostHouse();
+		case ENTERING_HOUSE -> enterGhostHouse(112, 116);
+		case LEAVING_HOUSE -> leaveGhostHouse(112, 116);
 		case CHASING, SCATTERING, FRIGHTENED -> wanderAround();
 		case EATEN -> {
 			wanderAround();
 			if (eatenTimer > 0) {
 				--eatenTimer;
 			}
-			if (Math.abs(x - game.world.ghostHouseEntry.x) <= 1 && y == game.world.ghostHouseEntry.y) {
+			if (Math.abs(x - 112) <= 1 && y == 116) {
 				state = GhostState.ENTERING_HOUSE;
 			}
 		}
@@ -185,49 +185,47 @@ public class Ghost extends Creature {
 		}
 	}
 
-	private void leaveGhostHouse() {
+	private void leaveGhostHouse(int entry_x, int entry_y) {
 		updateSpeed();
-		Vector2 entry = game.world.ghostHouseEntry;
-		if (wishDir == Direction.UP && y <= entry.y) {
-			// out of house
+		if (moveDir == Direction.UP && y <= entry_y) { // out of house
+			y = entry_y;
 			wishDir = Direction.LEFT;
-			state = game.chasing ? GhostState.CHASING : GhostState.SCATTERING;
-		} else if (Math.abs(x - entry.x) <= 1) {
+			state = game.chasingPhase ? GhostState.CHASING : GhostState.SCATTERING;
+		} else if (Math.abs(x - entry_x) <= 1) {
+			x = entry_x;
 			wishDir = moveDir = Direction.UP;
-			x = entry.x;
 			move(wishDir);
-		} else if (x < entry.x) {
+		} else if (x < entry_x) {
 			wishDir = moveDir = Direction.RIGHT;
 			move(wishDir);
-		} else if (x > entry.x) {
+		} else if (x > entry_x) {
 			wishDir = moveDir = Direction.LEFT;
 			move(wishDir);
 		}
 	}
 
-	private void enterGhostHouse() {
+	private void enterGhostHouse(int entry_x, int entry_y) {
 		updateSpeed();
-		Vector2 entry = game.world.ghostHouseEntry;
-		if (y <= entry.y) {
+		if (y <= entry_y) {
 			// start falling down
-			x = entry.x;
+			x = entry_x;
 			wishDir = moveDir = Direction.DOWN;
 			move(wishDir);
-		} else if (y <= entry.y + 3 * World.TS) {
+		} else if (y <= entry_y + 3 * World.TS) {
 			// reached bottom
 			move(wishDir);
 		} else if (id == INKY) {
 			// go left
 			wishDir = Direction.LEFT;
 			move(wishDir);
-			if (x <= entry.x - 2 * World.TS) {
+			if (x <= entry_x - 2 * World.TS) {
 				state = GhostState.LEAVING_HOUSE;
 			}
 		} else if (id == CLYDE) {
 			// go right
 			wishDir = Direction.RIGHT;
 			move(wishDir);
-			if (x >= entry.x + 2 * World.TS) {
+			if (x >= entry_x + 2 * World.TS) {
 				state = GhostState.LEAVING_HOUSE;
 			}
 		} else {

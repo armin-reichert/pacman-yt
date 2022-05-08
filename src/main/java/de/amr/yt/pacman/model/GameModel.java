@@ -61,7 +61,7 @@ public class GameModel {
 	public List<Integer> scatterStartTicks;
 	public List<Integer> chaseStartTicks;
 
-	public boolean chasing;
+	public boolean chasingPhase;
 	public boolean mazeFlashing;
 	public boolean powerPelletsBlinking;
 	public int ghostsKilledByPowerPill;
@@ -160,7 +160,7 @@ public class GameModel {
 		bonus = -1;
 		bonusTimer = 0;
 		bonusEaten = false;
-		chasing = false;
+		chasingPhase = false;
 		powerPelletsBlinking = false;
 		ghostsKilledByPowerPill = 0;
 
@@ -208,7 +208,7 @@ public class GameModel {
 	public void onPacPowerEnding() {
 		for (Ghost ghost : ghosts) {
 			if (ghost.state == GhostState.FRIGHTENED) {
-				ghost.state = chasing ? GhostState.CHASING : GhostState.SCATTERING;
+				ghost.state = chasingPhase ? GhostState.CHASING : GhostState.SCATTERING;
 			}
 		}
 	}
