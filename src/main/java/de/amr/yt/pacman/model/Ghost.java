@@ -205,21 +205,27 @@ public class Ghost extends Creature {
 
 	private void enterGhostHouse(Vector2 entry) {
 		speed = currentSpeed();
-		if (y == entry.y) { // start falling down
+		if (y == entry.y) {
+			// start falling down
 			x = entry.x;
 			wishDir = moveDir = Direction.DOWN;
 			move(wishDir);
-		} else if (y <= entry.y + 3 * World.TS) { // reached bottom
+		} else if (y <= entry.y + 3 * World.TS) {
+			// keep falling
 			move(wishDir);
 		} else if (ghostHousePosition() == Direction.LEFT) {
+			// move left
 			if (x <= entry.x - 2 * World.TS) {
+				// reached left seat
 				state = GhostState.LEAVING_HOUSE;
 			} else {
 				wishDir = Direction.LEFT;
 				move(wishDir);
 			}
 		} else if (ghostHousePosition() == Direction.RIGHT) {
+			// move right
 			if (x >= entry.x + 2 * World.TS) {
+				// reached right seat
 				state = GhostState.LEAVING_HOUSE;
 			} else {
 				wishDir = Direction.RIGHT;
