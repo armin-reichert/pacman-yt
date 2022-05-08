@@ -255,26 +255,18 @@ public class GameController {
 	}
 
 	private void releaseGhosts() {
-		// TODO this is just mockery
-		if (game.ghosts[BLINKY].state == GhostState.LOCKED) {
-			if (game.stateTimer == sec(0)) {
-				game.ghosts[BLINKY].state = GhostState.SCATTERING;
-			}
+		// TODO this is just arbitrary logic, the real game uses dot counters and stuff
+		if (game.ghosts[BLINKY].state == GhostState.LOCKED && game.stateTimer == sec(0)) {
+			game.ghosts[BLINKY].state = GhostState.SCATTERING;
 		}
-		if (game.ghosts[PINKY].state == GhostState.LOCKED) {
-			if (game.stateTimer == sec(1)) {
-				game.ghosts[PINKY].state = GhostState.LEAVING_HOUSE;
-			}
+		if (game.ghosts[PINKY].state == GhostState.LOCKED && game.stateTimer == sec(1)) {
+			game.ghosts[PINKY].state = GhostState.LEAVING_HOUSE;
 		}
-		if (game.ghosts[INKY].state == GhostState.LOCKED) {
-			if (game.stateTimer == sec(3)) {
-				game.ghosts[INKY].state = GhostState.LEAVING_HOUSE;
-			}
+		if (game.ghosts[INKY].state == GhostState.LOCKED && game.stateTimer == sec(3)) {
+			game.ghosts[INKY].state = GhostState.LEAVING_HOUSE;
 		}
-		if (game.ghosts[CLYDE].state == GhostState.LOCKED) {
-			if (game.stateTimer == sec(5)) {
-				game.ghosts[CLYDE].state = GhostState.LEAVING_HOUSE;
-			}
+		if (game.ghosts[CLYDE].state == GhostState.LOCKED && game.stateTimer == sec(7)) {
+			game.ghosts[CLYDE].state = GhostState.LEAVING_HOUSE;
 		}
 	}
 
