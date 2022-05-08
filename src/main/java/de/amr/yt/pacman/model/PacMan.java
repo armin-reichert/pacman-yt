@@ -57,14 +57,14 @@ public class PacMan extends Creature {
 	}
 
 	@Override
-	public String toString() {
-		return "PacMan[x=%.2f, y=%.2f tile=%s, offX=%.2f, offY=%.2f, moveDir=%s, wishDir=%s]".formatted(x, y, tile(),
-				offsetX(), offsetY(), moveDir, wishDir);
+	protected float currentSpeed() {
+		return powerTime == 0 ? game.playerSpeed : game.playerSpeedPowered;
 	}
 
 	@Override
-	public void updateSpeed() {
-		speed = powerTime == 0 ? game.playerSpeed : game.playerSpeedPowered;
+	public String toString() {
+		return "PacMan[x=%.2f, y=%.2f tile=%s, offX=%.2f, offY=%.2f, moveDir=%s, wishDir=%s]".formatted(x, y, tile(),
+				offsetX(), offsetY(), moveDir, wishDir);
 	}
 
 	public void update() {

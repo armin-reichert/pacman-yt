@@ -116,12 +116,12 @@ public class Ghost extends Creature {
 	}
 
 	@Override
-	public void updateSpeed() {
+	protected float currentSpeed() {
 		// TODO: some speed values are just guesses
 		if (game.world.isTunnel(tile())) {
-			speed = game.ghostSpeedTunnel;
+			return game.ghostSpeedTunnel;
 		} else {
-			speed = switch (state) {
+			return switch (state) {
 			case LOCKED -> 0.33f * GameModel.BASE_SPEED;
 			case ENTERING_HOUSE, LEAVING_HOUSE -> game.ghostSpeedFrightened;
 			case EATEN -> eatenTimer > 0 ? 0 : 2 * game.ghostSpeed;
@@ -189,7 +189,7 @@ public class Ghost extends Creature {
 	}
 
 	private void leaveGhostHouse(Vector2 entry) {
-		updateSpeed();
+		speed = currentSpeed();
 		if (moveDir == Direction.UP && y <= entry.y) { // out of house
 			y = entry.y;
 			wishDir = Direction.LEFT;
@@ -208,7 +208,7 @@ public class Ghost extends Creature {
 	}
 
 	private void enterGhostHouse(Vector2 entry) {
-		updateSpeed();
+		speed = currentSpeed();
 		if (y == entry.y) { // start falling down
 			x = entry.x;
 			wishDir = moveDir = Direction.DOWN;
@@ -262,7 +262,7 @@ public class Ghost extends Creature {
 		} else if (y <= 17 * World.TS) {
 			moveDir = wishDir = Direction.DOWN;
 		}
-		updateSpeed();
+		speed = currentSpeed();
 		move(wishDir);
 	}
 }

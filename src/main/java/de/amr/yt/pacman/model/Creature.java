@@ -32,24 +32,33 @@ import de.amr.yt.pacman.lib.Vector2;
 public abstract class Creature {
 
 	public final World world;
-	public float x;
-	public float y;
-	public float speed;
-	public boolean enteredNewTile;
-	public boolean canReverse;
-	public boolean stuck;
-	public boolean animated;
-	public int animFrame;
-	public boolean visible;
-	public Direction moveDir;
-	public Direction wishDir;
+	public float x = Float.MIN_VALUE;
+	public float y = Float.MIN_VALUE;
+	public float speed = 0;
+	public boolean enteredNewTile = false;
+	public boolean canReverse = false;
+	public boolean stuck = false;
+	public boolean animated = false;
+	public int animFrame = 0;
+	public boolean visible = true;
+	public Direction moveDir = Direction.LEFT;
+	public Direction wishDir = Direction.LEFT;
 
-	public Creature(World world) {
+	protected Creature(World world) {
 		this.world = world;
-		wishDir = moveDir = Direction.LEFT;
-		animated = true;
-		visible = true;
 	}
+
+	/**
+	 * @param tile some tile
+	 * @return Tells if this creature can enter the given tile in the current situation. This may depend on the creature's
+	 *         (e.g. ghost's) current state, location etc. or on the current game state.
+	 */
+	protected abstract boolean canEnterTile(Vector2 tile);
+
+	/**
+	 * @return the current speed (in pixels per frame)
+	 */
+	protected abstract float currentSpeed();
 
 	public void placeAtTile(int tile_x, int tile_y) {
 		placeAtTile(tile_x, tile_y, 0, 0);
@@ -92,10 +101,8 @@ public abstract class Creature {
 		return tileY() * World.TS + World.HTS;
 	}
 
-	public abstract void updateSpeed();
-
 	public void moveThroughWorld() {
-		updateSpeed();
+		speed = currentSpeed();
 		stuck = false;
 		Vector2 tile = tile();
 		boolean success = false;
@@ -119,10 +126,7 @@ public abstract class Creature {
 			x = World.COLS * World.TS + World.HTS;
 		}
 		enteredNewTile = !tile.equals(tile());
-//		Logging.log("%s", this);
 	}
-
-	protected abstract boolean canEnterTile(Vector2 tile);
 
 	protected boolean tryMove(Direction currentDir, Direction newDir) {
 		boolean canMove = canMove(currentDir, newDir);
@@ -138,9 +142,9 @@ public abstract class Creature {
 	}
 
 	protected boolean canMove(Direction currentDir, Direction newDir) {
-		Vector2 tile = tile();
+		var tile = tile();
 		if (tile.x < 0 || tile.x >= World.COLS) {
-			// no sidewards turn in teleport tunnel
+			// when teleporting, no sidewards turns are allowed!
 			return currentDir == newDir || currentDir == newDir.opposite();
 		}
 		if (canEnterTile(tile.neighbor(newDir))) {
@@ -154,22 +158,13 @@ public abstract class Creature {
 			}
 			return canTurn90;
 		} else {
-			switch (newDir) {
-			case UP -> {
-				return newDir.vector.y * speed + offsetY() > World.HTS;
-			}
-			case DOWN -> {
-				return newDir.vector.y * speed + offsetY() < World.HTS;
-			}
-			case LEFT -> {
-				return newDir.vector.x * speed + offsetX() > World.HTS;
-			}
-			case RIGHT -> {
-				return newDir.vector.x * speed + offsetX() < World.HTS;
-			}
-			}
+			return switch (newDir) {
+			case UP -> newDir.vector.y * speed + offsetY() > World.HTS;
+			case DOWN -> newDir.vector.y * speed + offsetY() < World.HTS;
+			case LEFT -> newDir.vector.x * speed + offsetX() > World.HTS;
+			case RIGHT -> newDir.vector.x * speed + offsetX() < World.HTS;
+			};
 		}
-		return true;
 	}
 
 	protected boolean canTurn90Degrees(Direction direction) {
