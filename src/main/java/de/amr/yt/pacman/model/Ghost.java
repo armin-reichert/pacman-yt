@@ -185,22 +185,22 @@ public class Ghost extends Creature {
 	}
 
 	private void leaveGhostHouse(Vector2 entry) {
-		speed = currentSpeed();
-		if (moveDir == Direction.UP && y <= entry.y) { // out of house
+		if (y <= entry.y) { // out of house
 			y = entry.y;
 			wishDir = Direction.LEFT;
 			state = game.chasingPhase ? GhostState.CHASING : GhostState.SCATTERING;
-		} else if (inRange(x, entry.x, 1)) {
+			return;
+		}
+		if (inRange(x, entry.x, 1)) {
 			x = entry.x;
 			wishDir = moveDir = Direction.UP;
-			move(wishDir);
 		} else if (x < entry.x) {
 			wishDir = moveDir = Direction.RIGHT;
-			move(wishDir);
 		} else if (x > entry.x) {
 			wishDir = moveDir = Direction.LEFT;
-			move(wishDir);
 		}
+		speed = currentSpeed();
+		move(wishDir);
 	}
 
 	private void enterGhostHouse(Vector2 entry) {
