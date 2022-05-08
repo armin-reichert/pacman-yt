@@ -70,38 +70,21 @@ public class PacMan extends Creature {
 			}
 		} else {
 			moveThroughWorld();
-			boolean powerPelletFound = game.checkPelletFound();
-			if (powerPelletFound) {
-				enterPowerState();
+			if (powerCountdown > 0) {
+				if (powerCountdown == losingPowerDuration) {
+					losingPower = true;
+				}
+				if (--powerCountdown == 0) {
+					losingPower = false;
+					game.onPacPowerEnding();
+				}
 			}
-			game.checkBonusFound();
-			game.checkPacKilledByGhost();
-			game.checkGhostsKilledByPac();
-			updatePowerState();
 		}
 	}
 
-	private void enterPowerState() {
+	public void enterPowerState() {
 		powerCountdown = sec(game.ghostFrightenedSeconds);
 		losingPower = false;
-		for (Ghost ghost : game.ghosts) {
-			if (ghost.state == GhostState.CHASING || ghost.state == GhostState.SCATTERING) {
-				ghost.state = GhostState.FRIGHTENED;
-			}
-		}
-		game.ghostsKilledByPowerPill = 0;
 		log("Pac-Man gets power for %d seconds", game.ghostFrightenedSeconds);
-	}
-
-	private void updatePowerState() {
-		if (powerCountdown > 0) {
-			if (powerCountdown == losingPowerDuration) {
-				losingPower = true;
-			}
-			if (--powerCountdown == 0) {
-				losingPower = false;
-				game.onPacPowerEnding();
-			}
-		}
 	}
 }

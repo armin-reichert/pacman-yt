@@ -170,7 +170,9 @@ public class GameController {
 		}
 		game.pac.visible = false;
 		if (game.stateTimer == sec(1)) {
-			Sounds.play(clipGameStart);
+			if (game.levelNumber == 1) {
+				Sounds.play(clipGameStart);
+			}
 			enterState(GameState.READY);
 		}
 	}
@@ -198,8 +200,62 @@ public class GameController {
 	}
 
 	private void update_PLAYING() {
-		// TODO this is just mockery
 
+		// check if level is complete
+		if (game.world.allFoodEaten()) {
+			enterState(GameState.LEVEL_COMPLETE);
+			return;
+		}
+
+		// check if new attack phase starts
+		if (game.chaseStartTicks.contains(game.attackTimer)) {
+			startChasingPhase();
+		} else if (game.scatterStartTicks.contains(game.attackTimer)) {
+			startScatteringPhase();
+		}
+		++game.attackTimer;
+
+		// Pac-Man business
+		if (move != null) {
+			game.pac.wishDir = move;
+		}
+		game.pac.update();
+
+		game.checkPacManFoundPellet();
+
+		if (game.checkPacManFoundPowerPellet()) {
+			game.pac.enterPowerState();
+			for (Ghost ghost : game.ghosts) {
+				if (ghost.state == GhostState.CHASING || ghost.state == GhostState.SCATTERING) {
+					ghost.state = GhostState.FRIGHTENED;
+				}
+			}
+			game.ghostsKilledByPowerPill = 0;
+		}
+
+		game.checkPacManFoundBonus();
+
+		if (game.checkPacManKilledByGhost()) {
+			enterState(GameState.PACMAN_DEAD);
+			return;
+		}
+
+		if (game.checkGhostsKilledByPac()) {
+			// TODO enter new state and return
+		}
+
+		// Ghost business
+		releaseGhosts();
+		for (Ghost ghost : game.ghosts) {
+			ghost.update();
+		}
+
+		// Bonus stuff
+		game.updateBonus();
+	}
+
+	private void releaseGhosts() {
+		// TODO this is just mockery
 		if (game.ghosts[BLINKY].state == GhostState.LOCKED) {
 			if (game.stateTimer == sec(0)) {
 				game.ghosts[BLINKY].state = GhostState.SCATTERING;
@@ -220,51 +276,26 @@ public class GameController {
 				game.ghosts[CLYDE].state = GhostState.LEAVING_HOUSE;
 			}
 		}
+	}
 
-		if (game.world.allFoodEaten()) {
-			enterState(GameState.LEVEL_COMPLETE);
-			return;
-		}
-
-		if (game.chaseStartTicks.contains(game.attackTimer)) {
-			for (Ghost ghost : game.ghosts) {
-				if (ghost.state == GhostState.SCATTERING) {
-					ghost.state = GhostState.CHASING;
-				}
-				game.chasingPhase = true;
-			}
-			log("Chasing phase started");
-		} else if (game.scatterStartTicks.contains(game.attackTimer)) {
-			for (Ghost ghost : game.ghosts) {
-				if (ghost.state == GhostState.CHASING) {
-					ghost.state = GhostState.SCATTERING;
-				}
-				game.chasingPhase = false;
-			}
-			log("Scattering phase started");
-		}
-		++game.attackTimer;
-
-		if (move != null) {
-			game.pac.wishDir = move;
-		}
-		game.pac.update();
-		if (game.pac.dead) {
-			enterState(GameState.PACMAN_DEAD);
-			return;
-		}
-
+	private void startScatteringPhase() {
 		for (Ghost ghost : game.ghosts) {
-			ghost.update();
-		}
-
-		if (game.bonusTimer > 0) {
-			--game.bonusTimer;
-			if (game.bonusTimer == 0) {
-				game.bonus = -1;
+			if (ghost.state == GhostState.CHASING) {
+				ghost.state = GhostState.SCATTERING;
 			}
+			game.chasingPhase = false;
 		}
+		log("Scattering phase started");
+	}
 
+	private void startChasingPhase() {
+		for (Ghost ghost : game.ghosts) {
+			if (ghost.state == GhostState.SCATTERING) {
+				ghost.state = GhostState.CHASING;
+			}
+			game.chasingPhase = true;
+		}
+		log("Chasing phase started");
 	}
 
 	private void update_PACMAN_DEAD() {

@@ -232,17 +232,26 @@ public class GameModel {
 	}
 
 	/**
-	 * @return {@code true} if a power pellet has been found
+	 * @return {@code true} if a pellet has been found
 	 */
-	public boolean checkPelletFound() {
+	public boolean checkPacManFoundPellet() {
 		Vector2 pacTile = pac.tile();
 		int oldScore = score;
 		if (world.eatPellet(pacTile)) {
 			score += 10;
 			checkBonusAwarded();
 			checkExtraLife(oldScore);
-			return false;
+			return true;
 		}
+		return false;
+	}
+
+	/**
+	 * @return {@code true} if a power pellet has been found
+	 */
+	public boolean checkPacManFoundPowerPellet() {
+		Vector2 pacTile = pac.tile();
+		int oldScore = score;
 		if (world.eatPowerPellet(pacTile)) {
 			score += 50;
 			checkBonusAwarded();
@@ -255,7 +264,7 @@ public class GameModel {
 	/**
 	 * @return {@code true} if edible bonus symbol has been found
 	 */
-	public boolean checkBonusFound() {
+	public boolean checkPacManFoundBonus() {
 		if (bonus != -1 && !bonusEaten && pac.tile().equals(world.bonusTile)) {
 			bonusTimer = sec(2);
 			bonusEaten = true;
@@ -265,9 +274,12 @@ public class GameModel {
 		return false;
 	}
 
-	public void checkPacKilledByGhost() {
+	/**
+	 * @return {@code true} if Pac-Man has been killed
+	 */
+	public boolean checkPacManKilledByGhost() {
 		if (pacSafe) {
-			return;
+			return false;
 		}
 		if (pac.powerCountdown == 0) {
 			Vector2 pacTile = pac.tile();
@@ -275,19 +287,25 @@ public class GameModel {
 				if ((ghost.state == GhostState.CHASING || ghost.state == GhostState.SCATTERING)
 						&& ghost.tile().equals(pacTile)) {
 					pac.dead = true;
-					return;
+					return true;
 				}
 			}
 		}
+		return false;
 	}
 
-	public void checkGhostsKilledByPac() {
+	/**
+	 * @return {@code true} if at least one ghost got killed
+	 */
+	public boolean checkGhostsKilledByPac() {
 		if (pac.powerCountdown == 0) {
-			return;
+			return false;
 		}
+		boolean killedOne = false;
 		Vector2 pacTile = pac.tile();
 		for (Ghost ghost : ghosts) {
 			if (ghost.state == GhostState.FRIGHTENED && ghost.tile().equals(pacTile)) {
+				killedOne = true;
 				ghostsKilledByPowerPill++;
 				ghost.state = GhostState.EATEN;
 				ghost.eatenTimer = sec(1);
@@ -299,6 +317,16 @@ public class GameModel {
 				default -> 0;
 				};
 				score += ghost.eatenValue;
+			}
+		}
+		return killedOne;
+	}
+
+	public void updateBonus() {
+		if (bonusTimer > 0) {
+			--bonusTimer;
+			if (bonusTimer == 0) {
+				bonus = -1;
 			}
 		}
 	}
