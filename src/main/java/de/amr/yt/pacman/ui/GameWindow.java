@@ -34,8 +34,8 @@ import java.awt.image.BufferedImage;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 
-import de.amr.yt.pacman.controller.FPSCounter;
 import de.amr.yt.pacman.controller.GameState;
+import de.amr.yt.pacman.lib.FPSCounter;
 import de.amr.yt.pacman.model.Creature;
 import de.amr.yt.pacman.model.GameModel;
 import de.amr.yt.pacman.model.Ghost;

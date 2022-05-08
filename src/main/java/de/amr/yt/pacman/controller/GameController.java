@@ -35,6 +35,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import de.amr.yt.pacman.lib.Direction;
+import de.amr.yt.pacman.lib.FPSCounter;
 import de.amr.yt.pacman.lib.Logging;
 import de.amr.yt.pacman.model.GameModel;
 import de.amr.yt.pacman.model.Ghost;
