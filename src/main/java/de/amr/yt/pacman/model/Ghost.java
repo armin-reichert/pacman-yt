@@ -104,12 +104,12 @@ public class Ghost extends Creature {
 			computeTargetTile();
 			takeDirectionTowardsTarget();
 		}
-		updateSpeed();
 		moveThroughWorld();
 	}
 
 	// TODO: some speed values are just guesses
-	private void updateSpeed() {
+	@Override
+	public void updateSpeed() {
 		if (game.world.isTunnel(tile())) {
 			speed = game.ghostSpeedTunnel;
 		} else {

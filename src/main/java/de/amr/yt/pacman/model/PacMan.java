@@ -62,6 +62,11 @@ public class PacMan extends Creature {
 				offsetX(), offsetY(), moveDir, wishDir);
 	}
 
+	@Override
+	public void updateSpeed() {
+		speed = powerTime == 0 ? game.playerSpeed : game.playerSpeedPowered;
+	}
+
 	public void update() {
 		if (dead) {
 			if (dyingAnimationTimer > 0) {

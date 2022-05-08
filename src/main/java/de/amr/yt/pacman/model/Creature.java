@@ -92,7 +92,10 @@ public abstract class Creature {
 		return tileY() * World.TS + World.HTS;
 	}
 
+	public abstract void updateSpeed();
+
 	public void moveThroughWorld() {
+		updateSpeed();
 		stuck = false;
 		Vector2 tile = tile();
 		boolean success = false;
