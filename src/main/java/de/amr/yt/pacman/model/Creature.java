@@ -61,12 +61,8 @@ public abstract class Creature {
 	protected abstract float currentSpeed();
 
 	public void placeAtTile(Vector2 tile, float offset_x, float offset_y) {
-		placeAtTile(tile.x, tile.y, offset_x, offset_y);
-	}
-
-	public void placeAtTile(int tile_x, int tile_y, float offset_x, float offset_y) {
-		x = tile_x * World.TS + World.HTS + offset_x;
-		y = tile_y * World.TS + World.HTS + offset_y;
+		x = tile.x * World.TS + World.HTS + offset_x;
+		y = tile.y * World.TS + World.HTS + offset_y;
 	}
 
 	public Vector2 tile() {
@@ -74,58 +70,62 @@ public abstract class Creature {
 	}
 
 	public Vector2 tile(float x, float y) {
-		return new Vector2(tileX(), tileY());
+		return new Vector2(col(), row());
 	}
 
-	public int tileX() {
+	public int col() {
 		return (int) (x / World.TS);
 	}
 
-	public int tileY() {
+	public int row() {
 		return (int) (y / World.TS);
 	}
 
 	public float offsetX() {
-		return x - tileX() * World.TS;
+		return x - col() * World.TS;
 	}
 
 	public float offsetY() {
-		return y - tileY() * World.TS;
+		return y - row() * World.TS;
 	}
 
 	public float centerX() {
-		return tileX() * World.TS + World.HTS;
+		return col() * World.TS + World.HTS;
 	}
 
 	public float centerY() {
-		return tileY() * World.TS + World.HTS;
+		return row() * World.TS + World.HTS;
 	}
 
 	public void moveThroughWorld() {
+		// teleport?
+		if (x > World.COLS * World.TS + World.HTS) {
+			x = 0;
+			return;
+		}
+		if (x < 0) {
+			x = World.COLS * World.TS + World.HTS;
+			return;
+		}
+
+		var tileBeforeMove = tile();
 		speed = currentSpeed();
 		stuck = false;
-		Vector2 tile = tile();
-		boolean success = false;
-		if (wishDir != moveDir.opposite() || canReverse) {
-			success = tryMove(moveDir, wishDir);
+		boolean couldMove = false;
+		if (canReverse || wishDir != moveDir.opposite()) {
+			couldMove = tryMove(moveDir, wishDir);
 		}
-		if (!success) {
-			success = tryMove(moveDir, moveDir);
-			if (!success) {
+		if (couldMove) {
+			moveDir = wishDir;
+		} else {
+			couldMove = tryMove(moveDir, moveDir);
+			if (!couldMove) {
 				x = centerX();
 				y = centerY();
 				stuck = true;
 			}
-		} else {
-			moveDir = wishDir;
 		}
-		// teleport
-		if (x > World.COLS * World.TS + World.HTS) {
-			x = 0;
-		} else if (x < 0) {
-			x = World.COLS * World.TS + World.HTS;
-		}
-		enteredNewTile = !tile.equals(tile());
+		enteredNewTile = !tileBeforeMove.equals(tile());
 	}
 
 	protected boolean tryMove(Direction currentDir, Direction newDir) {

@@ -118,7 +118,7 @@ public class Ghost extends Creature {
 	@Override
 	protected float currentSpeed() {
 		// TODO: some speed values are just guesses
-		if (game.world.isTunnel(tile())) {
+		if (state != GhostState.EATEN && game.world.isTunnel(tile())) {
 			return game.ghostSpeedTunnel;
 		} else {
 			return switch (state) {
