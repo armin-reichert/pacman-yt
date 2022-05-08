@@ -83,12 +83,12 @@ public class Ghost extends Creature {
 		case LOCKED -> bounce();
 		case ENTERING_HOUSE -> enterGhostHouse(world.houseEntry);
 		case LEAVING_HOUSE -> leaveGhostHouse(world.houseEntry);
-		case CHASING, SCATTERING, FRIGHTENED -> wanderAround();
+		case CHASING, SCATTERING, FRIGHTENED -> aimTowardsTarget();
 		case EATEN -> returnToGhostHouse();
 		}
 	}
 
-	private void wanderAround() {
+	private void aimTowardsTarget() {
 		if (enteredNewTile) {
 			targetTile = computeTargetTile();
 			takeDirectionTowardsTarget();
@@ -249,7 +249,7 @@ public class Ghost extends Creature {
 		if (inRange(x, world.houseEntry.x, 1) && y == world.houseEntry.y) {
 			state = GhostState.ENTERING_HOUSE;
 		} else {
-			wanderAround();
+			aimTowardsTarget();
 			if (eatenTimer > 0) {
 				--eatenTimer;
 			}
