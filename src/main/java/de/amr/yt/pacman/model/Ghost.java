@@ -28,10 +28,6 @@ import static de.amr.yt.pacman.model.GameModel.CLYDE;
 import static de.amr.yt.pacman.model.GameModel.INKY;
 import static de.amr.yt.pacman.model.GameModel.PINKY;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
 import de.amr.yt.pacman.lib.Direction;
 import de.amr.yt.pacman.lib.Vector2;
 
@@ -124,69 +120,60 @@ public class Ghost extends Creature {
 	}
 
 	private void computeTargetTile() {
-		switch (state) {
+		targetTile = switch (state) {
+		case LOCKED, ENTERING_HOUSE, LEAVING_HOUSE -> null;
+		case EATEN -> world.houseEntryTile;
+		case FRIGHTENED -> computeRandomNeighborTile();
+		case SCATTERING -> computeScatteringTargetTile();
+		case CHASING -> computeChasingTargetTile();
+		};
+	}
 
-		case LOCKED, ENTERING_HOUSE, LEAVING_HOUSE -> {
-			targetTile = null;
-		}
-
-		case EATEN -> {
-			targetTile = new Vector2(13, 14);
-		}
-
-		case FRIGHTENED -> {
-			List<Direction> directions = Arrays.asList(Direction.values());
-			Collections.shuffle(directions);
-			for (Direction direction : directions) {
-				Vector2 neighbor = tile().neighbor(direction);
-				if (canEnterTile(neighbor)) {
-					targetTile = neighbor;
-					return;
-				}
+	private Vector2 computeRandomNeighborTile() {
+		for (Direction direction : Direction.valuesShuffled()) {
+			Vector2 neighbor = tile().neighbor(direction);
+			if (canEnterTile(neighbor)) {
+				return neighbor;
 			}
 		}
+		return null;
+	}
 
-		case SCATTERING -> {
-			targetTile = switch (id) {
-			case BLINKY -> new Vector2(25, 0);
-			case PINKY -> new Vector2(2, 0);
-			case INKY -> new Vector2(27, 34);
-			case CLYDE -> new Vector2(0, 34);
-			default -> null;
-			};
+	private Vector2 computeScatteringTargetTile() {
+		return switch (id) {
+		case BLINKY -> world.rightUpperTarget;
+		case PINKY -> world.leftUpperTarget;
+		case INKY -> world.rightLowerTarget;
+		case CLYDE -> world.leftLowerTarget;
+		default -> null;
+		};
+	}
+
+	private Vector2 computeChasingTargetTile() {
+		return switch (id) {
+		case BLINKY -> {
+			yield game.pac.tile();
 		}
-
-		case CHASING -> {
-			switch (id) {
-			case BLINKY -> {
-				targetTile = game.pac.tile();
+		case PINKY -> {
+			Vector2 pacPlus4 = game.pac.tile().plus(game.pac.moveDir.vector.times(4));
+			if (game.pac.moveDir == Direction.UP) {
+				pacPlus4 = pacPlus4.plus(new Vector2(-4, 0));
 			}
-
-			case PINKY -> {
-				Vector2 pacPlus4 = game.pac.tile().plus(game.pac.moveDir.vector.times(4));
-				if (game.pac.moveDir == Direction.UP) {
-					pacPlus4 = pacPlus4.plus(new Vector2(-4, 0));
-				}
-				targetTile = pacPlus4;
-			}
-
-			case INKY -> {
-				Vector2 pacPlus2 = game.pac.tile().plus(game.pac.moveDir.vector.times(2));
-				if (game.pac.moveDir == Direction.UP) {
-					pacPlus2 = pacPlus2.plus(new Vector2(-2, 0));
-				}
-				Vector2 blinkyTile = game.ghosts[BLINKY].tile();
-				targetTile = pacPlus2.times(2).minus(blinkyTile);
-			}
-
-			case CLYDE -> {
-				targetTile = tile().dist(game.pac.tile()) < 8 ? new Vector2(0, 34) : game.pac.tile();
-			}
-
-			}
+			yield pacPlus4;
 		}
-
+		case INKY -> {
+			Vector2 pacPlus2 = game.pac.tile().plus(game.pac.moveDir.vector.times(2));
+			if (game.pac.moveDir == Direction.UP) {
+				pacPlus2 = pacPlus2.plus(new Vector2(-2, 0));
+			}
+			Vector2 blinkyTile = game.ghosts[BLINKY].tile();
+			yield pacPlus2.times(2).minus(blinkyTile);
 		}
+		case CLYDE -> {
+			yield tile().dist(game.pac.tile()) < 8 ? new Vector2(0, 34) : game.pac.tile();
+		}
+		default -> null;
+		};
 	}
 
 	private void leaveGhostHouse(Vector2 entry) {

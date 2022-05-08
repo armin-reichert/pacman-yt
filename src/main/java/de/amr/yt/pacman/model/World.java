@@ -88,8 +88,14 @@ public class World {
 		//@formatter:on
 	};
 
+	public Vector2 leftUpperTarget = new Vector2(2, 0);
+	public Vector2 rightUpperTarget = new Vector2(25, 0);
+	public Vector2 leftLowerTarget = new Vector2(0, 34);
+	public Vector2 rightLowerTarget = new Vector2(27, 34);
+
 	public Vector2 bonusTile = new Vector2(13, 20);
-	public Vector2 houseEntry = new Vector2(112, 116); // pixel position
+	public Vector2 houseEntryTile = new Vector2(13, 14); // left house entry tile
+	public Vector2 houseEntry = new Vector2(112, 116); // pixel position between both entry tiles
 
 	public int eatenFoodCount;
 

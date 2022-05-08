@@ -23,6 +23,10 @@ SOFTWARE.
 */
 package de.amr.yt.pacman.lib;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 /**
  * @author Armin Reichert
  */
@@ -34,6 +38,12 @@ public enum Direction {
 
 	private Direction(int dx, int dy) {
 		vector = new Vector2(dx, dy);
+	}
+
+	public static List<Direction> valuesShuffled() {
+		List<Direction> directions = Arrays.asList(Direction.values());
+		Collections.shuffle(directions);
+		return directions;
 	}
 
 	public Direction opposite() {
