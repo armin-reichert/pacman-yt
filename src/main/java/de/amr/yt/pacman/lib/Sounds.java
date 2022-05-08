@@ -29,15 +29,13 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 
-import de.amr.yt.pacman.controller.GameController;
-
 /**
  * @author Armin Reichert
  */
 public class Sounds {
 
 	public static void play(String path) {
-		URL url = GameController.class.getResource("/sounds/" + path);
+		URL url = Sounds.class.getResource("/sounds/" + path);
 		if (url == null) {
 			Logging.log("Could not load audio resource, path='%s'", path);
 		}
