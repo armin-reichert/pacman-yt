@@ -36,19 +36,25 @@ import javax.sound.sampled.Clip;
  */
 public class Sounds {
 
-	public static void play(String path) {
+	public static Clip clip(String path) {
 		URL url = Sounds.class.getResource("/sounds/" + path);
 		if (url == null) {
 			log("Could not load audio resource, path='%s'", path);
-			return;
+			return null;
 		}
 		try {
 			Clip clip = AudioSystem.getClip();
 			AudioInputStream ais = AudioSystem.getAudioInputStream(url);
 			clip.open(ais);
-			clip.start();
+			return clip;
 		} catch (Exception e) {
 			e.printStackTrace();
+			return null;
 		}
+	}
+
+	public static void play(Clip clip) {
+		clip.setFramePosition(0);
+		clip.start();
 	}
 }

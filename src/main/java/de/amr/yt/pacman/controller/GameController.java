@@ -34,6 +34,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+import javax.sound.sampled.Clip;
+
 import de.amr.yt.pacman.lib.Direction;
 import de.amr.yt.pacman.lib.FPSCounter;
 import de.amr.yt.pacman.lib.Logging;
@@ -59,6 +61,9 @@ public class GameController {
 	private Thread simulation;
 	private volatile boolean running;
 	private volatile Direction move;
+
+	private Clip clipGameStart = Sounds.clip("game_start.wav");
+	private Clip clipPacManDeath = Sounds.clip("pacman_death.wav");
 
 	public GameController() {
 		game = new GameModel();
@@ -165,7 +170,7 @@ public class GameController {
 		}
 		game.pac.visible = false;
 		if (game.stateTimer == sec(1)) {
-			Sounds.play("game_start.wav");
+			Sounds.play(clipGameStart);
 			enterState(GameState.READY);
 		}
 	}
@@ -279,7 +284,7 @@ public class GameController {
 		else if (game.stateTimer == sec(1.5)) {
 			game.pac.dyingAnimationCountdown = game.pac.dyingAnimationDuration;
 			game.pac.animated = true;
-			Sounds.play("pacman_death.wav");
+			Sounds.play(clipPacManDeath);
 		}
 
 		else if (game.stateTimer == sec(5)) {
