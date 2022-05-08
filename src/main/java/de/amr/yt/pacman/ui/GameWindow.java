@@ -215,7 +215,7 @@ public class GameWindow extends JFrame {
 
 	private void drawGhostState(Graphics2D g, Ghost ghost) {
 		if (ghost.visible) {
-			g.setFont(new Font("Arial Narrow", Font.PLAIN, 8));
+			g.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 6));
 			g.setColor(Color.WHITE);
 			int sw = g.getFontMetrics().stringWidth(ghost.state.name());
 			g.drawString(ghost.state.name(), (int) ghost.x - sw / 2, (int) ghost.y - 8);
