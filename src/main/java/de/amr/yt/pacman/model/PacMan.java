@@ -39,6 +39,7 @@ public class PacMan extends Creature {
 	public boolean dead;
 	public int dyingAnimationTimer;
 	public final int dyingAnimationDuration = sec(1.5);
+	public final int powerLossDuration = sec(2);
 
 	public PacMan(GameModel game) {
 		super(game.world);
@@ -95,7 +96,7 @@ public class PacMan extends Creature {
 
 	private void updatePowerState() {
 		if (powerTime > 0) {
-			if (powerTime == sec(2)) {
+			if (powerTime == powerLossDuration) {
 				losingPower = true;
 			}
 			if (--powerTime == 0) {
