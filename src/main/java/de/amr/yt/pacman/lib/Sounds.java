@@ -23,6 +23,8 @@ SOFTWARE.
 */
 package de.amr.yt.pacman.lib;
 
+import static de.amr.yt.pacman.lib.Logging.log;
+
 import java.net.URL;
 
 import javax.sound.sampled.AudioInputStream;
@@ -37,7 +39,8 @@ public class Sounds {
 	public static void play(String path) {
 		URL url = Sounds.class.getResource("/sounds/" + path);
 		if (url == null) {
-			Logging.log("Could not load audio resource, path='%s'", path);
+			log("Could not load audio resource, path='%s'", path);
+			return;
 		}
 		try {
 			Clip clip = AudioSystem.getClip();
