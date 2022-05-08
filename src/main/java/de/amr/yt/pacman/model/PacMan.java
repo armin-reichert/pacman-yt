@@ -24,8 +24,8 @@ SOFTWARE.
 package de.amr.yt.pacman.model;
 
 import static de.amr.yt.pacman.controller.GameController.sec;
+import static de.amr.yt.pacman.lib.Logging.log;
 
-import de.amr.yt.pacman.lib.Logging;
 import de.amr.yt.pacman.lib.Vector2;
 
 /**
@@ -91,7 +91,7 @@ public class PacMan extends Creature {
 			}
 		}
 		game.ghostsKilledByPowerPill = 0;
-		Logging.log("Pac-Man gets power for %d seconds", game.ghostFrightenedSeconds);
+		log("Pac-Man gets power for %d seconds", game.ghostFrightenedSeconds);
 	}
 
 	private void updatePowerState() {
@@ -100,6 +100,7 @@ public class PacMan extends Creature {
 				losingPower = true;
 			}
 			if (--powerTime == 0) {
+				losingPower = false;
 				game.onPacPowerEnding();
 			}
 		}
