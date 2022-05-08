@@ -122,9 +122,8 @@ public class Ghost extends Creature {
 			return game.ghostSpeedTunnel;
 		} else {
 			return switch (state) {
-			case LOCKED -> 0.33f * GameModel.BASE_SPEED;
-			case ENTERING_HOUSE, LEAVING_HOUSE -> game.ghostSpeedFrightened;
-			case EATEN -> eatenTimer > 0 ? 0 : 2 * game.ghostSpeed;
+			case LOCKED, LEAVING_HOUSE -> 0.33f * GameModel.BASE_SPEED;
+			case ENTERING_HOUSE, EATEN -> eatenTimer > 0 ? 0 : 2 * game.ghostSpeed;
 			case FRIGHTENED -> game.ghostSpeedFrightened;
 			case CHASING, SCATTERING -> game.ghostSpeed;
 			};
