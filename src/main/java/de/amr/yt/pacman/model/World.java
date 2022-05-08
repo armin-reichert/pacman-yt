@@ -23,6 +23,8 @@ SOFTWARE.
 */
 package de.amr.yt.pacman.model;
 
+import static de.amr.yt.pacman.lib.Vector2.v;
+
 import de.amr.yt.pacman.lib.Direction;
 import de.amr.yt.pacman.lib.Vector2;
 
@@ -89,21 +91,21 @@ public class World {
 	};
 
 	// home tiles
-	public final Vector2 pacManHomeTile = new Vector2(13, 26);
-	public final Vector2 blinkyHomeTile = new Vector2(13, 14);
-	public final Vector2 pinkyHomeTile = new Vector2(13, 17);
-	public final Vector2 inkyHomeTile = new Vector2(11, 17);
-	public final Vector2 clydeHomeTile = new Vector2(15, 17);
+	public final Vector2 pacManHomeTile = v(13, 26);
+	public final Vector2 blinkyHomeTile = v(13, 14);
+	public final Vector2 pinkyHomeTile = v(13, 17);
+	public final Vector2 inkyHomeTile = v(11, 17);
+	public final Vector2 clydeHomeTile = v(15, 17);
 
 	// scattering targets
-	public final Vector2 leftUpperTarget = new Vector2(2, 0);
-	public final Vector2 rightUpperTarget = new Vector2(25, 0);
-	public final Vector2 leftLowerTarget = new Vector2(0, 34);
-	public final Vector2 rightLowerTarget = new Vector2(27, 34);
+	public final Vector2 leftUpperTarget = v(2, 0);
+	public final Vector2 rightUpperTarget = v(25, 0);
+	public final Vector2 leftLowerTarget = v(0, 34);
+	public final Vector2 rightLowerTarget = v(27, 34);
 
-	public final Vector2 bonusTile = new Vector2(13, 20);
-	public final Vector2 houseEntryTile = new Vector2(13, 14); // left house entry tile
-	public final Vector2 houseEntry = new Vector2(112, 116); // pixel position between both entry tiles
+	public final Vector2 bonusTile = v(13, 20);
+	public final Vector2 houseEntryTile = v(13, 14); // left house entry tile
+	public final Vector2 houseEntry = v(112, 116); // pixel position between both entry tiles
 
 	public int eatenFoodCount;
 

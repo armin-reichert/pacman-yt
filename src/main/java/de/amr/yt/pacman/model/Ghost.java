@@ -23,6 +23,7 @@ SOFTWARE.
 */
 package de.amr.yt.pacman.model;
 
+import static de.amr.yt.pacman.lib.Vector2.v;
 import static de.amr.yt.pacman.model.GameModel.BLINKY;
 import static de.amr.yt.pacman.model.GameModel.CLYDE;
 import static de.amr.yt.pacman.model.GameModel.INKY;
@@ -168,7 +169,7 @@ public class Ghost extends Creature {
 			Vector2 pacPlus4 = game.pac.tile().plus(game.pac.moveDir.vector.times(4));
 			if (game.pac.moveDir == Direction.UP) {
 				// simulate overflow bug from Arcade game
-				pacPlus4 = pacPlus4.plus(new Vector2(-4, 0));
+				pacPlus4 = pacPlus4.plus(v(-4, 0));
 			}
 			yield pacPlus4;
 		}
@@ -176,7 +177,7 @@ public class Ghost extends Creature {
 			Vector2 pacPlus2 = game.pac.tile().plus(game.pac.moveDir.vector.times(2));
 			if (game.pac.moveDir == Direction.UP) {
 				// simulate overflow bug from Arcade game
-				pacPlus2 = pacPlus2.plus(new Vector2(-2, 0));
+				pacPlus2 = pacPlus2.plus(v(-2, 0));
 			}
 			yield pacPlus2.times(2).minus(game.ghosts[BLINKY].tile());
 		}

@@ -48,10 +48,10 @@ public enum Direction {
 
 	public Direction opposite() {
 		return switch (this) {
+		case UP -> DOWN;
 		case DOWN -> UP;
 		case LEFT -> RIGHT;
 		case RIGHT -> LEFT;
-		case UP -> DOWN;
 		};
 	}
 

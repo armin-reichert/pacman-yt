@@ -33,9 +33,8 @@ public class Vector2 {
 	public final int x;
 	public final int y;
 
-	@Override
-	public String toString() {
-		return String.format("[x=%d,y=%d]", x, y);
+	public static Vector2 v(int x, int y) {
+		return new Vector2(x, y);
 	}
 
 	public Vector2(int x, int y) {
@@ -43,13 +42,9 @@ public class Vector2 {
 		this.y = y;
 	}
 
-	public Vector2 neighbor(Direction direction) {
-		return switch (direction) {
-		case UP -> new Vector2(x, y - 1);
-		case DOWN -> new Vector2(x, y + 1);
-		case LEFT -> new Vector2(x - 1, y);
-		case RIGHT -> new Vector2(x + 1, y);
-		};
+	@Override
+	public String toString() {
+		return String.format("[x=%d,y=%d]", x, y);
 	}
 
 	@Override
@@ -69,19 +64,23 @@ public class Vector2 {
 		return x == other.x && y == other.y;
 	}
 
+	public Vector2 neighbor(Direction direction) {
+		return this.plus(direction.vector);
+	}
+
 	public double dist(Vector2 v) {
 		return Math.hypot(x - v.x, y - v.y);
 	}
 
 	public Vector2 plus(Vector2 v) {
-		return new Vector2(x + v.x, y + v.y);
+		return v(x + v.x, y + v.y);
 	}
 
 	public Vector2 minus(Vector2 v) {
-		return new Vector2(x - v.x, y - v.y);
+		return v(x - v.x, y - v.y);
 	}
 
 	public Vector2 times(int n) {
-		return new Vector2(n * x, n * y);
+		return v(n * x, n * y);
 	}
 }
