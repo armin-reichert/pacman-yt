@@ -99,6 +99,7 @@ public class GameModel {
 				new Ghost(this, CLYDE) };
 		setLevelNumber(1);
 		levelSymbols.add(bonusSymbol);
+		bonus = -1;
 	}
 
 	private void setLevel(Object... data) {

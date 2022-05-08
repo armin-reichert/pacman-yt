@@ -154,6 +154,7 @@ public class GameController {
 		case READY -> update_READY();
 		case PLAYING -> update_PLAYING();
 		case PACMAN_DEAD -> update_PACMAN_DEAD();
+		case GHOST_DYING -> update_GHOST_DYING();
 		case LEVEL_COMPLETE -> update_LEVEL_COMPLETE();
 		case GAME_OVER -> update_GAME_OVER();
 		}
@@ -240,7 +241,8 @@ public class GameController {
 		}
 
 		if (game.checkGhostsKilledByPac()) {
-			// TODO enter new state and return
+			enterState(GameState.GHOST_DYING);
+			return;
 		}
 
 		// Ghost business
@@ -320,6 +322,25 @@ public class GameController {
 				enterState(GameState.GAME_OVER);
 			}
 		}
+	}
+
+	private void update_GHOST_DYING() {
+		if (game.stateTimer == 0) {
+			game.pac.visible = false;
+		}
+
+		else if (game.stateTimer == sec(1)) {
+			game.pac.visible = true;
+			enterState(GameState.PLAYING);
+			return;
+		}
+
+		for (Ghost ghost : game.ghosts) {
+			if (ghost.state == GhostState.EATEN) {
+				ghost.update();
+			}
+		}
+
 	}
 
 	private void update_LEVEL_COMPLETE() {
