@@ -88,14 +88,22 @@ public class World {
 		//@formatter:on
 	};
 
-	public Vector2 leftUpperTarget = new Vector2(2, 0);
-	public Vector2 rightUpperTarget = new Vector2(25, 0);
-	public Vector2 leftLowerTarget = new Vector2(0, 34);
-	public Vector2 rightLowerTarget = new Vector2(27, 34);
+	// home tiles
+	public final Vector2 pacManHomeTile = new Vector2(13, 26);
+	public final Vector2 blinkyHomeTile = new Vector2(13, 14);
+	public final Vector2 pinkyHomeTile = new Vector2(13, 17);
+	public final Vector2 inkyHomeTile = new Vector2(11, 17);
+	public final Vector2 clydeHomeTile = new Vector2(15, 17);
 
-	public Vector2 bonusTile = new Vector2(13, 20);
-	public Vector2 houseEntryTile = new Vector2(13, 14); // left house entry tile
-	public Vector2 houseEntry = new Vector2(112, 116); // pixel position between both entry tiles
+	// scattering targets
+	public final Vector2 leftUpperTarget = new Vector2(2, 0);
+	public final Vector2 rightUpperTarget = new Vector2(25, 0);
+	public final Vector2 leftLowerTarget = new Vector2(0, 34);
+	public final Vector2 rightLowerTarget = new Vector2(27, 34);
+
+	public final Vector2 bonusTile = new Vector2(13, 20);
+	public final Vector2 houseEntryTile = new Vector2(13, 14); // left house entry tile
+	public final Vector2 houseEntry = new Vector2(112, 116); // pixel position between both entry tiles
 
 	public int eatenFoodCount;
 

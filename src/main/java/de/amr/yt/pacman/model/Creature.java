@@ -60,8 +60,8 @@ public abstract class Creature {
 	 */
 	protected abstract float currentSpeed();
 
-	public void placeAtTile(int tile_x, int tile_y) {
-		placeAtTile(tile_x, tile_y, 0, 0);
+	public void placeAtTile(Vector2 tile, float offset_x, float offset_y) {
+		placeAtTile(tile.x, tile.y, offset_x, offset_y);
 	}
 
 	public void placeAtTile(int tile_x, int tile_y, float offset_x, float offset_y) {

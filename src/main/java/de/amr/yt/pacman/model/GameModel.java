@@ -164,7 +164,7 @@ public class GameModel {
 		powerPelletsBlinking = false;
 		ghostsKilledByPowerPill = 0;
 
-		pac.placeAtTile(13, 26, World.HTS, 0);
+		pac.placeAtTile(world.pacManHomeTile, World.HTS, 0);
 		pac.wishDir = Direction.LEFT;
 		pac.moveDir = Direction.LEFT;
 		pac.speed = playerSpeed;
@@ -172,7 +172,7 @@ public class GameModel {
 		pac.animated = false;
 		pac.dead = false;
 
-		ghosts[BLINKY].placeAtTile(13, 14, World.HTS, 0);
+		ghosts[BLINKY].placeAtTile(world.blinkyHomeTile, World.HTS, 0);
 		ghosts[BLINKY].wishDir = Direction.LEFT;
 		ghosts[BLINKY].moveDir = Direction.LEFT;
 		ghosts[BLINKY].speed = ghostSpeed;
@@ -180,7 +180,7 @@ public class GameModel {
 		ghosts[BLINKY].targetTile = null;
 		ghosts[BLINKY].state = GhostState.LOCKED;
 
-		ghosts[INKY].placeAtTile(11, 17, World.HTS, 0);
+		ghosts[INKY].placeAtTile(world.inkyHomeTile, World.HTS, 0);
 		ghosts[INKY].wishDir = Direction.UP;
 		ghosts[INKY].moveDir = Direction.UP;
 		ghosts[INKY].speed = ghostSpeed;
@@ -188,7 +188,7 @@ public class GameModel {
 		ghosts[INKY].targetTile = null;
 		ghosts[INKY].state = GhostState.LOCKED;
 
-		ghosts[PINKY].placeAtTile(13, 17, World.HTS, 0);
+		ghosts[PINKY].placeAtTile(world.pinkyHomeTile, World.HTS, 0);
 		ghosts[PINKY].wishDir = Direction.DOWN;
 		ghosts[PINKY].moveDir = Direction.DOWN;
 		ghosts[PINKY].speed = ghostSpeed;
@@ -196,7 +196,7 @@ public class GameModel {
 		ghosts[PINKY].targetTile = null;
 		ghosts[PINKY].state = GhostState.LOCKED;
 
-		ghosts[CLYDE].placeAtTile(15, 17, World.HTS, 0);
+		ghosts[CLYDE].placeAtTile(world.clydeHomeTile, World.HTS, 0);
 		ghosts[CLYDE].wishDir = Direction.UP;
 		ghosts[CLYDE].moveDir = Direction.UP;
 		ghosts[CLYDE].speed = ghostSpeed;
