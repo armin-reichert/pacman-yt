@@ -230,7 +230,7 @@ public class GameController {
 					ghost.state = GhostState.FRIGHTENED;
 				}
 			}
-			game.ghostsKilledByPowerPill = 0;
+			game.ghostsKilledByCurrentPowerPellet = 0;
 		}
 
 		game.checkPacManFoundBonus();

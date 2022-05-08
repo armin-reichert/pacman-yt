@@ -64,7 +64,7 @@ public class GameModel {
 	public boolean chasingPhase;
 	public boolean mazeFlashing;
 	public boolean powerPelletsBlinking;
-	public int ghostsKilledByPowerPill;
+	public int ghostsKilledByCurrentPowerPellet;
 	public int score;
 	public int lives;
 
@@ -166,7 +166,7 @@ public class GameModel {
 		bonusEaten = false;
 		chasingPhase = false;
 		powerPelletsBlinking = false;
-		ghostsKilledByPowerPill = 0;
+		ghostsKilledByCurrentPowerPellet = 0;
 
 		pac.placeAtTile(world.pacManHomeTile, World.HTS, 0);
 		pac.wishDir = Direction.LEFT;
@@ -306,10 +306,10 @@ public class GameModel {
 		for (Ghost ghost : ghosts) {
 			if (ghost.state == GhostState.FRIGHTENED && ghost.tile().equals(pacTile)) {
 				killedOne = true;
-				ghostsKilledByPowerPill++;
+				ghostsKilledByCurrentPowerPellet++;
 				ghost.state = GhostState.EATEN;
 				ghost.eatenTimer = sec(1);
-				ghost.eatenValue = switch (ghostsKilledByPowerPill) {
+				ghost.eatenValue = switch (ghostsKilledByCurrentPowerPellet) {
 				case 1 -> 200;
 				case 2 -> 400;
 				case 3 -> 800;
