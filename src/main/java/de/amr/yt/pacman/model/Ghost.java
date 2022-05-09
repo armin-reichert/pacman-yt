@@ -147,6 +147,9 @@ public class Ghost extends Creature {
 
 	private Vector2 computeRandomNeighborTile() {
 		for (Direction direction : Direction.valuesShuffled()) {
+			if (direction == moveDir.opposite()) {
+				continue;
+			}
 			Vector2 neighbor = tile().neighbor(direction);
 			if (canEnterTile(neighbor)) {
 				return neighbor;
