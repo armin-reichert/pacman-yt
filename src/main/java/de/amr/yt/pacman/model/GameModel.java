@@ -45,6 +45,8 @@ public class GameModel {
 	public static final int CHERRIES = 0, STRAWBERRY = 1, PEACH = 2, APPLE = 3, GRAPES = 4, GALAXIAN = 5, BELL = 6,
 			KEY = 7;
 
+	public boolean paused;
+
 	public final World world;
 	public final PacMan pac;
 	public final Ghost[] ghosts;

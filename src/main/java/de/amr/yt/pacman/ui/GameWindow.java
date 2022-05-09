@@ -166,9 +166,12 @@ public class GameWindow extends JFrame {
 			state = game.chasingPhase ? "CHASING" : "SCATTERING";
 		}
 		g.drawString(fpsCounter.getFrameRate() + " FPS", 8, 16);
+		if (game.paused) {
+			g.drawString("(PAUSED)", 48, 16);
+		}
 		g.drawString(state + " " + game.stateTimer, 8, 24);
 		if (game.pacSafe) {
-			g.drawString("Pac-Man is safe", 120, 24);
+			g.drawString("Pac-Man is safe", 144, 24);
 		}
 		for (Ghost ghost : game.ghosts) {
 			drawGhostTarget(g, ghost);

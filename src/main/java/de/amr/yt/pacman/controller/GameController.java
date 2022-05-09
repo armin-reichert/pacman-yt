@@ -59,8 +59,8 @@ public class GameController {
 
 	private final FPSCounter fpsCounter = new FPSCounter();
 	private Thread simulation;
-	private volatile boolean running;
-	private volatile Direction move;
+	private boolean running;
+	private Direction move;
 
 	private Clip clipGameStart = Sounds.clip("game_start.wav");
 	private Clip clipPacManDeath = Sounds.clip("pacman_death.wav");
@@ -80,6 +80,7 @@ public class GameController {
 				case KeyEvent.VK_LEFT -> move = Direction.LEFT;
 				case KeyEvent.VK_RIGHT -> move = Direction.RIGHT;
 				case KeyEvent.VK_I -> window.showInfo = !window.showInfo;
+				case KeyEvent.VK_P -> game.paused = !game.paused;
 				case KeyEvent.VK_S -> game.pacSafe = !game.pacSafe;
 				}
 			}
@@ -119,7 +120,9 @@ public class GameController {
 		fpsCounter.start();
 		while (running) {
 			long frameStart = System.nanoTime();
-			update();
+			if (!game.paused) {
+				update();
+			}
 			window.repaint();
 			long frameDuration = System.nanoTime() - frameStart;
 			if (frameDuration < targetTime) {
