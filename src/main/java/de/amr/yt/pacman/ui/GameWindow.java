@@ -23,6 +23,11 @@ SOFTWARE.
 */
 package de.amr.yt.pacman.ui;
 
+import static de.amr.yt.pacman.model.GameModel.BLINKY;
+import static de.amr.yt.pacman.model.GameModel.CLYDE;
+import static de.amr.yt.pacman.model.GameModel.INKY;
+import static de.amr.yt.pacman.model.GameModel.PINKY;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -239,10 +244,10 @@ public class GameWindow extends JFrame {
 	private void drawGhostTarget(Graphics2D g, Ghost ghost) {
 		if (ghost.visible && ghost.targetTile != null) {
 			g.setColor(switch (ghost.id) {
-			case GameModel.BLINKY -> Color.RED;
-			case GameModel.PINKY -> Color.PINK;
-			case GameModel.INKY -> Color.CYAN;
-			case GameModel.CLYDE -> Color.ORANGE;
+			case BLINKY -> Color.RED;
+			case PINKY -> Color.PINK;
+			case INKY -> Color.CYAN;
+			case CLYDE -> Color.ORANGE;
 			default -> null;
 			});
 			g.drawRect(ghost.targetTile.x * World.TS + 2, ghost.targetTile.y * World.TS + 2, 4, 4);
