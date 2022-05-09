@@ -84,7 +84,7 @@ public class Ghost extends Creature {
 		case ENTERING_HOUSE -> enterGhostHouse(world.houseEntry);
 		case LEAVING_HOUSE -> leaveGhostHouse(world.houseEntry);
 		case CHASING, SCATTERING, FRIGHTENED -> aimTowardsTarget();
-		case EATEN -> returnToGhostHouse();
+		case EATEN -> returnToGhostHouse(world.houseEntry);
 		}
 	}
 
@@ -248,8 +248,8 @@ public class Ghost extends Creature {
 		};
 	}
 
-	private void returnToGhostHouse() {
-		if (about(x, world.houseEntry.x, 1) && y == world.houseEntry.y) {
+	private void returnToGhostHouse(Vector2 entry) {
+		if (about(x, entry.x, 1) && y == entry.y) {
 			state = GhostState.ENTERING_HOUSE;
 		} else {
 			aimTowardsTarget();
