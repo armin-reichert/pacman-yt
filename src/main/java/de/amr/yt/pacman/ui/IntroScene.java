@@ -43,6 +43,7 @@ public class IntroScene {
 
 	private final GameModel game;
 	private final Spritesheet ss;
+	private int animationStartTime = sec(2);
 
 	public IntroScene(Spritesheet ss, GameModel game) {
 		this.ss = ss;
@@ -50,7 +51,6 @@ public class IntroScene {
 	}
 
 	public void draw(Graphics2D g) {
-		int startTime = sec(2);
 		g.setColor(Color.WHITE);
 		g.setFont(ss.arcadeFont);
 		g.drawString("CHARACTER", 6 * World.TS, 6 * World.TS);
@@ -58,7 +58,7 @@ public class IntroScene {
 		g.drawString("NICKNAME", 18 * World.TS, 6 * World.TS);
 		int y = 6 * World.TS + World.HTS;
 		for (int id = 0; id <= 3; ++id) {
-			int t = startTime + sec(2 * id);
+			int t = animationStartTime + sec(2 * id);
 			if (game.stateTimer >= t) {
 				g.drawImage(ss.ghosts.get(id).get(Direction.RIGHT).get(0), 3 * World.TS, y, null);
 				g.setColor(ss.ghostColor(id));
@@ -71,7 +71,7 @@ public class IntroScene {
 			}
 			y += 3 * World.TS;
 		}
-		if (game.stateTimer > startTime + sec(10)) {
+		if (game.stateTimer > animationStartTime + sec(10)) {
 			if (game.frame(30, 2) == 1) {
 				g.setColor(Color.WHITE);
 				g.setFont(ss.arcadeFont);
