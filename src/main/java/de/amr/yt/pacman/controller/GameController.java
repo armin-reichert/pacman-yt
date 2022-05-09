@@ -81,6 +81,11 @@ public class GameController {
 				case KeyEvent.VK_RIGHT -> move = Direction.RIGHT;
 				case KeyEvent.VK_I -> window.showInfo = !window.showInfo;
 				case KeyEvent.VK_P -> game.paused = !game.paused;
+				case KeyEvent.VK_Q -> {
+					if (game.state != GameState.INTRO) {
+						enterState(GameState.INTRO);
+					}
+				}
 				case KeyEvent.VK_S -> game.pacSafe = !game.pacSafe;
 				case KeyEvent.VK_SPACE -> {
 					if (game.state == GameState.INTRO) {

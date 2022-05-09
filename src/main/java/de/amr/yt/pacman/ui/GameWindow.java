@@ -23,11 +23,6 @@ SOFTWARE.
 */
 package de.amr.yt.pacman.ui;
 
-import static de.amr.yt.pacman.model.GameModel.BLINKY;
-import static de.amr.yt.pacman.model.GameModel.CLYDE;
-import static de.amr.yt.pacman.model.GameModel.INKY;
-import static de.amr.yt.pacman.model.GameModel.PINKY;
-
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -40,7 +35,6 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 
 import de.amr.yt.pacman.controller.GameState;
-import de.amr.yt.pacman.lib.Direction;
 import de.amr.yt.pacman.lib.FPSCounter;
 import de.amr.yt.pacman.model.Creature;
 import de.amr.yt.pacman.model.GameModel;
@@ -53,19 +47,19 @@ import de.amr.yt.pacman.model.World;
  */
 public class GameWindow extends JFrame {
 
-	public boolean showInfo = false;
+	public boolean showInfo = true;
 
 	private final GameModel game;
 	private final FPSCounter fpsCounter;
 	private JComponent canvas;
-	private Font arcadeFont;
 	private Spritesheet ss = new Spritesheet();
+	private IntroScreen introScreen;
 
 	public GameWindow(GameModel game, FPSCounter fpsCounter, double scale) {
 		super("Pac-Man");
 		this.game = game;
 		this.fpsCounter = fpsCounter;
-		loadFonts();
+		introScreen = new IntroScreen(ss, game);
 		createCanvas(scale);
 		add(canvas);
 		setResizable(false);
@@ -91,22 +85,13 @@ public class GameWindow extends JFrame {
 		canvas.setSize(size);
 	}
 
-	private void loadFonts() {
-		try {
-			arcadeFont = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/emulogic.ttf"));
-			arcadeFont = arcadeFont.deriveFont(8.0f);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
 	private int frame(int duration, int frames) {
 		return (int) (game.ticks % duration) * frames / duration;
 	}
 
 	private void drawCurrentScene(Graphics2D g) {
 		switch (game.state) {
-		case INTRO -> drawIntroScene(g);
+		case INTRO -> introScreen.draw(g);
 		default -> drawGameScene(g);
 		}
 		if (showInfo) {
@@ -114,55 +99,9 @@ public class GameWindow extends JFrame {
 		}
 	}
 
-	private void drawIntroScene(Graphics2D g) {
-		g.setColor(Color.WHITE);
-		g.setFont(arcadeFont);
-		g.drawString("CHARACTER", 6 * World.TS, 6 * World.TS);
-		g.drawString("/", 16 * World.TS, 6 * World.TS);
-		g.drawString("NICKNAME", 18 * World.TS, 6 * World.TS);
-		int y = 6 * World.TS + World.HTS;
-		for (int id = 0; id <= 3; ++id) {
-			g.drawImage(ss.ghosts.get(id).get(Direction.RIGHT).get(0), 3 * World.TS, y, null);
-			g.setColor(ghostColor(id));
-			g.drawString("-" + ghostCharacter(id), 6 * World.TS, y + 12);
-			g.drawString("\"" + ghostNickname(id) + "\"", 17 * World.TS, y + 12);
-			y += 3 * World.TS;
-		}
-	}
-
-	private Color ghostColor(int id) {
-		return switch (id) {
-		case BLINKY -> Color.RED;
-		case PINKY -> new Color(252, 181, 255);
-		case INKY -> Color.CYAN;
-		case CLYDE -> new Color(253, 192, 90);
-		default -> null;
-		};
-	}
-
-	private String ghostCharacter(int id) {
-		return switch (id) {
-		case BLINKY -> "SHADOW";
-		case PINKY -> "SPEEDY";
-		case INKY -> "BASHFUL";
-		case CLYDE -> "POKEY";
-		default -> null;
-		};
-	}
-
-	private String ghostNickname(int id) {
-		return switch (id) {
-		case BLINKY -> "BLINKY";
-		case PINKY -> "PINKY";
-		case INKY -> "INKY";
-		case CLYDE -> "CLYDE";
-		default -> null;
-		};
-	}
-
 	private void drawGameScene(Graphics2D g) {
 		g.setColor(Color.WHITE);
-		g.setFont(arcadeFont);
+		g.setFont(ss.arcadeFont);
 		g.drawString("SCORE %07d".formatted(game.score), 8, 8);
 		g.drawString("LEVEL %03d".formatted(game.levelNumber), 144, 8);
 
@@ -196,11 +135,11 @@ public class GameWindow extends JFrame {
 
 		if (game.state == GameState.READY) {
 			g.setColor(Color.YELLOW);
-			g.setFont(arcadeFont.deriveFont(Font.ITALIC | Font.BOLD));
+			g.setFont(ss.arcadeFont.deriveFont(Font.ITALIC | Font.BOLD));
 			g.drawString("READY!", 11 * World.TS, 21 * World.TS);
 		} else if (game.state == GameState.GAME_OVER) {
 			g.setColor(Color.RED);
-			g.setFont(arcadeFont.deriveFont(Font.ITALIC | Font.BOLD));
+			g.setFont(ss.arcadeFont.deriveFont(Font.ITALIC | Font.BOLD));
 			g.drawString("GAME  OVER", 9 * World.TS, 21 * World.TS);
 		}
 
@@ -231,9 +170,12 @@ public class GameWindow extends JFrame {
 		if (game.pacSafe) {
 			g.drawString("Pac-Man is safe", 144, 24);
 		}
-		for (Ghost ghost : game.ghosts) {
-			drawGhostTarget(g, ghost);
-			drawGhostState(g, ghost);
+
+		if (game.state != GameState.INTRO) {
+			for (Ghost ghost : game.ghosts) {
+				drawGhostTarget(g, ghost);
+				drawGhostState(g, ghost);
+			}
 		}
 	}
 
@@ -296,7 +238,7 @@ public class GameWindow extends JFrame {
 
 	private void drawGhostTarget(Graphics2D g, Ghost ghost) {
 		if (ghost.visible && ghost.targetTile != null) {
-			g.setColor(ghostColor(ghost.id));
+			g.setColor(ss.ghostColor(ghost.id));
 			g.drawRect(ghost.targetTile.x * World.TS + 2, ghost.targetTile.y * World.TS + 2, 4, 4);
 		}
 	}

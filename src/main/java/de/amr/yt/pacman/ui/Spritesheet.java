@@ -27,7 +27,13 @@ import static de.amr.yt.pacman.lib.Direction.DOWN;
 import static de.amr.yt.pacman.lib.Direction.LEFT;
 import static de.amr.yt.pacman.lib.Direction.RIGHT;
 import static de.amr.yt.pacman.lib.Direction.UP;
+import static de.amr.yt.pacman.model.GameModel.BLINKY;
+import static de.amr.yt.pacman.model.GameModel.CLYDE;
+import static de.amr.yt.pacman.model.GameModel.INKY;
+import static de.amr.yt.pacman.model.GameModel.PINKY;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -46,6 +52,7 @@ public class Spritesheet {
 
 	public BufferedImage mazeImage;
 	public BufferedImage sheetImage;
+	public Font arcadeFont;
 
 	// sprite caches
 	public EnumMap<Direction, List<BufferedImage>> pac = new EnumMap<>(Direction.class);
@@ -60,74 +67,93 @@ public class Spritesheet {
 
 	public Spritesheet() {
 		try {
+			arcadeFont = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/emulogic.ttf"));
+			arcadeFont = arcadeFont.deriveFont(8.0f);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return;
+		}
+
+		try {
 			sheetImage = ImageIO.read(getClass().getResource("/sprites.png"));
 			mazeImage = ImageIO.read(getClass().getResource("/maze_empty.png"));
-
-			pac.put(RIGHT, List.of(s(0, 0), s(1, 0), s(2, 0)));
-			pac.put(LEFT, List.of(s(0, 1), s(1, 1), s(2, 0)));
-			pac.put(UP, List.of(s(0, 2), s(1, 2), s(2, 0)));
-			pac.put(DOWN, List.of(s(0, 3), s(1, 3), s(2, 0)));
-
-			pacDeadAnimation = new ArrayList<>();
-			for (int col = 3; col <= 13; ++col) {
-				pacDeadAnimation.add(s(col, 0));
-			}
-
-			EnumMap<Direction, List<BufferedImage>> redGhost = new EnumMap<>(Direction.class);
-			redGhost.put(RIGHT, List.of(s(0, 4), s(1, 4)));
-			redGhost.put(LEFT, List.of(s(2, 4), s(3, 4)));
-			redGhost.put(UP, List.of(s(4, 4), s(5, 4)));
-			redGhost.put(DOWN, List.of(s(6, 4), s(7, 4)));
-
-			EnumMap<Direction, List<BufferedImage>> pinkGhost = new EnumMap<>(Direction.class);
-			pinkGhost.put(RIGHT, List.of(s(0, 5), s(1, 5)));
-			pinkGhost.put(LEFT, List.of(s(2, 5), s(3, 5)));
-			pinkGhost.put(UP, List.of(s(4, 5), s(5, 5)));
-			pinkGhost.put(DOWN, List.of(s(6, 5), s(7, 5)));
-
-			EnumMap<Direction, List<BufferedImage>> cyanGhost = new EnumMap<>(Direction.class);
-			cyanGhost.put(RIGHT, List.of(s(0, 6), s(1, 6)));
-			cyanGhost.put(LEFT, List.of(s(2, 6), s(3, 6)));
-			cyanGhost.put(UP, List.of(s(4, 6), s(5, 6)));
-			cyanGhost.put(DOWN, List.of(s(6, 6), s(7, 6)));
-
-			EnumMap<Direction, List<BufferedImage>> orangeGhost = new EnumMap<>(Direction.class);
-			orangeGhost.put(RIGHT, List.of(s(0, 7), s(1, 7)));
-			orangeGhost.put(LEFT, List.of(s(2, 7), s(3, 7)));
-			orangeGhost.put(UP, List.of(s(4, 7), s(5, 7)));
-			orangeGhost.put(DOWN, List.of(s(6, 7), s(7, 7)));
-
-			ghosts = List.of(redGhost, pinkGhost, cyanGhost, orangeGhost);
-
-			ghostFrightened = List.of(s(8, 4), s(9, 4), s(10, 4), s(11, 4));
-
-			ghostEaten.put(RIGHT, s(8, 5));
-			ghostEaten.put(LEFT, s(9, 5));
-			ghostEaten.put(UP, s(10, 5));
-			ghostEaten.put(DOWN, s(11, 5));
-
-			ghostValues = Map.of( //
-					200, s(0, 8), //
-					400, s(1, 8), //
-					800, s(2, 8), //
-					1600, s(3, 8));
-
-			bonusSymbols = List.of(s(2, 3), s(3, 3), s(4, 3), s(5, 3), s(6, 3), s(7, 3), s(8, 3));
-
-			bonusValues = Map.of( //
-					100, s(0, 9), //
-					300, s(1, 9), //
-					500, s(2, 9), //
-					700, s(3, 9), //
-					1000, s(64, 144, 19, 16), //
-					2000, s(60, 160, 24, 16), //
-					3000, s(60, 176, 24, 16), //
-					5000, s(60, 192, 24, 16)); //
-
-			liveCount = s(8, 1);
 		} catch (IOException e) {
 			e.printStackTrace();
+			return;
 		}
+
+		pac.put(RIGHT, List.of(s(0, 0), s(1, 0), s(2, 0)));
+		pac.put(LEFT, List.of(s(0, 1), s(1, 1), s(2, 0)));
+		pac.put(UP, List.of(s(0, 2), s(1, 2), s(2, 0)));
+		pac.put(DOWN, List.of(s(0, 3), s(1, 3), s(2, 0)));
+
+		pacDeadAnimation = new ArrayList<>();
+		for (int col = 3; col <= 13; ++col) {
+			pacDeadAnimation.add(s(col, 0));
+		}
+
+		EnumMap<Direction, List<BufferedImage>> redGhost = new EnumMap<>(Direction.class);
+		redGhost.put(RIGHT, List.of(s(0, 4), s(1, 4)));
+		redGhost.put(LEFT, List.of(s(2, 4), s(3, 4)));
+		redGhost.put(UP, List.of(s(4, 4), s(5, 4)));
+		redGhost.put(DOWN, List.of(s(6, 4), s(7, 4)));
+
+		EnumMap<Direction, List<BufferedImage>> pinkGhost = new EnumMap<>(Direction.class);
+		pinkGhost.put(RIGHT, List.of(s(0, 5), s(1, 5)));
+		pinkGhost.put(LEFT, List.of(s(2, 5), s(3, 5)));
+		pinkGhost.put(UP, List.of(s(4, 5), s(5, 5)));
+		pinkGhost.put(DOWN, List.of(s(6, 5), s(7, 5)));
+
+		EnumMap<Direction, List<BufferedImage>> cyanGhost = new EnumMap<>(Direction.class);
+		cyanGhost.put(RIGHT, List.of(s(0, 6), s(1, 6)));
+		cyanGhost.put(LEFT, List.of(s(2, 6), s(3, 6)));
+		cyanGhost.put(UP, List.of(s(4, 6), s(5, 6)));
+		cyanGhost.put(DOWN, List.of(s(6, 6), s(7, 6)));
+
+		EnumMap<Direction, List<BufferedImage>> orangeGhost = new EnumMap<>(Direction.class);
+		orangeGhost.put(RIGHT, List.of(s(0, 7), s(1, 7)));
+		orangeGhost.put(LEFT, List.of(s(2, 7), s(3, 7)));
+		orangeGhost.put(UP, List.of(s(4, 7), s(5, 7)));
+		orangeGhost.put(DOWN, List.of(s(6, 7), s(7, 7)));
+
+		ghosts = List.of(redGhost, pinkGhost, cyanGhost, orangeGhost);
+
+		ghostFrightened = List.of(s(8, 4), s(9, 4), s(10, 4), s(11, 4));
+
+		ghostEaten.put(RIGHT, s(8, 5));
+		ghostEaten.put(LEFT, s(9, 5));
+		ghostEaten.put(UP, s(10, 5));
+		ghostEaten.put(DOWN, s(11, 5));
+
+		ghostValues = Map.of( //
+				200, s(0, 8), //
+				400, s(1, 8), //
+				800, s(2, 8), //
+				1600, s(3, 8));
+
+		bonusSymbols = List.of(s(2, 3), s(3, 3), s(4, 3), s(5, 3), s(6, 3), s(7, 3), s(8, 3));
+
+		bonusValues = Map.of( //
+				100, s(0, 9), //
+				300, s(1, 9), //
+				500, s(2, 9), //
+				700, s(3, 9), //
+				1000, s(64, 144, 19, 16), //
+				2000, s(60, 160, 24, 16), //
+				3000, s(60, 176, 24, 16), //
+				5000, s(60, 192, 24, 16)); //
+
+		liveCount = s(8, 1);
+	}
+
+	public Color ghostColor(int id) {
+		return switch (id) {
+		case BLINKY -> Color.RED;
+		case PINKY -> new Color(252, 181, 255);
+		case INKY -> Color.CYAN;
+		case CLYDE -> new Color(253, 192, 90);
+		default -> null;
+		};
 	}
 
 	private BufferedImage s(int col, int row) {
