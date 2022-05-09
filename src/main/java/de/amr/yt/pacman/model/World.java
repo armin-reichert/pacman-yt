@@ -106,6 +106,8 @@ public class World {
 	public final Vector2 bonusTile = v(13, 20);
 	public final Vector2 houseEntryTile = v(13, 14); // left house entry tile
 	public final Vector2 houseEntry = v(112, 116); // pixel position between both entry tiles
+	public final float houseTop = 17 * World.TS;
+	public final float houseBottom = 18 * World.TS;
 
 	public int eatenFoodCount;
 

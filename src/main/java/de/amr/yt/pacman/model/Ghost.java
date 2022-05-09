@@ -81,7 +81,10 @@ public class Ghost extends Creature {
 
 	public void update() {
 		switch (state) {
-		case LOCKED -> bounce();
+		case LOCKED -> {
+			if (id != BLINKY)
+				bounce(world.houseBottom, world.houseTop);
+		}
 		case ENTERING_HOUSE -> enterGhostHouse(world.houseEntry);
 		case LEAVING_HOUSE -> leaveGhostHouse(world.houseEntry);
 		case CHASING, SCATTERING, FRIGHTENED -> aimTowardsTarget();
@@ -257,13 +260,10 @@ public class Ghost extends Creature {
 		}
 	}
 
-	private void bounce() {
-		if (id == BLINKY) {
-			return;
-		}
-		if (y >= 18 * World.TS) {
+	private void bounce(float bottomY, float topY) {
+		if (y >= bottomY) {
 			moveDir = wishDir = Direction.UP;
-		} else if (y <= 17 * World.TS) {
+		} else if (y <= topY) {
 			moveDir = wishDir = Direction.DOWN;
 		}
 		speed = currentSpeed();
