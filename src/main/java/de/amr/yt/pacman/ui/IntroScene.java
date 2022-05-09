@@ -56,6 +56,7 @@ public class IntroScene {
 		g.drawString("CHARACTER", 6 * World.TS, 6 * World.TS);
 		g.drawString("/", 16 * World.TS, 6 * World.TS);
 		g.drawString("NICKNAME", 18 * World.TS, 6 * World.TS);
+
 		int y = 6 * World.TS + World.HTS;
 		for (int id = 0; id <= 3; ++id) {
 			int t = animationStartTime + sec(2 * id);
@@ -71,11 +72,27 @@ public class IntroScene {
 			}
 			y += 3 * World.TS;
 		}
-		if (game.stateTimer > animationStartTime + sec(10)) {
-			if (game.frame(30, 2) == 1) {
+		if (game.stateTimer >= animationStartTime + sec(8)) {
+			g.setColor(Color.PINK);
+			int x = 10 * World.TS;
+			y = 26 * World.TS;
+			g.fillRect(x + 3, y, 2, 2);
+			g.setFont(ss.arcadeFont);
+			g.drawString("10", x + 16, y + 6);
+			g.setFont(ss.arcadeFont.deriveFont(6.0f));
+			g.drawString("PTS", x + 40, y + 6);
+			y += 2 * World.TS;
+			g.fillOval(10 * World.TS, y, 8, 8);
+			g.setFont(ss.arcadeFont);
+			g.drawString("50", x + 16, y + 6);
+			g.setFont(ss.arcadeFont.deriveFont(6.0f));
+			g.drawString("PTS", x + 40, y + 6);
+		}
+		if (game.stateTimer >= animationStartTime + sec(12)) {
+			if (game.frame(30, 2) == 0) {
 				g.setColor(Color.WHITE);
 				g.setFont(ss.arcadeFont);
-				g.drawString("PRESS SPACE TO PLAY", 4 * World.TS, 26 * World.TS);
+				g.drawString("PRESS SPACE TO PLAY", 4 * World.TS, 32 * World.TS);
 			}
 		}
 	}
