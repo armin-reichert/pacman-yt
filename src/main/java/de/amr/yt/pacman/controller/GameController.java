@@ -82,6 +82,11 @@ public class GameController {
 				case KeyEvent.VK_I -> window.showInfo = !window.showInfo;
 				case KeyEvent.VK_P -> game.paused = !game.paused;
 				case KeyEvent.VK_S -> game.pacSafe = !game.pacSafe;
+				case KeyEvent.VK_SPACE -> {
+					if (game.state == GameState.INTRO) {
+						enterState(GameState.LEVEL_STARTING);
+					}
+				}
 				}
 			}
 		});
@@ -146,13 +151,14 @@ public class GameController {
 		game.levelSymbols.clear();
 		game.levelSymbols.add(game.bonusSymbol);
 		game.lives = 3;
-		enterState(GameState.LEVEL_STARTING);
+		enterState(GameState.INTRO);
 	}
 
 	private void update() {
 		++game.ticks;
 		++game.stateTimer;
 		switch (game.state) {
+		case INTRO -> update_INTRO();
 		case LEVEL_STARTING -> update_LEVEL_STARTING();
 		case READY -> update_READY();
 		case PLAYING -> update_PLAYING();
@@ -162,6 +168,12 @@ public class GameController {
 		case GAME_OVER -> update_GAME_OVER();
 		}
 		move = null;
+	}
+
+	private void update_INTRO() {
+		if (game.stateTimer == sec(1000)) {
+			enterState(GameState.LEVEL_STARTING);
+		}
 	}
 
 	private void update_LEVEL_STARTING() {

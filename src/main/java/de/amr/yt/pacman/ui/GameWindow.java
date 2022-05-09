@@ -40,6 +40,7 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 
 import de.amr.yt.pacman.controller.GameState;
+import de.amr.yt.pacman.lib.Direction;
 import de.amr.yt.pacman.lib.FPSCounter;
 import de.amr.yt.pacman.model.Creature;
 import de.amr.yt.pacman.model.GameModel;
@@ -52,7 +53,7 @@ import de.amr.yt.pacman.model.World;
  */
 public class GameWindow extends JFrame {
 
-	public boolean showInfo = true;
+	public boolean showInfo = false;
 
 	private final GameModel game;
 	private final FPSCounter fpsCounter;
@@ -80,7 +81,7 @@ public class GameWindow extends JFrame {
 				g2D.fillRect(0, 0, getWidth(), getHeight());
 				g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 				g2D.scale(scale, scale);
-				drawGameScene(g2D);
+				drawCurrentScene(g2D);
 				g2D.dispose();
 			}
 		};
@@ -103,8 +104,63 @@ public class GameWindow extends JFrame {
 		return (int) (game.ticks % duration) * frames / duration;
 	}
 
-	private void drawGameScene(Graphics2D g) {
+	private void drawCurrentScene(Graphics2D g) {
+		switch (game.state) {
+		case INTRO -> drawIntroScene(g);
+		default -> drawGameScene(g);
+		}
+		if (showInfo) {
+			drawInfo(g);
+		}
+	}
 
+	private void drawIntroScene(Graphics2D g) {
+		g.setColor(Color.WHITE);
+		g.setFont(arcadeFont);
+		g.drawString("CHARACTER", 6 * World.TS, 6 * World.TS);
+		g.drawString("/", 16 * World.TS, 6 * World.TS);
+		g.drawString("NICKNAME", 18 * World.TS, 6 * World.TS);
+		int y = 6 * World.TS + World.HTS;
+		for (int id = 0; id <= 3; ++id) {
+			g.drawImage(ss.ghosts.get(id).get(Direction.RIGHT).get(0), 3 * World.TS, y, null);
+			g.setColor(ghostColor(id));
+			g.drawString("-" + ghostCharacter(id), 6 * World.TS, y + 12);
+			g.drawString("\"" + ghostNickname(id) + "\"", 17 * World.TS, y + 12);
+			y += 3 * World.TS;
+		}
+	}
+
+	private Color ghostColor(int id) {
+		return switch (id) {
+		case BLINKY -> Color.RED;
+		case PINKY -> new Color(252, 181, 255);
+		case INKY -> Color.CYAN;
+		case CLYDE -> new Color(253, 192, 90);
+		default -> null;
+		};
+	}
+
+	private String ghostCharacter(int id) {
+		return switch (id) {
+		case BLINKY -> "SHADOW";
+		case PINKY -> "SPEEDY";
+		case INKY -> "BASHFUL";
+		case CLYDE -> "POKEY";
+		default -> null;
+		};
+	}
+
+	private String ghostNickname(int id) {
+		return switch (id) {
+		case BLINKY -> "BLINKY";
+		case PINKY -> "PINKY";
+		case INKY -> "INKY";
+		case CLYDE -> "CLYDE";
+		default -> null;
+		};
+	}
+
+	private void drawGameScene(Graphics2D g) {
 		g.setColor(Color.WHITE);
 		g.setFont(arcadeFont);
 		g.drawString("SCORE %07d".formatted(game.score), 8, 8);
@@ -136,10 +192,6 @@ public class GameWindow extends JFrame {
 		drawPacMan(g);
 		for (Ghost ghost : game.ghosts) {
 			drawGhost(g, ghost);
-		}
-
-		if (showInfo) {
-			drawInfo(g);
 		}
 
 		if (game.state == GameState.READY) {
@@ -244,13 +296,7 @@ public class GameWindow extends JFrame {
 
 	private void drawGhostTarget(Graphics2D g, Ghost ghost) {
 		if (ghost.visible && ghost.targetTile != null) {
-			g.setColor(switch (ghost.id) {
-			case BLINKY -> Color.RED;
-			case PINKY -> Color.PINK;
-			case INKY -> Color.CYAN;
-			case CLYDE -> Color.ORANGE;
-			default -> null;
-			});
+			g.setColor(ghostColor(ghost.id));
 			g.drawRect(ghost.targetTile.x * World.TS + 2, ghost.targetTile.y * World.TS + 2, 4, 4);
 		}
 	}
