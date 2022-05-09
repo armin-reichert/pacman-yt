@@ -29,17 +29,13 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.image.BufferedImage;
 
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 
 import de.amr.yt.pacman.controller.GameState;
 import de.amr.yt.pacman.lib.FPSCounter;
-import de.amr.yt.pacman.model.Creature;
 import de.amr.yt.pacman.model.GameModel;
-import de.amr.yt.pacman.model.Ghost;
-import de.amr.yt.pacman.model.GhostState;
 import de.amr.yt.pacman.model.World;
 
 /**
@@ -51,22 +47,24 @@ public class GameWindow extends JFrame {
 
 	private final GameModel game;
 	private final FPSCounter fpsCounter;
-	private JComponent canvas;
-	private Spritesheet ss = new Spritesheet();
-	private IntroScreen introScreen;
+	private final Spritesheet ss = new Spritesheet();
+	private final IntroScene introScene;
+	private final PlayScene playScene;
+	private final JComponent canvas;
 
 	public GameWindow(GameModel game, FPSCounter fpsCounter, double scale) {
 		super("Pac-Man");
 		this.game = game;
 		this.fpsCounter = fpsCounter;
-		introScreen = new IntroScreen(ss, game);
-		createCanvas(scale);
+		introScene = new IntroScene(ss, game);
+		playScene = new PlayScene(ss, game);
+		canvas = createCanvas(scale);
 		add(canvas);
 		setResizable(false);
 	}
 
-	private void createCanvas(double scale) {
-		canvas = new JComponent() {
+	private JComponent createCanvas(double scale) {
+		JComponent canvas = new JComponent() {
 			@Override
 			protected void paintComponent(Graphics g) {
 				super.paintComponent(g);
@@ -83,163 +81,36 @@ public class GameWindow extends JFrame {
 		canvas.setPreferredSize(size);
 		canvas.setMinimumSize(size);
 		canvas.setSize(size);
-	}
-
-	private int frame(int duration, int frames) {
-		return (int) (game.ticks % duration) * frames / duration;
+		return canvas;
 	}
 
 	private void drawCurrentScene(Graphics2D g) {
 		switch (game.state) {
-		case INTRO -> introScreen.draw(g);
-		default -> drawGameScene(g);
+		case INTRO -> introScene.draw(g);
+		default -> playScene.draw(g);
 		}
 		if (showInfo) {
 			drawInfo(g);
 		}
 	}
 
-	private void drawGameScene(Graphics2D g) {
-		g.setColor(Color.WHITE);
-		g.setFont(ss.arcadeFont);
-		g.drawString("SCORE %07d".formatted(game.score), 8, 8);
-		g.drawString("LEVEL %03d".formatted(game.levelNumber), 144, 8);
-
-		if (!game.mazeFlashing || frame(30, 2) == 0) {
-			g.drawImage(ss.mazeImage, 0, 3 * World.TS, null);
-		}
-
-		g.setColor(Color.PINK);
-		for (int row = 0; row < World.ROWS; ++row) {
-			for (int col = 0; col < World.COLS; ++col) {
-				if (game.world.isPellet(row, col)) {
-					g.fillRect(col * World.TS + 3, row * World.TS + 3, 2, 2);
-				} else if (game.world.isPowerPellet(row, col)) {
-					if (!game.powerPelletsBlinking || frame(30, 2) == 0) {
-						g.fillOval(col * World.TS, row * World.TS, World.TS, World.TS);
-					}
-				}
-			}
-		}
-
-		if (game.bonus != -1) {
-			int bonusValue = game.bonusValue(game.bonus);
-			BufferedImage sprite = game.bonusEaten ? ss.bonusValues.get(bonusValue) : ss.bonusSymbols.get(game.bonus);
-			g.drawImage(sprite, 14 * World.TS - sprite.getWidth() / 2, 20 * World.TS - World.HTS, null);
-		}
-
-		drawPacMan(g);
-		for (Ghost ghost : game.ghosts) {
-			drawGhost(g, ghost);
-		}
-
-		if (game.state == GameState.READY) {
-			g.setColor(Color.YELLOW);
-			g.setFont(ss.arcadeFont.deriveFont(Font.ITALIC | Font.BOLD));
-			g.drawString("READY!", 11 * World.TS, 21 * World.TS);
-		} else if (game.state == GameState.GAME_OVER) {
-			g.setColor(Color.RED);
-			g.setFont(ss.arcadeFont.deriveFont(Font.ITALIC | Font.BOLD));
-			g.drawString("GAME  OVER", 9 * World.TS, 21 * World.TS);
-		}
-
-		for (int i = 0; i < game.lives; ++i) {
-			g.drawImage(ss.liveCount, (1 + 2 * i) * World.TS, 34 * World.TS, null);
-		}
-
-		for (int i = 0; i < game.levelSymbols.size(); ++i) {
-			int x = (World.COLS - 3) * World.TS - 2 * i * World.TS;
-			int y = (World.ROWS - 2) * World.TS;
-			int symbol = game.levelSymbols.get(i);
-			g.drawImage(ss.bonusSymbols.get(symbol), x, y, null);
-		}
-	}
-
 	private void drawInfo(Graphics2D g) {
 		g.setColor(Color.WHITE);
 		g.setFont(new Font(Font.MONOSPACED, Font.BOLD, 8));
-		String state = game.state.name();
-		if (game.state == GameState.PLAYING) {
-			state = game.chasingPhase ? "CHASING" : "SCATTERING";
-		}
 		g.drawString("%2d FPS".formatted(fpsCounter.getFrameRate()), 8, 16);
 		if (game.paused) {
 			g.drawString("(PAUSED)", 48, 16);
+		}
+		String state = game.state.name();
+		if (game.state == GameState.PLAYING) {
+			state = game.chasingPhase ? "CHASING" : "SCATTERING";
 		}
 		g.drawString(state + " " + game.stateTimer, 8, 24);
 		if (game.pacSafe) {
 			g.drawString("Pac-Man is safe", 144, 24);
 		}
-
 		if (game.state != GameState.INTRO) {
-			for (Ghost ghost : game.ghosts) {
-				drawGhostTarget(g, ghost);
-				drawGhostState(g, ghost);
-			}
-		}
-	}
-
-	private void drawPacMan(Graphics2D g) {
-		BufferedImage sprite = null;
-		if (game.pac.dead) {
-			if (game.pac.dyingAnimationCountdown > 0) {
-				int frame = 10 - (10 * game.pac.dyingAnimationCountdown / game.pac.dyingAnimationDuration);
-				sprite = ss.pacDeadAnimation.get(frame);
-			} else if (!game.pac.animated) {
-				sprite = ss.pac.get(game.pac.moveDir).get(2);
-			}
-		} else {
-			if (game.pac.animated) {
-				game.pac.animFrame = game.pac.stuck ? 0 : frame(15, 3);
-			}
-			sprite = ss.pac.get(game.pac.moveDir).get(game.pac.animFrame);
-		}
-		drawCreatureSprite(g, game.pac, sprite);
-	}
-
-	private void drawGhost(Graphics2D g, Ghost ghost) {
-		BufferedImage sprite = null;
-		if (ghost.state == GhostState.EATEN || ghost.state == GhostState.ENTERING_HOUSE) {
-			sprite = ghost.eatenTimer > 0 ? ss.ghostValues.get(ghost.eatenValue) : ss.ghostEaten.get(ghost.moveDir);
-		} else if (ghost.state == GhostState.FRIGHTENED) {
-			if (ghost.animated) {
-				ghost.animFrame = frame(10, 2);
-				if (game.pac.losingPower) {
-					int blink = frame(20, 2) == 0 ? 0 : 2;
-					ghost.animFrame += blink;
-				}
-			}
-			sprite = ss.ghostFrightened.get(ghost.animFrame);
-		} else {
-			if (ghost.animated) {
-				ghost.animFrame = frame(10, 2);
-			}
-			sprite = ss.ghosts.get(ghost.id).get(ghost.moveDir).get(ghost.animFrame);
-		}
-		drawCreatureSprite(g, ghost, sprite);
-	}
-
-	private void drawCreatureSprite(Graphics2D g, Creature creature, BufferedImage sprite) {
-		if (creature.visible && sprite != null) {
-			int x = (int) creature.x - sprite.getWidth() / 2;
-			int y = (int) creature.y - sprite.getHeight() / 2;
-			g.drawImage(sprite, x, y, sprite.getWidth(), sprite.getHeight(), null);
-		}
-	}
-
-	private void drawGhostState(Graphics2D g, Ghost ghost) {
-		if (ghost.visible) {
-			g.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 6));
-			g.setColor(Color.WHITE);
-			int sw = g.getFontMetrics().stringWidth(ghost.state.name());
-			g.drawString(ghost.state.name(), (int) ghost.x - sw / 2, (int) ghost.y - 8);
-		}
-	}
-
-	private void drawGhostTarget(Graphics2D g, Ghost ghost) {
-		if (ghost.visible && ghost.targetTile != null) {
-			g.setColor(ss.ghostColor(ghost.id));
-			g.drawRect(ghost.targetTile.x * World.TS + 2, ghost.targetTile.y * World.TS + 2, 4, 4);
+			playScene.drawInfo(g);
 		}
 	}
 }

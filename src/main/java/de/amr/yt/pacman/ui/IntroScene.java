@@ -39,17 +39,18 @@ import de.amr.yt.pacman.model.World;
 /**
  * @author Armin Reichert
  */
-public class IntroScreen {
+public class IntroScene {
 
 	private final GameModel game;
 	private final Spritesheet ss;
 
-	public IntroScreen(Spritesheet ss, GameModel game) {
+	public IntroScene(Spritesheet ss, GameModel game) {
 		this.ss = ss;
 		this.game = game;
 	}
 
 	public void draw(Graphics2D g) {
+		int startTime = sec(2);
 		g.setColor(Color.WHITE);
 		g.setFont(ss.arcadeFont);
 		g.drawString("CHARACTER", 6 * World.TS, 6 * World.TS);
@@ -57,18 +58,25 @@ public class IntroScreen {
 		g.drawString("NICKNAME", 18 * World.TS, 6 * World.TS);
 		int y = 6 * World.TS + World.HTS;
 		for (int id = 0; id <= 3; ++id) {
-			int startTime = sec(3 + 2 * id);
-			if (game.stateTimer >= startTime) {
+			int t = startTime + sec(2 * id);
+			if (game.stateTimer >= t) {
 				g.drawImage(ss.ghosts.get(id).get(Direction.RIGHT).get(0), 3 * World.TS, y, null);
 				g.setColor(ss.ghostColor(id));
 			}
-			if (game.stateTimer >= startTime + sec(0.5)) {
+			if (game.stateTimer >= t + sec(0.5)) {
 				g.drawString("-" + ghostCharacter(id), 6 * World.TS, y + 12);
 			}
-			if (game.stateTimer >= startTime + sec(1.0)) {
+			if (game.stateTimer >= t + sec(1.0)) {
 				g.drawString("\"" + ghostNickname(id) + "\"", 17 * World.TS, y + 12);
 			}
 			y += 3 * World.TS;
+		}
+		if (game.stateTimer > startTime + sec(10)) {
+			if (game.frame(30, 2) == 1) {
+				g.setColor(Color.WHITE);
+				g.setFont(ss.arcadeFont);
+				g.drawString("PRESS SPACE TO PLAY", 4 * World.TS, 26 * World.TS);
+			}
 		}
 	}
 

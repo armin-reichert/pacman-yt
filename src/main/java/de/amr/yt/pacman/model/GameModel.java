@@ -119,6 +119,10 @@ public class GameModel {
 		numFlashes = (int) data[11];
 	}
 
+	public int frame(int duration, int frames) {
+		return (int) (ticks % duration) * frames / duration;
+	}
+
 	public void setLevelNumber(int number) {
 		if (number < 1) {
 			throw new IllegalArgumentException("Level number must be at least 1");
