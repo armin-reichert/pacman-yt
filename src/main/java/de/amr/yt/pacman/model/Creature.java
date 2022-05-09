@@ -31,6 +31,16 @@ import de.amr.yt.pacman.lib.Vector2;
  */
 public abstract class Creature {
 
+	/**
+	 * @param value      some value
+	 * @param exactValue the exact value
+	 * @param delta      the allowed difference
+	 * @return {@code true} if the value differs at most by delta from the exact value
+	 */
+	public static boolean about(float value, float exactValue, float delta) {
+		return Math.abs(value - exactValue) <= delta;
+	}
+
 	public final World world;
 	public float x = Float.MIN_VALUE;
 	public float y = Float.MIN_VALUE;

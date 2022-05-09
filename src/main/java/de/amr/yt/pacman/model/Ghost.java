@@ -39,10 +39,6 @@ public class Ghost extends Creature {
 
 	private static final Direction[] DIR_ORDER = { Direction.UP, Direction.RIGHT, Direction.DOWN, Direction.LEFT };
 
-	private static boolean inRange(float value, float target, float delta) {
-		return Math.abs(value - target) <= delta;
-	}
-
 	public final int id;
 	public final GameModel game;
 	public GhostState state;
@@ -199,7 +195,7 @@ public class Ghost extends Creature {
 			state = game.chasingPhase ? GhostState.CHASING : GhostState.SCATTERING;
 			return;
 		}
-		if (inRange(x, entry.x, 1)) {
+		if (about(x, entry.x, 1)) {
 			x = entry.x;
 			wishDir = moveDir = Direction.UP;
 		} else if (x < entry.x) {
@@ -253,7 +249,7 @@ public class Ghost extends Creature {
 	}
 
 	private void returnToGhostHouse() {
-		if (inRange(x, world.houseEntry.x, 1) && y == world.houseEntry.y) {
+		if (about(x, world.houseEntry.x, 1) && y == world.houseEntry.y) {
 			state = GhostState.ENTERING_HOUSE;
 		} else {
 			aimTowardsTarget();
