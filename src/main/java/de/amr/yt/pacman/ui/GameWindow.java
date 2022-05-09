@@ -104,6 +104,12 @@ public class GameWindow extends JFrame {
 	}
 
 	private void drawGameScene(Graphics2D g) {
+
+		g.setColor(Color.WHITE);
+		g.setFont(arcadeFont);
+		g.drawString("SCORE %07d".formatted(game.score), 8, 8);
+		g.drawString("LEVEL %03d".formatted(game.levelNumber), 144, 8);
+
 		if (!game.mazeFlashing || frame(30, 2) == 0) {
 			g.drawImage(ss.mazeImage, 0, 3 * World.TS, null);
 		}
@@ -136,11 +142,6 @@ public class GameWindow extends JFrame {
 			drawInfo(g);
 		}
 
-		g.setColor(Color.WHITE);
-		g.setFont(arcadeFont);
-		g.drawString("SCORE " + game.score, 8, 8);
-		g.drawString("LEVEL " + game.levelNumber, 140, 8);
-
 		if (game.state == GameState.READY) {
 			g.setColor(Color.YELLOW);
 			g.setFont(arcadeFont.deriveFont(Font.ITALIC | Font.BOLD));
@@ -165,12 +166,12 @@ public class GameWindow extends JFrame {
 
 	private void drawInfo(Graphics2D g) {
 		g.setColor(Color.WHITE);
-		g.setFont(new Font("Monospaced", Font.BOLD, 8));
-		String state = game.state + "";
+		g.setFont(new Font(Font.MONOSPACED, Font.BOLD, 8));
+		String state = game.state.name();
 		if (game.state == GameState.PLAYING) {
 			state = game.chasingPhase ? "CHASING" : "SCATTERING";
 		}
-		g.drawString(fpsCounter.getFrameRate() + " FPS", 8, 16);
+		g.drawString("%2d FPS".formatted(fpsCounter.getFrameRate()), 8, 16);
 		if (game.paused) {
 			g.drawString("(PAUSED)", 48, 16);
 		}
