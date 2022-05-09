@@ -146,7 +146,7 @@ public abstract class Creature {
 		return canMove;
 	}
 
-	protected void move(Direction dir) {
+	public void move(Direction dir) {
 		x += dir.vector.x * speed;
 		y += dir.vector.y * speed;
 	}

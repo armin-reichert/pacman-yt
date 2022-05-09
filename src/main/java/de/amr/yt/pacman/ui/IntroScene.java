@@ -34,6 +34,7 @@ import java.awt.Graphics2D;
 
 import de.amr.yt.pacman.lib.Direction;
 import de.amr.yt.pacman.model.GameModel;
+import de.amr.yt.pacman.model.PacMan;
 import de.amr.yt.pacman.model.World;
 
 /**
@@ -43,14 +44,23 @@ public class IntroScene {
 
 	private final GameModel game;
 	private final Spritesheet ss;
-	private int animationStartTime = sec(2);
+	private final int animStartTime = sec(2);
+	private final PacMan pacMan;
 
 	public IntroScene(Spritesheet ss, GameModel game) {
 		this.ss = ss;
 		this.game = game;
+		pacMan = new PacMan(game);
 	}
 
 	public void draw(Graphics2D g) {
+		if (game.stateTimer == 0) {
+			pacMan.x = 30 * World.TS;
+			pacMan.y = 20 * World.TS;
+			pacMan.speed = 1;
+			pacMan.moveDir = Direction.LEFT;
+		}
+
 		g.setColor(Color.WHITE);
 		g.setFont(ss.arcadeFont);
 		g.drawString("CHARACTER", 6 * World.TS, 6 * World.TS);
@@ -59,7 +69,7 @@ public class IntroScene {
 
 		int y = 6 * World.TS + World.HTS;
 		for (int id = 0; id <= 3; ++id) {
-			int t = animationStartTime + sec(2 * id);
+			int t = animStartTime + sec(2 * id);
 			if (game.stateTimer >= t) {
 				g.drawImage(ss.ghosts.get(id).get(Direction.RIGHT).get(0), 3 * World.TS, y, null);
 				g.setColor(ss.ghostColor(id));
@@ -72,7 +82,7 @@ public class IntroScene {
 			}
 			y += 3 * World.TS;
 		}
-		if (game.stateTimer >= animationStartTime + sec(8)) {
+		if (game.stateTimer >= animStartTime + sec(8)) {
 			g.setColor(Color.PINK);
 			int x = 10 * World.TS;
 			y = 24 * World.TS;
@@ -88,12 +98,30 @@ public class IntroScene {
 			g.setFont(ss.arcadeFont.deriveFont(6.0f));
 			g.drawString("PTS", x + 40, y + 6);
 		}
-		if (game.stateTimer >= animationStartTime + sec(12)) {
+		if (game.stateTimer >= animStartTime + sec(10) && game.stateTimer < animStartTime + sec(20)) {
+			drawGuys(g);
+		}
+		if (game.stateTimer >= animStartTime + sec(22)) {
 			if (game.frame(30, 2) == 0) {
 				g.setColor(Color.WHITE);
 				g.setFont(ss.arcadeFont);
 				g.drawString("PRESS SPACE TO PLAY", 4 * World.TS, 32 * World.TS);
 			}
+		}
+	}
+
+	private void drawGuys(Graphics2D g) {
+		pacMan.move(pacMan.moveDir);
+		if (pacMan.x <= 2 * World.TS) {
+			pacMan.moveDir = Direction.RIGHT;
+		}
+		pacMan.animFrame = game.frame(15, 3);
+		int ghostFrame = game.frame(10, 2);
+		g.drawImage(ss.pac.get(pacMan.moveDir).get(pacMan.animFrame), (int) pacMan.x, (int) pacMan.y, null);
+		for (int id = 0; id <= 3; ++id) {
+			var sprite = pacMan.moveDir == Direction.LEFT ? ss.ghosts.get(id).get(pacMan.moveDir).get(ghostFrame)
+					: ss.ghostFrightened.get(ghostFrame);
+			g.drawImage(sprite, (int) pacMan.x + 16 * (id + 1), (int) pacMan.y, null);
 		}
 	}
 
