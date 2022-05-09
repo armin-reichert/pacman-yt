@@ -75,7 +75,7 @@ public class IntroScene {
 		if (game.stateTimer >= animationStartTime + sec(8)) {
 			g.setColor(Color.PINK);
 			int x = 10 * World.TS;
-			y = 26 * World.TS;
+			y = 24 * World.TS;
 			g.fillRect(x + 3, y, 2, 2);
 			g.setFont(ss.arcadeFont);
 			g.drawString("10", x + 16, y + 6);
