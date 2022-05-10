@@ -42,7 +42,7 @@ import de.amr.yt.pacman.model.World;
  */
 public class IntroScene {
 
-	private final int animStart = sec(2);
+	private final int animStart = sec(1);
 	private final GameModel game;
 	private final Spritesheet ss;
 	private float pacManX, blinkyX;
@@ -67,11 +67,11 @@ public class IntroScene {
 		if (game.stateTimer == 0) {
 			init();
 		}
-		if (game.stateTimer >= sec(1)) {
+		if (game.stateTimer >= animStart) {
 			drawTitle(g);
 		}
 		for (int id = 0; id <= 3; ++id) {
-			drawGhostInfo(g, id);
+			drawGhostInfo(g, id, animStart + sec(1 + 1.5 * id));
 		}
 		boolean blink = game.stateTimer >= animStart + sec(9);
 		if (game.stateTimer >= animStart + sec(8)) {
@@ -127,8 +127,7 @@ public class IntroScene {
 		g.drawString("PTS", x + 40, y + 8);
 	}
 
-	private void drawGhostInfo(Graphics2D g, int id) {
-		int t = animStart + sec(2 * id);
+	private void drawGhostInfo(Graphics2D g, int id, int t) {
 		int y = t(6 + 3 * id) + World.HTS;
 		if (game.stateTimer >= t) {
 			g.drawImage(ss.ghosts.get(id).get(Direction.RIGHT).get(0), t(3), y, null);
