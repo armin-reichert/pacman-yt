@@ -72,9 +72,7 @@ public class IntroScene {
 
 		g.setColor(Color.WHITE);
 		g.setFont(ss.arcadeFont);
-		g.drawString("CHARACTER", t(6), t(6));
-		g.drawString("/", t(16), t(6));
-		g.drawString("NICKNAME", t(18), t(6));
+		g.drawString("CHARACTER / NICKNAME", t(6), t(6));
 
 		int y = t(6) + World.HTS;
 		for (int id = 0; id <= 3; ++id) {
@@ -91,24 +89,33 @@ public class IntroScene {
 			}
 			y += t(3);
 		}
+		boolean blink = game.stateTimer >= animStartTime + sec(9);
 		if (game.stateTimer >= animStartTime + sec(8)) {
-			g.setColor(Color.PINK);
 			int x = t(10);
+
 			y = t(24);
-			g.fillRect(x + 3, y, 2, 2);
+			g.setColor(Color.PINK);
+			g.fillRect(x + 3, y + 3, 2, 2);
+			g.setColor(Color.WHITE);
 			g.setFont(ss.arcadeFont);
-			g.drawString("10", x + 16, y + 6);
+			g.drawString("10", x + 16, y + 8);
 			g.setFont(ss.arcadeFont.deriveFont(6.0f));
-			g.drawString("PTS", x + 40, y + 6);
+			g.drawString("PTS", x + 40, y + 8);
+
 			y += t(2);
-			g.fillOval(t(10), y, 8, 8);
+			g.setColor(Color.PINK);
+			if (!blink || game.frame(30, 2) == 0) {
+				g.fillOval(t(10), y, 8, 8);
+			}
+			g.setColor(Color.WHITE);
 			g.setFont(ss.arcadeFont);
-			g.drawString("50", x + 16, y + 6);
+			g.drawString("50", x + 16, y + 8);
 			g.setFont(ss.arcadeFont.deriveFont(6.0f));
-			g.drawString("PTS", x + 40, y + 6);
+			g.drawString("PTS", x + 40, y + 8);
 		}
 		if (game.stateTimer >= animStartTime + sec(9) && pacManDir == Direction.LEFT) {
-			if (game.frame(30, 2) == 0) {
+			if (!blink || game.frame(30, 2) == 0) {
+				g.setColor(Color.PINK);
 				g.fillOval(t(2), t(20) + World.HTS, t(1), t(1));
 			}
 		}
