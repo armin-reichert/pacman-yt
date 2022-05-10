@@ -67,71 +67,88 @@ public class IntroScene {
 		if (game.stateTimer == 0) {
 			init();
 		}
-
 		if (game.stateTimer >= sec(1)) {
-			g.setColor(Color.WHITE);
-			g.setFont(ss.arcadeFont);
-			g.drawString("CHARACTER / NICKNAME", t(6), t(6));
+			drawTitle(g);
 		}
-
-		int y = t(6) + World.HTS;
 		for (int id = 0; id <= 3; ++id) {
-			int t = animStart + sec(2 * id);
-			if (game.stateTimer >= t) {
-				g.drawImage(ss.ghosts.get(id).get(Direction.RIGHT).get(0), t(3), y, null);
-			}
-			if (game.stateTimer >= t + sec(0.5)) {
-				g.setColor(ss.ghostColor(id));
-				g.setFont(ss.arcadeFont);
-				g.drawString("-" + ghostCharacter(id), t(6), y + 12);
-			}
-			if (game.stateTimer >= t + sec(1.0)) {
-				g.setColor(ss.ghostColor(id));
-				g.setFont(ss.arcadeFont);
-				g.drawString("\"" + ghostNickname(id) + "\"", t(17), y + 12);
-			}
-			y += t(3);
+			drawGhostInfo(g, id);
 		}
 		boolean blink = game.stateTimer >= animStart + sec(9);
 		if (game.stateTimer >= animStart + sec(8)) {
-			int x = t(10);
-
-			y = t(24);
-			g.setColor(Color.PINK);
-			g.fillRect(x + 3, y + 3, 2, 2);
-			g.setColor(Color.WHITE);
-			g.setFont(ss.arcadeFont);
-			g.drawString("10", x + 16, y + 8);
-			g.setFont(ss.arcadeFont.deriveFont(6.0f));
-			g.drawString("PTS", x + 40, y + 8);
-
-			y += t(2);
-			g.setColor(Color.PINK);
-			if (!blink || game.frame(30, 2) == 0) {
-				g.fillOval(t(10), y, 8, 8);
-			}
-			g.setColor(Color.WHITE);
-			g.setFont(ss.arcadeFont);
-			g.drawString("50", x + 16, y + 8);
-			g.setFont(ss.arcadeFont.deriveFont(6.0f));
-			g.drawString("PTS", x + 40, y + 8);
+			drawPointsAwarded(g, blink);
 		}
 		if (game.stateTimer >= animStart + sec(9) && !chasingGhosts) {
-			if (!blink || game.frame(30, 2) == 0) {
-				g.setColor(Color.PINK);
-				g.fillOval(t(2), t(20) + World.HTS, t(1), t(1));
-			}
+			drawPowerPellet(g, blink);
 		}
-		if (game.stateTimer >= animStart + sec(10) && game.stateTimer < animStart + sec(19)) {
+		if (game.stateTimer >= animStart + sec(10) && game.stateTimer < animStart + sec(17)) {
 			drawGuys(g);
 		}
-		if (game.stateTimer >= animStart + sec(20)) {
-			if (game.frame(60, 2) == 0) {
-				g.setColor(Color.WHITE);
-				g.setFont(ss.arcadeFont);
-				g.drawString("PRESS SPACE TO PLAY", t(4), t(32));
-			}
+		if (game.stateTimer >= animStart + sec(17)) {
+			drawPressSpaceToPlay(g);
 		}
+	}
+
+	private void drawPowerPellet(Graphics2D g, boolean blink) {
+		if (!blink || game.frame(30, 2) == 0) {
+			g.setColor(Color.PINK);
+			g.fillOval(t(2), t(20) + World.HTS, t(1), t(1));
+		}
+	}
+
+	private void drawPressSpaceToPlay(Graphics2D g) {
+		if (game.frame(60, 2) == 0) {
+			g.setColor(Color.WHITE);
+			g.setFont(ss.arcadeFont);
+			g.drawString("PRESS SPACE TO PLAY", t(4), t(32));
+		}
+	}
+
+	private void drawPointsAwarded(Graphics2D g, boolean blink) {
+		int x = t(10);
+		int y = t(24);
+
+		g.setColor(Color.PINK);
+		g.fillRect(x + 3, y + 3, 2, 2);
+		g.setColor(Color.WHITE);
+		g.setFont(ss.arcadeFont);
+		g.drawString("10", x + 16, y + 8);
+		g.setFont(ss.arcadeFont.deriveFont(6.0f));
+		g.drawString("PTS", x + 40, y + 8);
+
+		y += t(2);
+		g.setColor(Color.PINK);
+		if (!blink || game.frame(30, 2) == 0) {
+			g.fillOval(t(10), y, 8, 8);
+		}
+		g.setColor(Color.WHITE);
+		g.setFont(ss.arcadeFont);
+		g.drawString("50", x + 16, y + 8);
+		g.setFont(ss.arcadeFont.deriveFont(6.0f));
+		g.drawString("PTS", x + 40, y + 8);
+	}
+
+	private void drawGhostInfo(Graphics2D g, int id) {
+		int t = animStart + sec(2 * id);
+		int y = t(6 + 3 * id) + World.HTS;
+		if (game.stateTimer >= t) {
+			g.drawImage(ss.ghosts.get(id).get(Direction.RIGHT).get(0), t(3), y, null);
+		}
+		if (game.stateTimer >= t + sec(0.5)) {
+			g.setColor(ss.ghostColor(id));
+			g.setFont(ss.arcadeFont);
+			g.drawString("-" + ghostCharacter(id), t(6), y + 12);
+		}
+		if (game.stateTimer >= t + sec(1.0)) {
+			g.setColor(ss.ghostColor(id));
+			g.setFont(ss.arcadeFont);
+			g.drawString("\"" + ghostNickname(id) + "\"", t(17), y + 12);
+		}
+	}
+
+	private void drawTitle(Graphics2D g) {
+		g.setColor(Color.WHITE);
+		g.setFont(ss.arcadeFont);
+		g.drawString("CHARACTER / NICKNAME", t(6), t(6));
 	}
 
 	private void drawGuys(Graphics2D g) {
