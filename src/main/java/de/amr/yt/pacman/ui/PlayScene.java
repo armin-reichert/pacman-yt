@@ -23,6 +23,8 @@ SOFTWARE.
 */
 package de.amr.yt.pacman.ui;
 
+import static de.amr.yt.pacman.model.World.t;
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
@@ -49,56 +51,45 @@ public class PlayScene {
 	}
 
 	public void draw(Graphics2D g) {
-		g.setColor(Color.WHITE);
-		g.setFont(ss.arcadeFont);
-		g.drawString("SCORE %07d".formatted(game.score), 8, 8);
-		g.drawString("LEVEL %03d".formatted(game.levelNumber), 144, 8);
-
 		if (!game.mazeFlashing || game.frame(30, 2) == 0) {
-			g.drawImage(ss.mazeImage, 0, 3 * World.TS, null);
+			g.drawImage(ss.mazeImage, 0, t(3), null);
 		}
-
 		g.setColor(Color.PINK);
 		for (int row = 0; row < World.ROWS; ++row) {
 			for (int col = 0; col < World.COLS; ++col) {
 				if (game.world.isPellet(row, col)) {
-					g.fillRect(col * World.TS + 3, row * World.TS + 3, 2, 2);
+					g.fillRect(t(col) + 3, t(row) + 3, 2, 2);
 				} else if (game.world.isPowerPellet(row, col)) {
 					if (!game.powerPelletsBlinking || game.frame(30, 2) == 0) {
-						g.fillOval(col * World.TS, row * World.TS, World.TS, World.TS);
+						g.fillOval(t(col), t(row), t(1), t(1));
 					}
 				}
 			}
 		}
-
 		if (game.bonus != -1) {
 			int bonusValue = game.bonusValue(game.bonus);
 			BufferedImage sprite = game.bonusEaten ? ss.bonusValues.get(bonusValue) : ss.bonusSymbols.get(game.bonus);
-			g.drawImage(sprite, 14 * World.TS - sprite.getWidth() / 2, 20 * World.TS - World.HTS, null);
+			g.drawImage(sprite, t(14) - sprite.getWidth() / 2, t(20) - World.HTS, null);
 		}
-
 		drawPacMan(g);
 		for (Ghost ghost : game.ghosts) {
 			drawGhost(g, ghost);
 		}
-
 		if (game.state == GameState.READY) {
 			g.setColor(Color.YELLOW);
 			g.setFont(ss.arcadeFont.deriveFont(Font.ITALIC | Font.BOLD));
-			g.drawString("READY!", 11 * World.TS, 21 * World.TS);
+			g.drawString("READY!", t(11), t(21));
 		} else if (game.state == GameState.GAME_OVER) {
 			g.setColor(Color.RED);
 			g.setFont(ss.arcadeFont.deriveFont(Font.ITALIC | Font.BOLD));
-			g.drawString("GAME  OVER", 9 * World.TS, 21 * World.TS);
+			g.drawString("GAME  OVER", t(9), t(21));
 		}
-
 		for (int i = 0; i < game.lives; ++i) {
-			g.drawImage(ss.liveCount, (1 + 2 * i) * World.TS, 34 * World.TS, null);
+			g.drawImage(ss.liveCount, t(1 + 2 * i), t(World.ROWS - 2), null);
 		}
-
 		for (int i = 0; i < game.levelSymbols.size(); ++i) {
-			int x = (World.COLS - 3) * World.TS - 2 * i * World.TS;
-			int y = (World.ROWS - 2) * World.TS;
+			int x = t(World.COLS - 3 - 2 * i);
+			int y = t(World.ROWS - 2);
 			int symbol = game.levelSymbols.get(i);
 			g.drawImage(ss.bonusSymbols.get(symbol), x, y, null);
 		}

@@ -28,6 +28,7 @@ import static de.amr.yt.pacman.model.GameModel.BLINKY;
 import static de.amr.yt.pacman.model.GameModel.CLYDE;
 import static de.amr.yt.pacman.model.GameModel.INKY;
 import static de.amr.yt.pacman.model.GameModel.PINKY;
+import static de.amr.yt.pacman.model.World.t;
 
 import de.amr.yt.pacman.lib.Direction;
 import de.amr.yt.pacman.lib.Vector2;
@@ -214,12 +215,12 @@ public class Ghost extends Creature {
 			x = entry.x;
 			wishDir = moveDir = Direction.DOWN;
 			move(wishDir);
-		} else if (y <= entry.y + 3 * World.TS) {
+		} else if (y <= entry.y + t(3)) {
 			// keep falling
 			move(wishDir);
 		} else if (ghostHousePosition() == Direction.LEFT) {
 			// move left
-			if (x <= entry.x - 2 * World.TS) {
+			if (x <= entry.x - t(2)) {
 				// reached left seat
 				state = GhostState.LEAVING_HOUSE;
 			} else {
@@ -228,7 +229,7 @@ public class Ghost extends Creature {
 			}
 		} else if (ghostHousePosition() == Direction.RIGHT) {
 			// move right
-			if (x >= entry.x + 2 * World.TS) {
+			if (x >= entry.x + t(2)) {
 				// reached right seat
 				state = GhostState.LEAVING_HOUSE;
 			} else {

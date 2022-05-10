@@ -28,6 +28,7 @@ import static de.amr.yt.pacman.model.GameModel.BLINKY;
 import static de.amr.yt.pacman.model.GameModel.CLYDE;
 import static de.amr.yt.pacman.model.GameModel.INKY;
 import static de.amr.yt.pacman.model.GameModel.PINKY;
+import static de.amr.yt.pacman.model.World.t;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -52,50 +53,55 @@ public class IntroScene {
 	public IntroScene(Spritesheet ss, GameModel game) {
 		this.ss = ss;
 		this.game = game;
+		init();
+	}
+
+	private void init() {
+		pacManX = t(30);
+		pacManSpeed = 1f;
+		blinkyX = pacManX + t(2);
+		ghostSpeed = 1f;
+		pacManDir = Direction.LEFT;
+		chasing = false;
 	}
 
 	public void draw(Graphics2D g) {
 		if (game.stateTimer == 0) {
-			pacManX = 30 * World.TS;
-			pacManSpeed = 1f;
-			blinkyX = pacManX + 2 * World.TS;
-			ghostSpeed = 1f;
-			pacManDir = Direction.LEFT;
-			chasing = false;
+			init();
 		}
 
 		g.setColor(Color.WHITE);
 		g.setFont(ss.arcadeFont);
-		g.drawString("CHARACTER", 6 * World.TS, 6 * World.TS);
-		g.drawString("/", 16 * World.TS, 6 * World.TS);
-		g.drawString("NICKNAME", 18 * World.TS, 6 * World.TS);
+		g.drawString("CHARACTER", t(6), t(6));
+		g.drawString("/", t(16), t(6));
+		g.drawString("NICKNAME", t(18), t(6));
 
-		int y = 6 * World.TS + World.HTS;
+		int y = t(6) + World.HTS;
 		for (int id = 0; id <= 3; ++id) {
 			int t = animStartTime + sec(2 * id);
 			if (game.stateTimer >= t) {
-				g.drawImage(ss.ghosts.get(id).get(Direction.RIGHT).get(0), 3 * World.TS, y, null);
+				g.drawImage(ss.ghosts.get(id).get(Direction.RIGHT).get(0), t(3), y, null);
 				g.setColor(ss.ghostColor(id));
 			}
 			if (game.stateTimer >= t + sec(0.5)) {
-				g.drawString("-" + ghostCharacter(id), 6 * World.TS, y + 12);
+				g.drawString("-" + ghostCharacter(id), t(6), y + 12);
 			}
 			if (game.stateTimer >= t + sec(1.0)) {
-				g.drawString("\"" + ghostNickname(id) + "\"", 17 * World.TS, y + 12);
+				g.drawString("\"" + ghostNickname(id) + "\"", t(17), y + 12);
 			}
-			y += 3 * World.TS;
+			y += t(3);
 		}
 		if (game.stateTimer >= animStartTime + sec(8)) {
 			g.setColor(Color.PINK);
-			int x = 10 * World.TS;
-			y = 24 * World.TS;
+			int x = t(10);
+			y = t(24);
 			g.fillRect(x + 3, y, 2, 2);
 			g.setFont(ss.arcadeFont);
 			g.drawString("10", x + 16, y + 6);
 			g.setFont(ss.arcadeFont.deriveFont(6.0f));
 			g.drawString("PTS", x + 40, y + 6);
-			y += 2 * World.TS;
-			g.fillOval(10 * World.TS, y, 8, 8);
+			y += t(2);
+			g.fillOval(t(10), y, 8, 8);
 			g.setFont(ss.arcadeFont);
 			g.drawString("50", x + 16, y + 6);
 			g.setFont(ss.arcadeFont.deriveFont(6.0f));
@@ -103,7 +109,7 @@ public class IntroScene {
 		}
 		if (game.stateTimer >= animStartTime + sec(9) && pacManDir == Direction.LEFT) {
 			if (game.frame(30, 2) == 0) {
-				g.fillOval(2 * World.TS, 20 * World.TS + World.HTS, 8, 8);
+				g.fillOval(t(2), t(20) + World.HTS, t(1), t(1));
 			}
 		}
 		if (game.stateTimer >= animStartTime + sec(10) && game.stateTimer < animStartTime + sec(19)) {
@@ -113,17 +119,17 @@ public class IntroScene {
 			if (game.frame(60, 2) == 0) {
 				g.setColor(Color.WHITE);
 				g.setFont(ss.arcadeFont);
-				g.drawString("PRESS SPACE TO PLAY", 4 * World.TS, 32 * World.TS);
+				g.drawString("PRESS SPACE TO PLAY", t(4), t(32));
 			}
 		}
 	}
 
 	private void drawGuys(Graphics2D g) {
 		int ghostFrame = game.frame(10, 2);
-		int y = 20 * World.TS;
+		int y = t(20);
 		pacManX += pacManDir.vector.x * pacManSpeed;
 		blinkyX += pacManDir.vector.x * ghostSpeed;
-		if (pacManX <= 2 * World.TS) {
+		if (pacManX <= t(2)) {
 			pacManDir = Direction.RIGHT;
 			pacManSpeed = 1.0f;
 			ghostSpeed = 0.5f;

@@ -23,6 +23,8 @@ SOFTWARE.
 */
 package de.amr.yt.pacman.ui;
 
+import static de.amr.yt.pacman.model.World.t;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -85,12 +87,24 @@ public class GameWindow extends JFrame {
 	}
 
 	private void drawCurrentScene(Graphics2D g) {
+		drawScores(g);
 		switch (game.state) {
 		case INTRO -> introScene.draw(g);
 		default -> playScene.draw(g);
 		}
 		if (showInfo) {
 			drawInfo(g);
+		}
+	}
+
+	private void drawScores(Graphics2D g) {
+		g.setColor(Color.WHITE);
+		g.setFont(ss.arcadeFont);
+		g.drawString("SCORE", t(1), t(1));
+		g.drawString("LEVEL", t(18), t(1));
+		if (game.state != GameState.INTRO) {
+			g.drawString("%07d".formatted(game.score), t(7), t(1));
+			g.drawString("%03d".formatted(game.levelNumber), t(24), t(1));
 		}
 	}
 
