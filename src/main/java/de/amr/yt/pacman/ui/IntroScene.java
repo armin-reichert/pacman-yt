@@ -42,12 +42,12 @@ import de.amr.yt.pacman.model.World;
  */
 public class IntroScene {
 
+	private final int animStart = sec(2);
 	private final GameModel game;
 	private final Spritesheet ss;
-	private final int animStart = sec(2);
 	private float pacManX, blinkyX;
 	private float pacManSpeed, ghostSpeed;
-	private boolean chasing = false;
+	private boolean chasingGhosts;
 
 	public IntroScene(Spritesheet ss, GameModel game) {
 		this.ss = ss;
@@ -56,11 +56,11 @@ public class IntroScene {
 	}
 
 	private void init() {
-		pacManX = t(30);
-		pacManSpeed = 1f;
-		blinkyX = pacManX + t(2);
-		ghostSpeed = 1f;
-		chasing = false;
+		pacManX = t(World.COLS);
+		pacManSpeed = game.playerSpeed;
+		blinkyX = pacManX + t(3);
+		ghostSpeed = game.playerSpeed * 1.05f;
+		chasingGhosts = false;
 	}
 
 	public void draw(Graphics2D g) {
@@ -116,7 +116,7 @@ public class IntroScene {
 			g.setFont(ss.arcadeFont.deriveFont(6.0f));
 			g.drawString("PTS", x + 40, y + 8);
 		}
-		if (game.stateTimer >= animStart + sec(9) && !chasing) {
+		if (game.stateTimer >= animStart + sec(9) && !chasingGhosts) {
 			if (!blink || game.frame(30, 2) == 0) {
 				g.setColor(Color.PINK);
 				g.fillOval(t(2), t(20) + World.HTS, t(1), t(1));
@@ -137,15 +137,15 @@ public class IntroScene {
 	private void drawGuys(Graphics2D g) {
 		int ghostFrame = game.frame(10, 2);
 		int y = t(20);
-		Direction moveDir = chasing ? Direction.RIGHT : Direction.LEFT;
+		Direction moveDir = chasingGhosts ? Direction.RIGHT : Direction.LEFT;
 		pacManX += moveDir.vector.x * pacManSpeed;
 		blinkyX += moveDir.vector.x * ghostSpeed;
 		if (pacManX <= t(2)) {
-			pacManSpeed = 1.0f;
-			ghostSpeed = 0.5f;
-			chasing = true;
+			pacManSpeed = game.playerSpeedPowered;
+			ghostSpeed = game.ghostSpeedFrightened;
+			chasingGhosts = true;
 		}
-		if (chasing) {
+		if (chasingGhosts) {
 			int hitGhost = -1;
 			for (int id = 0; id <= 3; ++id) {
 				float ghostX = blinkyX + id * 16;
