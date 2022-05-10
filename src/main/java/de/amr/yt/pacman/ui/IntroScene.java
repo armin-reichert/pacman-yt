@@ -47,7 +47,6 @@ public class IntroScene {
 	private final int animStart = sec(2);
 	private float pacManX, blinkyX;
 	private float pacManSpeed, ghostSpeed;
-	private Direction pacManDir;
 	private boolean chasing = false;
 
 	public IntroScene(Spritesheet ss, GameModel game) {
@@ -61,7 +60,6 @@ public class IntroScene {
 		pacManSpeed = 1f;
 		blinkyX = pacManX + t(2);
 		ghostSpeed = 1f;
-		pacManDir = Direction.LEFT;
 		chasing = false;
 	}
 
@@ -139,10 +137,10 @@ public class IntroScene {
 	private void drawGuys(Graphics2D g) {
 		int ghostFrame = game.frame(10, 2);
 		int y = t(20);
-		pacManX += pacManDir.vector.x * pacManSpeed;
-		blinkyX += pacManDir.vector.x * ghostSpeed;
+		Direction moveDir = chasing ? Direction.RIGHT : Direction.LEFT;
+		pacManX += moveDir.vector.x * pacManSpeed;
+		blinkyX += moveDir.vector.x * ghostSpeed;
 		if (pacManX <= t(2)) {
-			pacManDir = Direction.RIGHT;
 			pacManSpeed = 1.0f;
 			ghostSpeed = 0.5f;
 			chasing = true;
@@ -167,17 +165,17 @@ public class IntroScene {
 				} else if (id == hitGhost) {
 					var ghostSprite = ss.ghostValues.get(id == 0 ? 200 : id == 1 ? 400 : id == 2 ? 800 : 1600);
 					g.drawImage(ghostSprite, (int) ghostX, y, null);
-					g.drawImage(ss.pac.get(pacManDir).get(game.frame(15, 3)), (int) pacManX, y, null);
+					g.drawImage(ss.pac.get(moveDir).get(game.frame(15, 3)), (int) pacManX, y, null);
 				}
 			}
 			if (hitGhost == -1 || hitGhost == 4) {
-				g.drawImage(ss.pac.get(pacManDir).get(game.frame(15, 3)), (int) pacManX, y, null);
+				g.drawImage(ss.pac.get(moveDir).get(game.frame(15, 3)), (int) pacManX, y, null);
 			}
 		} else {
-			g.drawImage(ss.pac.get(pacManDir).get(game.frame(15, 3)), (int) pacManX, y, null);
+			g.drawImage(ss.pac.get(moveDir).get(game.frame(15, 3)), (int) pacManX, y, null);
 			for (int id = 0; id <= 3; ++id) {
 				float ghostX = blinkyX + id * 16;
-				var ghostSprite = ss.ghosts.get(id).get(pacManDir).get(ghostFrame);
+				var ghostSprite = ss.ghosts.get(id).get(moveDir).get(ghostFrame);
 				g.drawImage(ghostSprite, (int) ghostX, y, null);
 			}
 		}
