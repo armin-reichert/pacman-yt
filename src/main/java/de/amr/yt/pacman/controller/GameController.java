@@ -215,12 +215,6 @@ public class GameController {
 
 	private void update_PLAYING() {
 
-		// check if level is complete
-		if (game.world.allFoodEaten()) {
-			enterState(GameState.LEVEL_COMPLETE);
-			return;
-		}
-
 		// check if new attack phase starts
 		if (game.chaseStartTicks.contains(game.attackTimer)) {
 			startChasingPhase();
@@ -245,6 +239,12 @@ public class GameController {
 				}
 			}
 			game.ghostsKilledByCurrentPowerPellet = 0;
+		}
+
+		// check if level is complete
+		if (game.world.allFoodEaten()) {
+			enterState(GameState.LEVEL_COMPLETE);
+			return;
 		}
 
 		game.checkPacManFoundBonus();
