@@ -128,7 +128,8 @@ public class PlayScene {
 		BufferedImage sprite = null;
 		if (ghost.state == GhostState.EATEN || ghost.state == GhostState.ENTERING_HOUSE) {
 			sprite = ghost.eatenTimer > 0 ? ss.ghostValues.get(ghost.eatenValue) : ss.ghostEaten.get(ghost.moveDir);
-		} else if (ghost.state == GhostState.FRIGHTENED) {
+		} else if (ghost.state == GhostState.FRIGHTENED
+				|| ghost.state == GhostState.LOCKED && game.pac.powerCountdown > 0) {
 			if (ghost.animated) {
 				ghost.animFrame = game.frame(10, 2);
 				if (game.pac.losingPower) {
