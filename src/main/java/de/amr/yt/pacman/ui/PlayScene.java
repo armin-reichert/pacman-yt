@@ -166,7 +166,7 @@ public class PlayScene {
 	private void drawGhostTarget(Graphics2D g, Ghost ghost) {
 		if (ghost.visible && ghost.targetTile != null) {
 			g.setColor(ss.ghostColor(ghost.id));
-			g.drawRect(ghost.targetTile.x * World.TS + 2, ghost.targetTile.y * World.TS + 2, 4, 4);
+			g.drawRect(t(ghost.targetTile.x) + 2, t(ghost.targetTile.y) + 2, 4, 4);
 		}
 	}
 }
