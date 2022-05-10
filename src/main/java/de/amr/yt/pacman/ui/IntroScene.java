@@ -64,26 +64,29 @@ public class IntroScene {
 	}
 
 	public void draw(Graphics2D g) {
-		if (game.stateTimer == 0) {
+		final long t = game.stateTimer;
+		if (t == 0) {
 			init();
 		}
-		if (game.stateTimer >= animStart) {
+		if (t >= animStart) {
 			drawTitle(g);
 		}
 		for (int id = 0; id <= 3; ++id) {
 			drawGhostInfo(g, id, animStart + sec(1 + 1.5 * id));
 		}
 		boolean blink = game.stateTimer >= animStart + sec(9);
-		if (game.stateTimer >= animStart + sec(8)) {
+		if (t >= animStart + sec(8)) {
 			drawPointsAwarded(g, blink);
 		}
-		if (game.stateTimer >= animStart + sec(9) && !chasingGhosts) {
-			drawPowerPellet(g, blink);
+		if (t >= animStart + sec(9)) {
+			if (!chasingGhosts) {
+				drawPowerPellet(g, blink);
+			}
 		}
-		if (game.stateTimer >= animStart + sec(10) && game.stateTimer < animStart + sec(17)) {
+		if (t >= animStart + sec(10) && t < animStart + sec(17)) {
 			drawGuys(g);
 		}
-		if (game.stateTimer >= animStart + sec(17)) {
+		if (t >= animStart + sec(17)) {
 			drawPressSpaceToPlay(g);
 		}
 	}
