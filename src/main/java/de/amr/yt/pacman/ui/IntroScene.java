@@ -70,9 +70,11 @@ public class IntroScene {
 			init();
 		}
 
-		g.setColor(Color.WHITE);
-		g.setFont(ss.arcadeFont);
-		g.drawString("CHARACTER / NICKNAME", t(6), t(6));
+		if (game.stateTimer >= sec(1)) {
+			g.setColor(Color.WHITE);
+			g.setFont(ss.arcadeFont);
+			g.drawString("CHARACTER / NICKNAME", t(6), t(6));
+		}
 
 		int y = t(6) + World.HTS;
 		for (int id = 0; id <= 3; ++id) {
