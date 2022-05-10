@@ -110,14 +110,14 @@ public class GameWindow extends JFrame {
 
 	private void drawInfo(Graphics2D g) {
 		g.setColor(Color.WHITE);
-		g.setFont(new Font(Font.MONOSPACED, Font.BOLD, 8));
+		g.setFont(new Font(Font.DIALOG, Font.PLAIN, 6));
 		g.drawString("%2d FPS".formatted(fpsCounter.getFrameRate()), 8, 16);
 		if (game.paused) {
 			g.drawString("(PAUSED)", 48, 16);
 		}
 		String state = game.state.name();
 		if (game.state == GameState.PLAYING) {
-			state = game.chasingPhase ? "CHASING" : "SCATTERING";
+			state = game.chasingPhase ? "PLAYING (CHASING)" : "PLAYING (SCATTERING)";
 		}
 		g.drawString(state + " " + game.stateTimer, 8, 24);
 		if (game.pacSafe) {
