@@ -44,7 +44,7 @@ public class IntroScene {
 
 	private final GameModel game;
 	private final Spritesheet ss;
-	private final int animStartTime = sec(2);
+	private final int animStart = sec(2);
 	private float pacManX, blinkyX;
 	private float pacManSpeed, ghostSpeed;
 	private Direction pacManDir;
@@ -78,21 +78,24 @@ public class IntroScene {
 
 		int y = t(6) + World.HTS;
 		for (int id = 0; id <= 3; ++id) {
-			int t = animStartTime + sec(2 * id);
+			int t = animStart + sec(2 * id);
 			if (game.stateTimer >= t) {
 				g.drawImage(ss.ghosts.get(id).get(Direction.RIGHT).get(0), t(3), y, null);
-				g.setColor(ss.ghostColor(id));
 			}
 			if (game.stateTimer >= t + sec(0.5)) {
+				g.setColor(ss.ghostColor(id));
+				g.setFont(ss.arcadeFont);
 				g.drawString("-" + ghostCharacter(id), t(6), y + 12);
 			}
 			if (game.stateTimer >= t + sec(1.0)) {
+				g.setColor(ss.ghostColor(id));
+				g.setFont(ss.arcadeFont);
 				g.drawString("\"" + ghostNickname(id) + "\"", t(17), y + 12);
 			}
 			y += t(3);
 		}
-		boolean blink = game.stateTimer >= animStartTime + sec(9);
-		if (game.stateTimer >= animStartTime + sec(8)) {
+		boolean blink = game.stateTimer >= animStart + sec(9);
+		if (game.stateTimer >= animStart + sec(8)) {
 			int x = t(10);
 
 			y = t(24);
@@ -115,16 +118,16 @@ public class IntroScene {
 			g.setFont(ss.arcadeFont.deriveFont(6.0f));
 			g.drawString("PTS", x + 40, y + 8);
 		}
-		if (game.stateTimer >= animStartTime + sec(9) && pacManDir == Direction.LEFT) {
+		if (game.stateTimer >= animStart + sec(9) && !chasing) {
 			if (!blink || game.frame(30, 2) == 0) {
 				g.setColor(Color.PINK);
 				g.fillOval(t(2), t(20) + World.HTS, t(1), t(1));
 			}
 		}
-		if (game.stateTimer >= animStartTime + sec(10) && game.stateTimer < animStartTime + sec(19)) {
+		if (game.stateTimer >= animStart + sec(10) && game.stateTimer < animStart + sec(19)) {
 			drawGuys(g);
 		}
-		if (game.stateTimer >= animStartTime + sec(20)) {
+		if (game.stateTimer >= animStart + sec(20)) {
 			if (game.frame(60, 2) == 0) {
 				g.setColor(Color.WHITE);
 				g.setFont(ss.arcadeFont);
