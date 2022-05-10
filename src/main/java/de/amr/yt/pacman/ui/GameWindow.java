@@ -55,13 +55,13 @@ public class GameWindow extends JFrame {
 	private final JComponent canvas;
 
 	public GameWindow(GameModel game, FPSCounter fpsCounter, double scale) {
-		super("Pac-Man");
 		this.game = game;
 		this.fpsCounter = fpsCounter;
 		introScene = new IntroScene(ss, game);
 		playScene = new PlayScene(ss, game);
 		canvas = createCanvas(scale);
 		add(canvas);
+		setTitle("Pac-Man");
 		setResizable(false);
 	}
 
@@ -92,9 +92,7 @@ public class GameWindow extends JFrame {
 		case INTRO -> introScene.draw(g);
 		default -> playScene.draw(g);
 		}
-		if (showInfo) {
-			drawInfo(g);
-		}
+		drawInfo(g);
 	}
 
 	private void drawScores(Graphics2D g) {
@@ -109,19 +107,23 @@ public class GameWindow extends JFrame {
 	}
 
 	private void drawInfo(Graphics2D g) {
+		if (!showInfo) {
+			return;
+		}
 		g.setColor(Color.WHITE);
 		g.setFont(new Font(Font.DIALOG, Font.PLAIN, 6));
-		g.drawString("%2d FPS".formatted(fpsCounter.getFrameRate()), 8, 16);
+		g.drawString("%2d FPS".formatted(fpsCounter.getFrameRate()), t(1), t(2));
 		if (game.paused) {
-			g.drawString("(PAUSED)", 48, 16);
+			g.drawString("(PAUSED)", t(6), t(2));
 		}
-		String state = game.state.name();
+		String text = game.state.name();
 		if (game.state == GameState.PLAYING) {
-			state = game.chasingPhase ? "PLAYING (CHASING)" : "PLAYING (SCATTERING)";
+			text += game.chasingPhase ? " (CHASING)" : " (SCATTERING)";
 		}
-		g.drawString(state + " " + game.stateTimer, 8, 24);
+		text += " " + game.stateTimer;
+		g.drawString(text, t(1), t(3));
 		if (game.pacSafe) {
-			g.drawString("Pac-Man is safe", 144, 24);
+			g.drawString("Pac-Man is safe", t(18), t(3));
 		}
 		if (game.state != GameState.INTRO) {
 			playScene.drawInfo(g);

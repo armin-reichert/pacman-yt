@@ -54,10 +54,9 @@ public class GameController {
 		return (int) (n * 60);
 	}
 
-	public final GameModel game;
-	public GameWindow window;
-
-	private final FPSCounter fpsCounter = new FPSCounter();
+	private GameModel game;
+	private GameWindow window;
+	private FPSCounter fpsCounter = new FPSCounter();
 	private Thread simulation;
 	private boolean running;
 	private Direction move;
