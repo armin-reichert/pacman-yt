@@ -28,24 +28,24 @@ package de.amr.yt.pacman.lib;
  */
 public class FPSCounter {
 
-	private long lastFPS;
-	private long frames;
-	private long countStartTime;
+	private long frameRate;
+	private long frameCount;
+	private long countStart;
 
 	public long getFrameRate() {
-		return lastFPS;
+		return frameRate;
 	}
 
 	public void start() {
-		countStartTime = System.nanoTime();
+		countStart = System.nanoTime();
 	}
 
 	public void update() {
-		++frames;
-		if (System.nanoTime() - countStartTime >= 1_000_000_000) {
-			lastFPS = frames;
-			countStartTime = System.nanoTime();
-			frames = 0;
+		++frameCount;
+		if (System.nanoTime() - countStart >= 1_000_000_000) {
+			frameRate = frameCount;
+			frameCount = 0;
+			countStart = System.nanoTime();
 		}
 	}
 }
