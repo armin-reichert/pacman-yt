@@ -25,36 +25,56 @@ package de.amr.yt.pacman.lib;
 
 import static de.amr.yt.pacman.lib.Logging.log;
 
+import java.io.IOException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 /**
  * @author Armin Reichert
  */
 public class Sounds {
 
-	public static Clip clip(String path) {
-		URL url = Sounds.class.getResource("/sounds/" + path);
-		if (url == null) {
-			log("Could not load audio resource, path='%s'", path);
-			return null;
+	private static Map<String, Clip> clipCache = new HashMap<>();
+
+	public static Clip clip(String fileName) {
+		if (clipCache.containsKey(fileName)) {
+			log("Found clip '%s' in cache", fileName);
+			return clipCache.get(fileName);
 		}
 		try {
-			Clip clip = AudioSystem.getClip();
-			AudioInputStream ais = AudioSystem.getAudioInputStream(url);
-			clip.open(ais);
+			Clip clip = loadClip(fileName);
+			clipCache.put(fileName, clip);
 			return clip;
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (Exception x) {
+			log("Could not load clip '%s': %s", fileName, x.getMessage());
 			return null;
 		}
 	}
 
-	public static void play(Clip clip) {
+	public static void play(String fileName) {
+		Clip clip = clip(fileName);
 		clip.setFramePosition(0);
 		clip.start();
+	}
+
+	private static Clip loadClip(String fileName)
+			throws LineUnavailableException, UnsupportedAudioFileException, IOException {
+		URL url = Sounds.class.getResource("/sounds/" + fileName + ".wav");
+		if (url == null) {
+			String message = "Could not load audio resource, path='%s'";
+			throw new RuntimeException(message);
+		}
+		Clip clip = AudioSystem.getClip();
+		AudioInputStream ais = AudioSystem.getAudioInputStream(url);
+		clip.open(ais);
+		clipCache.put(fileName, clip);
+		return clip;
 	}
 }
