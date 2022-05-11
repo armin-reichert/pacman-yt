@@ -48,8 +48,10 @@ import de.amr.yt.pacman.ui.GameWindow;
  */
 public class GameController {
 
+	public static final int FPS = 60;
+
 	public static int sec(double n) {
-		return (int) (n * 60);
+		return (int) (n * FPS);
 	}
 
 	private GameModel game;
@@ -120,7 +122,7 @@ public class GameController {
 	}
 
 	private void loop() {
-		final long targetTime = 1_000_000_000 / 60;
+		final long targetFrameDuration = 1_000_000_000L / FPS;
 		fpsCounter.start();
 		while (running) {
 			long frameStart = System.nanoTime();
@@ -129,9 +131,10 @@ public class GameController {
 			}
 			window.repaint();
 			long frameDuration = System.nanoTime() - frameStart;
-			if (frameDuration < targetTime) {
+			if (frameDuration < targetFrameDuration) {
+				long sleepMillis = (targetFrameDuration - frameDuration) / 1_000_000;
 				try {
-					Thread.sleep((targetTime - frameDuration) / 1_000_000);
+					Thread.sleep(sleepMillis);
 				} catch (InterruptedException e) {
 					// ignore
 				}
@@ -151,6 +154,7 @@ public class GameController {
 		game.levelSymbols.add(game.bonusSymbol);
 		game.lives = 3;
 		enterState(GameState.INTRO);
+		;
 	}
 
 	private void update() {
