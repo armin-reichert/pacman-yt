@@ -185,7 +185,7 @@ public class GameController {
 		for (Ghost ghost : game.ghosts) {
 			ghost.visible = false;
 		}
-		game.pac.visible = false;
+		game.pacMan.visible = false;
 		if (game.stateTimer == sec(1)) {
 			if (game.levelNumber == 1) {
 				Sounds.play("game_start");
@@ -197,7 +197,7 @@ public class GameController {
 	private void update_READY() {
 		if (game.stateTimer == 0) {
 			game.reset();
-			game.pac.visible = true;
+			game.pacMan.visible = true;
 			for (Ghost ghost : game.ghosts) {
 				ghost.visible = true;
 				ghost.animated = ghost.id != BLINKY;
@@ -206,7 +206,7 @@ public class GameController {
 
 		else if (game.stateTimer == sec(5)) {
 			game.powerPelletsBlinking = true;
-			game.pac.animated = true;
+			game.pacMan.animated = true;
 			game.ghosts[BLINKY].animated = true;
 			enterState(GameState.PLAYING);
 			return;
@@ -224,16 +224,16 @@ public class GameController {
 		} else if (game.scatterStartTicks.contains(game.attackTimer)) {
 			startScatteringPhase();
 		}
-		if (game.pac.powerCountdown == 0) {
+		if (game.pacMan.powerCountdown == 0) {
 			++game.attackTimer;
 		}
 
 		// Pac-Man behavior
 		if (moveCommand != null) {
-			game.pac.wishDir = moveCommand;
+			game.pacMan.wishDir = moveCommand;
 		}
-		game.pac.update();
-		final Vector2 pacManTile = game.pac.tile();
+		game.pacMan.update();
+		final Vector2 pacManTile = game.pacMan.tile();
 		if (game.pacManFindsPellet(pacManTile)) {
 			// found normal pellet
 		}
@@ -244,9 +244,9 @@ public class GameController {
 					ghost.state = GhostState.FRIGHTENED;
 				}
 			}
-			game.pac.powerCountdown = sec(game.ghostFrightenedSeconds);
-			game.pac.losingPower = false;
-			log("Pac-Man gets power for %d ticks", game.pac.powerCountdown);
+			game.pacMan.powerCountdown = sec(game.ghostFrightenedSeconds);
+			game.pacMan.losingPower = false;
+			log("Pac-Man gets power for %d ticks", game.pacMan.powerCountdown);
 		}
 		if (game.world.allPelletsEaten()) {
 			enterState(GameState.LEVEL_COMPLETE);
@@ -311,10 +311,10 @@ public class GameController {
 	}
 
 	private void update_PACMAN_DEAD() {
-		game.pac.update();
+		game.pacMan.update();
 
 		if (game.stateTimer == 0) {
-			game.pac.animated = false;
+			game.pacMan.animated = false;
 			game.bonus = -1;
 		}
 
@@ -325,8 +325,8 @@ public class GameController {
 		}
 
 		else if (game.stateTimer == sec(1.5)) {
-			game.pac.dyingAnimationCountdown = game.pac.dyingAnimationDuration;
-			game.pac.animated = true;
+			game.pacMan.dyingAnimationCountdown = game.pacMan.dyingAnimationDuration;
+			game.pacMan.animated = true;
 			Sounds.play("pacman_death");
 		}
 
@@ -345,11 +345,11 @@ public class GameController {
 
 	private void update_GHOST_DYING() {
 		if (game.stateTimer == 0) {
-			game.pac.visible = false;
+			game.pacMan.visible = false;
 		}
 
 		else if (game.stateTimer == sec(1)) {
-			game.pac.visible = true;
+			game.pacMan.visible = true;
 			enterState(GameState.PLAYING);
 			return;
 		}
@@ -364,8 +364,8 @@ public class GameController {
 
 	private void update_LEVEL_COMPLETE() {
 		if (game.stateTimer == 0) {
-			game.pac.animated = false;
-			game.pac.animFrame = 2; // full face
+			game.pacMan.animated = false;
+			game.pacMan.animFrame = 2; // full face
 			for (Ghost ghost : game.ghosts) {
 				ghost.animated = false;
 			}
@@ -380,7 +380,7 @@ public class GameController {
 
 		else if (game.stateTimer == sec(3)) {
 			game.mazeFlashing = false;
-			game.pac.visible = false;
+			game.pacMan.visible = false;
 			game.setLevelNumber(game.levelNumber + 1);
 			game.levelSymbols.add(game.bonusSymbol);
 			if (game.levelSymbols.size() == 8) {
@@ -396,7 +396,7 @@ public class GameController {
 			for (Ghost ghost : game.ghosts) {
 				ghost.animated = false;
 			}
-			game.pac.animated = false;
+			game.pacMan.animated = false;
 		}
 
 		else if (game.stateTimer == sec(5)) {

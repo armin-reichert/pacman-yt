@@ -48,7 +48,7 @@ public class GameModel {
 	public boolean paused;
 
 	public final World world;
-	public final PacMan pac;
+	public final PacMan pacMan;
 	public final Ghost[] ghosts;
 
 	public int bonus; // active bonus index or -1 if inactive
@@ -93,7 +93,7 @@ public class GameModel {
 
 	public GameModel() {
 		world = new World();
-		pac = new PacMan(this);
+		pacMan = new PacMan(this);
 		ghosts = new Ghost[] { //
 				new Ghost(this, BLINKY), //
 				new Ghost(this, PINKY), //
@@ -175,13 +175,13 @@ public class GameModel {
 		powerPelletsBlinking = false;
 		ghostsKilledByCurrentPowerPellet = 0;
 
-		pac.placeAtTile(world.pacManHomeTile, World.HTS, 0);
-		pac.wishDir = Direction.LEFT;
-		pac.moveDir = Direction.LEFT;
-		pac.speed = playerSpeed;
-		pac.animFrame = 2;
-		pac.animated = false;
-		pac.dead = false;
+		pacMan.placeAtTile(world.pacManHomeTile, World.HTS, 0);
+		pacMan.wishDir = Direction.LEFT;
+		pacMan.moveDir = Direction.LEFT;
+		pacMan.speed = playerSpeed;
+		pacMan.animFrame = 2;
+		pacMan.animated = false;
+		pacMan.state = PacManState.NORMAL;
 
 		ghosts[BLINKY].placeAtTile(world.blinkyHomeTile, World.HTS, 0);
 		ghosts[BLINKY].wishDir = Direction.LEFT;
@@ -217,6 +217,7 @@ public class GameModel {
 	}
 
 	public void onPacPowerEnding() {
+		pacMan.state = PacManState.NORMAL;
 		for (Ghost ghost : ghosts) {
 			if (ghost.state == GhostState.FRIGHTENED) {
 				ghost.state = chasingPhase ? GhostState.CHASING : GhostState.SCATTERING;
@@ -244,7 +245,7 @@ public class GameModel {
 	public boolean pacManFindsPellet(Vector2 tile) {
 		int oldScore = score;
 		if (world.eatPellet(tile)) {
-			pac.idleCountdown = 1;
+			pacMan.idleCountdown = 1;
 			score += 10;
 			checkBonusAwarded();
 			checkExtraLife(oldScore);
@@ -259,7 +260,8 @@ public class GameModel {
 	public boolean pacManFindsPowerPellet(Vector2 tile) {
 		int oldScore = score;
 		if (world.eatPowerPellet(tile)) {
-			pac.idleCountdown = 3;
+			pacMan.state = PacManState.POWER;
+			pacMan.idleCountdown = 3;
 			score += 50;
 			checkBonusAwarded();
 			checkExtraLife(oldScore);
@@ -288,11 +290,11 @@ public class GameModel {
 		if (pacSafe) {
 			return false;
 		}
-		if (pac.powerCountdown == 0) {
+		if (pacMan.powerCountdown == 0) {
 			for (Ghost ghost : ghosts) {
 				if (ghost.tile().equals(tile)) {
 					if (ghost.state == GhostState.CHASING || ghost.state == GhostState.SCATTERING) {
-						pac.dead = true;
+						pacMan.state = PacManState.DEAD;
 						return true;
 					}
 				}
@@ -305,11 +307,11 @@ public class GameModel {
 	 * @return {@code true} if at least one ghost got killed
 	 */
 	public boolean isGhostKilledByPacMan() {
-		if (pac.powerCountdown == 0) {
+		if (pacMan.powerCountdown == 0) {
 			return false;
 		}
 		boolean killedOne = false;
-		Vector2 pacTile = pac.tile();
+		Vector2 pacTile = pacMan.tile();
 		for (Ghost ghost : ghosts) {
 			if (ghost.state == GhostState.FRIGHTENED && ghost.tile().equals(pacTile)) {
 				killedOne = true;

@@ -167,24 +167,24 @@ public class Ghost extends Creature {
 
 	private Vector2 computeChasingTargetTile() {
 		return switch (id) {
-		case BLINKY -> game.pac.tile();
+		case BLINKY -> game.pacMan.tile();
 		case PINKY -> {
-			Vector2 pacPlus4 = game.pac.tile().plus(game.pac.moveDir.vector.times(4));
-			if (game.pac.moveDir == Direction.UP) {
+			Vector2 pacPlus4 = game.pacMan.tile().plus(game.pacMan.moveDir.vector.times(4));
+			if (game.pacMan.moveDir == Direction.UP) {
 				// simulate overflow bug from Arcade game
 				pacPlus4 = pacPlus4.plus(v(-4, 0));
 			}
 			yield pacPlus4;
 		}
 		case INKY -> {
-			Vector2 pacPlus2 = game.pac.tile().plus(game.pac.moveDir.vector.times(2));
-			if (game.pac.moveDir == Direction.UP) {
+			Vector2 pacPlus2 = game.pacMan.tile().plus(game.pacMan.moveDir.vector.times(2));
+			if (game.pacMan.moveDir == Direction.UP) {
 				// simulate overflow bug from Arcade game
 				pacPlus2 = pacPlus2.plus(v(-2, 0));
 			}
 			yield pacPlus2.times(2).minus(game.ghosts[BLINKY].tile());
 		}
-		case CLYDE -> tile().dist(game.pac.tile()) < 8 ? world.leftLowerTarget : game.pac.tile();
+		case CLYDE -> tile().dist(game.pacMan.tile()) < 8 ? world.leftLowerTarget : game.pacMan.tile();
 		default -> null;
 		};
 	}

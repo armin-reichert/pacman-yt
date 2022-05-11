@@ -33,8 +33,8 @@ import de.amr.yt.pacman.lib.Vector2;
 public class PacMan extends Creature {
 
 	public final GameModel game;
+	public PacManState state;
 	public boolean losingPower;
-	public boolean dead;
 	public int powerCountdown;
 	public int idleCountdown;
 	public int dyingAnimationCountdown;
@@ -45,6 +45,7 @@ public class PacMan extends Creature {
 		super(game.world);
 		this.game = game;
 		canReverse = true;
+		state = PacManState.NORMAL;
 	}
 
 	@Override
@@ -64,25 +65,33 @@ public class PacMan extends Creature {
 	}
 
 	public void update() {
-		if (dead) {
+		switch (state) {
+		case NORMAL -> {
+			wander();
+		}
+		case POWER -> {
+			wander();
+			if (powerCountdown == losingPowerDuration) {
+				losingPower = true;
+			}
+			if (--powerCountdown == 0) {
+				losingPower = false;
+				game.onPacPowerEnding();
+			}
+		}
+		case DEAD -> {
 			if (dyingAnimationCountdown > 0) {
 				--dyingAnimationCountdown;
 			}
+		}
+		}
+	}
+
+	private void wander() {
+		if (idleCountdown > 0) {
+			--idleCountdown;
 		} else {
-			if (idleCountdown > 0) {
-				--idleCountdown;
-			} else {
-				moveThroughWorld();
-			}
-			if (powerCountdown > 0) {
-				if (powerCountdown == losingPowerDuration) {
-					losingPower = true;
-				}
-				if (--powerCountdown == 0) {
-					losingPower = false;
-					game.onPacPowerEnding();
-				}
-			}
+			moveThroughWorld();
 		}
 	}
 }
