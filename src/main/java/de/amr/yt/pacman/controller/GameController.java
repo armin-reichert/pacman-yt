@@ -52,7 +52,7 @@ public class GameController {
 		return (int) (n * FPS);
 	}
 
-	private GameModel game;
+	private final GameModel game;
 	private GameWindow window;
 	private FPSCounter fpsCounter = new FPSCounter();
 	private Thread simulation;
