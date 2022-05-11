@@ -80,13 +80,13 @@ public class GameController {
 				case KeyEvent.VK_P -> game.paused = !game.paused;
 				case KeyEvent.VK_Q -> {
 					if (game.state != GameState.INTRO) {
-						enterState(GameState.INTRO);
+						enterGameState(GameState.INTRO);
 					}
 				}
 				case KeyEvent.VK_S -> game.pacSafe = !game.pacSafe;
 				case KeyEvent.VK_SPACE -> {
 					if (game.state == GameState.INTRO) {
-						enterState(GameState.LEVEL_STARTING);
+						enterGameState(GameState.LEVEL_STARTING);
 					}
 				}
 				}
@@ -144,7 +144,7 @@ public class GameController {
 		}
 	}
 
-	private void enterState(GameState state) {
+	private void enterGameState(GameState state) {
 		game.state = state;
 		game.stateTimer = -1;
 	}
@@ -154,7 +154,7 @@ public class GameController {
 		game.levelSymbols.clear();
 		game.levelSymbols.add(game.bonusSymbol);
 		game.lives = 3;
-		enterState(GameState.INTRO);
+		enterGameState(GameState.INTRO);
 	}
 
 	private void update() {
@@ -175,7 +175,7 @@ public class GameController {
 
 	private void update_INTRO() {
 		if (game.stateTimer == sec(30)) {
-			enterState(GameState.INTRO); // restart intro animation
+			enterGameState(GameState.INTRO); // restart intro animation
 		}
 	}
 
@@ -190,7 +190,7 @@ public class GameController {
 			if (game.levelNumber == 1) {
 				Sounds.play("game_start");
 			}
-			enterState(GameState.READY);
+			enterGameState(GameState.READY);
 		}
 	}
 
@@ -208,7 +208,7 @@ public class GameController {
 			game.powerPelletsBlinking = true;
 			game.pacMan.animated = true;
 			game.ghosts[BLINKY].animated = true;
-			enterState(GameState.PLAYING);
+			enterGameState(GameState.PLAYING);
 			return;
 		}
 
@@ -249,18 +249,18 @@ public class GameController {
 			log("Pac-Man gets power for %d ticks", game.pacMan.powerCountdown);
 		}
 		if (game.world.allPelletsEaten()) {
-			enterState(GameState.LEVEL_COMPLETE);
+			enterGameState(GameState.LEVEL_COMPLETE);
 			return;
 		}
 		if (game.pacManFindsBonus(pacManTile)) {
 			// found bonus
 		}
 		if (game.isPacManKilledByGhost(pacManTile)) {
-			enterState(GameState.PACMAN_DEAD);
+			enterGameState(GameState.PACMAN_DEAD);
 			return;
 		}
 		if (game.isGhostKilledByPacMan()) {
-			enterState(GameState.GHOST_DYING);
+			enterGameState(GameState.GHOST_DYING);
 			return;
 		}
 
@@ -333,12 +333,12 @@ public class GameController {
 		else if (game.stateTimer == sec(5)) {
 			--game.lives;
 			if (game.lives > 0) {
-				enterState(GameState.READY);
+				enterGameState(GameState.READY);
 			} else {
 				for (Ghost ghost : game.ghosts) {
 					ghost.visible = true;
 				}
-				enterState(GameState.GAME_OVER);
+				enterGameState(GameState.GAME_OVER);
 			}
 		}
 	}
@@ -350,7 +350,7 @@ public class GameController {
 
 		else if (game.stateTimer == sec(1)) {
 			game.pacMan.visible = true;
-			enterState(GameState.PLAYING);
+			enterGameState(GameState.PLAYING);
 			return;
 		}
 
@@ -386,7 +386,7 @@ public class GameController {
 			if (game.levelSymbols.size() == 8) {
 				game.levelSymbols.remove(0);
 			}
-			enterState(GameState.LEVEL_STARTING);
+			enterGameState(GameState.LEVEL_STARTING);
 		}
 	}
 
