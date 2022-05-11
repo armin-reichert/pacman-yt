@@ -38,6 +38,7 @@ import de.amr.yt.pacman.lib.Direction;
 import de.amr.yt.pacman.lib.FPSCounter;
 import de.amr.yt.pacman.lib.Logging;
 import de.amr.yt.pacman.lib.Sounds;
+import de.amr.yt.pacman.lib.Vector2;
 import de.amr.yt.pacman.model.GameModel;
 import de.amr.yt.pacman.model.Ghost;
 import de.amr.yt.pacman.model.GhostState;
@@ -59,7 +60,7 @@ public class GameController {
 	private FPSCounter fpsCounter = new FPSCounter();
 	private Thread simulation;
 	private boolean running;
-	private Direction move;
+	private Direction moveCommand;
 
 	public GameController() {
 		game = new GameModel();
@@ -71,10 +72,10 @@ public class GameController {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				switch (e.getKeyCode()) {
-				case KeyEvent.VK_UP -> move = Direction.UP;
-				case KeyEvent.VK_DOWN -> move = Direction.DOWN;
-				case KeyEvent.VK_LEFT -> move = Direction.LEFT;
-				case KeyEvent.VK_RIGHT -> move = Direction.RIGHT;
+				case KeyEvent.VK_UP -> moveCommand = Direction.UP;
+				case KeyEvent.VK_DOWN -> moveCommand = Direction.DOWN;
+				case KeyEvent.VK_LEFT -> moveCommand = Direction.LEFT;
+				case KeyEvent.VK_RIGHT -> moveCommand = Direction.RIGHT;
 				case KeyEvent.VK_I -> window.showInfo = !window.showInfo;
 				case KeyEvent.VK_P -> game.paused = !game.paused;
 				case KeyEvent.VK_Q -> {
@@ -169,7 +170,7 @@ public class GameController {
 		case LEVEL_COMPLETE -> update_LEVEL_COMPLETE();
 		case GAME_OVER -> update_GAME_OVER();
 		}
-		move = null;
+		moveCommand = null;
 	}
 
 	private void update_INTRO() {
@@ -217,8 +218,7 @@ public class GameController {
 	}
 
 	private void update_PLAYING() {
-
-		// check if new attack phase starts
+		// Attack logic
 		if (game.chaseStartTicks.contains(game.attackTimer)) {
 			startChasingPhase();
 		} else if (game.scatterStartTicks.contains(game.attackTimer)) {
@@ -228,44 +228,42 @@ public class GameController {
 			++game.attackTimer;
 		}
 
-		// Pac-Man business
-		if (move != null) {
-			game.pac.wishDir = move;
+		// Pac-Man behavior
+		if (moveCommand != null) {
+			game.pac.wishDir = moveCommand;
 		}
 		game.pac.update();
-
-		game.checkPacManFoundPellet();
-
-		if (game.checkPacManFoundPowerPellet()) {
-			game.pac.enterPowerState();
+		final Vector2 pacManTile = game.pac.tile();
+		if (game.pacManFindsPellet(pacManTile)) {
+			// found normal pellet
+		}
+		if (game.pacManFindsPowerPellet(pacManTile)) {
 			for (Ghost ghost : game.ghosts) {
 				if (ghost.state == GhostState.CHASING || ghost.state == GhostState.SCATTERING) {
 					ghost.state = GhostState.FRIGHTENED;
 				}
 			}
 			game.ghostsKilledByCurrentPowerPellet = 0;
+			game.pac.enterPowerState();
 		}
-
-		// check if level is complete
-		if (game.world.allFoodEaten()) {
+		if (game.world.allPelletsEaten()) {
 			enterState(GameState.LEVEL_COMPLETE);
 			return;
 		}
-
-		game.checkPacManFoundBonus();
-
-		if (game.checkPacManKilledByGhost()) {
+		if (game.pacManFindsBonus(pacManTile)) {
+			// found bonus
+		}
+		if (game.isPacManKilledByGhost(pacManTile)) {
 			enterState(GameState.PACMAN_DEAD);
 			return;
 		}
-
-		if (game.checkGhostsKilledByPac()) {
+		if (game.isGhostKilledByPacMan()) {
 			enterState(GameState.GHOST_DYING);
 			return;
 		}
 
-		// Ghost business
-		releaseGhosts();
+		// Ghost stuff
+		unlockGhosts();
 		for (Ghost ghost : game.ghosts) {
 			ghost.update();
 		}
@@ -274,8 +272,8 @@ public class GameController {
 		game.updateBonus();
 	}
 
-	private void releaseGhosts() {
-		// TODO this is just arbitrary logic, the real game uses dot counters and stuff
+	private void unlockGhosts() {
+		// TODO this is just some arbitrary logic, the real game uses dot counters and stuff
 		if (game.ghosts[BLINKY].state == GhostState.LOCKED && game.stateTimer == sec(0)) {
 			game.ghosts[BLINKY].state = GhostState.SCATTERING;
 		}

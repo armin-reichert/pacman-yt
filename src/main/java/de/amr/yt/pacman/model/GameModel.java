@@ -241,10 +241,9 @@ public class GameModel {
 	/**
 	 * @return {@code true} if a pellet has been found
 	 */
-	public boolean checkPacManFoundPellet() {
-		Vector2 pacTile = pac.tile();
+	public boolean pacManFindsPellet(Vector2 tile) {
 		int oldScore = score;
-		if (world.eatPellet(pacTile)) {
+		if (world.eatPellet(tile)) {
 			pac.idleCountdown = 1;
 			score += 10;
 			checkBonusAwarded();
@@ -257,10 +256,9 @@ public class GameModel {
 	/**
 	 * @return {@code true} if a power pellet has been found
 	 */
-	public boolean checkPacManFoundPowerPellet() {
-		Vector2 pacTile = pac.tile();
+	public boolean pacManFindsPowerPellet(Vector2 tile) {
 		int oldScore = score;
-		if (world.eatPowerPellet(pacTile)) {
+		if (world.eatPowerPellet(tile)) {
 			pac.idleCountdown = 3;
 			score += 50;
 			checkBonusAwarded();
@@ -273,8 +271,8 @@ public class GameModel {
 	/**
 	 * @return {@code true} if edible bonus symbol has been found
 	 */
-	public boolean checkPacManFoundBonus() {
-		if (bonus != -1 && !bonusEaten && pac.tile().equals(world.bonusTile)) {
+	public boolean pacManFindsBonus(Vector2 tile) {
+		if (bonus != -1 && !bonusEaten && tile.equals(world.bonusTile)) {
 			bonusTimer = sec(2);
 			bonusEaten = true;
 			score += bonusValue(bonusSymbol);
@@ -286,17 +284,17 @@ public class GameModel {
 	/**
 	 * @return {@code true} if Pac-Man has been killed
 	 */
-	public boolean checkPacManKilledByGhost() {
+	public boolean isPacManKilledByGhost(Vector2 tile) {
 		if (pacSafe) {
 			return false;
 		}
 		if (pac.powerCountdown == 0) {
-			Vector2 pacTile = pac.tile();
 			for (Ghost ghost : ghosts) {
-				if ((ghost.state == GhostState.CHASING || ghost.state == GhostState.SCATTERING)
-						&& ghost.tile().equals(pacTile)) {
-					pac.dead = true;
-					return true;
+				if (ghost.tile().equals(tile)) {
+					if (ghost.state == GhostState.CHASING || ghost.state == GhostState.SCATTERING) {
+						pac.dead = true;
+						return true;
+					}
 				}
 			}
 		}
@@ -306,7 +304,7 @@ public class GameModel {
 	/**
 	 * @return {@code true} if at least one ghost got killed
 	 */
-	public boolean checkGhostsKilledByPac() {
+	public boolean isGhostKilledByPacMan() {
 		if (pac.powerCountdown == 0) {
 			return false;
 		}
