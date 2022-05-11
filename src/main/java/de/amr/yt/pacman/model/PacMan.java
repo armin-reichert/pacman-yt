@@ -34,7 +34,6 @@ public class PacMan extends Creature {
 
 	public final GameModel game;
 	public PacManState state;
-	public boolean losingPower;
 	public int powerCountdown;
 	public int idleCountdown;
 	public int dyingAnimationCountdown;
@@ -64,6 +63,10 @@ public class PacMan extends Creature {
 				offsetX(), offsetY(), moveDir, wishDir);
 	}
 
+	public boolean isLosingPower() {
+		return 0 < powerCountdown && powerCountdown <= losingPowerDuration;
+	}
+
 	public void update() {
 		switch (state) {
 		case NORMAL -> {
@@ -71,11 +74,7 @@ public class PacMan extends Creature {
 		}
 		case POWER -> {
 			wander();
-			if (powerCountdown == losingPowerDuration) {
-				losingPower = true;
-			}
 			if (--powerCountdown == 0) {
-				losingPower = false;
 				game.onPacPowerEnding();
 			}
 		}

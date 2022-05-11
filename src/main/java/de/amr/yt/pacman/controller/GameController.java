@@ -217,7 +217,6 @@ public class GameController {
 				}
 			}
 			game.pacMan.powerCountdown = sec(game.ghostFrightenedSeconds);
-			game.pacMan.losingPower = false;
 			log("Pac-Man gets power for %d ticks", game.pacMan.powerCountdown);
 		}
 		if (game.world.allPelletsEaten()) {

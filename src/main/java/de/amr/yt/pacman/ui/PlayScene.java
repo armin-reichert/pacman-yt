@@ -135,7 +135,7 @@ public class PlayScene {
 				|| ghost.state == GhostState.LOCKED && game.pacMan.powerCountdown > 0) {
 			if (ghost.animated) {
 				ghost.animFrame = game.frame(10, 2);
-				if (game.pacMan.losingPower) {
+				if (game.pacMan.isLosingPower()) {
 					int blink = game.frame(20, 2) == 0 ? 0 : 2;
 					ghost.animFrame += blink;
 				}
@@ -162,7 +162,7 @@ public class PlayScene {
 		if (pacMan.visible) {
 			g.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 6));
 			g.setColor(Color.WHITE);
-			String text = pacMan.losingPower ? "LOSING POWER" : pacMan.state.name();
+			String text = pacMan.isLosingPower() ? "LOSING POWER" : pacMan.state.name();
 			int sw = g.getFontMetrics().stringWidth(text);
 			g.drawString(text, (int) pacMan.x - sw / 2, (int) pacMan.y - 8);
 		}
