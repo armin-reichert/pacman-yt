@@ -69,13 +69,14 @@ public class PacMan extends Creature {
 
 	public void update() {
 		switch (state) {
-		case NORMAL -> {
-			wander();
-		}
+		case NORMAL -> restOrWalk();
 		case POWER -> {
-			wander();
-			if (--powerCountdown == 0) {
+			restOrWalk();
+			if (powerCountdown == 0) {
 				game.onPacPowerEnding();
+				state = PacManState.NORMAL;
+			} else {
+				--powerCountdown;
 			}
 		}
 		case DEAD -> {
@@ -86,7 +87,7 @@ public class PacMan extends Creature {
 		}
 	}
 
-	private void wander() {
+	private void restOrWalk() {
 		if (idleCountdown > 0) {
 			--idleCountdown;
 		} else {

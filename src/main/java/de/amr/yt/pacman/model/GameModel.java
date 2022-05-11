@@ -217,7 +217,6 @@ public class GameModel {
 	}
 
 	public void onPacPowerEnding() {
-		pacMan.state = PacManState.NORMAL;
 		for (Ghost ghost : ghosts) {
 			if (ghost.state == GhostState.FRIGHTENED) {
 				ghost.state = chasingPhase ? GhostState.CHASING : GhostState.SCATTERING;
