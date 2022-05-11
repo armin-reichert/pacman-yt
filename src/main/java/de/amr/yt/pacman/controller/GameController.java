@@ -29,10 +29,7 @@ import static de.amr.yt.pacman.model.GameModel.CLYDE;
 import static de.amr.yt.pacman.model.GameModel.INKY;
 import static de.amr.yt.pacman.model.GameModel.PINKY;
 
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.util.Objects;
 
 import de.amr.yt.pacman.lib.Direction;
 import de.amr.yt.pacman.lib.FPSCounter;
@@ -67,38 +64,7 @@ public class GameController {
 	}
 
 	public void createAndShowUI() {
-		window = new GameWindow(game, fpsCounter, 2.0);
-		window.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				switch (e.getKeyCode()) {
-				case KeyEvent.VK_UP -> moveCommand = Direction.UP;
-				case KeyEvent.VK_DOWN -> moveCommand = Direction.DOWN;
-				case KeyEvent.VK_LEFT -> moveCommand = Direction.LEFT;
-				case KeyEvent.VK_RIGHT -> moveCommand = Direction.RIGHT;
-				case KeyEvent.VK_I -> window.showInfo = !window.showInfo;
-				case KeyEvent.VK_P -> game.paused = !game.paused;
-				case KeyEvent.VK_Q -> {
-					if (game.state != GameState.INTRO) {
-						enterGameState(GameState.INTRO);
-					}
-				}
-				case KeyEvent.VK_S -> game.pacSafe = !game.pacSafe;
-				case KeyEvent.VK_SPACE -> {
-					if (game.state == GameState.INTRO) {
-						enterGameState(GameState.LEVEL_STARTING);
-					}
-				}
-				}
-			}
-		});
-		window.addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowClosing(WindowEvent e) {
-				stopSimulation();
-				System.exit(0);
-			}
-		});
+		window = new GameWindow(this, game, fpsCounter, 2.0);
 		window.pack();
 		window.setLocationRelativeTo(null);
 		window.setVisible(true);
@@ -106,13 +72,13 @@ public class GameController {
 	}
 
 	public void startSimulation() {
-		newGame();
+		startIntro();
 		running = true;
 		simulation = new Thread(this::loop);
 		simulation.run();
 	}
 
-	private void stopSimulation() {
+	public void stopSimulation() {
 		running = false;
 		try {
 			simulation.join();
@@ -144,17 +110,28 @@ public class GameController {
 		}
 	}
 
-	private void enterGameState(GameState state) {
+	public void enterGameState(GameState state) {
 		game.state = state;
 		game.stateTimer = -1;
 	}
 
-	private void newGame() {
+	public void steerPacMan(Direction direction) {
+		moveCommand = Objects.requireNonNull(direction);
+	}
+
+	public void startIntro() {
 		game.setLevelNumber(1);
 		game.levelSymbols.clear();
 		game.levelSymbols.add(game.bonusSymbol);
 		game.lives = 3;
+		game.score = 0;
 		enterGameState(GameState.INTRO);
+	}
+
+	public void startLevel() {
+		if (game.state == GameState.INTRO) {
+			enterGameState(GameState.LEVEL_STARTING);
+		}
 	}
 
 	private void update() {
@@ -400,7 +377,7 @@ public class GameController {
 		}
 
 		else if (game.stateTimer == sec(5)) {
-			newGame();
+			startIntro();
 		}
 	}
 }

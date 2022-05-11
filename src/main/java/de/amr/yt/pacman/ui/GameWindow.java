@@ -31,11 +31,17 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 
+import de.amr.yt.pacman.controller.GameController;
 import de.amr.yt.pacman.controller.GameState;
+import de.amr.yt.pacman.lib.Direction;
 import de.amr.yt.pacman.lib.FPSCounter;
 import de.amr.yt.pacman.model.GameModel;
 import de.amr.yt.pacman.model.World;
@@ -54,7 +60,7 @@ public class GameWindow extends JFrame {
 	private final PlayScene playScene;
 	private final JComponent canvas;
 
-	public GameWindow(GameModel game, FPSCounter fpsCounter, double scale) {
+	public GameWindow(GameController gameController, GameModel game, FPSCounter fpsCounter, double scale) {
 		this.game = game;
 		this.fpsCounter = fpsCounter;
 		introScene = new IntroScene(ss, game);
@@ -63,6 +69,29 @@ public class GameWindow extends JFrame {
 		add(canvas);
 		setTitle("Pac-Man");
 		setResizable(false);
+		addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				switch (e.getKeyCode()) {
+				case KeyEvent.VK_UP -> gameController.steerPacMan(Direction.UP);
+				case KeyEvent.VK_DOWN -> gameController.steerPacMan(Direction.DOWN);
+				case KeyEvent.VK_LEFT -> gameController.steerPacMan(Direction.LEFT);
+				case KeyEvent.VK_RIGHT -> gameController.steerPacMan(Direction.RIGHT);
+				case KeyEvent.VK_I -> showInfo = !showInfo;
+				case KeyEvent.VK_P -> game.paused = !game.paused;
+				case KeyEvent.VK_Q -> gameController.startIntro();
+				case KeyEvent.VK_S -> game.pacSafe = !game.pacSafe;
+				case KeyEvent.VK_SPACE -> gameController.startLevel();
+				}
+			}
+		});
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				gameController.stopSimulation();
+				System.exit(0);
+			}
+		});
 	}
 
 	private JComponent createCanvas(double scale) {
