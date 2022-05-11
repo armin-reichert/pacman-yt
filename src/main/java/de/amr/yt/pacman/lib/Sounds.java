@@ -43,30 +43,9 @@ public class Sounds {
 
 	private static Map<String, Clip> clipCache = new HashMap<>();
 
-	public static Clip clip(String fileName) {
-		if (clipCache.containsKey(fileName)) {
-			log("Found clip '%s' in cache", fileName);
-			return clipCache.get(fileName);
-		}
-		try {
-			Clip clip = loadClip(fileName);
-			clipCache.put(fileName, clip);
-			return clip;
-		} catch (Exception x) {
-			log("Could not load clip '%s': %s", fileName, x.getMessage());
-			return null;
-		}
-	}
-
-	public static void play(String fileName) {
-		Clip clip = clip(fileName);
-		clip.setFramePosition(0);
-		clip.start();
-	}
-
-	private static Clip loadClip(String fileName)
+	private static Clip loadClip(String clipName)
 			throws LineUnavailableException, UnsupportedAudioFileException, IOException {
-		URL url = Sounds.class.getResource("/sounds/" + fileName + ".wav");
+		URL url = Sounds.class.getResource("/sounds/" + clipName + ".wav");
 		if (url == null) {
 			String message = "Could not load audio resource, path='%s'";
 			throw new RuntimeException(message);
@@ -74,7 +53,46 @@ public class Sounds {
 		Clip clip = AudioSystem.getClip();
 		AudioInputStream ais = AudioSystem.getAudioInputStream(url);
 		clip.open(ais);
-		clipCache.put(fileName, clip);
+		clipCache.put(clipName, clip);
 		return clip;
+	}
+
+	public static Clip clip(String clipName) {
+		if (clipCache.containsKey(clipName)) {
+			log("Found clip '%s' in cache", clipName);
+			return clipCache.get(clipName);
+		}
+		try {
+			Clip clip = loadClip(clipName);
+			clipCache.put(clipName, clip);
+			return clip;
+		} catch (Exception x) {
+			log("Could not load clip '%s': %s", clipName, x.getMessage());
+			return null;
+		}
+	}
+
+	public static void play(String clipName) {
+		Clip clip = clip(clipName);
+		clip.setFramePosition(0);
+		clip.start();
+	}
+
+	public static void loop(String clipName) {
+		Clip clip = clip(clipName);
+		if (!clip.isRunning()) {
+			clip.setFramePosition(0);
+			clip.loop(Clip.LOOP_CONTINUOUSLY);
+		}
+	}
+
+	public static void stop(String clipName) {
+		Clip clip = clip(clipName);
+		clip.stop();
+	}
+
+	public static boolean isRunning(String clipName) {
+		Clip clip = clip(clipName);
+		return clip.isRunning();
 	}
 }
