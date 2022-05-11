@@ -112,6 +112,7 @@ public abstract class Creature {
 		if (tryMove(moveDir, wishDir)) {
 			moveDir = wishDir;
 		}
+		enteredNewTile = true;
 	}
 
 	public void moveThroughWorld() {
