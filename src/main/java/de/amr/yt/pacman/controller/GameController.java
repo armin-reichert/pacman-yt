@@ -57,7 +57,7 @@ public class GameController {
 	private FPSCounter fpsCounter = new FPSCounter();
 	private Thread gameLoop;
 	private boolean gameLoopRunning;
-	private Direction moveCommand;
+	private Direction steering;
 
 	public GameController() {
 		gameLoop = new Thread(this::gameLoop);
@@ -115,7 +115,7 @@ public class GameController {
 	}
 
 	public void steerPacMan(Direction direction) {
-		moveCommand = Objects.requireNonNull(direction);
+		steering = Objects.requireNonNull(direction);
 	}
 
 	public void initGame() {
@@ -146,7 +146,7 @@ public class GameController {
 		case LEVEL_COMPLETE -> update_LEVEL_COMPLETE();
 		case GAME_OVER -> update_GAME_OVER();
 		}
-		moveCommand = null;
+		steering = null;
 	}
 
 	private void update_INTRO() {
@@ -205,8 +205,8 @@ public class GameController {
 		}
 
 		// Pac-Man behavior
-		if (moveCommand != null) {
-			game.pacMan.wishDir = moveCommand;
+		if (steering != null) {
+			game.pacMan.wishDir = steering;
 		}
 		game.pacMan.update();
 		final Vector2 pacManTile = game.pacMan.tile();
