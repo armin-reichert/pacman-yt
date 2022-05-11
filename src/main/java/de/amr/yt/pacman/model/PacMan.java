@@ -37,6 +37,7 @@ public class PacMan extends Creature {
 	public boolean losingPower;
 	public boolean dead;
 	public int powerCountdown;
+	public int idleCountdown;
 	public int dyingAnimationCountdown;
 	public final int dyingAnimationDuration = sec(1.5);
 	public final int losingPowerDuration = sec(2);
@@ -69,7 +70,11 @@ public class PacMan extends Creature {
 				--dyingAnimationCountdown;
 			}
 		} else {
-			moveThroughWorld();
+			if (idleCountdown > 0) {
+				--idleCountdown;
+			} else {
+				moveThroughWorld();
+			}
 			if (powerCountdown > 0) {
 				if (powerCountdown == losingPowerDuration) {
 					losingPower = true;

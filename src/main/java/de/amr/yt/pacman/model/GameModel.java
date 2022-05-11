@@ -245,6 +245,7 @@ public class GameModel {
 		Vector2 pacTile = pac.tile();
 		int oldScore = score;
 		if (world.eatPellet(pacTile)) {
+			pac.idleCountdown = 1;
 			score += 10;
 			checkBonusAwarded();
 			checkExtraLife(oldScore);
@@ -260,6 +261,7 @@ public class GameModel {
 		Vector2 pacTile = pac.tile();
 		int oldScore = score;
 		if (world.eatPowerPellet(pacTile)) {
+			pac.idleCountdown = 3;
 			score += 50;
 			checkBonusAwarded();
 			checkExtraLife(oldScore);
