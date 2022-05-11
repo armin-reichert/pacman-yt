@@ -24,7 +24,6 @@ SOFTWARE.
 package de.amr.yt.pacman.model;
 
 import static de.amr.yt.pacman.controller.GameController.sec;
-import static de.amr.yt.pacman.lib.Logging.log;
 
 import de.amr.yt.pacman.lib.Vector2;
 
@@ -85,11 +84,5 @@ public class PacMan extends Creature {
 				}
 			}
 		}
-	}
-
-	public void enterPowerState() {
-		powerCountdown = sec(game.ghostFrightenedSeconds);
-		losingPower = false;
-		log("Pac-Man gets power for %d seconds", game.ghostFrightenedSeconds);
 	}
 }

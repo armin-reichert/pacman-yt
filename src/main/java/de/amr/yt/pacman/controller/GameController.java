@@ -238,13 +238,15 @@ public class GameController {
 			// found normal pellet
 		}
 		if (game.pacManFindsPowerPellet(pacManTile)) {
+			game.ghostsKilledByCurrentPowerPellet = 0;
 			for (Ghost ghost : game.ghosts) {
 				if (ghost.state == GhostState.CHASING || ghost.state == GhostState.SCATTERING) {
 					ghost.state = GhostState.FRIGHTENED;
 				}
 			}
-			game.ghostsKilledByCurrentPowerPellet = 0;
-			game.pac.enterPowerState();
+			game.pac.powerCountdown = sec(game.ghostFrightenedSeconds);
+			game.pac.losingPower = false;
+			log("Pac-Man gets power for %d ticks", game.pac.powerCountdown);
 		}
 		if (game.world.allPelletsEaten()) {
 			enterState(GameState.LEVEL_COMPLETE);
