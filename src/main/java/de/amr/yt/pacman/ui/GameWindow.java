@@ -58,17 +58,15 @@ public class GameWindow extends JFrame {
 	private final Spritesheet ss = new Spritesheet();
 	private final IntroScene introScene;
 	private final PlayScene playScene;
-	private final JComponent canvas;
 
 	public GameWindow(GameController gameController, GameModel game, FPSCounter fpsCounter, double scale) {
 		this.game = game;
 		this.fpsCounter = fpsCounter;
 		introScene = new IntroScene(ss, game);
 		playScene = new PlayScene(ss, game);
-		canvas = createCanvas(scale);
-		add(canvas);
 		setTitle("Pac-Man");
 		setResizable(false);
+		add(createCanvas(scale));
 		addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
