@@ -219,6 +219,7 @@ public class GameController {
 			for (Ghost ghost : game.ghosts) {
 				if (ghost.state == GhostState.CHASING || ghost.state == GhostState.SCATTERING) {
 					ghost.state = GhostState.FRIGHTENED;
+					ghost.reverse();
 				}
 			}
 			game.pacMan.powerCountdown = sec(game.ghostFrightenedSeconds);
@@ -271,6 +272,7 @@ public class GameController {
 		for (Ghost ghost : game.ghosts) {
 			if (ghost.state == GhostState.CHASING) {
 				ghost.state = GhostState.SCATTERING;
+				ghost.reverse();
 			}
 			game.chasingPhase = false;
 		}
@@ -281,6 +283,7 @@ public class GameController {
 		for (Ghost ghost : game.ghosts) {
 			if (ghost.state == GhostState.SCATTERING) {
 				ghost.state = GhostState.CHASING;
+				ghost.reverse();
 			}
 			game.chasingPhase = true;
 		}

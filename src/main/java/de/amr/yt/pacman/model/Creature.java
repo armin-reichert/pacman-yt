@@ -107,6 +107,13 @@ public abstract class Creature {
 		return row() * World.TS + World.HTS;
 	}
 
+	public void reverse() {
+		wishDir = moveDir.opposite();
+		if (tryMove(moveDir, wishDir)) {
+			moveDir = wishDir;
+		}
+	}
+
 	public void moveThroughWorld() {
 		// teleport?
 		if (x > World.COLS * World.TS + World.HTS) {
