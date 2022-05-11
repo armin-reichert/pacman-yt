@@ -65,8 +65,8 @@ public class GameController {
 		window.setLocationRelativeTo(null);
 		window.setVisible(true);
 		window.requestFocus();
-		gameLoopRunning = true;
 		initGame();
+		gameLoopRunning = true;
 		gameLoop.run();
 	}
 
