@@ -29,8 +29,6 @@ package de.amr.yt.pacman.controller;
 public class PacManApp {
 
 	public static void main(String[] args) {
-		var gameController = new GameController();
-		gameController.createAndShowUI();
-		gameController.startSimulation();
+		new GameController().startGame();
 	}
 }

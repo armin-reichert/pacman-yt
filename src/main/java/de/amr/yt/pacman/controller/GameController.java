@@ -52,51 +52,48 @@ public class GameController {
 		return (int) (n * FPS);
 	}
 
-	private final GameModel game;
+	private GameModel game;
 	private GameWindow window;
 	private FPSCounter fpsCounter = new FPSCounter();
-	private Thread simulation;
-	private boolean running;
+	private Thread gameLoop;
+	private boolean gameLoopRunning;
 	private Direction moveCommand;
 
 	public GameController() {
+		gameLoop = new Thread(this::gameLoop);
 		game = new GameModel();
 	}
 
-	public void createAndShowUI() {
+	public void startGame() {
 		window = new GameWindow(this, game, fpsCounter, 2.0);
 		window.pack();
 		window.setLocationRelativeTo(null);
 		window.setVisible(true);
 		window.requestFocus();
+		gameLoopRunning = true;
+		initGame();
+		gameLoop.run();
 	}
 
-	public void startSimulation() {
-		startIntro();
-		running = true;
-		simulation = new Thread(this::loop);
-		simulation.run();
-	}
-
-	public void stopSimulation() {
-		running = false;
+	public void stopGameLoop() {
+		gameLoopRunning = false;
 		try {
-			simulation.join();
-			Logging.log("Simulation thread ended");
+			gameLoop.join();
+			Logging.log("Game loop stopped");
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 	}
 
-	private void loop() {
+	private void gameLoop() {
 		final long targetFrameDuration = 1_000_000_000L / FPS;
 		fpsCounter.start();
-		while (running) {
+		log("Game loop started");
+		while (gameLoopRunning) {
 			long frameStart = System.nanoTime();
 			if (!game.paused) {
 				update();
 			}
-			window.repaint();
 			long frameDuration = System.nanoTime() - frameStart;
 			if (frameDuration < targetFrameDuration) {
 				long sleepMillis = (targetFrameDuration - frameDuration) / 1_000_000;
@@ -107,19 +104,21 @@ public class GameController {
 				}
 			}
 			fpsCounter.update();
+			window.repaint();
 		}
 	}
 
 	public void enterGameState(GameState state) {
 		game.state = state;
 		game.stateTimer = -1;
+		log("Game state changed to %s", game.state);
 	}
 
 	public void steerPacMan(Direction direction) {
 		moveCommand = Objects.requireNonNull(direction);
 	}
 
-	public void startIntro() {
+	public void initGame() {
 		game.setLevelNumber(1);
 		game.levelSymbols.clear();
 		game.levelSymbols.add(game.bonusSymbol);
@@ -380,7 +379,7 @@ public class GameController {
 		}
 
 		else if (game.stateTimer == sec(5)) {
-			startIntro();
+			initGame();
 		}
 	}
 }

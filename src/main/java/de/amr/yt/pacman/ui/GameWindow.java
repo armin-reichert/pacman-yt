@@ -77,7 +77,7 @@ public class GameWindow extends JFrame {
 				case KeyEvent.VK_RIGHT -> gameController.steerPacMan(Direction.RIGHT);
 				case KeyEvent.VK_I -> showInfo = !showInfo;
 				case KeyEvent.VK_P -> game.paused = !game.paused;
-				case KeyEvent.VK_Q -> gameController.startIntro();
+				case KeyEvent.VK_Q -> gameController.initGame();
 				case KeyEvent.VK_S -> game.pacSafe = !game.pacSafe;
 				case KeyEvent.VK_SPACE -> gameController.startLevel();
 				}
@@ -86,7 +86,7 @@ public class GameWindow extends JFrame {
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
-				gameController.stopSimulation();
+				gameController.stopGameLoop();
 				System.exit(0);
 			}
 		});
