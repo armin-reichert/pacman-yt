@@ -116,11 +116,14 @@ public class GameWindow extends JFrame {
 		if (game.paused) {
 			g.drawString("(PAUSED)", t(6), t(2));
 		}
-		String text = game.state.name();
+		String text = "%s (%d)".formatted(game.state.name(), game.stateTimer);
 		if (game.state == GameState.PLAYING) {
-			text += game.chasingPhase ? " (CHASING)" : " (SCATTERING)";
+			if (game.chasingPhase) {
+				text += " CHASING (%d)".formatted(game.attackTimer);
+			} else {
+				text += " SCATTERING (%d)".formatted(game.attackTimer);
+			}
 		}
-		text += " " + game.stateTimer;
 		g.drawString(text, t(1), t(3));
 		if (game.pacSafe) {
 			g.drawString("Pac-Man is safe", t(18), t(3));

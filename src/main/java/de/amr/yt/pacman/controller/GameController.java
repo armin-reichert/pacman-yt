@@ -154,7 +154,6 @@ public class GameController {
 		game.levelSymbols.add(game.bonusSymbol);
 		game.lives = 3;
 		enterState(GameState.INTRO);
-		;
 	}
 
 	private void update() {
@@ -225,7 +224,9 @@ public class GameController {
 		} else if (game.scatterStartTicks.contains(game.attackTimer)) {
 			startScatteringPhase();
 		}
-		++game.attackTimer;
+		if (game.pac.powerCountdown == 0) {
+			++game.attackTimer;
+		}
 
 		// Pac-Man business
 		if (move != null) {
