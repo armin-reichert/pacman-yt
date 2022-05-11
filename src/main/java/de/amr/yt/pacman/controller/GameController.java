@@ -52,17 +52,12 @@ public class GameController {
 		return (int) (n * FPS);
 	}
 
-	private GameModel game;
-	private GameWindow window;
-	private FPSCounter fpsCounter = new FPSCounter();
-	private Thread gameLoop;
+	private final GameModel game = new GameModel();
+	private final FPSCounter fpsCounter = new FPSCounter();
+	private final Thread gameLoop = new Thread(this::gameLoop);
 	private boolean gameLoopRunning;
 	private Direction steering;
-
-	public GameController() {
-		gameLoop = new Thread(this::gameLoop);
-		game = new GameModel();
-	}
+	private GameWindow window;
 
 	public void startGame() {
 		window = new GameWindow(this, game, fpsCounter, 2.0);
