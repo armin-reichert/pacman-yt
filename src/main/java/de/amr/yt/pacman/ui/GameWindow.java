@@ -113,6 +113,13 @@ public class GameWindow extends JFrame {
 		return canvas;
 	}
 
+	public void update() {
+		switch (game.state) {
+		case INTRO -> introScene.update();
+		default -> playScene.update();
+		}
+	}
+
 	private void drawCurrentScene(Graphics2D g) {
 		drawScores(g);
 		switch (game.state) {

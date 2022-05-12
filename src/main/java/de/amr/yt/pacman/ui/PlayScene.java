@@ -52,6 +52,10 @@ public class PlayScene {
 		this.ss = ss;
 	}
 
+	public void update() {
+
+	}
+
 	public void draw(Graphics2D g) {
 		if (!game.mazeFlashing || game.frame(30, 2) == 0) {
 			g.drawImage(ss.mazeImage, 0, t(3), null);

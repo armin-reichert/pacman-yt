@@ -42,20 +42,43 @@ import de.amr.yt.pacman.model.World;
  */
 public class IntroScene {
 
-	private final int animStart = sec(1);
+	private static String character(int id) {
+		return switch (id) {
+		case BLINKY -> "SHADOW";
+		case PINKY -> "SPEEDY";
+		case INKY -> "BASHFUL";
+		case CLYDE -> "POKEY";
+		default -> null;
+		};
+	}
+
+	private static String nickname(int id) {
+		return switch (id) {
+		case BLINKY -> "BLINKY";
+		case PINKY -> "PINKY";
+		case INKY -> "INKY";
+		case CLYDE -> "CLYDE";
+		default -> null;
+		};
+	}
+
 	private final GameModel game;
 	private final Spritesheet ss;
+
 	private float pacManX, blinkyX;
 	private float pacManSpeed, ghostSpeed;
 	private boolean chasingGhosts;
+	private boolean blink;
+	private boolean powerPelletVisible;
 
 	public IntroScene(Spritesheet ss, GameModel game) {
 		this.ss = ss;
 		this.game = game;
-		init();
 	}
 
 	private void init() {
+		powerPelletVisible = false;
+		blink = false;
 		pacManX = t(World.COLS);
 		pacManSpeed = game.playerSpeed;
 		blinkyX = pacManX + t(3);
@@ -63,50 +86,78 @@ public class IntroScene {
 		chasingGhosts = false;
 	}
 
-	public void draw(Graphics2D g) {
-		final long t = game.stateTimer;
-		if (t == 0) {
+	private void at(long point, Runnable action) {
+		if (game.stateTimer == point) {
+			action.run();
+		}
+	}
+
+	private void from(long start, Runnable action) {
+		if (game.stateTimer >= start) {
+			action.run();
+		}
+	}
+
+	private void between(long start, long end, Runnable action) {
+		if (start <= game.stateTimer && game.stateTimer <= end) {
+			action.run();
+		}
+	}
+
+	public void update() {
+		if (game.stateTimer == 0) {
 			init();
 		}
-		if (t >= animStart) {
-			drawTitle(g);
-		}
-		for (int id = 0; id <= 3; ++id) {
-			drawGhostInfo(g, id, animStart + sec(1 + 1.5 * id));
-		}
-		boolean blink = game.stateTimer >= animStart + sec(9);
-		if (t >= animStart + sec(8)) {
-			drawPointsAwarded(g, blink);
-		}
-		if (t >= animStart + sec(9)) {
-			if (!chasingGhosts) {
-				drawPowerPellet(g, blink);
-			}
-		}
-		if (t >= animStart + sec(10) && t < animStart + sec(17)) {
-			drawGuys(g);
-		}
-		if (t >= animStart + sec(17)) {
-			drawPressSpaceToPlay(g);
-		}
 	}
 
-	private void drawPowerPellet(Graphics2D g, boolean blink) {
-		if (!blink || game.frame(30, 2) == 0) {
-			g.setColor(Color.PINK);
-			g.fillOval(t(2), t(20) + World.HTS, t(1), t(1));
-		}
+	public void draw(Graphics2D g) {
+		from(sec(1.0), () -> drawTitle(g));
+		from(sec(2.0), () -> drawGhostIcon(g, 0));
+		from(sec(2.5), () -> drawGhostCharacter(g, 0));
+		from(sec(3.0), () -> drawGhostNickname(g, 0));
+		from(sec(3.5), () -> drawGhostIcon(g, 1));
+		from(sec(4.0), () -> drawGhostCharacter(g, 1));
+		from(sec(4.5), () -> drawGhostNickname(g, 1));
+		from(sec(5.0), () -> drawGhostIcon(g, 2));
+		from(sec(5.5), () -> drawGhostCharacter(g, 2));
+		from(sec(6.0), () -> drawGhostNickname(g, 2));
+		from(sec(6.5), () -> drawGhostIcon(g, 3));
+		from(sec(7.0), () -> drawGhostCharacter(g, 3));
+		from(sec(7.5), () -> drawGhostNickname(g, 3));
+		from(sec(9.0), () -> drawPointsAwarded(g));
+		at(sec(10), () -> powerPelletVisible = true);
+		from(sec(10.0), () -> drawPowerPellet(g));
+		at(sec(11), () -> blink = true);
+		between(sec(11), sec(18), () -> drawGuys(g));
+		from(sec(18), () -> drawPressSpaceToPlay(g));
 	}
 
-	private void drawPressSpaceToPlay(Graphics2D g) {
-		if (game.frame(60, 2) == 0) {
-			g.setColor(Color.WHITE);
-			g.setFont(ss.arcadeFont);
-			g.drawString("PRESS SPACE TO PLAY", t(4), t(32));
-		}
+	private void drawTitle(Graphics2D g) {
+		g.setColor(Color.WHITE);
+		g.setFont(ss.arcadeFont);
+		g.drawString("CHARACTER / NICKNAME", t(6), t(6));
 	}
 
-	private void drawPointsAwarded(Graphics2D g, boolean blink) {
+	private void drawGhostIcon(Graphics2D g, int id) {
+		int y = t(6 + 3 * id) + World.HTS;
+		g.drawImage(ss.ghosts.get(id).get(Direction.RIGHT).get(0), t(3), y, null);
+	}
+
+	private void drawGhostCharacter(Graphics2D g, int id) {
+		int y = t(6 + 3 * id) + World.HTS;
+		g.setColor(ss.ghostColor(id));
+		g.setFont(ss.arcadeFont);
+		g.drawString("-" + character(id), t(6), y + 12);
+	}
+
+	private void drawGhostNickname(Graphics2D g, int id) {
+		int y = t(6 + 3 * id) + World.HTS;
+		g.setColor(ss.ghostColor(id));
+		g.setFont(ss.arcadeFont);
+		g.drawString("\"" + nickname(id) + "\"", t(17), y + 12);
+	}
+
+	private void drawPointsAwarded(Graphics2D g) {
 		int x = t(10);
 		int y = t(24);
 
@@ -130,27 +181,11 @@ public class IntroScene {
 		g.drawString("PTS", x + 40, y + 8);
 	}
 
-	private void drawGhostInfo(Graphics2D g, int id, int t) {
-		int y = t(6 + 3 * id) + World.HTS;
-		if (game.stateTimer >= t) {
-			g.drawImage(ss.ghosts.get(id).get(Direction.RIGHT).get(0), t(3), y, null);
+	private void drawPowerPellet(Graphics2D g) {
+		if (powerPelletVisible && (!blink || game.frame(30, 2) == 0)) {
+			g.setColor(Color.PINK);
+			g.fillOval(t(2), t(20) + World.HTS, t(1), t(1));
 		}
-		if (game.stateTimer >= t + sec(0.5)) {
-			g.setColor(ss.ghostColor(id));
-			g.setFont(ss.arcadeFont);
-			g.drawString("-" + ghostCharacter(id), t(6), y + 12);
-		}
-		if (game.stateTimer >= t + sec(1.0)) {
-			g.setColor(ss.ghostColor(id));
-			g.setFont(ss.arcadeFont);
-			g.drawString("\"" + ghostNickname(id) + "\"", t(17), y + 12);
-		}
-	}
-
-	private void drawTitle(Graphics2D g) {
-		g.setColor(Color.WHITE);
-		g.setFont(ss.arcadeFont);
-		g.drawString("CHARACTER / NICKNAME", t(6), t(6));
 	}
 
 	private void drawGuys(Graphics2D g) {
@@ -162,6 +197,7 @@ public class IntroScene {
 		if (pacManX <= t(2)) {
 			pacManSpeed = game.playerSpeedPowered;
 			ghostSpeed = game.ghostSpeedFrightened;
+			powerPelletVisible = false;
 			chasingGhosts = true;
 		}
 		if (chasingGhosts) {
@@ -200,23 +236,11 @@ public class IntroScene {
 		}
 	}
 
-	private String ghostCharacter(int id) {
-		return switch (id) {
-		case BLINKY -> "SHADOW";
-		case PINKY -> "SPEEDY";
-		case INKY -> "BASHFUL";
-		case CLYDE -> "POKEY";
-		default -> null;
-		};
-	}
-
-	private String ghostNickname(int id) {
-		return switch (id) {
-		case BLINKY -> "BLINKY";
-		case PINKY -> "PINKY";
-		case INKY -> "INKY";
-		case CLYDE -> "CLYDE";
-		default -> null;
-		};
+	private void drawPressSpaceToPlay(Graphics2D g) {
+		if (game.frame(60, 2) == 0) {
+			g.setColor(Color.WHITE);
+			g.setFont(ss.arcadeFont);
+			g.drawString("PRESS SPACE TO PLAY", t(4), t(32));
+		}
 	}
 }

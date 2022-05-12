@@ -81,15 +81,16 @@ public class GameController {
 	}
 
 	private void gameLoop() {
-		final long targetFrameDuration = 1_000_000_000L / FPS;
+		log("Game loop starting...");
 		fpsCounter.start();
-		log("Game loop started");
 		while (gameLoopRunning) {
 			long frameStart = System.nanoTime();
 			if (!game.paused) {
 				update();
+				window.update();
 			}
 			long frameDuration = System.nanoTime() - frameStart;
+			long targetFrameDuration = 1_000_000_000L / FPS;
 			if (frameDuration < targetFrameDuration) {
 				long sleepMillis = (targetFrameDuration - frameDuration) / 1_000_000;
 				try {
