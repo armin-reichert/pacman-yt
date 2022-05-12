@@ -182,20 +182,33 @@ public class IntroScene {
 	}
 
 	private void updateGuys() {
-		if (pacMan.x <= t(2)) { // finds power pellet
-			powerPelletVisible = false;
-			pacMan.moveDir = Direction.RIGHT;
+		if (!pacManChasingGhosts) {
+			/*
+			 * Phase 1: Guys come in from right side, when Pac-Man finds the power pellet, they reverse direction and chase
+			 * begins.
+			 */
+			pacMan.move(pacMan.moveDir);
 			for (var ghost : ghosts) {
-				ghost.moveDir = Direction.RIGHT;
-				ghost.speed = game.ghostSpeedFrightened;
+				ghost.move(ghost.moveDir);
 			}
-			pacManChasingGhosts = true;
-		}
-		pacMan.move(pacMan.moveDir);
-		for (var ghost : ghosts) {
-			ghost.move(ghost.moveDir);
-		}
-		if (pacManChasingGhosts) {
+			if (pacMan.x <= t(2)) { // finds power pellet
+				powerPelletVisible = false;
+				pacMan.moveDir = Direction.RIGHT;
+				for (var ghost : ghosts) {
+					ghost.moveDir = Direction.RIGHT;
+					ghost.speed = game.ghostSpeedFrightened;
+				}
+				pacManChasingGhosts = true;
+			}
+		} else {
+			/*
+			 * Phase 2: Pac-Man chases the ghosts, if a ghost is hit, its value is displayed for a second, Pac-Man is hidden
+			 * and the other ghosts stop.
+			 */
+			pacMan.move(pacMan.moveDir);
+			for (var ghost : ghosts) {
+				ghost.move(ghost.moveDir);
+			}
 			if (pacMan.x > ghosts[3].x) {
 				hit = 4;
 			} else {
