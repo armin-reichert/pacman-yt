@@ -73,6 +73,7 @@ public class IntroScene {
 	private boolean pacManChasingGhosts;
 	private boolean powerPelletsBlinking;
 	private boolean powerPelletVisible;
+	private int hit;
 
 	public IntroScene(Spritesheet ss, GameModel game) {
 		this.ss = ss;
@@ -113,11 +114,40 @@ public class IntroScene {
 			ghost.moveDir = Direction.LEFT;
 		}
 		pacManChasingGhosts = false;
+		hit = -1;
 	}
 
 	public void update() {
 		if (game.stateTimer == 0) {
 			init(); // TODO init() should be called by scene manager (GameWindow) when scene is exchanged
+		}
+	}
+
+	private void updateGuys() {
+		if (pacMan.x <= t(2)) { // finds power pellet
+			powerPelletVisible = false;
+			pacMan.moveDir = Direction.RIGHT;
+			for (var ghost : ghosts) {
+				ghost.moveDir = Direction.RIGHT;
+				ghost.speed = game.ghostSpeedFrightened;
+			}
+			pacManChasingGhosts = true;
+		}
+		pacMan.move(pacMan.moveDir);
+		for (var ghost : ghosts) {
+			ghost.move(ghost.moveDir);
+		}
+		if (pacManChasingGhosts) {
+			if (pacMan.x > ghosts[3].x) {
+				hit = 4;
+			} else {
+				for (var ghost : ghosts) {
+					if (Math.abs(pacMan.x - ghost.x) <= 8) {
+						hit = ghost.id;
+						break;
+					}
+				}
+			}
 		}
 	}
 
@@ -138,6 +168,7 @@ public class IntroScene {
 		from(sec(9.0), () -> drawPointsAwarded(g));
 		from(sec(10.0), () -> drawPowerPellet(g));
 		at(sec(11), () -> powerPelletsBlinking = true);
+		between(sec(12), sec(19), () -> updateGuys());
 		between(sec(12), sec(19), () -> drawGuys(g));
 		from(sec(19), () -> drawPressSpaceToPlay(g));
 	}
@@ -190,30 +221,7 @@ public class IntroScene {
 	}
 
 	private void drawGuys(Graphics2D g) {
-		if (pacMan.x <= t(2)) { // finds power pellet
-			powerPelletVisible = false;
-			pacMan.moveDir = Direction.RIGHT;
-			for (var ghost : ghosts) {
-				ghost.moveDir = Direction.RIGHT;
-				ghost.speed = game.ghostSpeedFrightened;
-			}
-			pacManChasingGhosts = true;
-		}
-		pacMan.move(pacMan.moveDir);
-		for (var ghost : ghosts) {
-			ghost.move(ghost.moveDir);
-		}
 		if (pacManChasingGhosts) {
-			int hit = -1;
-			for (var ghost : ghosts) {
-				if (Math.abs(pacMan.x - ghost.x) <= 8) {
-					hit = ghost.id;
-					break;
-				}
-			}
-			if (pacMan.x > ghosts[3].x) {
-				hit = 4;
-			}
 			drawPacManChasingGhosts(g, hit);
 		} else {
 			drawGhostChasingPacMan(g);
