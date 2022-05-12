@@ -32,6 +32,7 @@ import static de.amr.yt.pacman.model.World.t;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 
 import de.amr.yt.pacman.lib.Direction;
 import de.amr.yt.pacman.model.GameModel;
@@ -201,7 +202,6 @@ public class IntroScene {
 	}
 
 	private void drawGuys(Graphics2D g) {
-		int ghostFrame = game.frame(10, 2);
 		pacMan.move(pacMan.moveDir);
 		for (var ghost : ghosts) {
 			ghost.move(ghost.moveDir);
@@ -227,13 +227,11 @@ public class IntroScene {
 			if (pacMan.x > ghosts[3].x) {
 				hitGhost = 4;
 			}
-			for (int id = 0; id <= 3; ++id) {
-				if (id > hitGhost) {
-					var ghostSprite = ss.ghostFrightened.get(ghostFrame);
-					g.drawImage(ghostSprite, (int) ghosts[id].x, (int) ghosts[id].y, null);
-				} else if (id == hitGhost) {
-					var ghostSprite = ss.ghostValues.get(id == 0 ? 200 : id == 1 ? 400 : id == 2 ? 800 : 1600);
-					g.drawImage(ghostSprite, (int) ghosts[id].x, (int) ghosts[id].y, null);
+			for (var ghost : ghosts) {
+				if (ghost.id > hitGhost) {
+					drawGhostFrightened(g, ghost);
+				} else if (ghost.id == hitGhost) {
+					drawGhostValue(g, ghost);
 					drawPacMan(g);
 				}
 			}
@@ -242,15 +240,30 @@ public class IntroScene {
 			}
 		} else {
 			drawPacMan(g);
-			for (int id = 0; id <= 3; ++id) {
-				var ghostSprite = ss.ghosts.get(id).get(pacMan.moveDir).get(ghostFrame);
-				g.drawImage(ghostSprite, (int) ghosts[id].x, (int) ghosts[id].y, null);
+			for (var ghost : ghosts) {
+				drawGhostNormal(g, ghost);
 			}
 		}
 	}
 
 	private void drawPacMan(Graphics2D g) {
 		g.drawImage(ss.pac.get(pacMan.moveDir).get(game.frame(15, 3)), (int) pacMan.x, (int) pacMan.y, null);
+	}
+
+	private void drawGhost(Graphics2D g, Ghost ghost, BufferedImage sprite) {
+		g.drawImage(sprite, (int) ghost.x, (int) ghost.y, null);
+	}
+
+	private void drawGhostNormal(Graphics2D g, Ghost ghost) {
+		drawGhost(g, ghost, ss.ghosts.get(ghost.id).get(ghost.moveDir).get(game.frame(10, 2)));
+	}
+
+	private void drawGhostFrightened(Graphics2D g, Ghost ghost) {
+		drawGhost(g, ghost, ss.ghostFrightened.get(game.frame(10, 2)));
+	}
+
+	private void drawGhostValue(Graphics2D g, Ghost ghost) {
+		drawGhost(g, ghost, ss.ghostValues.get(ghost.id == 0 ? 200 : ghost.id == 1 ? 400 : ghost.id == 2 ? 800 : 1600));
 	}
 
 	private void drawPressSpaceToPlay(Graphics2D g) {
