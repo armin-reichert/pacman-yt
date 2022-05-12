@@ -121,6 +121,28 @@ public class IntroScene {
 		if (game.stateTimer == 0) {
 			init(); // TODO init() should be called by scene manager (GameWindow) when scene is exchanged
 		}
+		between(sec(12), sec(19), () -> updateGuys());
+	}
+
+	public void draw(Graphics2D g) {
+		from(sec(1.0), () -> drawHeading(g));
+		from(sec(2.0), () -> drawGhostImage(g, 0));
+		from(sec(2.5), () -> drawGhostCharacter(g, 0));
+		from(sec(3.0), () -> drawGhostNickname(g, 0));
+		from(sec(3.5), () -> drawGhostImage(g, 1));
+		from(sec(4.0), () -> drawGhostCharacter(g, 1));
+		from(sec(4.5), () -> drawGhostNickname(g, 1));
+		from(sec(5.0), () -> drawGhostImage(g, 2));
+		from(sec(5.5), () -> drawGhostCharacter(g, 2));
+		from(sec(6.0), () -> drawGhostNickname(g, 2));
+		from(sec(6.5), () -> drawGhostImage(g, 3));
+		from(sec(7.0), () -> drawGhostCharacter(g, 3));
+		from(sec(7.5), () -> drawGhostNickname(g, 3));
+		from(sec(9.0), () -> drawPointsAwarded(g));
+		from(sec(10.0), () -> drawPowerPellet(g));
+		at(sec(11), () -> powerPelletsBlinking = true);
+		between(sec(12), sec(19), () -> drawGuys(g));
+		from(sec(19), () -> drawPressSpaceToPlay(g));
 	}
 
 	private void updateGuys() {
@@ -149,28 +171,6 @@ public class IntroScene {
 				}
 			}
 		}
-	}
-
-	public void draw(Graphics2D g) {
-		from(sec(1.0), () -> drawHeading(g));
-		from(sec(2.0), () -> drawGhostImage(g, 0));
-		from(sec(2.5), () -> drawGhostCharacter(g, 0));
-		from(sec(3.0), () -> drawGhostNickname(g, 0));
-		from(sec(3.5), () -> drawGhostImage(g, 1));
-		from(sec(4.0), () -> drawGhostCharacter(g, 1));
-		from(sec(4.5), () -> drawGhostNickname(g, 1));
-		from(sec(5.0), () -> drawGhostImage(g, 2));
-		from(sec(5.5), () -> drawGhostCharacter(g, 2));
-		from(sec(6.0), () -> drawGhostNickname(g, 2));
-		from(sec(6.5), () -> drawGhostImage(g, 3));
-		from(sec(7.0), () -> drawGhostCharacter(g, 3));
-		from(sec(7.5), () -> drawGhostNickname(g, 3));
-		from(sec(9.0), () -> drawPointsAwarded(g));
-		from(sec(10.0), () -> drawPowerPellet(g));
-		at(sec(11), () -> powerPelletsBlinking = true);
-		between(sec(12), sec(19), () -> updateGuys());
-		between(sec(12), sec(19), () -> drawGuys(g));
-		from(sec(19), () -> drawPressSpaceToPlay(g));
 	}
 
 	private void drawHeading(Graphics2D g) {
