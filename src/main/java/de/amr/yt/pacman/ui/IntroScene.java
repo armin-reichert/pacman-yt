@@ -82,22 +82,16 @@ public class IntroScene {
 		ghosts = new Ghost[] { new Ghost(game, 0), new Ghost(game, 1), new Ghost(game, 2), new Ghost(game, 3) };
 	}
 
-	private void at(long point, Runnable action) {
-		if (game.stateTimer == point) {
-			action.run();
-		}
+	private boolean at(long tick) {
+		return game.stateTimer == tick;
 	}
 
-	private void from(long start, Runnable action) {
-		if (game.stateTimer >= start) {
-			action.run();
-		}
+	private boolean passed(long tick) {
+		return game.stateTimer >= tick;
 	}
 
-	private void between(long start, long end, Runnable action) {
-		if (start <= game.stateTimer && game.stateTimer <= end) {
-			action.run();
-		}
+	private boolean between(long fromTick, long toTick) {
+		return fromTick <= game.stateTimer && game.stateTimer <= toTick;
 	}
 
 	public void init() {
@@ -121,28 +115,69 @@ public class IntroScene {
 		if (game.stateTimer == 0) {
 			init(); // TODO init() should be called by scene manager (GameWindow) when scene is exchanged
 		}
-		between(sec(12), sec(19), () -> updateGuys());
+		if (between(sec(12), sec(19))) {
+			updateGuys();
+		}
 	}
 
 	public void draw(Graphics2D g) {
-		from(sec(1.0), () -> drawHeading(g));
-		from(sec(2.0), () -> drawGhostImage(g, 0));
-		from(sec(2.5), () -> drawGhostCharacter(g, 0));
-		from(sec(3.0), () -> drawGhostNickname(g, 0));
-		from(sec(3.5), () -> drawGhostImage(g, 1));
-		from(sec(4.0), () -> drawGhostCharacter(g, 1));
-		from(sec(4.5), () -> drawGhostNickname(g, 1));
-		from(sec(5.0), () -> drawGhostImage(g, 2));
-		from(sec(5.5), () -> drawGhostCharacter(g, 2));
-		from(sec(6.0), () -> drawGhostNickname(g, 2));
-		from(sec(6.5), () -> drawGhostImage(g, 3));
-		from(sec(7.0), () -> drawGhostCharacter(g, 3));
-		from(sec(7.5), () -> drawGhostNickname(g, 3));
-		from(sec(9.0), () -> drawPointsAwarded(g));
-		from(sec(10.0), () -> drawPowerPellet(g));
-		at(sec(11), () -> powerPelletsBlinking = true);
-		between(sec(12), sec(19), () -> drawGuys(g));
-		from(sec(19), () -> drawPressSpaceToPlay(g));
+		if (passed(sec(1))) {
+			drawHeading(g);
+		}
+		if (passed(sec(1.0))) {
+			drawHeading(g);
+		}
+		if (passed(sec(2.0))) {
+			drawGhostImage(g, 0);
+		}
+		if (passed(sec(2.5))) {
+			drawGhostCharacter(g, 0);
+		}
+		if (passed(sec(3.0))) {
+			drawGhostNickname(g, 0);
+		}
+		if (passed(sec(3.5))) {
+			drawGhostImage(g, 1);
+		}
+		if (passed(sec(4.0))) {
+			drawGhostCharacter(g, 1);
+		}
+		if (passed(sec(4.5))) {
+			drawGhostNickname(g, 1);
+		}
+		if (passed(sec(5.0))) {
+			drawGhostImage(g, 2);
+		}
+		if (passed(sec(5.5))) {
+			drawGhostCharacter(g, 2);
+		}
+		if (passed(sec(6.0))) {
+			drawGhostNickname(g, 2);
+		}
+		if (passed(sec(6.5))) {
+			drawGhostImage(g, 3);
+		}
+		if (passed(sec(7.0))) {
+			drawGhostCharacter(g, 3);
+		}
+		if (passed(sec(7.5))) {
+			drawGhostNickname(g, 3);
+		}
+		if (passed(sec(9.0))) {
+			drawPointsAwarded(g);
+		}
+		if (passed(sec(10.0))) {
+			drawPowerPellet(g);
+		}
+		if (at(sec(11))) {
+			powerPelletsBlinking = true;
+		}
+		if (between(sec(12), sec(19))) {
+			drawGuys(g);
+		}
+		if (passed(sec(19))) {
+			drawPressSpaceToPlay(g);
+		}
 	}
 
 	private void updateGuys() {
