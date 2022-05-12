@@ -35,6 +35,7 @@ import java.awt.Graphics2D;
 
 import de.amr.yt.pacman.lib.Direction;
 import de.amr.yt.pacman.model.GameModel;
+import de.amr.yt.pacman.model.PacMan;
 import de.amr.yt.pacman.model.World;
 
 /**
@@ -65,8 +66,9 @@ public class IntroScene {
 	private final GameModel game;
 	private final Spritesheet ss;
 
-	private float pacManX, blinkyX;
-	private float pacManSpeed, ghostSpeed;
+	private final PacMan pacMan;
+	private float blinkyX;
+	private float ghostSpeed;
 	private boolean chasingGhosts;
 	private boolean blink;
 	private boolean powerPelletVisible;
@@ -74,14 +76,15 @@ public class IntroScene {
 	public IntroScene(Spritesheet ss, GameModel game) {
 		this.ss = ss;
 		this.game = game;
+		pacMan = new PacMan(game);
 	}
 
 	private void init() {
 		powerPelletVisible = true;
 		blink = false;
-		pacManX = t(World.COLS);
-		pacManSpeed = game.playerSpeed;
-		blinkyX = pacManX + t(3);
+		pacMan.x = t(World.COLS);
+		pacMan.speed = game.playerSpeed;
+		blinkyX = pacMan.x + t(3);
 		ghostSpeed = game.playerSpeed * 1.05f;
 		chasingGhosts = false;
 	}
@@ -192,12 +195,12 @@ public class IntroScene {
 
 	private void drawGuys(Graphics2D g) {
 		int ghostFrame = game.frame(10, 2);
-		int y = t(20);
-		Direction moveDir = chasingGhosts ? Direction.RIGHT : Direction.LEFT;
-		pacManX += moveDir.vector.x * pacManSpeed;
-		blinkyX += moveDir.vector.x * ghostSpeed;
-		if (pacManX <= t(2)) {
-			pacManSpeed = game.playerSpeedPowered;
+		pacMan.moveDir = chasingGhosts ? Direction.RIGHT : Direction.LEFT;
+		pacMan.x += pacMan.moveDir.vector.x * pacMan.speed;
+		pacMan.y = t(20);
+		blinkyX += pacMan.moveDir.vector.x * ghostSpeed;
+		if (pacMan.x <= t(2)) {
+			pacMan.speed = game.playerSpeedPowered;
 			ghostSpeed = game.ghostSpeedFrightened;
 			powerPelletVisible = false;
 			chasingGhosts = true;
@@ -206,40 +209,40 @@ public class IntroScene {
 			int hitGhost = -1;
 			for (int id = 0; id <= 3; ++id) {
 				float ghostX = blinkyX + id * 16;
-				if (Math.abs(pacManX - ghostX) <= 8) {
+				if (Math.abs(pacMan.x - ghostX) <= 8) {
 					hitGhost = id;
 					break;
 				}
 			}
-			if (pacManX > blinkyX + 3 * 16) {
+			if (pacMan.x > blinkyX + 3 * 16) {
 				hitGhost = 4;
 			}
 			for (int id = 0; id <= 3; ++id) {
 				float ghostX = blinkyX + id * 16;
 				if (id > hitGhost) {
 					var ghostSprite = ss.ghostFrightened.get(ghostFrame);
-					g.drawImage(ghostSprite, (int) ghostX, y, null);
+					g.drawImage(ghostSprite, (int) ghostX, (int) pacMan.y, null);
 				} else if (id == hitGhost) {
 					var ghostSprite = ss.ghostValues.get(id == 0 ? 200 : id == 1 ? 400 : id == 2 ? 800 : 1600);
-					g.drawImage(ghostSprite, (int) ghostX, y, null);
-					drawPacMan(g, pacManX, y, moveDir);
+					g.drawImage(ghostSprite, (int) ghostX, (int) pacMan.y, null);
+					drawPacMan(g);
 				}
 			}
 			if (hitGhost == -1 || hitGhost == 4) {
-				drawPacMan(g, pacManX, y, moveDir);
+				drawPacMan(g);
 			}
 		} else {
-			drawPacMan(g, pacManX, y, moveDir);
+			drawPacMan(g);
 			for (int id = 0; id <= 3; ++id) {
 				float ghostX = blinkyX + id * 16;
-				var ghostSprite = ss.ghosts.get(id).get(moveDir).get(ghostFrame);
-				g.drawImage(ghostSprite, (int) ghostX, y, null);
+				var ghostSprite = ss.ghosts.get(id).get(pacMan.moveDir).get(ghostFrame);
+				g.drawImage(ghostSprite, (int) ghostX, (int) pacMan.y, null);
 			}
 		}
 	}
 
-	private void drawPacMan(Graphics2D g, float x, float y, Direction dir) {
-		g.drawImage(ss.pac.get(dir).get(game.frame(15, 3)), (int) x, (int) y, null);
+	private void drawPacMan(Graphics2D g) {
+		g.drawImage(ss.pac.get(pacMan.moveDir).get(game.frame(15, 3)), (int) pacMan.x, (int) pacMan.y, null);
 	}
 
 	private void drawPressSpaceToPlay(Graphics2D g) {
