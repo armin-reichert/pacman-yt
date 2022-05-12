@@ -170,7 +170,11 @@ public class IntroScene {
 			powerPelletsBlinking = true;
 		}
 		if (between(sec(12), sec(19))) {
-			drawGuys(g);
+			if (pacManChasingGhosts) {
+				drawPacManChasingGhosts(g, hit);
+			} else {
+				drawGhostChasingPacMan(g);
+			}
 		}
 		if (passed(sec(19))) {
 			drawPressSpaceToPlay(g);
@@ -249,14 +253,6 @@ public class IntroScene {
 		if (!powerPelletsBlinking || game.frame(30, 2) == 0) {
 			g.setColor(Color.PINK);
 			g.fillOval(t(2), t(20) + World.HTS, t(1), t(1));
-		}
-	}
-
-	private void drawGuys(Graphics2D g) {
-		if (pacManChasingGhosts) {
-			drawPacManChasingGhosts(g, hit);
-		} else {
-			drawGhostChasingPacMan(g);
 		}
 	}
 
