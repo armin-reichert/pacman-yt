@@ -77,7 +77,7 @@ public class IntroScene {
 	}
 
 	private void init() {
-		powerPelletVisible = false;
+		powerPelletVisible = true;
 		blink = false;
 		pacManX = t(World.COLS);
 		pacManSpeed = game.playerSpeed;
@@ -125,11 +125,10 @@ public class IntroScene {
 		from(sec(7.0), () -> drawGhostCharacter(g, 3));
 		from(sec(7.5), () -> drawGhostNickname(g, 3));
 		from(sec(9.0), () -> drawPointsAwarded(g));
-		at(sec(10), () -> powerPelletVisible = true);
 		from(sec(10.0), () -> drawPowerPellet(g));
 		at(sec(11), () -> blink = true);
-		between(sec(11), sec(18), () -> drawGuys(g));
-		from(sec(18), () -> drawPressSpaceToPlay(g));
+		between(sec(12), sec(19), () -> drawGuys(g));
+		from(sec(19), () -> drawPressSpaceToPlay(g));
 	}
 
 	private void drawTitle(Graphics2D g) {
@@ -182,7 +181,10 @@ public class IntroScene {
 	}
 
 	private void drawPowerPellet(Graphics2D g) {
-		if (powerPelletVisible && (!blink || game.frame(30, 2) == 0)) {
+		if (!powerPelletVisible) {
+			return;
+		}
+		if (!blink || game.frame(30, 2) == 0) {
 			g.setColor(Color.PINK);
 			g.fillOval(t(2), t(20) + World.HTS, t(1), t(1));
 		}
