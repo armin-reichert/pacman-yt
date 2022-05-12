@@ -204,7 +204,17 @@ public class IntroScene {
 			ghost.move(ghost.moveDir);
 		}
 		if (pacManChasingGhosts) {
-			drawPacManChasingGhosts(g);
+			int hit = -1;
+			for (var ghost : ghosts) {
+				if (Math.abs(pacMan.x - ghost.x) <= 8) {
+					hit = ghost.id;
+					break;
+				}
+			}
+			if (pacMan.x > ghosts[3].x) {
+				hit = 4;
+			}
+			drawPacManChasingGhosts(g, hit);
 		} else {
 			drawGhostChasingPacMan(g);
 		}
@@ -217,17 +227,7 @@ public class IntroScene {
 		}
 	}
 
-	private void drawPacManChasingGhosts(Graphics2D g) {
-		int hit = -1;
-		for (var ghost : ghosts) {
-			if (Math.abs(pacMan.x - ghost.x) <= 8) {
-				hit = ghost.id;
-				break;
-			}
-		}
-		if (pacMan.x > ghosts[3].x) {
-			hit = 4;
-		}
+	private void drawPacManChasingGhosts(Graphics2D g, int hit) {
 		for (var ghost : ghosts) {
 			if (ghost.id > hit) {
 				drawGhostFrightened(g, ghost);
