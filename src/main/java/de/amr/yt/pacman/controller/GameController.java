@@ -120,6 +120,7 @@ public class GameController {
 		game.levelSymbols.add(game.bonusSymbol);
 		game.lives = 3;
 		game.score = 0;
+		Sounds.stopAll();
 		enterGameState(GameState.INTRO);
 	}
 

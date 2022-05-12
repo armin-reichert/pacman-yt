@@ -91,6 +91,12 @@ public class Sounds {
 		clip.stop();
 	}
 
+	public static void stopAll() {
+		for (Clip clip : clipCache.values()) {
+			clip.stop();
+		}
+	}
+
 	public static boolean isRunning(String clipName) {
 		Clip clip = clip(clipName);
 		return clip.isRunning();
