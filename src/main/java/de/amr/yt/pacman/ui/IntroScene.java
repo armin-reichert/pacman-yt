@@ -121,9 +121,6 @@ public class IntroScene {
 	}
 
 	public void draw(Graphics2D g) {
-		if (passed(sec(1))) {
-			drawHeading(g);
-		}
 		if (passed(sec(1.0))) {
 			drawHeading(g);
 		}
