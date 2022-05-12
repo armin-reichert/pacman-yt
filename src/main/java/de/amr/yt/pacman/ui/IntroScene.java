@@ -222,20 +222,24 @@ public class IntroScene {
 				} else if (id == hitGhost) {
 					var ghostSprite = ss.ghostValues.get(id == 0 ? 200 : id == 1 ? 400 : id == 2 ? 800 : 1600);
 					g.drawImage(ghostSprite, (int) ghostX, y, null);
-					g.drawImage(ss.pac.get(moveDir).get(game.frame(15, 3)), (int) pacManX, y, null);
+					drawPacMan(g, pacManX, y, moveDir);
 				}
 			}
 			if (hitGhost == -1 || hitGhost == 4) {
-				g.drawImage(ss.pac.get(moveDir).get(game.frame(15, 3)), (int) pacManX, y, null);
+				drawPacMan(g, pacManX, y, moveDir);
 			}
 		} else {
-			g.drawImage(ss.pac.get(moveDir).get(game.frame(15, 3)), (int) pacManX, y, null);
+			drawPacMan(g, pacManX, y, moveDir);
 			for (int id = 0; id <= 3; ++id) {
 				float ghostX = blinkyX + id * 16;
 				var ghostSprite = ss.ghosts.get(id).get(moveDir).get(ghostFrame);
 				g.drawImage(ghostSprite, (int) ghostX, y, null);
 			}
 		}
+	}
+
+	private void drawPacMan(Graphics2D g, float x, float y, Direction dir) {
+		g.drawImage(ss.pac.get(dir).get(game.frame(15, 3)), (int) x, (int) y, null);
 	}
 
 	private void drawPressSpaceToPlay(Graphics2D g) {
