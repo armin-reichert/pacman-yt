@@ -241,12 +241,9 @@ public class IntroScene {
 				drawGhostFrightened(g, ghost);
 			} else if (ghost.id == hit) {
 				drawGhostValue(g, ghost);
-				drawPacMan(g);
 			}
 		}
-		if (hit == -1 || hit == 4) {
-			drawPacMan(g);
-		}
+		drawPacMan(g);
 	}
 
 	private void drawPacMan(Graphics2D g) {
