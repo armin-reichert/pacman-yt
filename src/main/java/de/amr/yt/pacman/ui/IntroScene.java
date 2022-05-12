@@ -173,7 +173,7 @@ public class IntroScene {
 			if (pacManChasingGhosts) {
 				drawPacManChasingGhosts(g, hit);
 			} else {
-				drawGhostChasingPacMan(g);
+				drawGhostsChasingPacMan(g);
 			}
 		}
 		if (passed(sec(19))) {
@@ -256,7 +256,7 @@ public class IntroScene {
 		}
 	}
 
-	private void drawGhostChasingPacMan(Graphics2D g) {
+	private void drawGhostsChasingPacMan(Graphics2D g) {
 		drawPacMan(g);
 		for (var ghost : ghosts) {
 			drawGhostNormal(g, ghost);
