@@ -70,7 +70,7 @@ public class IntroScene {
 
 	private final PacMan pacMan;
 	private final Ghost[] ghosts;
-	private boolean chasingGhosts;
+	private boolean pacManChasingGhosts;
 	private boolean powerPelletsBlinking;
 	private boolean powerPelletVisible;
 
@@ -112,7 +112,7 @@ public class IntroScene {
 			ghost.speed = game.playerSpeed * 1.05f;
 			ghost.moveDir = Direction.LEFT;
 		}
-		chasingGhosts = false;
+		pacManChasingGhosts = false;
 	}
 
 	public void update() {
@@ -190,47 +190,54 @@ public class IntroScene {
 	}
 
 	private void drawGuys(Graphics2D g) {
-		pacMan.move(pacMan.moveDir);
-		for (var ghost : ghosts) {
-			ghost.move(ghost.moveDir);
-		}
-		if (pacMan.x <= t(2)) { // meets power pellet
+		if (pacMan.x <= t(2)) { // finds power pellet
+			powerPelletVisible = false;
 			pacMan.moveDir = Direction.RIGHT;
-			pacMan.speed = game.playerSpeedPowered;
 			for (var ghost : ghosts) {
 				ghost.moveDir = Direction.RIGHT;
 				ghost.speed = game.ghostSpeedFrightened;
 			}
-			powerPelletVisible = false;
-			chasingGhosts = true;
+			pacManChasingGhosts = true;
 		}
-		if (chasingGhosts) {
-			int hitGhost = -1;
-			for (int id = 0; id <= 3; ++id) {
-				if (Math.abs(pacMan.x - ghosts[id].x) <= 8) {
-					hitGhost = id;
-					break;
-				}
+		pacMan.move(pacMan.moveDir);
+		for (var ghost : ghosts) {
+			ghost.move(ghost.moveDir);
+		}
+		if (pacManChasingGhosts) {
+			drawPacManChasingGhosts(g);
+		} else {
+			drawGhostChasingPacMan(g);
+		}
+	}
+
+	private void drawGhostChasingPacMan(Graphics2D g) {
+		drawPacMan(g);
+		for (var ghost : ghosts) {
+			drawGhostNormal(g, ghost);
+		}
+	}
+
+	private void drawPacManChasingGhosts(Graphics2D g) {
+		int hit = -1;
+		for (var ghost : ghosts) {
+			if (Math.abs(pacMan.x - ghost.x) <= 8) {
+				hit = ghost.id;
+				break;
 			}
-			if (pacMan.x > ghosts[3].x) {
-				hitGhost = 4;
-			}
-			for (var ghost : ghosts) {
-				if (ghost.id > hitGhost) {
-					drawGhostFrightened(g, ghost);
-				} else if (ghost.id == hitGhost) {
-					drawGhostValue(g, ghost);
-					drawPacMan(g);
-				}
-			}
-			if (hitGhost == -1 || hitGhost == 4) {
+		}
+		if (pacMan.x > ghosts[3].x) {
+			hit = 4;
+		}
+		for (var ghost : ghosts) {
+			if (ghost.id > hit) {
+				drawGhostFrightened(g, ghost);
+			} else if (ghost.id == hit) {
+				drawGhostValue(g, ghost);
 				drawPacMan(g);
 			}
-		} else {
+		}
+		if (hit == -1 || hit == 4) {
 			drawPacMan(g);
-			for (var ghost : ghosts) {
-				drawGhostNormal(g, ghost);
-			}
 		}
 	}
 
