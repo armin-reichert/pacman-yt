@@ -219,23 +219,21 @@ public class IntroScene {
 		if (chasingGhosts) {
 			int hitGhost = -1;
 			for (int id = 0; id <= 3; ++id) {
-				float ghostX = ghosts[0].x + id * 16;
-				if (Math.abs(pacMan.x - ghostX) <= 8) {
+				if (Math.abs(pacMan.x - ghosts[id].x) <= 8) {
 					hitGhost = id;
 					break;
 				}
 			}
-			if (pacMan.x > ghosts[0].x + 3 * 16) {
+			if (pacMan.x > ghosts[3].x) {
 				hitGhost = 4;
 			}
 			for (int id = 0; id <= 3; ++id) {
-				float ghostX = ghosts[0].x + id * 16;
 				if (id > hitGhost) {
 					var ghostSprite = ss.ghostFrightened.get(ghostFrame);
-					g.drawImage(ghostSprite, (int) ghostX, (int) pacMan.y, null);
+					g.drawImage(ghostSprite, (int) ghosts[id].x, (int) ghosts[id].y, null);
 				} else if (id == hitGhost) {
 					var ghostSprite = ss.ghostValues.get(id == 0 ? 200 : id == 1 ? 400 : id == 2 ? 800 : 1600);
-					g.drawImage(ghostSprite, (int) ghostX, (int) pacMan.y, null);
+					g.drawImage(ghostSprite, (int) ghosts[id].x, (int) ghosts[id].y, null);
 					drawPacMan(g);
 				}
 			}
@@ -245,9 +243,8 @@ public class IntroScene {
 		} else {
 			drawPacMan(g);
 			for (int id = 0; id <= 3; ++id) {
-				float ghostX = ghosts[0].x + id * 16;
 				var ghostSprite = ss.ghosts.get(id).get(pacMan.moveDir).get(ghostFrame);
-				g.drawImage(ghostSprite, (int) ghostX, (int) pacMan.y, null);
+				g.drawImage(ghostSprite, (int) ghosts[id].x, (int) ghosts[id].y, null);
 			}
 		}
 	}
