@@ -81,22 +81,6 @@ public class IntroScene {
 		ghosts = new Ghost[] { new Ghost(game, 0), new Ghost(game, 1), new Ghost(game, 2), new Ghost(game, 3) };
 	}
 
-	private void init() {
-		powerPelletVisible = true;
-		powerPelletsBlinking = false;
-		pacMan.x = t(World.COLS);
-		pacMan.y = t(20);
-		pacMan.speed = game.playerSpeed;
-		pacMan.moveDir = Direction.LEFT;
-		for (Ghost ghost : ghosts) {
-			ghost.x = pacMan.x + t(3) + ghost.id * 16;
-			ghost.y = pacMan.y;
-			ghost.speed = game.playerSpeed * 1.05f;
-			ghost.moveDir = Direction.LEFT;
-		}
-		chasingGhosts = false;
-	}
-
 	private void at(long point, Runnable action) {
 		if (game.stateTimer == point) {
 			action.run();
@@ -115,24 +99,40 @@ public class IntroScene {
 		}
 	}
 
+	public void init() {
+		powerPelletVisible = true;
+		powerPelletsBlinking = false;
+		pacMan.x = t(World.COLS);
+		pacMan.y = t(20);
+		pacMan.speed = game.playerSpeed;
+		pacMan.moveDir = Direction.LEFT;
+		for (Ghost ghost : ghosts) {
+			ghost.x = pacMan.x + t(3) + ghost.id * 16;
+			ghost.y = pacMan.y;
+			ghost.speed = game.playerSpeed * 1.05f;
+			ghost.moveDir = Direction.LEFT;
+		}
+		chasingGhosts = false;
+	}
+
 	public void update() {
 		if (game.stateTimer == 0) {
-			init();
+			init(); // TODO init() should be called by scene manager (GameWindow) when scene is exchanged
 		}
 	}
 
 	public void draw(Graphics2D g) {
-		from(sec(1.0), () -> drawTitle(g));
-		from(sec(2.0), () -> drawGhostIcon(g, 0));
+		from(sec(1.0), () -> drawHeading(g));
+		from(sec(2.0), () -> drawGhostImage(g, 0));
 		from(sec(2.5), () -> drawGhostCharacter(g, 0));
 		from(sec(3.0), () -> drawGhostNickname(g, 0));
-		from(sec(3.5), () -> drawGhostIcon(g, 1));
+		from(sec(3.5), () -> drawGhostImage(g, 1));
 		from(sec(4.0), () -> drawGhostCharacter(g, 1));
 		from(sec(4.5), () -> drawGhostNickname(g, 1));
-		from(sec(5.0), () -> drawGhostIcon(g, 2));
+		from(sec(5.0), () -> drawGhostImage(g, 2));
 		from(sec(5.5), () -> drawGhostCharacter(g, 2));
 		from(sec(6.0), () -> drawGhostNickname(g, 2));
-		from(sec(6.5), () -> drawGhostIcon(g, 3));
+		from(sec(6.5), () -> drawGhostImage(g, 3));
 		from(sec(7.0), () -> drawGhostCharacter(g, 3));
 		from(sec(7.5), () -> drawGhostNickname(g, 3));
 		from(sec(9.0), () -> drawPointsAwarded(g));
@@ -142,53 +142,41 @@ public class IntroScene {
 		from(sec(19), () -> drawPressSpaceToPlay(g));
 	}
 
-	private void drawTitle(Graphics2D g) {
+	private void drawHeading(Graphics2D g) {
 		g.setColor(Color.WHITE);
 		g.setFont(ss.arcadeFont);
 		g.drawString("CHARACTER / NICKNAME", t(6), t(6));
 	}
 
-	private void drawGhostIcon(Graphics2D g, int id) {
-		int y = t(6 + 3 * id) + World.HTS;
-		g.drawImage(ss.ghosts.get(id).get(Direction.RIGHT).get(0), t(3), y, null);
+	private void drawGhostImage(Graphics2D g, int id) {
+		g.drawImage(ss.ghosts.get(id).get(Direction.RIGHT).get(0), t(3), t(6 + 3 * id) + World.HTS, null);
 	}
 
 	private void drawGhostCharacter(Graphics2D g, int id) {
-		int y = t(6 + 3 * id) + World.HTS;
 		g.setColor(ss.ghostColor(id));
 		g.setFont(ss.arcadeFont);
-		g.drawString("-" + character(id), t(6), y + 12);
+		g.drawString("-" + character(id), t(6), t(6 + 3 * id) + World.HTS + 12);
 	}
 
 	private void drawGhostNickname(Graphics2D g, int id) {
-		int y = t(6 + 3 * id) + World.HTS;
 		g.setColor(ss.ghostColor(id));
 		g.setFont(ss.arcadeFont);
-		g.drawString("\"" + nickname(id) + "\"", t(17), y + 12);
+		g.drawString("\"" + nickname(id) + "\"", t(17), t(6 + 3 * id) + World.HTS + 12);
 	}
 
 	private void drawPointsAwarded(Graphics2D g) {
-		int x = t(10);
-		int y = t(24);
-
-		g.setColor(Color.PINK);
-		g.fillRect(x + 3, y + 3, 2, 2);
 		g.setColor(Color.WHITE);
 		g.setFont(ss.arcadeFont);
-		g.drawString("10", x + 16, y + 8);
+		g.drawString("10", t(12), t(25));
+		g.drawString("50", t(12), t(27));
 		g.setFont(ss.arcadeFont.deriveFont(6.0f));
-		g.drawString("PTS", x + 40, y + 8);
-
-		y += t(2);
+		g.drawString("PTS", t(15), t(25));
+		g.drawString("PTS", t(15), t(27));
 		g.setColor(Color.PINK);
+		g.fillRect(t(10) + 3, t(24) + 3, 2, 2);
 		if (!powerPelletsBlinking || game.frame(30, 2) == 0) {
-			g.fillOval(t(10), y, 8, 8);
+			g.fillOval(t(10), t(26), t(1), t(1));
 		}
-		g.setColor(Color.WHITE);
-		g.setFont(ss.arcadeFont);
-		g.drawString("50", x + 16, y + 8);
-		g.setFont(ss.arcadeFont.deriveFont(6.0f));
-		g.drawString("PTS", x + 40, y + 8);
 	}
 
 	private void drawPowerPellet(Graphics2D g) {
