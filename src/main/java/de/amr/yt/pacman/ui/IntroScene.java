@@ -35,6 +35,7 @@ import java.awt.Graphics2D;
 
 import de.amr.yt.pacman.lib.Direction;
 import de.amr.yt.pacman.model.GameModel;
+import de.amr.yt.pacman.model.Ghost;
 import de.amr.yt.pacman.model.PacMan;
 import de.amr.yt.pacman.model.World;
 
@@ -67,25 +68,31 @@ public class IntroScene {
 	private final Spritesheet ss;
 
 	private final PacMan pacMan;
-	private float blinkyX;
-	private float ghostSpeed;
+	private final Ghost[] ghosts;
 	private boolean chasingGhosts;
-	private boolean blink;
+	private boolean powerPelletsBlinking;
 	private boolean powerPelletVisible;
 
 	public IntroScene(Spritesheet ss, GameModel game) {
 		this.ss = ss;
 		this.game = game;
 		pacMan = new PacMan(game);
+		ghosts = new Ghost[] { new Ghost(game, 0), new Ghost(game, 1), new Ghost(game, 2), new Ghost(game, 3) };
 	}
 
 	private void init() {
 		powerPelletVisible = true;
-		blink = false;
+		powerPelletsBlinking = false;
 		pacMan.x = t(World.COLS);
+		pacMan.y = t(20);
 		pacMan.speed = game.playerSpeed;
-		blinkyX = pacMan.x + t(3);
-		ghostSpeed = game.playerSpeed * 1.05f;
+		pacMan.moveDir = Direction.LEFT;
+		for (Ghost ghost : ghosts) {
+			ghost.x = pacMan.x + t(3) + ghost.id * 16;
+			ghost.y = pacMan.y;
+			ghost.speed = game.playerSpeed * 1.05f;
+			ghost.moveDir = Direction.LEFT;
+		}
 		chasingGhosts = false;
 	}
 
@@ -129,7 +136,7 @@ public class IntroScene {
 		from(sec(7.5), () -> drawGhostNickname(g, 3));
 		from(sec(9.0), () -> drawPointsAwarded(g));
 		from(sec(10.0), () -> drawPowerPellet(g));
-		at(sec(11), () -> blink = true);
+		at(sec(11), () -> powerPelletsBlinking = true);
 		between(sec(12), sec(19), () -> drawGuys(g));
 		from(sec(19), () -> drawPressSpaceToPlay(g));
 	}
@@ -173,7 +180,7 @@ public class IntroScene {
 
 		y += t(2);
 		g.setColor(Color.PINK);
-		if (!blink || game.frame(30, 2) == 0) {
+		if (!powerPelletsBlinking || game.frame(30, 2) == 0) {
 			g.fillOval(t(10), y, 8, 8);
 		}
 		g.setColor(Color.WHITE);
@@ -187,7 +194,7 @@ public class IntroScene {
 		if (!powerPelletVisible) {
 			return;
 		}
-		if (!blink || game.frame(30, 2) == 0) {
+		if (!powerPelletsBlinking || game.frame(30, 2) == 0) {
 			g.setColor(Color.PINK);
 			g.fillOval(t(2), t(20) + World.HTS, t(1), t(1));
 		}
@@ -195,30 +202,34 @@ public class IntroScene {
 
 	private void drawGuys(Graphics2D g) {
 		int ghostFrame = game.frame(10, 2);
-		pacMan.moveDir = chasingGhosts ? Direction.RIGHT : Direction.LEFT;
-		pacMan.x += pacMan.moveDir.vector.x * pacMan.speed;
-		pacMan.y = t(20);
-		blinkyX += pacMan.moveDir.vector.x * ghostSpeed;
-		if (pacMan.x <= t(2)) {
+		pacMan.move(pacMan.moveDir);
+		for (var ghost : ghosts) {
+			ghost.move(ghost.moveDir);
+		}
+		if (pacMan.x <= t(2)) { // meets power pellet
+			pacMan.moveDir = Direction.RIGHT;
 			pacMan.speed = game.playerSpeedPowered;
-			ghostSpeed = game.ghostSpeedFrightened;
+			for (var ghost : ghosts) {
+				ghost.moveDir = Direction.RIGHT;
+				ghost.speed = game.ghostSpeedFrightened;
+			}
 			powerPelletVisible = false;
 			chasingGhosts = true;
 		}
 		if (chasingGhosts) {
 			int hitGhost = -1;
 			for (int id = 0; id <= 3; ++id) {
-				float ghostX = blinkyX + id * 16;
+				float ghostX = ghosts[0].x + id * 16;
 				if (Math.abs(pacMan.x - ghostX) <= 8) {
 					hitGhost = id;
 					break;
 				}
 			}
-			if (pacMan.x > blinkyX + 3 * 16) {
+			if (pacMan.x > ghosts[0].x + 3 * 16) {
 				hitGhost = 4;
 			}
 			for (int id = 0; id <= 3; ++id) {
-				float ghostX = blinkyX + id * 16;
+				float ghostX = ghosts[0].x + id * 16;
 				if (id > hitGhost) {
 					var ghostSprite = ss.ghostFrightened.get(ghostFrame);
 					g.drawImage(ghostSprite, (int) ghostX, (int) pacMan.y, null);
@@ -234,7 +245,7 @@ public class IntroScene {
 		} else {
 			drawPacMan(g);
 			for (int id = 0; id <= 3; ++id) {
-				float ghostX = blinkyX + id * 16;
+				float ghostX = ghosts[0].x + id * 16;
 				var ghostSprite = ss.ghosts.get(id).get(pacMan.moveDir).get(ghostFrame);
 				g.drawImage(ghostSprite, (int) ghostX, (int) pacMan.y, null);
 			}
