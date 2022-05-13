@@ -24,6 +24,7 @@ SOFTWARE.
 package de.amr.yt.pacman.ui;
 
 import static de.amr.yt.pacman.controller.GameController.sec;
+import static de.amr.yt.pacman.lib.Logging.log;
 import static de.amr.yt.pacman.model.GameModel.BLINKY;
 import static de.amr.yt.pacman.model.GameModel.CLYDE;
 import static de.amr.yt.pacman.model.GameModel.INKY;
@@ -74,6 +75,7 @@ public class IntroScene {
 	private boolean powerPelletsBlinking;
 	private boolean powerPelletVisible;
 	private int ghostHit;
+	private int ghostHitCountdown;
 
 	public IntroScene(Spritesheet ss, GameModel game) {
 		this.ss = ss;
@@ -99,23 +101,26 @@ public class IntroScene {
 		pacMan.y = t(20);
 		pacMan.speed = game.playerSpeed;
 		pacMan.moveDir = Direction.LEFT;
+		pacMan.visible = true;
 		for (var ghost : ghosts) {
 			ghost.x = pacMan.x + t(3) + ghost.id * 16;
 			ghost.y = pacMan.y;
 			ghost.speed = pacMan.speed * 1.05f;
 			ghost.moveDir = pacMan.moveDir;
+			ghost.visible = true;
 		}
 		powerPelletVisible = true;
 		powerPelletsBlinking = false;
 		pacManChasingGhosts = false;
 		ghostHit = -1;
+		ghostHitCountdown = 0;
 	}
 
 	public void update() {
 		if (game.stateTimer == 0) {
 			init(); // TODO init() should be called by scene manager (GameWindow) when scene is exchanged
 		}
-		if (between(sec(12), sec(19))) {
+		if (between(sec(12), sec(22))) {
 			updateGuys();
 		}
 	}
@@ -169,7 +174,7 @@ public class IntroScene {
 		if (at(sec(11))) {
 			powerPelletsBlinking = true;
 		}
-		if (between(sec(12), sec(19))) {
+		if (between(sec(12), sec(22))) {
 			if (pacManChasingGhosts) {
 				drawPacMan(g);
 				for (var ghost : ghosts) {
@@ -186,35 +191,52 @@ public class IntroScene {
 				}
 			}
 		}
-		if (passed(sec(19))) {
+		if (passed(sec(22))) {
 			drawPressSpaceToPlay(g);
 		}
 	}
 
 	private void updateGuys() {
-		if (!pacManChasingGhosts) {
-			/*
-			 * Phase 1: Guys come in from right side, when Pac-Man finds the power pellet, they reverse direction and chase
-			 * begins.
-			 */
-			pacMan.move(pacMan.moveDir);
+		if (pacManChasingGhosts) {
+			updatePacManChasingGhosts();
+		} else {
+			updateGhostsChasingPacMan();
+		}
+	}
+
+	/*
+	 * Phase 1: Guys come in from right side, when Pac-Man finds the power pellet, they reverse direction and chase
+	 * begins.
+	 */
+	private void updateGhostsChasingPacMan() {
+		pacMan.move(pacMan.moveDir);
+		for (var ghost : ghosts) {
+			ghost.move(ghost.moveDir);
+		}
+		if (pacMan.x <= t(2)) { // finds power pellet
+			powerPelletVisible = false;
+			pacMan.moveDir = Direction.RIGHT;
 			for (var ghost : ghosts) {
-				ghost.move(ghost.moveDir);
+				ghost.moveDir = Direction.RIGHT;
+				ghost.speed = game.ghostSpeedFrightened;
 			}
-			if (pacMan.x <= t(2)) { // finds power pellet
-				powerPelletVisible = false;
-				pacMan.moveDir = Direction.RIGHT;
-				for (var ghost : ghosts) {
-					ghost.moveDir = Direction.RIGHT;
-					ghost.speed = game.ghostSpeedFrightened;
-				}
-				pacManChasingGhosts = true;
+			pacManChasingGhosts = true;
+		}
+	}
+
+	/*
+	 * Phase 2: Pac-Man chases the ghosts, if a ghost is hit, its value is displayed for a second, Pac-Man is hidden and
+	 * the other ghosts stop.
+	 */
+	private void updatePacManChasingGhosts() {
+		if (ghostHitCountdown > 0) {
+			--ghostHitCountdown;
+			if (ghostHitCountdown == 0) {
+				pacMan.visible = true;
+			} else if (ghostHitCountdown == 10) {
+				ghosts[ghostHit].visible = false;
 			}
 		} else {
-			/*
-			 * Phase 2: Pac-Man chases the ghosts, if a ghost is hit, its value is displayed for a second, Pac-Man is hidden
-			 * and the other ghosts stop.
-			 */
 			pacMan.move(pacMan.moveDir);
 			for (var ghost : ghosts) {
 				ghost.move(ghost.moveDir);
@@ -223,8 +245,11 @@ public class IntroScene {
 				ghostHit = 4;
 			} else {
 				for (var ghost : ghosts) {
-					if (Math.abs(pacMan.x - ghost.x) <= 8) {
+					if (Math.abs(ghost.x - pacMan.x) <= 1 && ghostHit != ghost.id) {
 						ghostHit = ghost.id;
+						ghostHitCountdown = sec(0.5);
+						pacMan.visible = false;
+						log("Ghost %d hit, timer is %d", ghostHit, ghostHitCountdown);
 						break;
 					}
 				}
@@ -280,11 +305,15 @@ public class IntroScene {
 	}
 
 	private void drawPacMan(Graphics2D g) {
-		g.drawImage(ss.pac.get(pacMan.moveDir).get(game.frame(15, 3)), (int) pacMan.x, (int) pacMan.y, null);
+		if (pacMan.visible) {
+			g.drawImage(ss.pac.get(pacMan.moveDir).get(game.frame(15, 3)), (int) pacMan.x, (int) pacMan.y, null);
+		}
 	}
 
 	private void drawGhost(Graphics2D g, Ghost ghost, BufferedImage sprite) {
-		g.drawImage(sprite, (int) ghost.x, (int) ghost.y, null);
+		if (ghost.visible) {
+			g.drawImage(sprite, (int) ghost.x, (int) ghost.y, null);
+		}
 	}
 
 	private void drawGhostNormal(Graphics2D g, Ghost ghost) {
