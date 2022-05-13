@@ -130,46 +130,46 @@ public class IntroScene implements GameScene {
 		if (passed(sec(2.0))) {
 			drawGhostImage(g, 0);
 		}
-		if (passed(sec(2.5))) {
+		if (passed(sec(3.0))) {
 			drawGhostCharacter(g, 0);
 		}
-		if (passed(sec(3.0))) {
+		if (passed(sec(3.5))) {
 			drawGhostNickname(g, 0);
 		}
-		if (passed(sec(3.5))) {
+		if (passed(sec(4.0))) {
 			drawGhostImage(g, 1);
 		}
-		if (passed(sec(4.0))) {
+		if (passed(sec(5.0))) {
 			drawGhostCharacter(g, 1);
 		}
-		if (passed(sec(4.5))) {
+		if (passed(sec(5.5))) {
 			drawGhostNickname(g, 1);
 		}
-		if (passed(sec(5.0))) {
+		if (passed(sec(6.0))) {
 			drawGhostImage(g, 2);
 		}
-		if (passed(sec(5.5))) {
+		if (passed(sec(7.0))) {
 			drawGhostCharacter(g, 2);
 		}
-		if (passed(sec(6.0))) {
+		if (passed(sec(7.5))) {
 			drawGhostNickname(g, 2);
 		}
-		if (passed(sec(6.5))) {
+		if (passed(sec(8.0))) {
 			drawGhostImage(g, 3);
 		}
-		if (passed(sec(7.0))) {
+		if (passed(sec(9.0))) {
 			drawGhostCharacter(g, 3);
 		}
-		if (passed(sec(7.5))) {
+		if (passed(sec(9.5))) {
 			drawGhostNickname(g, 3);
 		}
-		if (passed(sec(9.0))) {
+		if (passed(sec(10.0))) {
 			drawPointsAwarded(g);
 		}
-		if (passed(sec(10.0))) {
+		if (passed(sec(11.0))) {
 			drawPowerPellet(g);
 		}
-		if (at(sec(11))) {
+		if (at(sec(12))) {
 			powerPelletsBlinking = true;
 		}
 		if (between(sec(12), sec(22))) {
