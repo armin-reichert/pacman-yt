@@ -51,6 +51,7 @@ import de.amr.yt.pacman.lib.Direction;
 public class Spritesheet {
 
 	public static final int[] PACMAN_MOUTH_ANIMATION = { 1, 1, 0, 0, 1, 1, 2, 2 };
+	public static final int[] GHOST_ANIMATION = { 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1 };
 
 	public BufferedImage mazeImage;
 	public BufferedImage sheetImage;

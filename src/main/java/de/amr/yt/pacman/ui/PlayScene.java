@@ -138,7 +138,7 @@ public class PlayScene {
 		} else if (ghost.state == GhostState.FRIGHTENED
 				|| ghost.state == GhostState.LOCKED && game.pacMan.powerCountdown > 0) {
 			if (ghost.animated) {
-				ghost.animFrame = game.frame(10, 2);
+				ghost.animFrame = game.frame(Spritesheet.GHOST_ANIMATION);
 				if (game.pacMan.isLosingPower()) {
 					int blink = game.frame(20, 2) == 0 ? 0 : 2;
 					ghost.animFrame += blink;
@@ -147,7 +147,7 @@ public class PlayScene {
 			sprite = ss.ghostFrightened.get(ghost.animFrame);
 		} else {
 			if (ghost.animated) {
-				ghost.animFrame = game.frame(10, 2);
+				ghost.animFrame = game.frame(Spritesheet.GHOST_ANIMATION);
 			}
 			sprite = ss.ghosts.get(ghost.id).get(ghost.moveDir).get(ghost.animFrame);
 		}

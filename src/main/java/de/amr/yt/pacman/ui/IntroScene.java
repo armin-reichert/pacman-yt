@@ -308,8 +308,8 @@ public class IntroScene {
 
 	private void drawPacMan(Graphics2D g) {
 		if (pacMan.visible) {
-			g.drawImage(ss.pac.get(pacMan.moveDir).get(game.frame(Spritesheet.PACMAN_MOUTH_ANIMATION)), (int) pacMan.x, (int) pacMan.y,
-					null);
+			g.drawImage(ss.pac.get(pacMan.moveDir).get(game.frame(Spritesheet.PACMAN_MOUTH_ANIMATION)), (int) pacMan.x,
+					(int) pacMan.y, null);
 		}
 	}
 
@@ -320,11 +320,11 @@ public class IntroScene {
 	}
 
 	private void drawGhostNormal(Graphics2D g, Ghost ghost) {
-		drawGhost(g, ghost, ss.ghosts.get(ghost.id).get(ghost.moveDir).get(game.frame(10, 2)));
+		drawGhost(g, ghost, ss.ghosts.get(ghost.id).get(ghost.moveDir).get(game.frame(Spritesheet.GHOST_ANIMATION)));
 	}
 
 	private void drawGhostFrightened(Graphics2D g, Ghost ghost) {
-		drawGhost(g, ghost, ss.ghostFrightened.get(game.frame(10, 2)));
+		drawGhost(g, ghost, ss.ghostFrightened.get(game.frame(Spritesheet.GHOST_ANIMATION)));
 	}
 
 	private void drawGhostValue(Graphics2D g, Ghost ghost) {
