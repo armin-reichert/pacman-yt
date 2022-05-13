@@ -152,40 +152,40 @@ public abstract class Creature {
 	}
 
 	protected boolean tryMove(Direction currentDir, Direction newDir) {
-		boolean canMove = canMove(currentDir, newDir);
-		if (canMove) {
-			move(newDir);
-		}
-		return canMove;
-	}
-
-	protected boolean canMove(Direction currentDir, Direction newDir) {
+		boolean canMove = false;
 		var tile = tile();
 		if (tile.x < 0 || tile.x >= World.COLS) {
-			// when teleporting, no sidewards turns are allowed!
-			return currentDir == newDir || currentDir == newDir.opposite();
-		}
-		if (canEnterTile(tile.neighbor(newDir))) {
+			// when teleporting, we cannot move sidewards
+			canMove = currentDir == newDir || currentDir == newDir.opposite();
+		} else if (canEnterTile(tile.neighbor(newDir))) {
+			// check if accessible neighbor tile can be entered now
 			if (newDir == currentDir || newDir == currentDir.opposite()) {
-				return true;
+				canMove = true;
+			} else {
+				// can we move sidewards into accessible neighbor?
+				canMove = canTurnSidewards(currentDir);
+				if (canMove) {
+					// align exactly inside tile
+					x = centerX();
+					y = centerY();
+				}
 			}
-			boolean canTurn90 = canTurn90Degrees(currentDir);
-			if (canTurn90) {
-				x = centerX();
-				y = centerY();
-			}
-			return canTurn90;
 		} else {
-			return switch (newDir) {
+			// check if we can move further towards an inaccessible neighbor tile
+			canMove = switch (newDir) {
 			case UP -> newDir.vector.y * speed + offsetY() > World.HTS;
 			case DOWN -> newDir.vector.y * speed + offsetY() < World.HTS;
 			case LEFT -> newDir.vector.x * speed + offsetX() > World.HTS;
 			case RIGHT -> newDir.vector.x * speed + offsetX() < World.HTS;
 			};
 		}
+		if (canMove) {
+			move(newDir);
+		}
+		return canMove;
 	}
 
-	protected boolean canTurn90Degrees(Direction direction) {
+	protected boolean canTurnSidewards(Direction direction) {
 		return direction.isVertical() ? Math.abs(offsetY() - World.HTS) <= 1 : Math.abs(offsetX() - World.HTS) <= 1;
 	}
 }
