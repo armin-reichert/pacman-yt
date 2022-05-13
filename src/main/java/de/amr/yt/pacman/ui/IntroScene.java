@@ -24,7 +24,6 @@ SOFTWARE.
 package de.amr.yt.pacman.ui;
 
 import static de.amr.yt.pacman.controller.GameController.sec;
-import static de.amr.yt.pacman.lib.Logging.log;
 import static de.amr.yt.pacman.model.GameModel.BLINKY;
 import static de.amr.yt.pacman.model.GameModel.CLYDE;
 import static de.amr.yt.pacman.model.GameModel.INKY;
@@ -237,7 +236,7 @@ public class IntroScene {
 			--ghostHitCountdown;
 			if (ghostHitCountdown == 0) {
 				pacMan.visible = true;
-			} else if (ghostHitCountdown == 10) {
+			} else if (ghostHitCountdown == 15) {
 				ghosts[ghostHit].visible = false;
 			}
 		} else {
@@ -253,7 +252,6 @@ public class IntroScene {
 						ghostHit = ghost.id;
 						ghostHitCountdown = sec(0.5);
 						pacMan.visible = false;
-						log("Ghost %d hit, timer is %d", ghostHit, ghostHitCountdown);
 						break;
 					}
 				}
