@@ -57,8 +57,8 @@ public class Ghost extends Creature {
 
 	@Override
 	public String toString() {
-		return "Ghost[id=%d, x=%.2f, y=%.2f, moveDir=%s, wishDir=%s speed=%.2f]".formatted(id, x, y, moveDir, wishDir,
-				speed);
+		return "Ghost[id=%d, x=%.2f, y=%.2f, tile=%s, moveDir=%s, wishDir=%s speed=%.2f]".formatted(id, x, y, tile(),
+				moveDir, wishDir, speed);
 	}
 
 	@Override

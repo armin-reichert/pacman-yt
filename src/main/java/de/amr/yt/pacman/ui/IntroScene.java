@@ -32,12 +32,9 @@ import static de.amr.yt.pacman.model.World.t;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
 
 import de.amr.yt.pacman.lib.Direction;
 import de.amr.yt.pacman.model.GameModel;
-import de.amr.yt.pacman.model.Ghost;
-import de.amr.yt.pacman.model.PacMan;
 import de.amr.yt.pacman.model.World;
 
 /**
@@ -67,9 +64,8 @@ public class IntroScene {
 
 	private final GameModel game;
 	private final Spritesheet ss;
+	private final CreatureRenderer renderer;
 
-	private final PacMan pacMan;
-	private final Ghost[] ghosts;
 	private boolean pacManChasingGhosts;
 	private boolean powerPelletsBlinking;
 	private boolean powerPelletVisible;
@@ -79,8 +75,7 @@ public class IntroScene {
 	public IntroScene(Spritesheet ss, GameModel game) {
 		this.ss = ss;
 		this.game = game;
-		pacMan = new PacMan(game);
-		ghosts = new Ghost[] { new Ghost(game, 0), new Ghost(game, 1), new Ghost(game, 2), new Ghost(game, 3) };
+		renderer = new CreatureRenderer(ss, game);
 	}
 
 	private boolean at(long tick) {
@@ -96,16 +91,17 @@ public class IntroScene {
 	}
 
 	public void init() {
-		pacMan.x = t(World.COLS);
-		pacMan.y = t(20);
-		pacMan.speed = game.playerSpeed;
-		pacMan.moveDir = Direction.LEFT;
-		pacMan.visible = true;
-		for (var ghost : ghosts) {
-			ghost.x = pacMan.x + t(3) + ghost.id * 16;
-			ghost.y = pacMan.y;
-			ghost.speed = pacMan.speed * 1.05f;
-			ghost.moveDir = pacMan.moveDir;
+		game.pacMan.x = t(World.COLS);
+		game.pacMan.y = t(20);
+		game.pacMan.speed = game.playerSpeed;
+		game.pacMan.moveDir = Direction.LEFT;
+		game.pacMan.visible = true;
+		game.pacMan.animated = true;
+		for (var ghost : game.ghosts) {
+			ghost.x = game.pacMan.x + t(3) + ghost.id * 16;
+			ghost.y = game.pacMan.y;
+			ghost.speed = game.pacMan.speed * 1.05f;
+			ghost.moveDir = game.pacMan.moveDir;
 			ghost.visible = true;
 		}
 		powerPelletVisible = true;
@@ -177,10 +173,10 @@ public class IntroScene {
 			if (pacManChasingGhosts) {
 				drawPacManChasingGhosts(g);
 			} else {
-				drawPacMan(g);
-				for (var ghost : ghosts) {
-					drawGhostNormal(g, ghost);
+				for (var ghost : game.ghosts) {
+					renderer.drawGhostNormal(g, ghost);
 				}
+				renderer.drawPacMan(g, game.pacMan);
 			}
 		}
 		if (passed(sec(22))) {
@@ -189,14 +185,14 @@ public class IntroScene {
 	}
 
 	private void drawPacManChasingGhosts(Graphics2D g) {
-		drawPacMan(g);
-		for (var ghost : ghosts) {
+		for (var ghost : game.ghosts) {
 			if (ghost.id > ghostHit) {
-				drawGhostFrightened(g, ghost);
+				renderer.drawGhostFrightened(g, ghost);
 			} else if (ghost.id == ghostHit) {
-				drawGhostValue(g, ghost);
+				renderer.drawGhostValue(g, ghost);
 			}
 		}
+		renderer.drawPacMan(g, game.pacMan);
 	}
 
 	private void updateGuys() {
@@ -212,14 +208,14 @@ public class IntroScene {
 	 * begins.
 	 */
 	private void updateGhostsChasingPacMan() {
-		pacMan.move(pacMan.moveDir);
-		for (var ghost : ghosts) {
+		game.pacMan.move(game.pacMan.moveDir);
+		for (var ghost : game.ghosts) {
 			ghost.move(ghost.moveDir);
 		}
-		if (pacMan.x <= t(2)) { // finds power pellet
+		if (game.pacMan.x <= t(2)) { // finds power pellet
 			powerPelletVisible = false;
-			pacMan.moveDir = Direction.RIGHT;
-			for (var ghost : ghosts) {
+			game.pacMan.moveDir = Direction.RIGHT;
+			for (var ghost : game.ghosts) {
 				ghost.moveDir = Direction.RIGHT;
 				ghost.speed = game.ghostSpeedFrightened;
 			}
@@ -235,23 +231,23 @@ public class IntroScene {
 		if (ghostHitCountdown > 0) {
 			--ghostHitCountdown;
 			if (ghostHitCountdown == 0) {
-				pacMan.visible = true;
+				game.pacMan.visible = true;
 			} else if (ghostHitCountdown == 15) {
-				ghosts[ghostHit].visible = false;
+				game.ghosts[ghostHit].visible = false;
 			}
 		} else {
-			pacMan.move(pacMan.moveDir);
-			for (var ghost : ghosts) {
+			game.pacMan.move(game.pacMan.moveDir);
+			for (var ghost : game.ghosts) {
 				ghost.move(ghost.moveDir);
 			}
-			if (pacMan.x > ghosts[3].x) {
+			if (game.pacMan.x > game.ghosts[3].x) {
 				ghostHit = 4;
 			} else {
-				for (var ghost : ghosts) {
-					if (Math.abs(ghost.x - pacMan.x) <= 1 && ghostHit != ghost.id) {
+				for (var ghost : game.ghosts) {
+					if (Math.abs(ghost.x - game.pacMan.x) <= 1 && ghostHit != ghost.id) {
 						ghostHit = ghost.id;
 						ghostHitCountdown = sec(0.5);
-						pacMan.visible = false;
+						game.pacMan.visible = false;
 						break;
 					}
 				}
@@ -302,33 +298,8 @@ public class IntroScene {
 		}
 		if (!powerPelletsBlinking || game.frame(30, 2) == 0) {
 			g.setColor(Color.PINK);
-			g.fillOval(t(2), t(20) + World.HTS, t(1), t(1));
+			g.fillOval(t(2), t(19) + World.HTS, t(1), t(1));
 		}
-	}
-
-	private void drawPacMan(Graphics2D g) {
-		if (pacMan.visible) {
-			g.drawImage(ss.pac.get(pacMan.moveDir).get(game.frame(Spritesheet.PACMAN_MOUTH_ANIMATION)), (int) pacMan.x,
-					(int) pacMan.y, null);
-		}
-	}
-
-	private void drawGhost(Graphics2D g, Ghost ghost, BufferedImage sprite) {
-		if (ghost.visible) {
-			g.drawImage(sprite, (int) ghost.x, (int) ghost.y, null);
-		}
-	}
-
-	private void drawGhostNormal(Graphics2D g, Ghost ghost) {
-		drawGhost(g, ghost, ss.ghosts.get(ghost.id).get(ghost.moveDir).get(game.frame(Spritesheet.GHOST_ANIMATION)));
-	}
-
-	private void drawGhostFrightened(Graphics2D g, Ghost ghost) {
-		drawGhost(g, ghost, ss.ghostFrightened.get(game.frame(Spritesheet.GHOST_ANIMATION)));
-	}
-
-	private void drawGhostValue(Graphics2D g, Ghost ghost) {
-		drawGhost(g, ghost, ss.ghostValues.get(ghost.id == 0 ? 200 : ghost.id == 1 ? 400 : ghost.id == 2 ? 800 : 1600));
 	}
 
 	private void drawPressSpaceToPlay(Graphics2D g) {

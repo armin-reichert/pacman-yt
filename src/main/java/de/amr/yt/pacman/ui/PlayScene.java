@@ -31,12 +31,9 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 import de.amr.yt.pacman.controller.GameState;
-import de.amr.yt.pacman.model.Creature;
 import de.amr.yt.pacman.model.GameModel;
 import de.amr.yt.pacman.model.Ghost;
-import de.amr.yt.pacman.model.GhostState;
 import de.amr.yt.pacman.model.PacMan;
-import de.amr.yt.pacman.model.PacManState;
 import de.amr.yt.pacman.model.World;
 
 /**
@@ -46,14 +43,15 @@ public class PlayScene {
 
 	private final GameModel game;
 	private final Spritesheet ss;
+	private final CreatureRenderer renderer;
 
 	public PlayScene(Spritesheet ss, GameModel game) {
 		this.game = game;
 		this.ss = ss;
+		renderer = new CreatureRenderer(ss, game);
 	}
 
 	public void update() {
-
 	}
 
 	public void draw(Graphics2D g) {
@@ -77,9 +75,9 @@ public class PlayScene {
 			BufferedImage sprite = game.bonusEaten ? ss.bonusValues.get(bonusValue) : ss.bonusSymbols.get(game.bonus);
 			g.drawImage(sprite, t(14) - sprite.getWidth() / 2, t(20) - World.HTS, null);
 		}
-		drawPacMan(g);
+		renderer.drawPacMan(g, game.pacMan);
 		for (Ghost ghost : game.ghosts) {
-			drawGhost(g, ghost);
+			renderer.drawGhost(g, ghost);
 		}
 		if (game.state == GameState.READY) {
 			g.setColor(Color.YELLOW);
@@ -110,55 +108,6 @@ public class PlayScene {
 				drawGhostTarget(g, ghost);
 				drawGhostState(g, ghost);
 			}
-		}
-	}
-
-	private void drawPacMan(Graphics2D g) {
-		BufferedImage sprite = null;
-		if (game.pacMan.state == PacManState.DEAD) {
-			if (game.pacMan.dyingAnimationCountdown > 0) {
-				int frame = 10 - (10 * game.pacMan.dyingAnimationCountdown / game.pacMan.dyingAnimationDuration);
-				sprite = ss.pacDeadAnimation.get(frame);
-			} else if (!game.pacMan.animated) {
-				sprite = ss.pac.get(game.pacMan.moveDir).get(2);
-			}
-		} else {
-			if (game.pacMan.animated) {
-				game.pacMan.animFrame = game.pacMan.stuck ? 0 : game.frame(Spritesheet.PACMAN_MOUTH_ANIMATION);
-			}
-			sprite = ss.pac.get(game.pacMan.moveDir).get(game.pacMan.animFrame);
-		}
-		drawCreatureSprite(g, game.pacMan, sprite);
-	}
-
-	private void drawGhost(Graphics2D g, Ghost ghost) {
-		BufferedImage sprite = null;
-		if (ghost.state == GhostState.EATEN || ghost.state == GhostState.ENTERING_HOUSE) {
-			sprite = ghost.eatenTimer > 0 ? ss.ghostValues.get(ghost.eatenValue) : ss.ghostEaten.get(ghost.moveDir);
-		} else if (ghost.state == GhostState.FRIGHTENED
-				|| ghost.state == GhostState.LOCKED && game.pacMan.powerCountdown > 0) {
-			if (ghost.animated) {
-				ghost.animFrame = game.frame(Spritesheet.GHOST_ANIMATION);
-				if (game.pacMan.isLosingPower()) {
-					int blink = game.frame(20, 2) == 0 ? 0 : 2;
-					ghost.animFrame += blink;
-				}
-			}
-			sprite = ss.ghostFrightened.get(ghost.animFrame);
-		} else {
-			if (ghost.animated) {
-				ghost.animFrame = game.frame(Spritesheet.GHOST_ANIMATION);
-			}
-			sprite = ss.ghosts.get(ghost.id).get(ghost.moveDir).get(ghost.animFrame);
-		}
-		drawCreatureSprite(g, ghost, sprite);
-	}
-
-	private void drawCreatureSprite(Graphics2D g, Creature creature, BufferedImage sprite) {
-		if (creature.visible && sprite != null) {
-			int x = (int) creature.x - sprite.getWidth() / 2;
-			int y = (int) creature.y - sprite.getHeight() / 2;
-			g.drawImage(sprite, x, y, sprite.getWidth(), sprite.getHeight(), null);
 		}
 	}
 
