@@ -129,15 +129,15 @@ public abstract class Creature {
 		var tileBeforeMove = tile();
 		speed = currentSpeed();
 		stuck = false;
-		boolean couldMove = false;
+		boolean moved = false;
 		if (canReverse || wishDir != moveDir.opposite()) {
-			couldMove = tryMove(moveDir, wishDir);
+			moved = tryMove(moveDir, wishDir);
 		}
-		if (couldMove) {
+		if (moved) {
 			moveDir = wishDir;
 		} else {
-			couldMove = tryMove(moveDir, moveDir);
-			if (!couldMove) {
+			moved = tryMove(moveDir, moveDir);
+			if (!moved) {
 				x = centerX();
 				y = centerY();
 				stuck = true;
