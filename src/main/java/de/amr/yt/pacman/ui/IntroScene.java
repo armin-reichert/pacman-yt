@@ -176,14 +176,7 @@ public class IntroScene {
 		}
 		if (between(sec(12), sec(22))) {
 			if (pacManChasingGhosts) {
-				drawPacMan(g);
-				for (var ghost : ghosts) {
-					if (ghost.id > ghostHit) {
-						drawGhostFrightened(g, ghost);
-					} else if (ghost.id == ghostHit) {
-						drawGhostValue(g, ghost);
-					}
-				}
+				drawPacManChasingGhosts(g);
 			} else {
 				drawPacMan(g);
 				for (var ghost : ghosts) {
@@ -193,6 +186,17 @@ public class IntroScene {
 		}
 		if (passed(sec(22))) {
 			drawPressSpaceToPlay(g);
+		}
+	}
+
+	private void drawPacManChasingGhosts(Graphics2D g) {
+		drawPacMan(g);
+		for (var ghost : ghosts) {
+			if (ghost.id > ghostHit) {
+				drawGhostFrightened(g, ghost);
+			} else if (ghost.id == ghostHit) {
+				drawGhostValue(g, ghost);
+			}
 		}
 	}
 
