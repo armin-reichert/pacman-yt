@@ -73,7 +73,7 @@ public class IntroScene {
 	private boolean pacManChasingGhosts;
 	private boolean powerPelletsBlinking;
 	private boolean powerPelletVisible;
-	private int hit;
+	private int ghostHit;
 
 	public IntroScene(Spritesheet ss, GameModel game) {
 		this.ss = ss;
@@ -95,20 +95,20 @@ public class IntroScene {
 	}
 
 	public void init() {
-		powerPelletVisible = true;
-		powerPelletsBlinking = false;
 		pacMan.x = t(World.COLS);
 		pacMan.y = t(20);
 		pacMan.speed = game.playerSpeed;
 		pacMan.moveDir = Direction.LEFT;
-		for (Ghost ghost : ghosts) {
+		for (var ghost : ghosts) {
 			ghost.x = pacMan.x + t(3) + ghost.id * 16;
 			ghost.y = pacMan.y;
-			ghost.speed = game.playerSpeed * 1.05f;
-			ghost.moveDir = Direction.LEFT;
+			ghost.speed = pacMan.speed * 1.05f;
+			ghost.moveDir = pacMan.moveDir;
 		}
+		powerPelletVisible = true;
+		powerPelletsBlinking = false;
 		pacManChasingGhosts = false;
-		hit = -1;
+		ghostHit = -1;
 	}
 
 	public void update() {
@@ -171,9 +171,19 @@ public class IntroScene {
 		}
 		if (between(sec(12), sec(19))) {
 			if (pacManChasingGhosts) {
-				drawPacManChasingGhosts(g);
+				drawPacMan(g);
+				for (var ghost : ghosts) {
+					if (ghost.id > ghostHit) {
+						drawGhostFrightened(g, ghost);
+					} else if (ghost.id == ghostHit) {
+						drawGhostValue(g, ghost);
+					}
+				}
 			} else {
-				drawGhostsChasingPacMan(g);
+				drawPacMan(g);
+				for (var ghost : ghosts) {
+					drawGhostNormal(g, ghost);
+				}
 			}
 		}
 		if (passed(sec(19))) {
@@ -210,11 +220,11 @@ public class IntroScene {
 				ghost.move(ghost.moveDir);
 			}
 			if (pacMan.x > ghosts[3].x) {
-				hit = 4;
+				ghostHit = 4;
 			} else {
 				for (var ghost : ghosts) {
 					if (Math.abs(pacMan.x - ghost.x) <= 8) {
-						hit = ghost.id;
+						ghostHit = ghost.id;
 						break;
 					}
 				}
@@ -245,6 +255,11 @@ public class IntroScene {
 	}
 
 	private void drawPointsAwarded(Graphics2D g) {
+		g.setColor(Color.PINK);
+		g.fillRect(t(10) + 3, t(24) + 3, 2, 2);
+		if (!powerPelletsBlinking || game.frame(30, 2) == 0) {
+			g.fillOval(t(10), t(26), t(1), t(1));
+		}
 		g.setColor(Color.WHITE);
 		g.setFont(ss.arcadeFont);
 		g.drawString("10", t(12), t(25));
@@ -252,11 +267,6 @@ public class IntroScene {
 		g.setFont(ss.arcadeFont.deriveFont(6.0f));
 		g.drawString("PTS", t(15), t(25));
 		g.drawString("PTS", t(15), t(27));
-		g.setColor(Color.PINK);
-		g.fillRect(t(10) + 3, t(24) + 3, 2, 2);
-		if (!powerPelletsBlinking || game.frame(30, 2) == 0) {
-			g.fillOval(t(10), t(26), t(1), t(1));
-		}
 	}
 
 	private void drawPowerPellet(Graphics2D g) {
@@ -266,24 +276,6 @@ public class IntroScene {
 		if (!powerPelletsBlinking || game.frame(30, 2) == 0) {
 			g.setColor(Color.PINK);
 			g.fillOval(t(2), t(20) + World.HTS, t(1), t(1));
-		}
-	}
-
-	private void drawGhostsChasingPacMan(Graphics2D g) {
-		drawPacMan(g);
-		for (var ghost : ghosts) {
-			drawGhostNormal(g, ghost);
-		}
-	}
-
-	private void drawPacManChasingGhosts(Graphics2D g) {
-		drawPacMan(g);
-		for (var ghost : ghosts) {
-			if (ghost.id > hit) {
-				drawGhostFrightened(g, ghost);
-			} else if (ghost.id == hit) {
-				drawGhostValue(g, ghost);
-			}
 		}
 	}
 
