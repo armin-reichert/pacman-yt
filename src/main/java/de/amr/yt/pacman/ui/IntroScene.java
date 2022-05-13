@@ -189,7 +189,8 @@ public class IntroScene {
 			if (ghost.id > ghostHit) {
 				renderer.drawGhostFrightened(g, ghost);
 			} else if (ghost.id == ghostHit) {
-				renderer.drawGhostValue(g, ghost);
+				int value = ghost.id == 0 ? 200 : ghost.id == 1 ? 400 : ghost.id == 2 ? 800 : 1600;
+				renderer.drawGhostValue(g, ghost, value);
 			}
 		}
 		renderer.drawPacMan(g, game.pacMan);

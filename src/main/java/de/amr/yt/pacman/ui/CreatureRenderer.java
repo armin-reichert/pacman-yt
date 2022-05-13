@@ -55,22 +55,19 @@ public class CreatureRenderer {
 	}
 
 	private void drawPacManDead(Graphics2D g, PacMan pacMan) {
-		BufferedImage sprite = null;
 		if (pacMan.dyingAnimationCountdown > 0) {
 			int frame = 10 - (10 * pacMan.dyingAnimationCountdown / pacMan.dyingAnimationDuration);
-			sprite = ss.pacDeadAnimation.get(frame);
+			drawGuy(g, pacMan, ss.pacDeadAnimation.get(frame));
 		} else if (!pacMan.animated) {
-			sprite = ss.pac.get(pacMan.moveDir).get(2);
+			drawGuy(g, pacMan, ss.pac.get(pacMan.moveDir).get(2)); // full face
 		}
-		drawCreatureSprite(g, pacMan, sprite);
 	}
 
 	private void drawPacManAlive(Graphics2D g, PacMan pacMan) {
 		if (pacMan.animated) {
 			pacMan.animFrame = pacMan.stuck ? 0 : game.frame(Spritesheet.PACMAN_MOUTH_ANIMATION);
 		}
-		BufferedImage sprite = ss.pac.get(pacMan.moveDir).get(pacMan.animFrame);
-		drawCreatureSprite(g, pacMan, sprite);
+		drawGuy(g, pacMan, ss.pac.get(pacMan.moveDir).get(pacMan.animFrame));
 	}
 
 	public void drawGhost(Graphics2D g, Ghost ghost) {
@@ -93,31 +90,31 @@ public class CreatureRenderer {
 			}
 			sprite = ss.ghosts.get(ghost.id).get(ghost.moveDir).get(ghost.animFrame);
 		}
-		drawCreatureSprite(g, ghost, sprite);
-	}
-
-	private void drawGhost(Graphics2D g, Ghost ghost, BufferedImage sprite) {
-		if (ghost.visible) {
-			drawCreatureSprite(g, ghost, sprite);
-		}
+		drawGuy(g, ghost, sprite);
 	}
 
 	public void drawGhostNormal(Graphics2D g, Ghost ghost) {
-		drawGhost(g, ghost, ss.ghosts.get(ghost.id).get(ghost.moveDir).get(game.frame(Spritesheet.GHOST_ANIMATION)));
+		if (ghost.visible) {
+			drawGuy(g, ghost, ss.ghosts.get(ghost.id).get(ghost.moveDir).get(game.frame(Spritesheet.GHOST_ANIMATION)));
+		}
 	}
 
 	public void drawGhostFrightened(Graphics2D g, Ghost ghost) {
-		drawGhost(g, ghost, ss.ghostFrightened.get(game.frame(Spritesheet.GHOST_ANIMATION)));
+		if (ghost.visible) {
+			drawGuy(g, ghost, ss.ghostFrightened.get(game.frame(Spritesheet.GHOST_ANIMATION)));
+		}
 	}
 
-	public void drawGhostValue(Graphics2D g, Ghost ghost) {
-		drawGhost(g, ghost, ss.ghostValues.get(ghost.id == 0 ? 200 : ghost.id == 1 ? 400 : ghost.id == 2 ? 800 : 1600));
+	public void drawGhostValue(Graphics2D g, Ghost ghost, int value) {
+		if (ghost.visible) {
+			drawGuy(g, ghost, ss.ghostValues.get(value));
+		}
 	}
 
-	public void drawCreatureSprite(Graphics2D g, Creature creature, BufferedImage sprite) {
-		if (creature.visible && sprite != null) {
-			int x = (int) creature.x - sprite.getWidth() / 2;
-			int y = (int) creature.y - sprite.getHeight() / 2;
+	public void drawGuy(Graphics2D g, Creature guy, BufferedImage sprite) {
+		if (guy.visible && sprite != null) {
+			int x = (int) guy.x - sprite.getWidth() / 2;
+			int y = (int) guy.y - sprite.getHeight() / 2;
 			g.drawImage(sprite, x, y, sprite.getWidth(), sprite.getHeight(), null);
 		}
 	}
