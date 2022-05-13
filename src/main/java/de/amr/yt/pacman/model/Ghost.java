@@ -51,8 +51,17 @@ public class Ghost extends Creature {
 		super(game.world);
 		this.game = game;
 		this.id = id;
+		reset();
+	}
+
+	@Override
+	public void reset() {
+		super.reset();
 		canReverse = false;
-		state = GhostState.LOCKED;
+		state = GhostState.CHASING;
+		targetTile = null;
+		eatenTimer = 0;
+		eatenValue = 0;
 	}
 
 	@Override

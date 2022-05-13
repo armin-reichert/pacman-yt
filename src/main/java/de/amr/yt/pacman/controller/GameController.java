@@ -148,8 +148,8 @@ public class GameController {
 	}
 
 	private void update_INTRO() {
-		if (game.stateTimer == sec(30)) {
-			enterGameState(GameState.INTRO); // restart intro animation
+		if (game.stateTimer == sec(28)) {
+			initGame(); // restart intro
 		}
 	}
 

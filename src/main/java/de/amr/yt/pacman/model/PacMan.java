@@ -43,8 +43,17 @@ public class PacMan extends Creature {
 	public PacMan(GameModel game) {
 		super(game.world);
 		this.game = game;
+		reset();
+	}
+
+	@Override
+	public void reset() {
+		super.reset();
 		canReverse = true;
 		state = PacManState.NORMAL;
+		powerCountdown = 0;
+		idleCountdown = 0;
+		dyingAnimationCountdown = 0;
 	}
 
 	@Override

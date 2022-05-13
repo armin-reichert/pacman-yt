@@ -42,20 +42,35 @@ public abstract class Creature {
 	}
 
 	public final World world;
-	public float x = Float.MIN_VALUE;
-	public float y = Float.MIN_VALUE;
-	public float speed = 0;
-	public boolean enteredNewTile = false;
-	public boolean canReverse = false;
-	public boolean stuck = false;
-	public boolean animated = false;
-	public int animFrame = 0;
-	public boolean visible = true;
-	public Direction moveDir = Direction.LEFT;
-	public Direction wishDir = Direction.LEFT;
+	public float x;
+	public float y;
+	public float speed;
+	public boolean enteredNewTile;
+	public boolean canReverse;
+	public boolean stuck;
+	public boolean animated;
+	public int animFrame;
+	public boolean visible;
+	public Direction moveDir;
+	public Direction wishDir;
 
 	protected Creature(World world) {
 		this.world = world;
+		reset();
+	}
+
+	public void reset() {
+		x = Float.MIN_VALUE;
+		y = Float.MIN_VALUE;
+		speed = 0;
+		enteredNewTile = false;
+		canReverse = false;
+		stuck = false;
+		animated = false;
+		animFrame = 0;
+		visible = true;
+		moveDir = Direction.LEFT;
+		wishDir = Direction.LEFT;
 	}
 
 	/**

@@ -24,6 +24,7 @@ SOFTWARE.
 package de.amr.yt.pacman.ui;
 
 import static de.amr.yt.pacman.controller.GameController.sec;
+import static de.amr.yt.pacman.lib.Logging.log;
 import static de.amr.yt.pacman.model.GameModel.BLINKY;
 import static de.amr.yt.pacman.model.GameModel.CLYDE;
 import static de.amr.yt.pacman.model.GameModel.INKY;
@@ -35,8 +36,6 @@ import java.awt.Graphics2D;
 
 import de.amr.yt.pacman.lib.Direction;
 import de.amr.yt.pacman.model.GameModel;
-import de.amr.yt.pacman.model.GhostState;
-import de.amr.yt.pacman.model.PacManState;
 import de.amr.yt.pacman.model.World;
 
 /**
@@ -94,21 +93,19 @@ public class IntroScene implements GameScene {
 
 	@Override
 	public void init() {
-		game.pacMan.state = PacManState.NORMAL;
+		log("IntroScene init");
+		game.pacMan.reset();
 		game.pacMan.x = t(World.COLS);
 		game.pacMan.y = t(20);
 		game.pacMan.speed = game.playerSpeed;
 		game.pacMan.moveDir = Direction.LEFT;
-		game.pacMan.visible = true;
-		game.pacMan.stuck = false;
 		game.pacMan.animated = true;
 		for (var ghost : game.ghosts) {
-			ghost.state = GhostState.CHASING;
+			ghost.reset();
 			ghost.x = game.pacMan.x + t(3) + ghost.id * 16;
 			ghost.y = game.pacMan.y;
 			ghost.speed = game.pacMan.speed * 1.05f;
 			ghost.moveDir = game.pacMan.moveDir;
-			ghost.visible = true;
 			ghost.animated = true;
 		}
 		powerPelletVisible = true;
