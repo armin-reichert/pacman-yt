@@ -124,7 +124,7 @@ public class PlayScene {
 			}
 		} else {
 			if (game.pacMan.animated) {
-				game.pacMan.animFrame = game.pacMan.stuck ? 0 : game.frame(15, 3);
+				game.pacMan.animFrame = game.pacMan.stuck ? 0 : game.frame(Spritesheet.PACMAN_MOUTH_ANIMATION);
 			}
 			sprite = ss.pac.get(game.pacMan.moveDir).get(game.pacMan.animFrame);
 		}

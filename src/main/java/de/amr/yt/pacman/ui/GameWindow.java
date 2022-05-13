@@ -31,6 +31,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.Toolkit;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
@@ -51,6 +52,8 @@ import de.amr.yt.pacman.model.World;
  */
 public class GameWindow extends JFrame {
 
+	public static final double SCALE_MAX = -1;
+
 	public boolean showInfo = false;
 
 	private final GameModel game;
@@ -66,6 +69,10 @@ public class GameWindow extends JFrame {
 		playScene = new PlayScene(ss, game);
 		setTitle("Pac-Man");
 		setResizable(false);
+		if (scale == SCALE_MAX) {
+			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+			scale = screenSize.getHeight() / (World.ROWS * World.TS);
+		}
 		add(createCanvas(scale));
 		addKeyListener(new KeyAdapter() {
 			@Override

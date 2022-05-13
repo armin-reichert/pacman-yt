@@ -308,7 +308,8 @@ public class IntroScene {
 
 	private void drawPacMan(Graphics2D g) {
 		if (pacMan.visible) {
-			g.drawImage(ss.pac.get(pacMan.moveDir).get(game.frame(15, 3)), (int) pacMan.x, (int) pacMan.y, null);
+			g.drawImage(ss.pac.get(pacMan.moveDir).get(game.frame(Spritesheet.PACMAN_MOUTH_ANIMATION)), (int) pacMan.x, (int) pacMan.y,
+					null);
 		}
 	}
 

@@ -59,8 +59,8 @@ public class GameController {
 	private Direction steering;
 	private GameWindow window;
 
-	public void startGame() {
-		window = new GameWindow(this, game, fpsCounter, 2.0);
+	public void startGame(double scale) {
+		window = new GameWindow(this, game, fpsCounter, scale);
 		window.pack();
 		window.setLocationRelativeTo(null);
 		window.setVisible(true);
