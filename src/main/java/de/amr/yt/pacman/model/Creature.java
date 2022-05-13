@@ -146,17 +146,17 @@ public abstract class Creature {
 		enteredNewTile = !tileBeforeMove.equals(tile());
 	}
 
+	public void move(Direction dir) {
+		x += dir.vector.x * speed;
+		y += dir.vector.y * speed;
+	}
+
 	protected boolean tryMove(Direction currentDir, Direction newDir) {
 		boolean canMove = canMove(currentDir, newDir);
 		if (canMove) {
 			move(newDir);
 		}
 		return canMove;
-	}
-
-	public void move(Direction dir) {
-		x += dir.vector.x * speed;
-		y += dir.vector.y * speed;
 	}
 
 	protected boolean canMove(Direction currentDir, Direction newDir) {
