@@ -171,7 +171,7 @@ public class IntroScene {
 		}
 		if (between(sec(12), sec(19))) {
 			if (pacManChasingGhosts) {
-				drawPacManChasingGhosts(g, hit);
+				drawPacManChasingGhosts(g);
 			} else {
 				drawGhostsChasingPacMan(g);
 			}
@@ -276,7 +276,8 @@ public class IntroScene {
 		}
 	}
 
-	private void drawPacManChasingGhosts(Graphics2D g, int hit) {
+	private void drawPacManChasingGhosts(Graphics2D g) {
+		drawPacMan(g);
 		for (var ghost : ghosts) {
 			if (ghost.id > hit) {
 				drawGhostFrightened(g, ghost);
@@ -284,7 +285,6 @@ public class IntroScene {
 				drawGhostValue(g, ghost);
 			}
 		}
-		drawPacMan(g);
 	}
 
 	private void drawPacMan(Graphics2D g) {
