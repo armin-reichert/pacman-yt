@@ -39,7 +39,7 @@ import de.amr.yt.pacman.model.World;
 /**
  * @author Armin Reichert
  */
-public class PlayScene {
+public class PlayScene implements GameScene {
 
 	private final GameModel game;
 	private final Spritesheet ss;
@@ -51,9 +51,15 @@ public class PlayScene {
 		renderer = new CreatureRenderer(ss, game);
 	}
 
+	@Override
+	public void init() {
+	}
+
+	@Override
 	public void update() {
 	}
 
+	@Override
 	public void draw(Graphics2D g) {
 		if (!game.mazeFlashing || game.frame(30, 2) == 0) {
 			g.drawImage(ss.mazeImage, 0, t(3), null);

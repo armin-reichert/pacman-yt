@@ -23,6 +23,7 @@ SOFTWARE.
 */
 package de.amr.yt.pacman.ui;
 
+import static de.amr.yt.pacman.lib.Logging.log;
 import static de.amr.yt.pacman.model.World.t;
 
 import java.awt.Color;
@@ -61,6 +62,7 @@ public class GameWindow extends JFrame {
 	private final Spritesheet ss = new Spritesheet();
 	private final IntroScene introScene;
 	private final PlayScene playScene;
+	private GameScene previousScene;
 
 	public GameWindow(GameController gameController, GameModel game, FPSCounter fpsCounter, double scale) {
 		this.game = game;
@@ -121,18 +123,25 @@ public class GameWindow extends JFrame {
 	}
 
 	public void update() {
-		switch (game.state) {
-		case INTRO -> introScene.update();
-		default -> playScene.update();
+		GameScene scene = currentScene();
+		if (previousScene != scene) {
+			scene.init();
+			log("Scene changed from %s to %s", previousScene, scene);
+			previousScene = scene;
 		}
+		currentScene().update();
+	}
+
+	public GameScene currentScene() {
+		return switch (game.state) {
+		case INTRO -> introScene;
+		default -> playScene;
+		};
 	}
 
 	private void drawCurrentScene(Graphics2D g) {
 		drawScores(g);
-		switch (game.state) {
-		case INTRO -> introScene.draw(g);
-		default -> playScene.draw(g);
-		}
+		currentScene().draw(g);
 		drawInfo(g);
 	}
 

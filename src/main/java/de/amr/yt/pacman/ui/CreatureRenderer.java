@@ -94,21 +94,15 @@ public class CreatureRenderer {
 	}
 
 	public void drawGhostNormal(Graphics2D g, Ghost ghost) {
-		if (ghost.visible) {
-			drawGuy(g, ghost, ss.ghosts.get(ghost.id).get(ghost.moveDir).get(game.frame(Spritesheet.GHOST_ANIMATION)));
-		}
+		drawGuy(g, ghost, ss.ghosts.get(ghost.id).get(ghost.moveDir).get(game.frame(Spritesheet.GHOST_ANIMATION)));
 	}
 
 	public void drawGhostFrightened(Graphics2D g, Ghost ghost) {
-		if (ghost.visible) {
-			drawGuy(g, ghost, ss.ghostFrightened.get(game.frame(Spritesheet.GHOST_ANIMATION)));
-		}
+		drawGuy(g, ghost, ss.ghostFrightened.get(game.frame(Spritesheet.GHOST_ANIMATION)));
 	}
 
 	public void drawGhostValue(Graphics2D g, Ghost ghost, int value) {
-		if (ghost.visible) {
-			drawGuy(g, ghost, ss.ghostValues.get(value));
-		}
+		drawGuy(g, ghost, ss.ghostValues.get(value));
 	}
 
 	public void drawGuy(Graphics2D g, Creature guy, BufferedImage sprite) {

@@ -122,6 +122,7 @@ public class GameController {
 		game.score = 0;
 		Sounds.stopAll();
 		enterGameState(GameState.INTRO);
+		window.currentScene().init(); // TODO
 	}
 
 	public void startLevel() {

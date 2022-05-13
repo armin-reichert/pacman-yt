@@ -35,12 +35,14 @@ import java.awt.Graphics2D;
 
 import de.amr.yt.pacman.lib.Direction;
 import de.amr.yt.pacman.model.GameModel;
+import de.amr.yt.pacman.model.GhostState;
+import de.amr.yt.pacman.model.PacManState;
 import de.amr.yt.pacman.model.World;
 
 /**
  * @author Armin Reichert
  */
-public class IntroScene {
+public class IntroScene implements GameScene {
 
 	private static String character(int id) {
 		return switch (id) {
@@ -90,19 +92,24 @@ public class IntroScene {
 		return fromTick <= game.stateTimer && game.stateTimer <= toTick;
 	}
 
+	@Override
 	public void init() {
+		game.pacMan.state = PacManState.NORMAL;
 		game.pacMan.x = t(World.COLS);
 		game.pacMan.y = t(20);
 		game.pacMan.speed = game.playerSpeed;
 		game.pacMan.moveDir = Direction.LEFT;
 		game.pacMan.visible = true;
+		game.pacMan.stuck = false;
 		game.pacMan.animated = true;
 		for (var ghost : game.ghosts) {
+			ghost.state = GhostState.CHASING;
 			ghost.x = game.pacMan.x + t(3) + ghost.id * 16;
 			ghost.y = game.pacMan.y;
 			ghost.speed = game.pacMan.speed * 1.05f;
 			ghost.moveDir = game.pacMan.moveDir;
 			ghost.visible = true;
+			ghost.animated = true;
 		}
 		powerPelletVisible = true;
 		powerPelletsBlinking = false;
@@ -111,15 +118,14 @@ public class IntroScene {
 		ghostHitCountdown = 0;
 	}
 
+	@Override
 	public void update() {
-		if (game.stateTimer == 0) {
-			init(); // TODO init() should be called by scene manager (GameWindow) when scene is exchanged
-		}
 		if (between(sec(12), sec(22))) {
 			updateGuys();
 		}
 	}
 
+	@Override
 	public void draw(Graphics2D g) {
 		if (passed(sec(1.0))) {
 			drawHeading(g);
