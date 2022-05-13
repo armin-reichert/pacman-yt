@@ -51,7 +51,7 @@ import de.amr.yt.pacman.model.World;
  */
 public class GameWindow extends JFrame {
 
-	public boolean showInfo = true;
+	public boolean showInfo = false;
 
 	private final GameModel game;
 	private final FPSCounter fpsCounter;

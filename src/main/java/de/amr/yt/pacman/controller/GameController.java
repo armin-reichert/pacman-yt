@@ -115,7 +115,7 @@ public class GameController {
 	}
 
 	public void initGame() {
-		game.setLevelNumber(1);
+		game.initLevel(1);
 		game.levelSymbols.clear();
 		game.levelSymbols.add(game.bonusSymbol);
 		game.lives = 3;
@@ -356,7 +356,7 @@ public class GameController {
 		else if (game.stateTimer == sec(3)) {
 			game.mazeFlashing = false;
 			game.pacMan.visible = false;
-			game.setLevelNumber(game.levelNumber + 1);
+			game.initLevel(game.levelNumber + 1);
 			game.levelSymbols.add(game.bonusSymbol);
 			if (game.levelSymbols.size() == 8) {
 				game.levelSymbols.remove(0);
