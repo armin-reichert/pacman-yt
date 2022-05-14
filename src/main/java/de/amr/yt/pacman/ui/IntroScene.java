@@ -31,6 +31,10 @@ import static de.amr.yt.pacman.model.GameModel.CLYDE;
 import static de.amr.yt.pacman.model.GameModel.INKY;
 import static de.amr.yt.pacman.model.GameModel.PINKY;
 import static de.amr.yt.pacman.model.World.t;
+import static de.amr.yt.pacman.ui.Renderer.drawGhostFrightened;
+import static de.amr.yt.pacman.ui.Renderer.drawGhostNormal;
+import static de.amr.yt.pacman.ui.Renderer.drawGhostValue;
+import static de.amr.yt.pacman.ui.Renderer.drawPacMan;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -66,7 +70,6 @@ public class IntroScene implements GameScene {
 	}
 
 	private final GameModel game;
-	private final CreatureRenderer renderer = new CreatureRenderer();
 
 	private boolean pacManChasingGhosts;
 	private boolean powerPelletsBlinking;
@@ -176,9 +179,9 @@ public class IntroScene implements GameScene {
 				drawPacManChasingGhosts(g);
 			} else {
 				for (var ghost : game.ghosts) {
-					renderer.drawGhostNormal(g, ghost);
+					drawGhostNormal(g, ghost);
 				}
-				renderer.drawPacMan(g, game.pacMan);
+				drawPacMan(g, game.pacMan);
 			}
 		}
 		if (passed(sec(22))) {
@@ -189,13 +192,13 @@ public class IntroScene implements GameScene {
 	private void drawPacManChasingGhosts(Graphics2D g) {
 		for (var ghost : game.ghosts) {
 			if (ghost.id > ghostHit) {
-				renderer.drawGhostFrightened(g, ghost);
+				drawGhostFrightened(g, ghost);
 			} else if (ghost.id == ghostHit) {
 				int value = ghost.id == 0 ? 200 : ghost.id == 1 ? 400 : ghost.id == 2 ? 800 : 1600;
-				renderer.drawGhostValue(g, ghost, value);
+				drawGhostValue(g, ghost, value);
 			}
 		}
-		renderer.drawPacMan(g, game.pacMan);
+		drawPacMan(g, game.pacMan);
 	}
 
 	private void updateGuys() {

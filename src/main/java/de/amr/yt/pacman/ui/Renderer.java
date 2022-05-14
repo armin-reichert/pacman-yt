@@ -37,9 +37,12 @@ import de.amr.yt.pacman.model.PacManState;
 /**
  * @author Armin Reichert
  */
-public class CreatureRenderer {
+public class Renderer {
 
-	public void drawPacMan(Graphics2D g, PacMan pacMan) {
+	private Renderer() {
+	}
+
+	public static void drawPacMan(Graphics2D g, PacMan pacMan) {
 		if (pacMan.state == PacManState.DEAD) {
 			drawPacManDead(g, pacMan);
 		} else {
@@ -47,7 +50,7 @@ public class CreatureRenderer {
 		}
 	}
 
-	private void drawPacManDead(Graphics2D g, PacMan pacMan) {
+	private static void drawPacManDead(Graphics2D g, PacMan pacMan) {
 		if (pacMan.dyingAnimationCountdown > 0) {
 			int frame = 10 - (10 * pacMan.dyingAnimationCountdown / pacMan.dyingAnimationDuration);
 			drawGuy(g, pacMan, Spritesheet.get().pacDeadAnimation.get(frame));
@@ -56,14 +59,14 @@ public class CreatureRenderer {
 		}
 	}
 
-	private void drawPacManAlive(Graphics2D g, PacMan pacMan) {
+	private static void drawPacManAlive(Graphics2D g, PacMan pacMan) {
 		if (pacMan.animated) {
 			pacMan.animFrame = pacMan.stuck ? 0 : frame(Spritesheet.PACMAN_MOUTH_ANIMATION);
 		}
 		drawGuy(g, pacMan, Spritesheet.get().pac.get(pacMan.moveDir).get(pacMan.animFrame));
 	}
 
-	public void drawGhost(Graphics2D g, Ghost ghost, boolean pacManHasPower, boolean pacManLosingPower) {
+	public static void drawGhost(Graphics2D g, Ghost ghost, boolean pacManHasPower, boolean pacManLosingPower) {
 		BufferedImage sprite = null;
 		if (ghost.state == GhostState.EATEN || ghost.state == GhostState.ENTERING_HOUSE) {
 			sprite = ghost.eatenTimer > 0 ? Spritesheet.get().ghostValues.get(ghost.eatenValue)
@@ -86,20 +89,20 @@ public class CreatureRenderer {
 		drawGuy(g, ghost, sprite);
 	}
 
-	public void drawGhostNormal(Graphics2D g, Ghost ghost) {
+	public static void drawGhostNormal(Graphics2D g, Ghost ghost) {
 		drawGuy(g, ghost,
 				Spritesheet.get().ghosts.get(ghost.id).get(ghost.moveDir).get(frame(Spritesheet.GHOST_ANIMATION)));
 	}
 
-	public void drawGhostFrightened(Graphics2D g, Ghost ghost) {
+	public static void drawGhostFrightened(Graphics2D g, Ghost ghost) {
 		drawGuy(g, ghost, Spritesheet.get().ghostFrightened.get(frame(Spritesheet.GHOST_ANIMATION)));
 	}
 
-	public void drawGhostValue(Graphics2D g, Ghost ghost, int value) {
+	public static void drawGhostValue(Graphics2D g, Ghost ghost, int value) {
 		drawGuy(g, ghost, Spritesheet.get().ghostValues.get(value));
 	}
 
-	public void drawGuy(Graphics2D g, Creature guy, BufferedImage sprite) {
+	public static void drawGuy(Graphics2D g, Creature guy, BufferedImage sprite) {
 		if (guy.visible && sprite != null) {
 			int x = (int) guy.x - sprite.getWidth() / 2;
 			int y = (int) guy.y - sprite.getHeight() / 2;

@@ -25,6 +25,8 @@ package de.amr.yt.pacman.ui;
 
 import static de.amr.yt.pacman.controller.GameController.frame;
 import static de.amr.yt.pacman.model.World.t;
+import static de.amr.yt.pacman.ui.Renderer.drawGhost;
+import static de.amr.yt.pacman.ui.Renderer.drawPacMan;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -43,7 +45,6 @@ import de.amr.yt.pacman.model.World;
 public class PlayScene implements GameScene {
 
 	private final GameModel game;
-	private final CreatureRenderer renderer = new CreatureRenderer();
 
 	public PlayScene(GameModel game) {
 		this.game = game;
@@ -80,9 +81,9 @@ public class PlayScene implements GameScene {
 					: Spritesheet.get().bonusSymbols.get(game.bonus);
 			g.drawImage(sprite, t(14) - sprite.getWidth() / 2, t(20) - World.HTS, null);
 		}
-		renderer.drawPacMan(g, game.pacMan);
+		drawPacMan(g, game.pacMan);
 		for (Ghost ghost : game.ghosts) {
-			renderer.drawGhost(g, ghost, game.pacMan.hasPower(), game.pacMan.isLosingPower());
+			drawGhost(g, ghost, game.pacMan.hasPower(), game.pacMan.isLosingPower());
 		}
 		if (game.state == GameState.READY) {
 			g.setColor(Color.YELLOW);
