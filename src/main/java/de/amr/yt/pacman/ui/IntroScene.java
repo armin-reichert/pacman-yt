@@ -75,7 +75,7 @@ public class IntroScene implements GameScene {
 		log("IntroScene init, start time=%d", GameController.ticks);
 		game.pacMan.reset();
 		game.pacMan.x = t(World.COLS);
-		game.pacMan.y = t(20);
+		game.pacMan.y = t(20) + World.HTS;
 		game.pacMan.speed = game.playerSpeed;
 		game.pacMan.moveDir = Direction.LEFT;
 		game.pacMan.animated = true;
@@ -96,7 +96,7 @@ public class IntroScene implements GameScene {
 
 	@Override
 	public void update() {
-		if (between(sec(13), sec(22))) {
+		if (between(sec(12), sec(22))) {
 			updateGuys();
 		}
 		++passed;
@@ -149,10 +149,10 @@ public class IntroScene implements GameScene {
 		if (passed >= sec(11.0)) {
 			drawPowerPellet(g);
 		}
-		if (passed == sec(12)) {
+		if (passed == sec(11.5)) {
 			powerPelletsBlinking = true;
 		}
-		if (between(sec(13), sec(22))) {
+		if (between(sec(12), sec(22))) {
 			if (pacManChasingGhosts) {
 				drawPacManChasingGhosts(g);
 			} else {
@@ -196,7 +196,7 @@ public class IntroScene implements GameScene {
 		for (var ghost : game.ghosts) {
 			ghost.move(ghost.moveDir);
 		}
-		if (game.pacMan.x <= t(2)) { // finds power pellet
+		if (game.pacMan.x <= t(3)) { // finds power pellet
 			powerPelletVisible = false;
 			game.pacMan.moveDir = Direction.RIGHT;
 			for (var ghost : game.ghosts) {
@@ -215,7 +215,9 @@ public class IntroScene implements GameScene {
 		if (ghostHitCountdown > 0) {
 			--ghostHitCountdown;
 			if (ghostHitCountdown == 0) {
-				game.pacMan.visible = true;
+				if (ghostHit < 3) {
+					game.pacMan.visible = true;
+				}
 			} else if (ghostHitCountdown == 15) {
 				game.ghosts[ghostHit].visible = false;
 			}
@@ -282,7 +284,7 @@ public class IntroScene implements GameScene {
 		}
 		if (!powerPelletsBlinking || frame(30, 2) == 0) {
 			g.setColor(Color.PINK);
-			g.fillOval(t(2), t(19) + World.HTS, t(1), t(1));
+			g.fillOval(t(3), t(20), t(1), t(1));
 		}
 	}
 
