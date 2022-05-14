@@ -116,12 +116,12 @@ public class GameWindow {
 			}
 		};
 		frame.add(canvas);
-		frame.pack();
-		frame.setLocationRelativeTo(null);
 	}
 
 	public void show() {
 		frame.setVisible(true);
+		frame.pack();
+		frame.setLocationRelativeTo(null);
 		frame.requestFocus();
 	}
 
