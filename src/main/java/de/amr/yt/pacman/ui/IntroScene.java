@@ -49,25 +49,8 @@ import de.amr.yt.pacman.model.World;
  */
 public class IntroScene implements GameScene {
 
-	private static String character(int id) {
-		return switch (id) {
-		case BLINKY -> "SHADOW";
-		case PINKY -> "SPEEDY";
-		case INKY -> "BASHFUL";
-		case CLYDE -> "POKEY";
-		default -> null;
-		};
-	}
-
-	private static String nickname(int id) {
-		return switch (id) {
-		case BLINKY -> "BLINKY";
-		case PINKY -> "PINKY";
-		case INKY -> "INKY";
-		case CLYDE -> "CLYDE";
-		default -> null;
-		};
-	}
+	private static final String[] GHOST_CHARACTERS = { "SHADOW", "SPEEDY", "BASHFUL", "POKEY" };
+	private static final String[] GHOST_NICKNAMES = { "BLINKY", "PINKY", "INKY", "CLYDE" };
 
 	private final GameModel game;
 
@@ -269,13 +252,13 @@ public class IntroScene implements GameScene {
 	private void drawGhostCharacter(Graphics2D g, int id) {
 		g.setColor(Spritesheet.get().ghostColor(id));
 		g.setFont(Spritesheet.get().arcadeFont);
-		g.drawString("-" + character(id), t(6), t(6 + 3 * id) + World.HTS + 12);
+		g.drawString("-" + GHOST_CHARACTERS[id], t(6), t(6 + 3 * id) + World.HTS + 12);
 	}
 
 	private void drawGhostNickname(Graphics2D g, int id) {
 		g.setColor(Spritesheet.get().ghostColor(id));
 		g.setFont(Spritesheet.get().arcadeFont);
-		g.drawString("\"" + nickname(id) + "\"", t(17), t(6 + 3 * id) + World.HTS + 12);
+		g.drawString("\"" + GHOST_NICKNAMES[id] + "\"", t(17), t(6 + 3 * id) + World.HTS + 12);
 	}
 
 	private void drawPointsAwarded(Graphics2D g) {
