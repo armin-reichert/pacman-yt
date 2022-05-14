@@ -93,8 +93,7 @@ public class GameWindow {
 		frame.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
-				gameController.stopGameLoop();
-				System.exit(0);
+				gameController.exit();
 			}
 		});
 		var canvas = new JComponent() {

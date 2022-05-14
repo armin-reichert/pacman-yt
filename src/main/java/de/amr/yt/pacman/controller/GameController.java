@@ -75,19 +75,16 @@ public class GameController {
 		window = new GameWindow(this, game, fpsCounter, scale);
 		window.show();
 		initGame();
-		startGameLoop();
-	}
-
-	private void startGameLoop() {
 		gameLoopRunning = true;
 		gameLoop.run();
 	}
 
-	public void stopGameLoop() {
+	public void exit() {
 		gameLoopRunning = false;
 		try {
 			gameLoop.join();
 			Logging.log("Game loop stopped");
+			System.exit(0);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
