@@ -117,7 +117,7 @@ public class IntroScene implements GameScene {
 
 	@Override
 	public void update() {
-		if (between(sec(12), sec(22))) {
+		if (between(sec(13), sec(22))) {
 			updateGuys();
 		}
 	}
@@ -172,7 +172,7 @@ public class IntroScene implements GameScene {
 		if (passed() == sec(12)) {
 			powerPelletsBlinking = true;
 		}
-		if (between(sec(12), sec(22))) {
+		if (between(sec(13), sec(22))) {
 			if (pacManChasingGhosts) {
 				drawPacManChasingGhosts(g);
 			} else {
@@ -182,7 +182,7 @@ public class IntroScene implements GameScene {
 				drawPacMan(g, game.pacMan);
 			}
 		}
-		if (passed() >= sec(22)) {
+		if (passed() >= sec(22.5)) {
 			drawPressSpaceToPlay(g);
 		}
 	}
