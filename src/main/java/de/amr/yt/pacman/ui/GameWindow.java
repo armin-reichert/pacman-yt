@@ -161,7 +161,7 @@ public class GameWindow extends JFrame {
 
 	private void drawScore(Graphics2D g) {
 		g.setColor(Color.WHITE);
-		g.setFont(Spritesheet.get().arcadeFont);
+		g.setFont(Sprites.get().arcadeFont);
 		g.drawString("SCORE", t(1), t(1));
 		g.drawString("LEVEL", t(18), t(1));
 		if (scoreVisible) {

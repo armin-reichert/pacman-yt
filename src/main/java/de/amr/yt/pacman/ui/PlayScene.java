@@ -61,7 +61,7 @@ public class PlayScene implements GameScene {
 	@Override
 	public void draw(Graphics2D g) {
 		if (!game.mazeFlashing || frame(30, 2) == 0) {
-			g.drawImage(Spritesheet.get().mazeImage, 0, t(3), null);
+			g.drawImage(Sprites.get().mazeImage, 0, t(3), null);
 		}
 		g.setColor(Color.PINK);
 		for (int row = 0; row < World.ROWS; ++row) {
@@ -77,8 +77,8 @@ public class PlayScene implements GameScene {
 		}
 		if (game.bonus != -1) {
 			int bonusValue = game.bonusValue(game.bonus);
-			BufferedImage sprite = game.bonusEaten ? Spritesheet.get().bonusValues.get(bonusValue)
-					: Spritesheet.get().bonusSymbols.get(game.bonus);
+			BufferedImage sprite = game.bonusEaten ? Sprites.get().bonusValues.get(bonusValue)
+					: Sprites.get().bonusSymbols.get(game.bonus);
 			g.drawImage(sprite, t(14) - sprite.getWidth() / 2, t(20) - World.HTS, null);
 		}
 		drawPacMan(g, game.pacMan);
@@ -87,21 +87,21 @@ public class PlayScene implements GameScene {
 		}
 		if (game.state == GameState.READY) {
 			g.setColor(Color.YELLOW);
-			g.setFont(Spritesheet.get().arcadeFont.deriveFont(Font.ITALIC | Font.BOLD));
+			g.setFont(Sprites.get().arcadeFont.deriveFont(Font.ITALIC | Font.BOLD));
 			g.drawString("READY!", t(11), t(21));
 		} else if (game.state == GameState.GAME_OVER) {
 			g.setColor(Color.RED);
-			g.setFont(Spritesheet.get().arcadeFont.deriveFont(Font.ITALIC | Font.BOLD));
+			g.setFont(Sprites.get().arcadeFont.deriveFont(Font.ITALIC | Font.BOLD));
 			g.drawString("GAME  OVER", t(9), t(21));
 		}
 		for (int i = 0; i < game.lives; ++i) {
-			g.drawImage(Spritesheet.get().liveCount, t(1 + 2 * i), t(World.ROWS - 2), null);
+			g.drawImage(Sprites.get().liveCount, t(1 + 2 * i), t(World.ROWS - 2), null);
 		}
 		for (int i = 0; i < game.levelSymbols.size(); ++i) {
 			int x = t(World.COLS - 3 - 2 * i);
 			int y = t(World.ROWS - 2);
 			int symbol = game.levelSymbols.get(i);
-			g.drawImage(Spritesheet.get().bonusSymbols.get(symbol), x, y, null);
+			g.drawImage(Sprites.get().bonusSymbols.get(symbol), x, y, null);
 		}
 	}
 
@@ -138,7 +138,7 @@ public class PlayScene implements GameScene {
 
 	private void drawGhostTarget(Graphics2D g, Ghost ghost) {
 		if (ghost.visible && ghost.targetTile != null) {
-			g.setColor(Spritesheet.get().ghostColor(ghost.id));
+			g.setColor(Sprites.get().ghostColor(ghost.id));
 			g.drawRect(t(ghost.targetTile.x) + 2, t(ghost.targetTile.y) + 2, 4, 4);
 		}
 	}

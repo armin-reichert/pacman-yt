@@ -48,11 +48,11 @@ import de.amr.yt.pacman.lib.Direction;
 /**
  * @author Armin Reichert
  */
-public class Spritesheet {
+public class Sprites {
 
-	private static final Spritesheet IT = new Spritesheet();
+	private static final Sprites IT = new Sprites();
 
-	public static Spritesheet get() {
+	public static Sprites get() {
 		return IT;
 	}
 
@@ -74,7 +74,7 @@ public class Spritesheet {
 	public Map<Integer, BufferedImage> bonusValues;
 	public BufferedImage liveCount;
 
-	private Spritesheet() {
+	private Sprites() {
 		try {
 			arcadeFont = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/emulogic.ttf"));
 			arcadeFont = arcadeFont.deriveFont(8.0f);
