@@ -178,9 +178,6 @@ public class GameWindow extends JFrame {
 		g.setColor(Color.WHITE);
 		g.setFont(new Font(Font.DIALOG, Font.PLAIN, 6));
 		g.drawString("%2d FPS".formatted(fpsCounter.getFrameRate()), t(1), t(2));
-		if (game.paused) {
-			g.drawString("(PAUSED)", t(6), t(2));
-		}
 		String text = "%s (%d)".formatted(game.state.name(), game.stateTimer);
 		if (game.state == GameState.PLAYING) {
 			if (game.chasingPhase) {
