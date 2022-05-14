@@ -95,7 +95,7 @@ public class IntroScene implements GameScene {
 
 	@Override
 	public void init() {
-		log("IntroScene init, ticks=%d", GameController.ticks);
+		log("IntroScene init, game time=%d", GameController.ticks);
 		game.pacMan.reset();
 		game.pacMan.x = t(World.COLS);
 		game.pacMan.y = t(20);

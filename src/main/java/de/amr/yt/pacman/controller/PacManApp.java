@@ -29,6 +29,10 @@ package de.amr.yt.pacman.controller;
 public class PacManApp {
 
 	public static void main(String[] args) {
-		new GameController().startGame(2);
+		double scale = 2.0;
+		if (args.length > 0) {
+			scale = Double.parseDouble(args[0]);
+		}
+		new GameController().startGame(scale);
 	}
 }
