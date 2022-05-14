@@ -56,7 +56,6 @@ public class IntroScene implements GameScene {
 
 	private boolean pacManChasingGhosts;
 	private boolean powerPelletsBlinking;
-	private boolean powerPelletVisible;
 	private int ghostHit;
 	private int ghostHitCountdown;
 	private long passed;
@@ -87,7 +86,6 @@ public class IntroScene implements GameScene {
 			ghost.moveDir = game.pacMan.moveDir;
 			ghost.animated = true;
 		}
-		powerPelletVisible = true;
 		powerPelletsBlinking = false;
 		pacManChasingGhosts = false;
 		ghostHit = -1;
@@ -197,7 +195,6 @@ public class IntroScene implements GameScene {
 			ghost.move(ghost.moveDir);
 		}
 		if (game.pacMan.x <= t(3)) { // finds power pellet
-			powerPelletVisible = false;
 			game.pacMan.moveDir = Direction.RIGHT;
 			for (var ghost : game.ghosts) {
 				ghost.moveDir = Direction.RIGHT;
@@ -279,7 +276,7 @@ public class IntroScene implements GameScene {
 	}
 
 	private void drawPowerPellet(Graphics2D g) {
-		if (!powerPelletVisible) {
+		if (pacManChasingGhosts) {
 			return;
 		}
 		if (!powerPelletsBlinking || frame(30, 2) == 0) {
