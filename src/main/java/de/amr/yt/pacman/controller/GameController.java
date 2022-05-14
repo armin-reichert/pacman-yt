@@ -73,10 +73,7 @@ public class GameController {
 	public void createAndShowUI(double scale) {
 		ticks = 0;
 		window = new GameWindow(this, game, fpsCounter, scale);
-		window.pack();
-		window.setLocationRelativeTo(null);
-		window.setVisible(true);
-		window.requestFocus();
+		window.show();
 		initGame();
 		startGameLoop();
 	}
@@ -116,8 +113,8 @@ public class GameController {
 				}
 			}
 			fpsCounter.update();
-			window.repaint();
 			++ticks;
+			window.render();
 		}
 	}
 

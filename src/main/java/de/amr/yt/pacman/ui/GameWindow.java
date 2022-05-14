@@ -51,7 +51,7 @@ import de.amr.yt.pacman.model.World;
 /**
  * @author Armin Reichert
  */
-public class GameWindow extends JFrame {
+public class GameWindow {
 
 	public static final double SCALE_MAX = -1;
 
@@ -61,6 +61,7 @@ public class GameWindow extends JFrame {
 	private final IntroScene introScene;
 	private final PlayScene playScene;
 	private final FPSCounter fpsCounter;
+	private final JFrame frame;
 	private GameScene previousScene;
 	private boolean scoreVisible;
 
@@ -72,9 +73,9 @@ public class GameWindow extends JFrame {
 				: scaleValue;
 		introScene = new IntroScene(game);
 		playScene = new PlayScene(game);
-		setTitle("Pac-Man");
-		setResizable(false);
-		addKeyListener(new KeyAdapter() {
+		frame = new JFrame("Pac-Man");
+		frame.setResizable(false);
+		frame.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				switch (e.getKeyCode()) {
@@ -90,7 +91,7 @@ public class GameWindow extends JFrame {
 				}
 			}
 		});
-		addWindowListener(new WindowAdapter() {
+		frame.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
 				gameController.stopGameLoop();
@@ -114,7 +115,18 @@ public class GameWindow extends JFrame {
 				drawPauseText(g);
 			}
 		};
-		add(canvas);
+		frame.add(canvas);
+		frame.pack();
+		frame.setLocationRelativeTo(null);
+	}
+
+	public void show() {
+		frame.setVisible(true);
+		frame.requestFocus();
+	}
+
+	public void render() {
+		frame.repaint();
 	}
 
 	public void update() {
@@ -141,7 +153,7 @@ public class GameWindow extends JFrame {
 			g.setColor(Color.RED);
 			g.setFont(new Font(Font.MONOSPACED, Font.BOLD, 36));
 			int sw = g.getFontMetrics().stringWidth(text);
-			g.drawString(text, (getWidth() - sw) / 2, getHeight() * 3 / 4);
+			g.drawString(text, (frame.getWidth() - sw) / 2, frame.getHeight() * 3 / 4);
 		}
 	}
 
