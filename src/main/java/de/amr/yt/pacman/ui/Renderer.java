@@ -50,7 +50,7 @@ public class Renderer {
 		}
 	}
 
-	private static void drawPacManDead(Graphics2D g, PacMan pacMan) {
+	public static void drawPacManDead(Graphics2D g, PacMan pacMan) {
 		if (pacMan.dyingAnimationCountdown > 0) {
 			int frame = 10 - (10 * pacMan.dyingAnimationCountdown / pacMan.dyingAnimationDuration);
 			drawGuy(g, pacMan, Spritesheet.get().pacDeadAnimation.get(frame));
@@ -59,7 +59,7 @@ public class Renderer {
 		}
 	}
 
-	private static void drawPacManAlive(Graphics2D g, PacMan pacMan) {
+	public static void drawPacManAlive(Graphics2D g, PacMan pacMan) {
 		if (pacMan.animated) {
 			pacMan.animFrame = pacMan.stuck ? 0 : frame(Spritesheet.PACMAN_MOUTH_ANIMATION);
 		}
@@ -102,7 +102,7 @@ public class Renderer {
 		drawGuy(g, ghost, Spritesheet.get().ghostValues.get(value));
 	}
 
-	public static void drawGuy(Graphics2D g, Creature guy, BufferedImage sprite) {
+	private static void drawGuy(Graphics2D g, Creature guy, BufferedImage sprite) {
 		if (guy.visible && sprite != null) {
 			int x = (int) guy.x - sprite.getWidth() / 2;
 			int y = (int) guy.y - sprite.getHeight() / 2;
