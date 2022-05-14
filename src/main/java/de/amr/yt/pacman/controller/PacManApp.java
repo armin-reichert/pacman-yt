@@ -33,6 +33,7 @@ public class PacManApp {
 		if (args.length > 0) {
 			scale = Double.parseDouble(args[0]);
 		}
-		new GameController().startGame(scale);
+		GameController controller = new GameController();
+		controller.createAndShowUI(scale);
 	}
 }

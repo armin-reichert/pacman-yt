@@ -62,7 +62,7 @@ public class GameController {
 		return animation[(int) ticks % animation.length];
 	}
 
-	public final GameModel game = new GameModel();
+	private final GameModel game = new GameModel();
 
 	private final FPSCounter fpsCounter = new FPSCounter();
 	private final Thread gameLoop = new Thread(this::gameLoop);
@@ -70,14 +70,18 @@ public class GameController {
 	private Direction steering;
 	private GameWindow window;
 
-	public void startGame(double scale) {
+	public void createAndShowUI(double scale) {
 		ticks = 0;
-		window = new GameWindow(this, fpsCounter, scale);
+		window = new GameWindow(this, game, fpsCounter, scale);
 		window.pack();
 		window.setLocationRelativeTo(null);
 		window.setVisible(true);
 		window.requestFocus();
 		initGame();
+		startGameLoop();
+	}
+
+	private void startGameLoop() {
 		gameLoopRunning = true;
 		gameLoop.run();
 	}

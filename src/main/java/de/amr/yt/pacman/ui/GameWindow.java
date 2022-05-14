@@ -64,11 +64,11 @@ public class GameWindow extends JFrame {
 	private GameScene previousScene;
 	private boolean scoreVisible;
 
-	public GameWindow(GameController gameController, FPSCounter fpsCounter, double scale) {
-		game = gameController.game;
+	public GameWindow(GameController gameController, GameModel game, FPSCounter fpsCounter, double scale) {
+		this.game = game;
+		this.fpsCounter = fpsCounter;
 		introScene = new IntroScene(game);
 		playScene = new PlayScene(game);
-		this.fpsCounter = fpsCounter;
 		setTitle("Pac-Man");
 		setResizable(false);
 		if (scale == SCALE_MAX) {
