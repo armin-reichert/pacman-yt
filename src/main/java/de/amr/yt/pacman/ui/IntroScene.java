@@ -51,27 +51,24 @@ public class IntroScene implements GameScene {
 
 	private static final String[] GHOST_CHARACTERS = { "SHADOW", "SPEEDY", "BASHFUL", "POKEY" };
 	private static final String[] GHOST_NICKNAMES = { "BLINKY", "PINKY", "INKY", "CLYDE" };
+	private static final int[] GHOST_VALUES = { 200, 400, 800, 1600 };
 
 	private final GameModel game;
 
+	private long passed;
 	private boolean pacManChasingGhosts;
 	private boolean powerPelletsBlinking;
-	private int ghostHit;
-	private int ghostHitCountdown;
-	private long passed;
+	private int ghostEaten;
+	private int ghostEatenCountdown;
 
 	public IntroScene(GameModel game) {
 		this.game = game;
 	}
 
-	private boolean between(long beginTick, long endTick) {
-		return beginTick <= passed && passed <= endTick;
-	}
-
 	@Override
 	public void init() {
-		passed = 0;
 		log("IntroScene init, start time=%d", GameController.ticks);
+		passed = 0;
 		game.pacMan.reset();
 		game.pacMan.x = t(World.COLS);
 		game.pacMan.y = t(20) + World.HTS;
@@ -88,8 +85,8 @@ public class IntroScene implements GameScene {
 		}
 		powerPelletsBlinking = false;
 		pacManChasingGhosts = false;
-		ghostHit = -1;
-		ghostHitCountdown = 0;
+		ghostEaten = -1;
+		ghostEatenCountdown = 0;
 	}
 
 	@Override
@@ -165,13 +162,16 @@ public class IntroScene implements GameScene {
 		}
 	}
 
+	private boolean between(long begin, long end) {
+		return begin <= passed && passed <= end;
+	}
+
 	private void drawPacManChasingGhosts(Graphics2D g) {
 		for (var ghost : game.ghosts) {
-			if (ghost.id > ghostHit) {
+			if (ghost.id > ghostEaten) {
 				drawGhostFrightened(g, ghost);
-			} else if (ghost.id == ghostHit) {
-				int value = ghost.id == 0 ? 200 : ghost.id == 1 ? 400 : ghost.id == 2 ? 800 : 1600;
-				drawGhostValue(g, ghost, value);
+			} else if (ghost.id == ghostEaten) {
+				drawGhostValue(g, ghost, GHOST_VALUES[ghost.id]);
 			}
 		}
 		drawPacMan(g, game.pacMan);
@@ -209,14 +209,14 @@ public class IntroScene implements GameScene {
 	 * the other ghosts stop.
 	 */
 	private void updatePacManChasingGhosts() {
-		if (ghostHitCountdown > 0) {
-			--ghostHitCountdown;
-			if (ghostHitCountdown == 0) {
-				if (ghostHit < 3) {
+		if (ghostEatenCountdown > 0) {
+			--ghostEatenCountdown;
+			if (ghostEatenCountdown == 0) {
+				if (ghostEaten < 3) {
 					game.pacMan.visible = true;
 				}
-			} else if (ghostHitCountdown == 15) {
-				game.ghosts[ghostHit].visible = false;
+			} else if (ghostEatenCountdown == 15) {
+				game.ghosts[ghostEaten].visible = false;
 			}
 		} else {
 			game.pacMan.move(game.pacMan.moveDir);
@@ -224,12 +224,12 @@ public class IntroScene implements GameScene {
 				ghost.move(ghost.moveDir);
 			}
 			if (game.pacMan.x > game.ghosts[3].x) {
-				ghostHit = 4;
+				ghostEaten = 4;
 			} else {
 				for (var ghost : game.ghosts) {
-					if (Math.abs(ghost.x - game.pacMan.x) <= 1 && ghostHit != ghost.id) {
-						ghostHit = ghost.id;
-						ghostHitCountdown = sec(0.5);
+					if (Math.abs(ghost.x - game.pacMan.x) <= 1 && ghostEaten != ghost.id) {
+						ghostEaten = ghost.id;
+						ghostEatenCountdown = sec(0.5);
 						game.pacMan.visible = false;
 						break;
 					}
