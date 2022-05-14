@@ -128,40 +128,40 @@ public class IntroScene implements GameScene {
 			drawHeading(g);
 		}
 		if (passed() >= sec(2.0)) {
-			drawGhostImage(g, 0);
+			drawGhostImage(g, BLINKY);
 		}
 		if (passed() >= sec(3.0)) {
-			drawGhostCharacter(g, 0);
+			drawGhostCharacter(g, BLINKY);
 		}
 		if (passed() >= sec(3.5)) {
-			drawGhostNickname(g, 0);
+			drawGhostNickname(g, BLINKY);
 		}
 		if (passed() >= sec(4.0)) {
-			drawGhostImage(g, 1);
+			drawGhostImage(g, PINKY);
 		}
 		if (passed() >= sec(5.0)) {
-			drawGhostCharacter(g, 1);
+			drawGhostCharacter(g, PINKY);
 		}
 		if (passed() >= sec(5.5)) {
-			drawGhostNickname(g, 1);
+			drawGhostNickname(g, PINKY);
 		}
 		if (passed() >= sec(6.0)) {
-			drawGhostImage(g, 2);
+			drawGhostImage(g, INKY);
 		}
 		if (passed() >= sec(7.0)) {
-			drawGhostCharacter(g, 2);
+			drawGhostCharacter(g, INKY);
 		}
 		if (passed() >= sec(7.5)) {
-			drawGhostNickname(g, 2);
+			drawGhostNickname(g, INKY);
 		}
 		if (passed() >= sec(8.0)) {
-			drawGhostImage(g, 3);
+			drawGhostImage(g, CLYDE);
 		}
 		if (passed() >= sec(9.0)) {
-			drawGhostCharacter(g, 3);
+			drawGhostCharacter(g, CLYDE);
 		}
 		if (passed() >= sec(9.5)) {
-			drawGhostNickname(g, 3);
+			drawGhostNickname(g, CLYDE);
 		}
 		if (passed() >= sec(10.0)) {
 			drawPointsAwarded(g);
