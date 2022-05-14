@@ -58,7 +58,6 @@ public class GameModel {
 
 	public GameState state;
 	public long stateTimer;
-	public long ticks;
 	public int attackTimer;
 
 	public List<Integer> scatterStartTicks;
@@ -157,14 +156,6 @@ public class GameModel {
 		}
 
 		ghostsKilledInLevel = 0;
-	}
-
-	public int frame(int duration, int frames) {
-		return (int) (ticks % duration) * frames / duration;
-	}
-
-	public int frame(int[] animation) {
-		return animation[(int) ticks % animation.length];
 	}
 
 	public void reset() {

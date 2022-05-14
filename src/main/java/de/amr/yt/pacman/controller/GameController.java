@@ -48,8 +48,18 @@ public class GameController {
 
 	public static final int FPS = 60;
 
+	public static long ticks;
+
 	public static int sec(double n) {
 		return (int) (n * FPS);
+	}
+
+	public static int frame(int duration, int frames) {
+		return (int) (ticks % duration) * frames / duration;
+	}
+
+	public static int frame(int[] animation) {
+		return animation[(int) ticks % animation.length];
 	}
 
 	private final GameModel game = new GameModel();
@@ -60,6 +70,7 @@ public class GameController {
 	private GameWindow window;
 
 	public void startGame(double scale) {
+		ticks = 0;
 		window = new GameWindow(this, game, fpsCounter, scale);
 		window.pack();
 		window.setLocationRelativeTo(null);
@@ -101,6 +112,7 @@ public class GameController {
 			}
 			fpsCounter.update();
 			window.repaint();
+			++ticks;
 		}
 	}
 
@@ -132,7 +144,6 @@ public class GameController {
 	}
 
 	private void update() {
-		++game.ticks;
 		++game.stateTimer;
 		switch (game.state) {
 		case INTRO -> update_INTRO();

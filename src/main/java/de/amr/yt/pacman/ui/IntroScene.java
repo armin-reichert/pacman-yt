@@ -23,6 +23,7 @@ SOFTWARE.
 */
 package de.amr.yt.pacman.ui;
 
+import static de.amr.yt.pacman.controller.GameController.frame;
 import static de.amr.yt.pacman.controller.GameController.sec;
 import static de.amr.yt.pacman.lib.Logging.log;
 import static de.amr.yt.pacman.model.GameModel.BLINKY;
@@ -34,6 +35,7 @@ import static de.amr.yt.pacman.model.World.t;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
+import de.amr.yt.pacman.controller.GameController;
 import de.amr.yt.pacman.lib.Direction;
 import de.amr.yt.pacman.model.GameModel;
 import de.amr.yt.pacman.model.World;
@@ -93,7 +95,7 @@ public class IntroScene implements GameScene {
 
 	@Override
 	public void init() {
-		log("IntroScene init");
+		log("IntroScene init, ticks=%d", GameController.ticks);
 		game.pacMan.reset();
 		game.pacMan.x = t(World.COLS);
 		game.pacMan.y = t(20);
@@ -284,7 +286,7 @@ public class IntroScene implements GameScene {
 	private void drawPointsAwarded(Graphics2D g) {
 		g.setColor(Color.PINK);
 		g.fillRect(t(10) + 3, t(24) + 3, 2, 2);
-		if (!powerPelletsBlinking || game.frame(30, 2) == 0) {
+		if (!powerPelletsBlinking || frame(30, 2) == 0) {
 			g.fillOval(t(10), t(26), t(1), t(1));
 		}
 		g.setColor(Color.WHITE);
@@ -300,14 +302,14 @@ public class IntroScene implements GameScene {
 		if (!powerPelletVisible) {
 			return;
 		}
-		if (!powerPelletsBlinking || game.frame(30, 2) == 0) {
+		if (!powerPelletsBlinking || frame(30, 2) == 0) {
 			g.setColor(Color.PINK);
 			g.fillOval(t(2), t(19) + World.HTS, t(1), t(1));
 		}
 	}
 
 	private void drawPressSpaceToPlay(Graphics2D g) {
-		if (game.frame(60, 2) == 0) {
+		if (frame(60, 2) == 0) {
 			g.setColor(Color.WHITE);
 			g.setFont(ss.arcadeFont);
 			g.drawString("PRESS SPACE TO PLAY", t(4), t(32));

@@ -23,6 +23,7 @@ SOFTWARE.
 */
 package de.amr.yt.pacman.ui;
 
+import static de.amr.yt.pacman.controller.GameController.frame;
 import static de.amr.yt.pacman.model.World.t;
 
 import java.awt.Color;
@@ -61,7 +62,7 @@ public class PlayScene implements GameScene {
 
 	@Override
 	public void draw(Graphics2D g) {
-		if (!game.mazeFlashing || game.frame(30, 2) == 0) {
+		if (!game.mazeFlashing || frame(30, 2) == 0) {
 			g.drawImage(ss.mazeImage, 0, t(3), null);
 		}
 		g.setColor(Color.PINK);
@@ -70,7 +71,7 @@ public class PlayScene implements GameScene {
 				if (game.world.isPellet(row, col)) {
 					g.fillRect(t(col) + 3, t(row) + 3, 2, 2);
 				} else if (game.world.isPowerPellet(row, col)) {
-					if (!game.powerPelletsBlinking || game.frame(30, 2) == 0) {
+					if (!game.powerPelletsBlinking || frame(30, 2) == 0) {
 						g.fillOval(t(col), t(row), t(1), t(1));
 					}
 				}

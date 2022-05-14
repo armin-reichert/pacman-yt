@@ -23,6 +23,8 @@ SOFTWARE.
 */
 package de.amr.yt.pacman.ui;
 
+import static de.amr.yt.pacman.controller.GameController.frame;
+
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
@@ -65,7 +67,7 @@ public class CreatureRenderer {
 
 	private void drawPacManAlive(Graphics2D g, PacMan pacMan) {
 		if (pacMan.animated) {
-			pacMan.animFrame = pacMan.stuck ? 0 : game.frame(Spritesheet.PACMAN_MOUTH_ANIMATION);
+			pacMan.animFrame = pacMan.stuck ? 0 : frame(Spritesheet.PACMAN_MOUTH_ANIMATION);
 		}
 		drawGuy(g, pacMan, ss.pac.get(pacMan.moveDir).get(pacMan.animFrame));
 	}
@@ -77,16 +79,16 @@ public class CreatureRenderer {
 		} else if (ghost.state == GhostState.FRIGHTENED
 				|| ghost.state == GhostState.LOCKED && game.pacMan.powerCountdown > 0) {
 			if (ghost.animated) {
-				ghost.animFrame = game.frame(Spritesheet.GHOST_ANIMATION);
+				ghost.animFrame = frame(Spritesheet.GHOST_ANIMATION);
 				if (game.pacMan.isLosingPower()) {
-					int blink = game.frame(20, 2) == 0 ? 0 : 2;
+					int blink = frame(20, 2) == 0 ? 0 : 2;
 					ghost.animFrame += blink;
 				}
 			}
 			sprite = ss.ghostFrightened.get(ghost.animFrame);
 		} else {
 			if (ghost.animated) {
-				ghost.animFrame = game.frame(Spritesheet.GHOST_ANIMATION);
+				ghost.animFrame = frame(Spritesheet.GHOST_ANIMATION);
 			}
 			sprite = ss.ghosts.get(ghost.id).get(ghost.moveDir).get(ghost.animFrame);
 		}
@@ -94,11 +96,11 @@ public class CreatureRenderer {
 	}
 
 	public void drawGhostNormal(Graphics2D g, Ghost ghost) {
-		drawGuy(g, ghost, ss.ghosts.get(ghost.id).get(ghost.moveDir).get(game.frame(Spritesheet.GHOST_ANIMATION)));
+		drawGuy(g, ghost, ss.ghosts.get(ghost.id).get(ghost.moveDir).get(frame(Spritesheet.GHOST_ANIMATION)));
 	}
 
 	public void drawGhostFrightened(Graphics2D g, Ghost ghost) {
-		drawGuy(g, ghost, ss.ghostFrightened.get(game.frame(Spritesheet.GHOST_ANIMATION)));
+		drawGuy(g, ghost, ss.ghostFrightened.get(frame(Spritesheet.GHOST_ANIMATION)));
 	}
 
 	public void drawGhostValue(Graphics2D g, Ghost ghost, int value) {
