@@ -62,7 +62,8 @@ public class GameController {
 		return animation[(int) ticks % animation.length];
 	}
 
-	private final GameModel game = new GameModel();
+	public final GameModel game = new GameModel();
+
 	private final FPSCounter fpsCounter = new FPSCounter();
 	private final Thread gameLoop = new Thread(this::gameLoop);
 	private boolean gameLoopRunning;
@@ -71,7 +72,7 @@ public class GameController {
 
 	public void startGame(double scale) {
 		ticks = 0;
-		window = new GameWindow(this, game, fpsCounter, scale);
+		window = new GameWindow(this, fpsCounter, scale);
 		window.pack();
 		window.setLocationRelativeTo(null);
 		window.setVisible(true);

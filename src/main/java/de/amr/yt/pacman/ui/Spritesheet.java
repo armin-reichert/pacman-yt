@@ -50,6 +50,12 @@ import de.amr.yt.pacman.lib.Direction;
  */
 public class Spritesheet {
 
+	private static final Spritesheet IT = new Spritesheet();
+
+	public static Spritesheet get() {
+		return IT;
+	}
+
 	public static final int[] PACMAN_MOUTH_ANIMATION = { 1, 1, 0, 0, 1, 1, 2, 2 };
 	public static final int[] GHOST_ANIMATION = { 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1 };
 
@@ -68,7 +74,7 @@ public class Spritesheet {
 	public Map<Integer, BufferedImage> bonusValues;
 	public BufferedImage liveCount;
 
-	public Spritesheet() {
+	private Spritesheet() {
 		try {
 			arcadeFont = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/emulogic.ttf"));
 			arcadeFont = arcadeFont.deriveFont(8.0f);

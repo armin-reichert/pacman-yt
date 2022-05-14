@@ -58,18 +58,17 @@ public class GameWindow extends JFrame {
 	public boolean showInfo = false;
 
 	private final GameModel game;
-	private final FPSCounter fpsCounter;
-	private final Spritesheet ss = new Spritesheet();
 	private final IntroScene introScene;
 	private final PlayScene playScene;
+	private final FPSCounter fpsCounter;
 	private GameScene previousScene;
 	private boolean scoreVisible;
 
-	public GameWindow(GameController gameController, GameModel game, FPSCounter fpsCounter, double scale) {
-		this.game = game;
+	public GameWindow(GameController gameController, FPSCounter fpsCounter, double scale) {
+		game = gameController.game;
+		introScene = new IntroScene(game);
+		playScene = new PlayScene(game);
 		this.fpsCounter = fpsCounter;
-		introScene = new IntroScene(ss, game);
-		playScene = new PlayScene(ss, game);
 		setTitle("Pac-Man");
 		setResizable(false);
 		if (scale == SCALE_MAX) {
@@ -162,7 +161,7 @@ public class GameWindow extends JFrame {
 
 	private void drawScore(Graphics2D g) {
 		g.setColor(Color.WHITE);
-		g.setFont(ss.arcadeFont);
+		g.setFont(Spritesheet.get().arcadeFont);
 		g.drawString("SCORE", t(1), t(1));
 		g.drawString("LEVEL", t(18), t(1));
 		if (scoreVisible) {
