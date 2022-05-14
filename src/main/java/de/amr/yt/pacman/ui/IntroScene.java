@@ -76,24 +76,20 @@ public class IntroScene implements GameScene {
 	private boolean powerPelletVisible;
 	private int ghostHit;
 	private int ghostHitCountdown;
-	private long startTick;
+	private long passed;
 
 	public IntroScene(GameModel game) {
 		this.game = game;
 	}
 
-	private long passed() {
-		return GameController.ticks - startTick;
-	}
-
 	private boolean between(long beginTick, long endTick) {
-		return beginTick <= passed() && passed() <= endTick;
+		return beginTick <= passed && passed <= endTick;
 	}
 
 	@Override
 	public void init() {
-		startTick = GameController.ticks;
-		log("IntroScene init, start time=%d", startTick);
+		passed = 0;
+		log("IntroScene init, start time=%d", GameController.ticks);
 		game.pacMan.reset();
 		game.pacMan.x = t(World.COLS);
 		game.pacMan.y = t(20);
@@ -120,56 +116,57 @@ public class IntroScene implements GameScene {
 		if (between(sec(13), sec(22))) {
 			updateGuys();
 		}
+		++passed;
 	}
 
 	@Override
 	public void draw(Graphics2D g) {
-		if (passed() >= sec(1.0)) {
+		if (passed >= sec(1.0)) {
 			drawHeading(g);
 		}
-		if (passed() >= sec(2.0)) {
+		if (passed >= sec(2.0)) {
 			drawGhostImage(g, BLINKY);
 		}
-		if (passed() >= sec(3.0)) {
+		if (passed >= sec(3.0)) {
 			drawGhostCharacter(g, BLINKY);
 		}
-		if (passed() >= sec(3.5)) {
+		if (passed >= sec(3.5)) {
 			drawGhostNickname(g, BLINKY);
 		}
-		if (passed() >= sec(4.0)) {
+		if (passed >= sec(4.0)) {
 			drawGhostImage(g, PINKY);
 		}
-		if (passed() >= sec(5.0)) {
+		if (passed >= sec(5.0)) {
 			drawGhostCharacter(g, PINKY);
 		}
-		if (passed() >= sec(5.5)) {
+		if (passed >= sec(5.5)) {
 			drawGhostNickname(g, PINKY);
 		}
-		if (passed() >= sec(6.0)) {
+		if (passed >= sec(6.0)) {
 			drawGhostImage(g, INKY);
 		}
-		if (passed() >= sec(7.0)) {
+		if (passed >= sec(7.0)) {
 			drawGhostCharacter(g, INKY);
 		}
-		if (passed() >= sec(7.5)) {
+		if (passed >= sec(7.5)) {
 			drawGhostNickname(g, INKY);
 		}
-		if (passed() >= sec(8.0)) {
+		if (passed >= sec(8.0)) {
 			drawGhostImage(g, CLYDE);
 		}
-		if (passed() >= sec(9.0)) {
+		if (passed >= sec(9.0)) {
 			drawGhostCharacter(g, CLYDE);
 		}
-		if (passed() >= sec(9.5)) {
+		if (passed >= sec(9.5)) {
 			drawGhostNickname(g, CLYDE);
 		}
-		if (passed() >= sec(10.0)) {
+		if (passed >= sec(10.0)) {
 			drawPointsAwarded(g);
 		}
-		if (passed() >= sec(11.0)) {
+		if (passed >= sec(11.0)) {
 			drawPowerPellet(g);
 		}
-		if (passed() == sec(12)) {
+		if (passed == sec(12)) {
 			powerPelletsBlinking = true;
 		}
 		if (between(sec(13), sec(22))) {
@@ -182,7 +179,7 @@ public class IntroScene implements GameScene {
 				drawPacMan(g, game.pacMan);
 			}
 		}
-		if (passed() >= sec(22.5)) {
+		if (passed >= sec(22.5)) {
 			drawPressSpaceToPlay(g);
 		}
 	}
