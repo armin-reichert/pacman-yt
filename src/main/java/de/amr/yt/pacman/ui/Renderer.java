@@ -39,9 +39,6 @@ import de.amr.yt.pacman.model.PacManState;
  */
 public class Renderer {
 
-	private Renderer() {
-	}
-
 	public static void drawPacMan(Graphics2D g, PacMan pacMan) {
 		if (pacMan.state == PacManState.DEAD) {
 			drawPacManDead(g, pacMan);
