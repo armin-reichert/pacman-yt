@@ -102,7 +102,15 @@ public class GameWindow extends JFrame {
 	}
 
 	private JComponent createCanvas(double scale) {
-		JComponent canvas = new JComponent() {
+		return new JComponent() {
+
+			{
+				Dimension size = new Dimension((int) (scale * t(World.COLS)), (int) (scale * t(World.ROWS)));
+				setPreferredSize(size);
+				setSize(size);
+				log("Game canvas size=%dx%s", getWidth(), getHeight());
+			}
+
 			@Override
 			protected void paintComponent(Graphics g) {
 				super.paintComponent(g);
@@ -116,11 +124,6 @@ public class GameWindow extends JFrame {
 				drawPauseText(g);
 			}
 		};
-		Dimension size = new Dimension((int) (scale * t(World.COLS)), (int) (scale * t(World.ROWS)));
-		canvas.setPreferredSize(size);
-		canvas.setSize(size);
-		log("Game canvas size=%dx%s", canvas.getWidth(), canvas.getHeight());
-		return canvas;
 	}
 
 	public void update() {
