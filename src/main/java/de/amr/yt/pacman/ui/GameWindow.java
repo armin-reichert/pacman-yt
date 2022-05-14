@@ -113,18 +113,11 @@ public class GameWindow extends JFrame {
 				g2D.scale(scale, scale);
 				drawCurrentScene(g2D);
 				g2D.dispose();
-				if (game.paused) {
-					String text = "PAUSED";
-					g.setColor(Color.RED);
-					g.setFont(new Font(Font.MONOSPACED, Font.BOLD, 36));
-					int sw = g.getFontMetrics().stringWidth(text);
-					g.drawString(text, (getWidth() - sw) / 2, getHeight() * 3 / 4);
-				}
+				drawPauseText(g);
 			}
 		};
-		Dimension size = new Dimension((int) (World.COLS * World.TS * scale), (int) (World.ROWS * World.TS * scale));
+		Dimension size = new Dimension((int) (scale * t(World.COLS)), (int) (scale * t(World.ROWS)));
 		canvas.setPreferredSize(size);
-		canvas.setMinimumSize(size);
 		canvas.setSize(size);
 		log("Game canvas size=%dx%s", canvas.getWidth(), canvas.getHeight());
 		return canvas;
@@ -188,6 +181,16 @@ public class GameWindow extends JFrame {
 		}
 		if (game.state != GameState.INTRO) {
 			playScene.drawInfo(g);
+		}
+	}
+
+	private void drawPauseText(Graphics g) {
+		if (game.paused) {
+			String text = "PAUSED";
+			g.setColor(Color.RED);
+			g.setFont(new Font(Font.MONOSPACED, Font.BOLD, 36));
+			int sw = g.getFontMetrics().stringWidth(text);
+			g.drawString(text, (getWidth() - sw) / 2, getHeight() * 3 / 4);
 		}
 	}
 }
