@@ -62,15 +62,14 @@ public class GameWindow {
 	private final PlayScene playScene;
 	private final FPSCounter fpsCounter;
 	private final JFrame frame;
+	private JComponent canvas;
+	private double scale;
 	private GameScene previousScene;
 	private boolean scoreVisible;
 
 	public GameWindow(GameController gameController, GameModel game, FPSCounter fpsCounter, double scaleValue) {
 		this.game = game;
 		this.fpsCounter = fpsCounter;
-		final double scale = (scaleValue == SCALE_MAX)
-				? Toolkit.getDefaultToolkit().getScreenSize().getHeight() / t(World.ROWS)
-				: scaleValue;
 		introScene = new IntroScene(game);
 		playScene = new PlayScene(game);
 		frame = new JFrame("Pac-Man");
@@ -96,14 +95,7 @@ public class GameWindow {
 				gameController.exit();
 			}
 		});
-		var canvas = new JComponent() {
-			{
-				Dimension size = new Dimension((int) (scale * t(World.COLS)), (int) (scale * t(World.ROWS)));
-				setPreferredSize(size);
-				setSize(size);
-				log("Game canvas size=%dx%s", getWidth(), getHeight());
-			}
-
+		canvas = new JComponent() {
 			@Override
 			protected void paintComponent(Graphics g) {
 				super.paintComponent(g);
@@ -113,8 +105,17 @@ public class GameWindow {
 				drawPauseText(g);
 			}
 		};
+		setScale(scaleValue);
 		frame.add(canvas);
 		frame.setResizable(false);
+	}
+
+	public void setScale(double value) {
+		scale = (value == SCALE_MAX) ? Toolkit.getDefaultToolkit().getScreenSize().getHeight() / t(World.ROWS) : value;
+		Dimension size = new Dimension((int) (scale * t(World.COLS)), (int) (scale * t(World.ROWS)));
+		canvas.setPreferredSize(size);
+		canvas.setSize(size);
+		log("Game canvas size=%dx%s", canvas.getWidth(), canvas.getHeight());
 	}
 
 	public void show() {
