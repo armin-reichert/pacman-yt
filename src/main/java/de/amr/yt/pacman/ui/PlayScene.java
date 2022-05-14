@@ -43,11 +43,10 @@ import de.amr.yt.pacman.model.World;
 public class PlayScene implements GameScene {
 
 	private final GameModel game;
-	private final CreatureRenderer renderer;
+	private final CreatureRenderer renderer = new CreatureRenderer();
 
 	public PlayScene(GameModel game) {
 		this.game = game;
-		renderer = new CreatureRenderer(game);
 	}
 
 	@Override
@@ -83,7 +82,7 @@ public class PlayScene implements GameScene {
 		}
 		renderer.drawPacMan(g, game.pacMan);
 		for (Ghost ghost : game.ghosts) {
-			renderer.drawGhost(g, ghost);
+			renderer.drawGhost(g, ghost, game.pacMan.hasPower(), game.pacMan.isLosingPower());
 		}
 		if (game.state == GameState.READY) {
 			g.setColor(Color.YELLOW);

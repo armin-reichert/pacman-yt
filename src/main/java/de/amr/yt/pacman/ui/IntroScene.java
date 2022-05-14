@@ -66,7 +66,7 @@ public class IntroScene implements GameScene {
 	}
 
 	private final GameModel game;
-	private final CreatureRenderer renderer;
+	private final CreatureRenderer renderer = new CreatureRenderer();
 
 	private boolean pacManChasingGhosts;
 	private boolean powerPelletsBlinking;
@@ -76,7 +76,6 @@ public class IntroScene implements GameScene {
 
 	public IntroScene(GameModel game) {
 		this.game = game;
-		renderer = new CreatureRenderer(game);
 	}
 
 	private boolean at(long tick) {

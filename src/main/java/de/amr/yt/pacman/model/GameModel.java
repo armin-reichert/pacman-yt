@@ -278,16 +278,14 @@ public class GameModel {
 	 * @return {@code true} if Pac-Man has been killed
 	 */
 	public boolean isPacManKilledByGhost(Vector2 tile) {
-		if (pacSafe) {
+		if (pacSafe || pacMan.hasPower()) {
 			return false;
 		}
-		if (pacMan.powerCountdown == 0) {
-			for (Ghost ghost : ghosts) {
-				if (ghost.tile().equals(tile)) {
-					if (ghost.state == GhostState.CHASING || ghost.state == GhostState.SCATTERING) {
-						pacMan.state = PacManState.DEAD;
-						return true;
-					}
+		for (Ghost ghost : ghosts) {
+			if (ghost.tile().equals(tile)) {
+				if (ghost.state == GhostState.CHASING || ghost.state == GhostState.SCATTERING) {
+					pacMan.state = PacManState.DEAD;
+					return true;
 				}
 			}
 		}
@@ -298,7 +296,7 @@ public class GameModel {
 	 * @return {@code true} if at least one ghost got killed
 	 */
 	public boolean isGhostKilledByPacMan() {
-		if (pacMan.powerCountdown == 0) {
+		if (!pacMan.hasPower()) {
 			return false;
 		}
 		boolean killedOne = false;

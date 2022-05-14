@@ -210,7 +210,7 @@ public class GameController {
 		} else if (game.scatterStartTicks.contains(game.attackTimer)) {
 			startScatteringPhase();
 		}
-		if (game.pacMan.powerCountdown == 0) {
+		if (!game.pacMan.hasPower()) {
 			++game.attackTimer;
 		}
 

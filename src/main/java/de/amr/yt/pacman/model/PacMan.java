@@ -63,13 +63,17 @@ public class PacMan extends Creature {
 
 	@Override
 	protected float currentSpeed() {
-		return powerCountdown == 0 ? game.playerSpeed : game.playerSpeedPowered;
+		return hasPower() ? game.playerSpeedPowered : game.playerSpeed;
 	}
 
 	@Override
 	public String toString() {
 		return "PacMan[x=%.2f, y=%.2f tile=%s, offX=%.2f, offY=%.2f, moveDir=%s, wishDir=%s]".formatted(x, y, tile(),
 				offsetX(), offsetY(), moveDir, wishDir);
+	}
+
+	public boolean hasPower() {
+		return powerCountdown > 0;
 	}
 
 	public boolean isLosingPower() {

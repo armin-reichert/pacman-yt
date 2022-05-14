@@ -29,7 +29,6 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 import de.amr.yt.pacman.model.Creature;
-import de.amr.yt.pacman.model.GameModel;
 import de.amr.yt.pacman.model.Ghost;
 import de.amr.yt.pacman.model.GhostState;
 import de.amr.yt.pacman.model.PacMan;
@@ -39,12 +38,6 @@ import de.amr.yt.pacman.model.PacManState;
  * @author Armin Reichert
  */
 public class CreatureRenderer {
-
-	private final GameModel game;
-
-	public CreatureRenderer(GameModel game) {
-		this.game = game;
-	}
 
 	public void drawPacMan(Graphics2D g, PacMan pacMan) {
 		if (pacMan.state == PacManState.DEAD) {
@@ -70,16 +63,15 @@ public class CreatureRenderer {
 		drawGuy(g, pacMan, Spritesheet.get().pac.get(pacMan.moveDir).get(pacMan.animFrame));
 	}
 
-	public void drawGhost(Graphics2D g, Ghost ghost) {
+	public void drawGhost(Graphics2D g, Ghost ghost, boolean pacManHasPower, boolean pacManLosingPower) {
 		BufferedImage sprite = null;
 		if (ghost.state == GhostState.EATEN || ghost.state == GhostState.ENTERING_HOUSE) {
 			sprite = ghost.eatenTimer > 0 ? Spritesheet.get().ghostValues.get(ghost.eatenValue)
 					: Spritesheet.get().ghostEaten.get(ghost.moveDir);
-		} else if (ghost.state == GhostState.FRIGHTENED
-				|| ghost.state == GhostState.LOCKED && game.pacMan.powerCountdown > 0) {
+		} else if (ghost.state == GhostState.FRIGHTENED || ghost.state == GhostState.LOCKED && pacManHasPower) {
 			if (ghost.animated) {
 				ghost.animFrame = frame(Spritesheet.GHOST_ANIMATION);
-				if (game.pacMan.isLosingPower()) {
+				if (pacManLosingPower) {
 					int blink = frame(20, 2) == 0 ? 0 : 2;
 					ghost.animFrame += blink;
 				}
