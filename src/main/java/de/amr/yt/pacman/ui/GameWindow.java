@@ -63,6 +63,7 @@ public class GameWindow extends JFrame {
 	private final IntroScene introScene;
 	private final PlayScene playScene;
 	private GameScene previousScene;
+	private boolean scoreVisible;
 
 	public GameWindow(GameController gameController, GameModel game, FPSCounter fpsCounter, double scale) {
 		this.game = game;
@@ -122,6 +123,7 @@ public class GameWindow extends JFrame {
 	}
 
 	public void update() {
+		scoreVisible = game.state != GameState.INTRO;
 		GameScene scene = currentScene();
 		if (previousScene != scene) {
 			scene.init();
@@ -152,18 +154,18 @@ public class GameWindow extends JFrame {
 		Graphics2D g2D = (Graphics2D) g.create();
 		g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2D.scale(scale, scale);
-		drawScore(g2D, game.state != GameState.INTRO);
+		drawScore(g2D);
 		currentScene().draw(g2D);
 		drawInfo(g2D);
 		g2D.dispose();
 	}
 
-	private void drawScore(Graphics2D g, boolean showScore) {
+	private void drawScore(Graphics2D g) {
 		g.setColor(Color.WHITE);
 		g.setFont(ss.arcadeFont);
 		g.drawString("SCORE", t(1), t(1));
 		g.drawString("LEVEL", t(18), t(1));
-		if (showScore) {
+		if (scoreVisible) {
 			g.drawString("%07d".formatted(game.score), t(7), t(1));
 			g.drawString("%03d".formatted(game.levelNumber), t(24), t(1));
 		}
