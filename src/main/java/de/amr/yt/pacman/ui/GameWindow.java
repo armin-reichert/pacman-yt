@@ -103,7 +103,6 @@ public class GameWindow extends JFrame {
 
 	private JComponent createCanvas(double scale) {
 		return new JComponent() {
-
 			{
 				Dimension size = new Dimension((int) (scale * t(World.COLS)), (int) (scale * t(World.ROWS)));
 				setPreferredSize(size);
@@ -114,13 +113,9 @@ public class GameWindow extends JFrame {
 			@Override
 			protected void paintComponent(Graphics g) {
 				super.paintComponent(g);
-				Graphics2D g2D = (Graphics2D) g.create();
-				g2D.setColor(Color.BLACK);
-				g2D.fillRect(0, 0, getWidth(), getHeight());
-				g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-				g2D.scale(scale, scale);
-				drawCurrentScene(g2D);
-				g2D.dispose();
+				g.setColor(Color.BLACK);
+				g.fillRect(0, 0, getWidth(), getHeight());
+				drawCurrentGameScene(scale, g);
 				drawPauseText(g);
 			}
 		};
@@ -133,7 +128,7 @@ public class GameWindow extends JFrame {
 			log("Scene changed from %s to %s", previousScene, scene);
 			previousScene = scene;
 		}
-		currentScene().update();
+		scene.update();
 	}
 
 	public GameScene currentScene() {
@@ -143,18 +138,32 @@ public class GameWindow extends JFrame {
 		};
 	}
 
-	private void drawCurrentScene(Graphics2D g) {
-		drawScores(g);
-		currentScene().draw(g);
-		drawInfo(g);
+	private void drawPauseText(Graphics g) {
+		if (game.paused) {
+			String text = "PAUSED";
+			g.setColor(Color.RED);
+			g.setFont(new Font(Font.MONOSPACED, Font.BOLD, 36));
+			int sw = g.getFontMetrics().stringWidth(text);
+			g.drawString(text, (getWidth() - sw) / 2, getHeight() * 3 / 4);
+		}
 	}
 
-	private void drawScores(Graphics2D g) {
+	private void drawCurrentGameScene(double scale, Graphics g) {
+		Graphics2D g2D = (Graphics2D) g.create();
+		g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		g2D.scale(scale, scale);
+		drawScore(g2D, game.state != GameState.INTRO);
+		currentScene().draw(g2D);
+		drawInfo(g2D);
+		g2D.dispose();
+	}
+
+	private void drawScore(Graphics2D g, boolean showScore) {
 		g.setColor(Color.WHITE);
 		g.setFont(ss.arcadeFont);
 		g.drawString("SCORE", t(1), t(1));
 		g.drawString("LEVEL", t(18), t(1));
-		if (game.state != GameState.INTRO) {
+		if (showScore) {
 			g.drawString("%07d".formatted(game.score), t(7), t(1));
 			g.drawString("%03d".formatted(game.levelNumber), t(24), t(1));
 		}
@@ -184,16 +193,6 @@ public class GameWindow extends JFrame {
 		}
 		if (game.state != GameState.INTRO) {
 			playScene.drawInfo(g);
-		}
-	}
-
-	private void drawPauseText(Graphics g) {
-		if (game.paused) {
-			String text = "PAUSED";
-			g.setColor(Color.RED);
-			g.setFont(new Font(Font.MONOSPACED, Font.BOLD, 36));
-			int sw = g.getFontMetrics().stringWidth(text);
-			g.drawString(text, (getWidth() - sw) / 2, getHeight() * 3 / 4);
 		}
 	}
 }
