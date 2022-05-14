@@ -58,32 +58,40 @@ public class Renderer {
 
 	public static void drawPacManAlive(Graphics2D g, PacMan pacMan) {
 		if (pacMan.animated) {
-			pacMan.animFrame = pacMan.stuck ? 0 : frame(Spritesheet.PACMAN_MOUTH_ANIMATION);
+			pacMan.animFrame = pacMan.stuck //
+					? 1 // half open mouth
+					: frame(Spritesheet.PACMAN_MOUTH_ANIMATION);
 		}
 		drawGuy(g, pacMan, Spritesheet.get().pac.get(pacMan.moveDir).get(pacMan.animFrame));
 	}
 
 	public static void drawGhost(Graphics2D g, Ghost ghost, boolean pacManHasPower, boolean pacManLosingPower) {
-		BufferedImage sprite = null;
-		if (ghost.state == GhostState.EATEN || ghost.state == GhostState.ENTERING_HOUSE) {
-			sprite = ghost.eatenTimer > 0 ? Spritesheet.get().ghostValues.get(ghost.eatenValue)
-					: Spritesheet.get().ghostEaten.get(ghost.moveDir);
-		} else if (ghost.state == GhostState.FRIGHTENED || ghost.state == GhostState.LOCKED && pacManHasPower) {
+		// frightened look (also when locked and Pac-Man has power)
+		if (ghost.state == GhostState.FRIGHTENED || ghost.state == GhostState.LOCKED && pacManHasPower) {
 			if (ghost.animated) {
 				ghost.animFrame = frame(Spritesheet.GHOST_ANIMATION);
 				if (pacManLosingPower) {
-					int blink = frame(20, 2) == 0 ? 0 : 2;
-					ghost.animFrame += blink;
+					int blinkOffset = frame(20, 2) == 0 ? 0 : 2;
+					ghost.animFrame += blinkOffset;
 				}
 			}
-			sprite = Spritesheet.get().ghostFrightened.get(ghost.animFrame);
-		} else {
+			drawGuy(g, ghost, Spritesheet.get().ghostFrightened.get(ghost.animFrame));
+		}
+
+		// eaten (eyes) or eaten (value) look
+		else if (ghost.state == GhostState.EATEN || ghost.state == GhostState.ENTERING_HOUSE) {
+			var sprite = ghost.eatenTimer > 0 //
+					? Spritesheet.get().ghostValues.get(ghost.eatenValue) //
+					: Spritesheet.get().ghostEaten.get(ghost.moveDir);
+			drawGuy(g, ghost, sprite);
+		}
+
+		else { // normal look
 			if (ghost.animated) {
 				ghost.animFrame = frame(Spritesheet.GHOST_ANIMATION);
 			}
-			sprite = Spritesheet.get().ghosts.get(ghost.id).get(ghost.moveDir).get(ghost.animFrame);
+			drawGuy(g, ghost, Spritesheet.get().ghosts.get(ghost.id).get(ghost.moveDir).get(ghost.animFrame));
 		}
-		drawGuy(g, ghost, sprite);
 	}
 
 	public static void drawGhostNormal(Graphics2D g, Ghost ghost) {
