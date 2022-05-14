@@ -58,7 +58,7 @@ public class GameController {
 		return (int) (ticks % duration) * frames / duration;
 	}
 
-	public static int frame(int[] animation) {
+	public static int frame(byte[] animation) {
 		return animation[(int) ticks % animation.length];
 	}
 
