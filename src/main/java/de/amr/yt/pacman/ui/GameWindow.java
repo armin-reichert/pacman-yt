@@ -74,7 +74,6 @@ public class GameWindow {
 		introScene = new IntroScene(game);
 		playScene = new PlayScene(game);
 		frame = new JFrame("Pac-Man");
-		frame.setResizable(false);
 		frame.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
@@ -98,7 +97,7 @@ public class GameWindow {
 				System.exit(0);
 			}
 		});
-		JComponent canvas = new JComponent() {
+		var canvas = new JComponent() {
 			{
 				Dimension size = new Dimension((int) (scale * t(World.COLS)), (int) (scale * t(World.ROWS)));
 				setPreferredSize(size);
@@ -116,6 +115,7 @@ public class GameWindow {
 			}
 		};
 		frame.add(canvas);
+		frame.setResizable(false);
 	}
 
 	public void show() {
