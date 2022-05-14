@@ -132,14 +132,15 @@ public class GameController {
 	}
 
 	public void initGame() {
+		Sounds.stopAll();
 		game.initLevel(1);
 		game.levelSymbols.clear();
 		game.levelSymbols.add(game.bonusSymbol);
 		game.lives = 3;
 		game.score = 0;
-		Sounds.stopAll();
 		enterGameState(GameState.INTRO);
-		window.currentScene().init(); // TODO
+		// must call init explicitly in case of restart of intro scene
+		window.currentScene().init();
 	}
 
 	public void startLevel() {

@@ -67,15 +67,13 @@ public class GameWindow extends JFrame {
 	public GameWindow(GameController gameController, GameModel game, FPSCounter fpsCounter, double scale) {
 		this.game = game;
 		this.fpsCounter = fpsCounter;
+		if (scale == SCALE_MAX) {
+			scale = Toolkit.getDefaultToolkit().getScreenSize().getHeight() / t(World.ROWS);
+		}
 		introScene = new IntroScene(game);
 		playScene = new PlayScene(game);
 		setTitle("Pac-Man");
 		setResizable(false);
-		if (scale == SCALE_MAX) {
-			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-			scale = screenSize.getHeight() / (World.ROWS * World.TS);
-		}
-		add(createCanvas(scale));
 		addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
@@ -99,6 +97,7 @@ public class GameWindow extends JFrame {
 				System.exit(0);
 			}
 		});
+		add(createCanvas(scale));
 	}
 
 	private JComponent createCanvas(double scale) {
