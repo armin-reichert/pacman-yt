@@ -35,7 +35,6 @@ import static de.amr.yt.pacman.model.GameModel.PINKY;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
@@ -50,7 +49,16 @@ import de.amr.yt.pacman.lib.Direction;
  */
 public class Sprites {
 
-	private static final Sprites IT = new Sprites();
+	private static Sprites IT;
+
+	static {
+		try {
+			IT = new Sprites();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.exit(42);
+		}
+	}
 
 	public static Sprites get() {
 		return IT;
@@ -74,22 +82,12 @@ public class Sprites {
 	public Map<Integer, BufferedImage> bonusValues;
 	public BufferedImage liveCount;
 
-	private Sprites() {
-		try {
-			arcadeFont = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/emulogic.ttf"));
-			arcadeFont = arcadeFont.deriveFont(8.0f);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return;
-		}
+	private Sprites() throws Exception {
+		arcadeFont = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/emulogic.ttf"));
+		arcadeFont = arcadeFont.deriveFont(8.0f);
 
-		try {
-			sheetImage = ImageIO.read(getClass().getResource("/sprites.png"));
-			mazeImage = ImageIO.read(getClass().getResource("/maze_empty.png"));
-		} catch (IOException e) {
-			e.printStackTrace();
-			return;
-		}
+		sheetImage = ImageIO.read(getClass().getResource("/sprites.png"));
+		mazeImage = ImageIO.read(getClass().getResource("/maze_empty.png"));
 
 		pac.put(RIGHT, List.of(s(0, 0), s(1, 0), s(2, 0)));
 		pac.put(LEFT, List.of(s(0, 1), s(1, 1), s(2, 0)));
