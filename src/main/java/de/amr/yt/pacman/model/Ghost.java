@@ -128,30 +128,29 @@ public class Ghost extends Creature {
 
 	@Override
 	protected float currentSpeed() {
-		// TODO: some speed values are just guesses
-		if (state != GhostState.EATEN && game.world.isTunnel(tile())) {
-			return game.ghostSpeedTunnel;
-		} else {
-			return switch (state) {
-			case LOCKED, LEAVING_HOUSE -> 0.4f * GameModel.BASE_SPEED; // TODO guess
-			case ENTERING_HOUSE, EATEN -> 2 * game.ghostSpeed; // TODO guess
-			case FRIGHTENED -> game.ghostSpeedFrightened;
-			case CHASING, SCATTERING -> game.ghostSpeed;
-			};
-		}
+		boolean tunnel = game.world.isTunnel(tile());
+		return switch (state) {
+		case CHASING -> tunnel ? game.ghostSpeedTunnel : game.ghostSpeed;
+		case EATEN -> 2 * game.ghostSpeed; // TODO guess
+		case ENTERING_HOUSE -> 2 * game.ghostSpeed;// TODO guess
+		case FRIGHTENED -> tunnel ? game.ghostSpeedTunnel : game.ghostSpeedFrightened;
+		case LEAVING_HOUSE -> 0.4f * GameModel.BASE_SPEED;// TODO guess
+		case LOCKED -> 0.4f * GameModel.BASE_SPEED;// TODO guess
+		case SCATTERING -> tunnel ? game.ghostSpeedTunnel : game.ghostSpeed;
+		};
 	}
 
 	private Vector2 computeTargetTile() {
 		return switch (state) {
-		case LOCKED, ENTERING_HOUSE, LEAVING_HOUSE -> null;
+		case CHASING -> computeChasingTarget();
 		case EATEN -> world.houseEntryTile;
-		case FRIGHTENED -> computeRandomNeighborTile();
-		case SCATTERING -> computeScatteringTargetTile();
-		case CHASING -> computeChasingTargetTile();
+		case FRIGHTENED -> selectRandomNeighbor();
+		case SCATTERING -> computeScatteringTarget();
+		default -> null;
 		};
 	}
 
-	private Vector2 computeRandomNeighborTile() {
+	private Vector2 selectRandomNeighbor() {
 		for (Direction direction : Direction.valuesShuffled()) {
 			if (direction == moveDir.opposite()) {
 				continue;
@@ -164,7 +163,7 @@ public class Ghost extends Creature {
 		return null;
 	}
 
-	private Vector2 computeScatteringTargetTile() {
+	private Vector2 computeScatteringTarget() {
 		return switch (id) {
 		case BLINKY -> world.rightUpperTarget;
 		case PINKY -> world.leftUpperTarget;
@@ -174,7 +173,7 @@ public class Ghost extends Creature {
 		};
 	}
 
-	private Vector2 computeChasingTargetTile() {
+	private Vector2 computeChasingTarget() {
 		return switch (id) {
 		case BLINKY -> game.pacMan.tile();
 		case PINKY -> {
