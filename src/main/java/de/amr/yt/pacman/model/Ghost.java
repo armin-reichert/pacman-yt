@@ -38,7 +38,8 @@ import de.amr.yt.pacman.lib.Vector2;
  */
 public class Ghost extends Creature {
 
-	private static final Direction[] DIR_ORDER = { Direction.UP, Direction.RIGHT, Direction.DOWN, Direction.LEFT };
+	static final Direction[] DIR_ORDER = { //
+			Direction.UP, Direction.LEFT, Direction.DOWN, Direction.RIGHT };
 
 	public final int id;
 	public final GameModel game;
