@@ -94,7 +94,8 @@ public class PlayScene implements GameScene {
 			g.setFont(Sprites.get().arcadeFont.deriveFont(Font.ITALIC | Font.BOLD));
 			g.drawString("GAME  OVER", t(9), t(21));
 		}
-		for (int i = 0; i < game.lives; ++i) {
+		int livesDisplayed = game.score == 0 && game.state == GameState.LEVEL_STARTING ? game.lives : game.lives - 1;
+		for (int i = 0; i < livesDisplayed; ++i) {
 			g.drawImage(Sprites.get().liveCount, t(2 + 2 * i), t(World.ROWS - 2), null);
 		}
 		for (int i = 0; i < game.levelSymbols.size(); ++i) {

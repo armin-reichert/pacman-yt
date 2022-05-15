@@ -183,22 +183,21 @@ public class GameController {
 		if (game.stateTimer == 0) {
 			game.reset();
 			game.pacMan.visible = true;
+			game.pacMan.animated = false;
 			for (Ghost ghost : game.ghosts) {
 				ghost.visible = true;
-				ghost.animated = ghost.id != BLINKY;
+				ghost.animated = false;
 			}
 		}
 
 		else if (game.stateTimer == sec(5)) {
 			game.powerPelletsBlinking = true;
 			game.pacMan.animated = true;
-			game.ghosts[BLINKY].animated = true;
+			for (Ghost ghost : game.ghosts) {
+				ghost.animated = true;
+			}
 			enterGameState(GameState.PLAYING);
 			return;
-		}
-
-		for (Ghost ghost : game.ghosts) {
-			ghost.update();
 		}
 	}
 
