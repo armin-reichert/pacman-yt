@@ -64,6 +64,10 @@ public class Vector2 {
 		return x == other.x && y == other.y;
 	}
 
+	public boolean equals(int x, int y) {
+		return this.x == x && this.y == y;
+	}
+
 	public Vector2 neighbor(Direction direction) {
 		return this.plus(direction.vector);
 	}

@@ -117,8 +117,12 @@ public class World {
 
 	public int eatenFoodCount;
 
-	private boolean inRange(int row, int col) {
-		return 0 <= row && row < ROWS && 0 <= col && col < COLS;
+	private boolean inRange(int begin, int end, int value) {
+		return begin <= value && value <= end;
+	}
+
+	private boolean inMapRange(int row, int col) {
+		return inRange(0, ROWS - 1, row) && inRange(0, COLS - 1, col);
 	}
 
 	public boolean isWaypoint(Vector2 tile) {
@@ -132,7 +136,7 @@ public class World {
 	}
 
 	public boolean isBlocked(int row, int col) {
-		return inRange(row, col) && map[row][col] == WALL;
+		return inMapRange(row, col) && map[row][col] == WALL;
 	}
 
 	public boolean isBlocked(Vector2 tile) {
@@ -140,16 +144,15 @@ public class World {
 	}
 
 	public boolean isTunnel(Vector2 tile) {
-		return inRange(tile.y, tile.x) && map[tile.y][tile.x] == TUNNEL;
+		return inMapRange(tile.y, tile.x) && map[tile.y][tile.x] == TUNNEL;
 	}
 
 	public boolean isGhostHouse(Vector2 tile) {
-		return 10 <= tile.x && tile.x <= 17 && 15 <= tile.y && tile.y <= 19;
+		return inRange(10, 17, tile.x) && inRange(15, 19, tile.y);
 	}
 
 	public boolean isOneWayDown(Vector2 tile) {
-		return (tile.x == 12 && tile.y == 13) || (tile.x == 15 && tile.y == 13) || (tile.x == 12 && tile.y == 25)
-				|| (tile.x == 15 && tile.y == 25);
+		return tile.equals(12, 13) || tile.equals(15, 13) || tile.equals(12, 25) || tile.equals(15, 25);
 	}
 
 	public boolean isPellet(Vector2 tile) {
@@ -157,7 +160,7 @@ public class World {
 	}
 
 	public boolean isPellet(int row, int col) {
-		return inRange(row, col) && map[row][col] == PELLET;
+		return inMapRange(row, col) && map[row][col] == PELLET;
 	}
 
 	public boolean isPowerPellet(Vector2 tile) {
@@ -165,15 +168,15 @@ public class World {
 	}
 
 	public boolean isPowerPellet(int row, int col) {
-		return inRange(row, col) && map[row][col] == ENERGIZER;
+		return inMapRange(row, col) && map[row][col] == ENERGIZER;
 	}
 
 	public boolean isEatenPellet(int row, int col) {
-		return inRange(row, col) && map[row][col] == PELLET_EATEN;
+		return inMapRange(row, col) && map[row][col] == PELLET_EATEN;
 	}
 
 	public boolean isEatenPowerPellet(int row, int col) {
-		return inRange(row, col) && map[row][col] == ENERGIZER_EATEN;
+		return inMapRange(row, col) && map[row][col] == ENERGIZER_EATEN;
 	}
 
 	public boolean eatPellet(Vector2 tile) {
