@@ -133,8 +133,8 @@ public class Ghost extends Creature {
 			return game.ghostSpeedTunnel;
 		} else {
 			return switch (state) {
-			case LOCKED, LEAVING_HOUSE -> 0.33f * GameModel.BASE_SPEED;
-			case ENTERING_HOUSE, EATEN -> eatenTimer > 0 ? 0 : 2 * game.ghostSpeed;
+			case LOCKED, LEAVING_HOUSE -> 0.4f * GameModel.BASE_SPEED; // TODO guess
+			case ENTERING_HOUSE, EATEN -> 2 * game.ghostSpeed; // TODO guess
 			case FRIGHTENED -> game.ghostSpeedFrightened;
 			case CHASING, SCATTERING -> game.ghostSpeed;
 			};
@@ -262,9 +262,11 @@ public class Ghost extends Creature {
 		if (about(x, entry.x, 1) && y == entry.y) {
 			state = GhostState.ENTERING_HOUSE;
 		} else {
-			aimTowardsTarget();
 			if (eatenTimer > 0) {
+				// don't move while displaying ghost value
 				--eatenTimer;
+			} else {
+				aimTowardsTarget();
 			}
 		}
 	}
