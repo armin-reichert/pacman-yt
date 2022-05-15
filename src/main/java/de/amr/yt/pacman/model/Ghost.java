@@ -23,6 +23,10 @@ SOFTWARE.
 */
 package de.amr.yt.pacman.model;
 
+import static de.amr.yt.pacman.lib.Direction.DOWN;
+import static de.amr.yt.pacman.lib.Direction.LEFT;
+import static de.amr.yt.pacman.lib.Direction.RIGHT;
+import static de.amr.yt.pacman.lib.Direction.UP;
 import static de.amr.yt.pacman.lib.Vector2.v;
 import static de.amr.yt.pacman.model.GameModel.BLINKY;
 import static de.amr.yt.pacman.model.GameModel.CLYDE;
@@ -38,8 +42,7 @@ import de.amr.yt.pacman.lib.Vector2;
  */
 public class Ghost extends Creature {
 
-	static final Direction[] DIR_ORDER = { //
-			Direction.UP, Direction.LEFT, Direction.DOWN, Direction.RIGHT };
+	static final Direction[] DIR_ORDER = { UP, LEFT, DOWN, RIGHT };
 
 	public final int id;
 	public final GameModel game;
@@ -67,22 +70,36 @@ public class Ghost extends Creature {
 
 	@Override
 	public String toString() {
-		return "Ghost[id=%d, x=%.2f, y=%.2f, tile=%s, moveDir=%s, wishDir=%s speed=%.2f]".formatted(id, x, y, tile(),
-				moveDir, wishDir, speed);
+		return "Ghost[id=%d, state=%s, x=%.2f, y=%.2f, tile=%s, target=%s, moveDir=%s, wishDir=%s speed=%.2f]".formatted(id,
+				state, x, y, tile(), targetTile, moveDir, wishDir, speed);
 	}
 
 	@Override
-	protected boolean canEnterTile(Vector2 tile) {
+	public boolean canEnterTile(Vector2 tile) {
 		if (world.isBlocked(tile)) {
 			return false;
 		}
 		if (world.isGhostHouse(tile)) {
-			return state == GhostState.ENTERING_HOUSE || state == GhostState.LEAVING_HOUSE;
+			return state == GhostState.ENTERING_HOUSE || state == GhostState.LEAVING_HOUSE || state == GhostState.LOCKED;
 		}
-		if (wishDir == Direction.UP && world.isOneWayDown(tile)) {
+		if (wishDir == UP && world.isOneWayDown(tile)) {
 			return state == GhostState.FRIGHTENED || state == GhostState.EATEN;
 		}
 		return true;
+	}
+
+	@Override
+	public float currentSpeed() {
+		boolean tunnel = game.world.isTunnel(tile());
+		return switch (state) {
+		case CHASING -> tunnel ? game.ghostSpeedTunnel : game.ghostSpeed;
+		case EATEN -> 2 * game.ghostSpeed; // TODO guess
+		case ENTERING_HOUSE -> 2 * game.ghostSpeed;// TODO guess
+		case FRIGHTENED -> tunnel ? game.ghostSpeedTunnel : game.ghostSpeedFrightened;
+		case LEAVING_HOUSE -> 0.4f * GameModel.BASE_SPEED;// TODO guess
+		case LOCKED -> 0.4f * GameModel.BASE_SPEED;// TODO guess
+		case SCATTERING -> tunnel ? game.ghostSpeedTunnel : game.ghostSpeed;
+		};
 	}
 
 	public void update() {
@@ -101,15 +118,14 @@ public class Ghost extends Creature {
 	private void aimTowardsTarget() {
 		if (enteredNewTile) {
 			targetTile = computeTargetTile();
-			takeDirectionTowardsTarget();
+			if (targetTile != null) {
+				takeDirectionTowardsTarget();
+			}
 		}
 		moveThroughWorld();
 	}
 
 	private void takeDirectionTowardsTarget() {
-		if (targetTile == null) {
-			return;
-		}
 		double minDist = Double.MAX_VALUE;
 		for (Direction direction : DIR_ORDER) {
 			if (direction == moveDir.opposite()) {
@@ -124,20 +140,6 @@ public class Ghost extends Creature {
 				}
 			}
 		}
-	}
-
-	@Override
-	protected float currentSpeed() {
-		boolean tunnel = game.world.isTunnel(tile());
-		return switch (state) {
-		case CHASING -> tunnel ? game.ghostSpeedTunnel : game.ghostSpeed;
-		case EATEN -> 2 * game.ghostSpeed; // TODO guess
-		case ENTERING_HOUSE -> 2 * game.ghostSpeed;// TODO guess
-		case FRIGHTENED -> tunnel ? game.ghostSpeedTunnel : game.ghostSpeedFrightened;
-		case LEAVING_HOUSE -> 0.4f * GameModel.BASE_SPEED;// TODO guess
-		case LOCKED -> 0.4f * GameModel.BASE_SPEED;// TODO guess
-		case SCATTERING -> tunnel ? game.ghostSpeedTunnel : game.ghostSpeed;
-		};
 	}
 
 	private Vector2 computeTargetTile() {
@@ -174,25 +176,26 @@ public class Ghost extends Creature {
 	}
 
 	private Vector2 computeChasingTarget() {
+		var pacMan = game.pacMan;
 		return switch (id) {
-		case BLINKY -> game.pacMan.tile();
+		case BLINKY -> pacMan.tile();
 		case PINKY -> {
-			Vector2 pacPlus4 = game.pacMan.tile().plus(game.pacMan.moveDir.vector.times(4));
-			if (game.pacMan.moveDir == Direction.UP) {
+			Vector2 pacPlus4 = pacMan.tile().plus(pacMan.moveDir.vector.times(4));
+			if (pacMan.moveDir == UP) {
 				// simulate overflow bug from Arcade game
 				pacPlus4 = pacPlus4.plus(v(-4, 0));
 			}
 			yield pacPlus4;
 		}
 		case INKY -> {
-			Vector2 pacPlus2 = game.pacMan.tile().plus(game.pacMan.moveDir.vector.times(2));
-			if (game.pacMan.moveDir == Direction.UP) {
+			Vector2 pacPlus2 = pacMan.tile().plus(pacMan.moveDir.vector.times(2));
+			if (pacMan.moveDir == UP) {
 				// simulate overflow bug from Arcade game
 				pacPlus2 = pacPlus2.plus(v(-2, 0));
 			}
 			yield pacPlus2.times(2).minus(game.ghosts[BLINKY].tile());
 		}
-		case CLYDE -> tile().dist(game.pacMan.tile()) < 8 ? world.leftLowerTarget : game.pacMan.tile();
+		case CLYDE -> tile().dist(pacMan.tile()) < 8 ? world.leftLowerTarget : pacMan.tile();
 		default -> null;
 		};
 	}
@@ -200,17 +203,17 @@ public class Ghost extends Creature {
 	private void leaveGhostHouse(Vector2 entry) {
 		if (y <= entry.y) { // out of house
 			y = entry.y;
-			wishDir = Direction.LEFT;
+			wishDir = LEFT;
 			state = game.chasingPhase ? GhostState.CHASING : GhostState.SCATTERING;
 			return;
 		}
 		if (about(x, entry.x, 1)) {
 			x = entry.x;
-			wishDir = moveDir = Direction.UP;
+			wishDir = moveDir = UP;
 		} else if (x < entry.x) {
-			wishDir = moveDir = Direction.RIGHT;
+			wishDir = moveDir = RIGHT;
 		} else if (x > entry.x) {
-			wishDir = moveDir = Direction.LEFT;
+			wishDir = moveDir = LEFT;
 		}
 		speed = currentSpeed();
 		move(wishDir);
@@ -221,27 +224,27 @@ public class Ghost extends Creature {
 		if (y == entry.y) {
 			// start falling down
 			x = entry.x;
-			wishDir = moveDir = Direction.DOWN;
+			wishDir = moveDir = DOWN;
 			move(wishDir);
 		} else if (y <= entry.y + t(3)) {
 			// keep falling
 			move(wishDir);
-		} else if (ghostHousePosition() == Direction.LEFT) {
+		} else if (ghostHousePosition() == LEFT) {
 			// move left
 			if (x <= entry.x - t(2)) {
 				// reached left seat
 				state = GhostState.LEAVING_HOUSE;
 			} else {
-				wishDir = Direction.LEFT;
+				wishDir = LEFT;
 				move(wishDir);
 			}
-		} else if (ghostHousePosition() == Direction.RIGHT) {
+		} else if (ghostHousePosition() == RIGHT) {
 			// move right
 			if (x >= entry.x + t(2)) {
 				// reached right seat
 				state = GhostState.LEAVING_HOUSE;
 			} else {
-				wishDir = Direction.RIGHT;
+				wishDir = RIGHT;
 				move(wishDir);
 			}
 		} else {
@@ -251,8 +254,8 @@ public class Ghost extends Creature {
 
 	private Direction ghostHousePosition() {
 		return switch (id) {
-		case INKY -> Direction.LEFT;
-		case CLYDE -> Direction.RIGHT;
+		case INKY -> LEFT;
+		case CLYDE -> RIGHT;
 		default -> null;
 		};
 	}
@@ -272,9 +275,9 @@ public class Ghost extends Creature {
 
 	private void bounce(float bottomY, float topY) {
 		if (y >= bottomY) {
-			moveDir = wishDir = Direction.UP;
+			moveDir = wishDir = UP;
 		} else if (y <= topY) {
-			moveDir = wishDir = Direction.DOWN;
+			moveDir = wishDir = DOWN;
 		}
 		speed = currentSpeed();
 		move(wishDir);

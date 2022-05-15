@@ -78,12 +78,12 @@ public abstract class Creature {
 	 * @return Tells if this creature can enter the given tile in the current situation. This may depend on the creature's
 	 *         (e.g. ghost's) current state, location etc. or on the current game state.
 	 */
-	protected abstract boolean canEnterTile(Vector2 tile);
+	public abstract boolean canEnterTile(Vector2 tile);
 
 	/**
 	 * @return the current speed (in pixels per frame)
 	 */
-	protected abstract float currentSpeed();
+	public abstract float currentSpeed();
 
 	public void placeAtTile(Vector2 tile, float offset_x, float offset_y) {
 		x = tile.x * World.TS + World.HTS + offset_x;
