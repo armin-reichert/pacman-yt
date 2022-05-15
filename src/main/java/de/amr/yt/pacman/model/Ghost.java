@@ -133,7 +133,7 @@ public class Ghost extends Creature {
 			}
 			Vector2 neighbor = tile().neighbor(direction);
 			if (canEnterTile(neighbor)) {
-				double dist = neighbor.dist(targetTile);
+				double dist = neighbor.euclideanDist(targetTile);
 				if (dist < minDist) {
 					minDist = dist;
 					wishDir = direction;
@@ -181,73 +181,76 @@ public class Ghost extends Creature {
 		case BLINKY -> pacMan.tile();
 		case PINKY -> {
 			Vector2 pacPlus4 = pacMan.tile().plus(pacMan.moveDir.vector.times(4));
-			if (pacMan.moveDir == UP) {
-				// simulate overflow bug from Arcade game
+			if (pacMan.moveDir == UP) { // simulate overflow bug from Arcade game
 				pacPlus4 = pacPlus4.plus(v(-4, 0));
 			}
 			yield pacPlus4;
 		}
 		case INKY -> {
 			Vector2 pacPlus2 = pacMan.tile().plus(pacMan.moveDir.vector.times(2));
-			if (pacMan.moveDir == UP) {
-				// simulate overflow bug from Arcade game
+			if (pacMan.moveDir == UP) { // simulate overflow bug from Arcade game
 				pacPlus2 = pacPlus2.plus(v(-2, 0));
 			}
 			yield pacPlus2.times(2).minus(game.ghosts[BLINKY].tile());
 		}
-		case CLYDE -> tile().dist(pacMan.tile()) < 8 ? world.leftLowerTarget : pacMan.tile();
+		case CLYDE -> tile().euclideanDist(pacMan.tile()) < 8 ? world.leftLowerTarget : pacMan.tile();
 		default -> null;
 		};
 	}
 
-	private void leaveGhostHouse(Vector2 entry) {
-		if (y <= entry.y) { // out of house
-			y = entry.y;
+	private void leaveGhostHouse(Vector2 houseEntry) {
+		if (y <= houseEntry.y) {
+			// out of house
+			y = houseEntry.y;
 			wishDir = LEFT;
 			state = game.chasingPhase ? GhostState.CHASING : GhostState.SCATTERING;
 			return;
 		}
-		if (about(x, entry.x, 1)) {
-			x = entry.x;
+		if (about(x, houseEntry.x, 1)) {
+			// at "lift" position
+			x = houseEntry.x;
 			wishDir = moveDir = UP;
-		} else if (x < entry.x) {
+		} else if (x < houseEntry.x) {
+			// left of "lift" position
 			wishDir = moveDir = RIGHT;
-		} else if (x > entry.x) {
+		} else if (x > houseEntry.x) {
+			// right of "lift" position
 			wishDir = moveDir = LEFT;
 		}
 		speed = currentSpeed();
 		move(wishDir);
 	}
 
-	private void enterGhostHouse(Vector2 entry) {
+	private void enterGhostHouse(Vector2 houseEntry) {
 		speed = currentSpeed();
-		if (y == entry.y) {
-			// start falling down
-			x = entry.x;
+		if (about(x, houseEntry.x, 1) && y == houseEntry.y) {
+			// enter "lift" downwards
+			x = houseEntry.x;
 			wishDir = moveDir = DOWN;
 			move(wishDir);
-		} else if (y <= entry.y + t(3)) {
-			// keep falling
+		} else if (y <= houseEntry.y + t(3)) {
+			// "lift" moves down
 			move(wishDir);
 		} else if (ghostHousePosition() == LEFT) {
-			// move left
-			if (x <= entry.x - t(2)) {
-				// reached left seat
+			if (x <= houseEntry.x - t(2)) {
+				// reached left home position
 				state = GhostState.LEAVING_HOUSE;
 			} else {
+				// move left towards home position
 				wishDir = LEFT;
 				move(wishDir);
 			}
 		} else if (ghostHousePosition() == RIGHT) {
-			// move right
-			if (x >= entry.x + t(2)) {
-				// reached right seat
+			if (x >= houseEntry.x + t(2)) {
+				// reached right home position
 				state = GhostState.LEAVING_HOUSE;
 			} else {
+				// move right towards home position
 				wishDir = RIGHT;
 				move(wishDir);
 			}
 		} else {
+			// reached center home position
 			state = GhostState.LEAVING_HOUSE;
 		}
 	}
@@ -256,7 +259,7 @@ public class Ghost extends Creature {
 		return switch (id) {
 		case INKY -> LEFT;
 		case CLYDE -> RIGHT;
-		default -> null;
+		default -> null; // CENTER
 		};
 	}
 

@@ -68,7 +68,7 @@ public class Vector2 {
 		return this.plus(direction.vector);
 	}
 
-	public double dist(Vector2 v) {
+	public double euclideanDist(Vector2 v) {
 		return Math.hypot(x - v.x, y - v.y);
 	}
 

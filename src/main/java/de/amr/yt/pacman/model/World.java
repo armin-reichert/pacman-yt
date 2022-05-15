@@ -108,8 +108,10 @@ public class World {
 	public final Vector2 rightLowerTarget = v(27, 34);
 
 	public final Vector2 bonusTile = v(13, 20);
-	public final Vector2 houseEntryTile = v(13, 14); // left house entry tile
-	public final Vector2 houseEntry = v(112, 116); // pixel position between both entry tiles
+	/** Left house entry tile */
+	public final Vector2 houseEntryTile = v(13, 14);
+	/** Pixel position of house entry */
+	public final Vector2 houseEntry = v(t(14), t(14) + World.HTS);
 	public final float houseTop = t(17);
 	public final float houseBottom = t(18);
 
