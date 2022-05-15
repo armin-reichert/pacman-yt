@@ -161,6 +161,7 @@ public class GameWindow {
 		Graphics2D g2D = (Graphics2D) g.create();
 		g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2D.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+		g2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 		g2D.scale(scale, scale);
 		drawScore(g2D);
 		currentScene().draw(g2D);

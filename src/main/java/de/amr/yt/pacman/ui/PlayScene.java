@@ -67,7 +67,7 @@ public class PlayScene implements GameScene {
 		for (int row = 0; row < World.ROWS; ++row) {
 			for (int col = 0; col < World.COLS; ++col) {
 				if (game.world.isPellet(row, col)) {
-					g.fillRect(t(col) + 3, t(row) + 3, 2, 2);
+					g.fillOval(t(col) + 3, t(row) + 3, 2, 2);
 				} else if (game.world.isPowerPellet(row, col)) {
 					if (!game.powerPelletsBlinking || frame(30, 2) == 0) {
 						g.fillOval(t(col), t(row), t(1), t(1));
@@ -95,10 +95,10 @@ public class PlayScene implements GameScene {
 			g.drawString("GAME  OVER", t(9), t(21));
 		}
 		for (int i = 0; i < game.lives; ++i) {
-			g.drawImage(Sprites.get().liveCount, t(1 + 2 * i), t(World.ROWS - 2), null);
+			g.drawImage(Sprites.get().liveCount, t(2 + 2 * i), t(World.ROWS - 2), null);
 		}
 		for (int i = 0; i < game.levelSymbols.size(); ++i) {
-			int x = t(World.COLS - 3 - 2 * i);
+			int x = t(World.COLS - 4 - 2 * i);
 			int y = t(World.ROWS - 2);
 			int symbol = game.levelSymbols.get(i);
 			g.drawImage(Sprites.get().bonusSymbols.get(symbol), x, y, null);
