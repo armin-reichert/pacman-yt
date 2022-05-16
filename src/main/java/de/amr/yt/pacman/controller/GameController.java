@@ -33,7 +33,6 @@ import static de.amr.yt.pacman.model.GameModel.PINKY;
 import java.util.Objects;
 
 import de.amr.yt.pacman.lib.Direction;
-import de.amr.yt.pacman.lib.FPSCounter;
 import de.amr.yt.pacman.lib.GameClock;
 import de.amr.yt.pacman.lib.Sounds;
 import de.amr.yt.pacman.lib.Vector2;
@@ -49,16 +48,14 @@ public class GameController {
 
 	private final GameModel game = new GameModel();
 
-	private final FPSCounter fpsCounter = new FPSCounter();
 	private Direction steering;
 	private GameWindow window;
 
 	public void createAndShowUI(double scale) {
-		window = new GameWindow(this, game, fpsCounter, scale);
+		window = new GameWindow(this, game, scale);
 		window.show();
 		initGame();
 		GameClock.get().onTick = this::step;
-		fpsCounter.start();
 		GameClock.get().start();
 	}
 
@@ -85,7 +82,7 @@ public class GameController {
 		game.lives = 3;
 		game.score = 0;
 		enterGameState(GameState.INTRO);
-		// must call init explicitly in case of restart of intro scene
+		// TODO: fixme (must call init explicitly in case of restart of intro scene)
 		window.currentScene().init();
 	}
 
@@ -101,7 +98,6 @@ public class GameController {
 			window.update();
 		}
 		window.render();
-		fpsCounter.update();
 	}
 
 	private void update() {

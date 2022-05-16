@@ -44,7 +44,6 @@ import javax.swing.JFrame;
 import de.amr.yt.pacman.controller.GameController;
 import de.amr.yt.pacman.controller.GameState;
 import de.amr.yt.pacman.lib.Direction;
-import de.amr.yt.pacman.lib.FPSCounter;
 import de.amr.yt.pacman.lib.GameClock;
 import de.amr.yt.pacman.model.GameModel;
 import de.amr.yt.pacman.model.World;
@@ -61,16 +60,14 @@ public class GameWindow {
 	private final GameModel game;
 	private final IntroScene introScene;
 	private final PlayScene playScene;
-	private final FPSCounter fpsCounter;
 	private final JFrame frame;
 	private JComponent canvas;
 	private double scale;
 	private GameScene previousScene;
 	private boolean scoreVisible;
 
-	public GameWindow(GameController gameController, GameModel game, FPSCounter fpsCounter, double scaleValue) {
+	public GameWindow(GameController gameController, GameModel game, double scaleValue) {
 		this.game = game;
-		this.fpsCounter = fpsCounter;
 		introScene = new IntroScene(game);
 		playScene = new PlayScene(game);
 		frame = new JFrame("Pac-Man");
@@ -196,7 +193,8 @@ public class GameWindow {
 		}
 		g.setColor(Color.WHITE);
 		g.setFont(new Font(Font.DIALOG, Font.PLAIN, 6));
-		g.drawString("%2d FPS (Target=%d)".formatted(fpsCounter.getFrameRate(), GameClock.get().frequency), t(1), t(2));
+		g.drawString("%2d FPS (Target=%d)".formatted(GameClock.get().fpsCounter.getFrameRate(), GameClock.get().frequency),
+				t(1), t(2));
 		String text = "%s (%d)".formatted(game.state.name(), game.stateTimer);
 		if (game.state == GameState.PLAYING) {
 			if (game.chasingPhase) {

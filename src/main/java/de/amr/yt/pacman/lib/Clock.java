@@ -28,6 +28,7 @@ package de.amr.yt.pacman.lib;
  */
 public class Clock {
 
+	public final FPSCounter fpsCounter = new FPSCounter();
 	public int frequency = 60;
 	public long ticks;
 	public Runnable onTick = () -> Logging.log("Tick");
@@ -51,21 +52,26 @@ public class Clock {
 		}
 	}
 
+	public void tick() {
+		long start = System.nanoTime();
+		onTick.run();
+		long duration = System.nanoTime() - start;
+		long period = 1_000_000_000L / frequency;
+		if (duration < period) {
+			long sleep = period - duration;
+			try {
+				Thread.sleep(sleep / 1_000_000);
+			} catch (InterruptedException e) {
+				// ignore
+			}
+		}
+		++ticks;
+		fpsCounter.update();
+	}
+
 	private void run() {
 		while (running) {
-			long start = System.nanoTime();
-			onTick.run();
-			long duration = System.nanoTime() - start;
-			long period = 1_000_000_000L / frequency;
-			if (duration < period) {
-				long sleep = period - duration;
-				try {
-					Thread.sleep(sleep / 1_000_000);
-				} catch (InterruptedException e) {
-					// ignore
-				}
-			}
-			++ticks;
+			tick();
 		}
 	}
 }
