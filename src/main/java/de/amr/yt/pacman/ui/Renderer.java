@@ -58,8 +58,8 @@ public class Renderer {
 		ARCADE_FONT = font;
 	}
 
-	public static int frame(int duration, int frames) {
-		return (int) (GameController.ticks % duration) * frames / duration;
+	public static int frame(int totalAnimationTicks, int numFrames) {
+		return (int) (GameController.ticks % totalAnimationTicks) * numFrames / totalAnimationTicks;
 	}
 
 	public static void drawPacMan(Graphics2D g, PacMan pacMan) {
@@ -81,7 +81,6 @@ public class Renderer {
 	}
 
 	public static void drawGhost(Graphics2D g, Ghost ghost, boolean blinking) {
-		// eaten (eyes) or eaten (value) look
 		if (ghost.state == GhostState.EATEN || ghost.state == GhostState.ENTERING_HOUSE) {
 			if (ghost.valueTimer > 0) {
 				drawGuy(g, ghost, Sprites.get().ghostValues.get(ghost.value));
