@@ -194,8 +194,8 @@ public class GameWindow {
 		}
 		g.setColor(Color.WHITE);
 		g.setFont(new Font(Font.DIALOG, Font.PLAIN, 6));
-		g.drawString("%2d FPS (Target=%d)".formatted(GameClock.get().fpsCounter.getFrameRate(), GameClock.get().frequency),
-				t(1), t(2));
+		g.drawString("%2d FPS (Target=%d)".formatted(GameClock.get().getFrameRate(), GameClock.get().frequency), t(1),
+				t(2));
 		String text = "%s (%d)".formatted(game.state.name(), game.stateTimer);
 		if (game.state == GameState.PLAYING) {
 			if (game.chasingPhase) {

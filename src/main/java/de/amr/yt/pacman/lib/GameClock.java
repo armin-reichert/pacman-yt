@@ -45,7 +45,6 @@ public class GameClock extends Clock {
 	@Override
 	public void start() {
 		Logging.log("Game clock starts");
-		fpsCounter.start();
 		super.start();
 	}
 
