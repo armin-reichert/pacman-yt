@@ -202,7 +202,7 @@ public class IntroScene implements GameScene {
 			ghost.move(ghost.moveDir);
 			ghost.animation.advance();
 		}
-		if (game.pacMan.x <= t(3)) { // finds power pellet
+		if (game.pacMan.x <= COL_LEFT) { // finds power pellet
 			game.pacMan.moveDir = Direction.RIGHT;
 			for (var ghost : game.ghosts) {
 				ghost.moveDir = Direction.RIGHT;
@@ -296,7 +296,7 @@ public class IntroScene implements GameScene {
 		}
 		if (!powerPelletsBlinking || frame(passed, 30, 2) == 0) {
 			g.setColor(Color.PINK);
-			g.fillOval(t(3), t(20), t(1), t(1));
+			g.fillOval(COL_LEFT, t(20), t(1), t(1));
 		}
 	}
 
