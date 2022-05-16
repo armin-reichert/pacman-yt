@@ -45,21 +45,18 @@ public class Clock {
 	public void start() {
 		countStart = System.nanoTime();
 		running = true;
-		thread = new Thread(this::run);
+		thread = new Thread(() -> {
+			while (running) {
+				tick();
+			}
+		});
 		thread.run();
-	}
-
-	private void run() {
-		while (running) {
-			tick();
-		}
 	}
 
 	public void stop() {
 		running = false;
 		try {
 			thread.join();
-			Logging.log("Game clock stopped");
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
