@@ -120,20 +120,27 @@ public class PlayScene implements GameScene {
 
 	private void drawPacManState(Graphics2D g, PacMan pacMan) {
 		if (pacMan.visible) {
-			g.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 6));
+			g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 6));
 			g.setColor(Color.WHITE);
 			String text = pacMan.isLosingPower() ? "LOSING POWER" : pacMan.state.name();
 			int sw = g.getFontMetrics().stringWidth(text);
 			g.drawString(text, (int) pacMan.x - sw / 2, (int) pacMan.y - 8);
+			text = "(%d,%d)".formatted(pacMan.tile().x, pacMan.tile().y);
+			sw = g.getFontMetrics().stringWidth(text);
+			g.drawString(text, (int) pacMan.x - sw / 2, (int) pacMan.y + 12);
 		}
 	}
 
 	private void drawGhostState(Graphics2D g, Ghost ghost) {
 		if (ghost.visible) {
-			g.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 6));
+			g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 6));
 			g.setColor(Color.WHITE);
-			int sw = g.getFontMetrics().stringWidth(ghost.state.name());
-			g.drawString(ghost.state.name(), (int) ghost.x - sw / 2, (int) ghost.y - 8);
+			String text = ghost.state.name();
+			int sw = g.getFontMetrics().stringWidth(text);
+			g.drawString(text, (int) ghost.x - sw / 2, (int) ghost.y - 8);
+			text = "(%d,%d)".formatted(ghost.tile().x, ghost.tile().y);
+			sw = g.getFontMetrics().stringWidth(text);
+			g.drawString(text, (int) ghost.x - sw / 2, (int) ghost.y + 12);
 		}
 	}
 

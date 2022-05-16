@@ -41,7 +41,7 @@ public abstract class Creature {
 		return Math.abs(value - exactValue) <= delta;
 	}
 
-	public final World world;
+	public World world;
 	public float x;
 	public float y;
 	public float speed;
