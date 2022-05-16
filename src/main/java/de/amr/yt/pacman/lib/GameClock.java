@@ -28,14 +28,14 @@ package de.amr.yt.pacman.lib;
  */
 public class GameClock extends Clock {
 
-	private static final GameClock IT = new GameClock();
+	private static final GameClock THE_GAME_CLOCK = new GameClock();
 
 	public static GameClock get() {
-		return IT;
+		return THE_GAME_CLOCK;
 	}
 
 	public static int sec(double seconds) {
-		return (int) (IT.frequency * seconds);
+		return (int) (THE_GAME_CLOCK.frequency * seconds);
 	}
 
 	public GameClock() {
