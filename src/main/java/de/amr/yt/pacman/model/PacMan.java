@@ -24,7 +24,6 @@ SOFTWARE.
 package de.amr.yt.pacman.model;
 
 import static de.amr.yt.pacman.lib.GameClock.sec;
-import static de.amr.yt.pacman.lib.SpriteAnimation.nfold;
 
 import de.amr.yt.pacman.lib.SpriteAnimation;
 import de.amr.yt.pacman.lib.Vector2;
@@ -51,8 +50,8 @@ public class PacMan extends Creature {
 		this.game = game;
 		animStanding = new SpriteAnimation("standing", 2, false);
 		animStuck = new SpriteAnimation("stuck", 1, false);
-		animWalking = new SpriteAnimation("walking", nfold(2, new byte[] { 1, 0, 1, 2 }), true);
-		animDying = new SpriteAnimation("dying", nfold(6, new byte[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }), false);
+		animWalking = new SpriteAnimation("walking", new byte[] { 1, 0, 1, 2 }, 2, true);
+		animDying = new SpriteAnimation("dying", new byte[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }, 6, false);
 		reset();
 	}
 

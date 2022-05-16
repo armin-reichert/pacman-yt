@@ -38,8 +38,8 @@ import static de.amr.yt.pacman.ui.Renderer.drawPacMan;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-import de.amr.yt.pacman.lib.GameClock;
 import de.amr.yt.pacman.lib.Direction;
+import de.amr.yt.pacman.lib.GameClock;
 import de.amr.yt.pacman.model.GameModel;
 import de.amr.yt.pacman.model.World;
 
@@ -203,6 +203,7 @@ public class IntroScene implements GameScene {
 				ghost.moveDir = Direction.RIGHT;
 				ghost.speed = game.ghostSpeedFrightened;
 				ghost.animation = ghost.animFrightened;
+				ghost.animFrightened.enabled = true;
 			}
 			pacManChasingGhosts = true;
 		}

@@ -1,35 +1,38 @@
+/**
+ * 
+ */
 package de.amr.yt.pacman.lib;
 
 /**
  * @author Armin Reichert
+ *
  */
 public class SpriteAnimation {
-
-	public static byte[] nfold(int n, byte[] frames) {
-		byte[] result = new byte[frames.length * n];
-		for (int i = 0; i < frames.length; ++i) {
-			for (int j = 0; j < n; ++j) {
-				result[n * i + j] = frames[i];
-			}
-		}
-		return result;
-	}
 
 	public static int frame(long clock, int totalAnimationTicks, int numFrames) {
 		return (int) (clock % totalAnimationTicks) * numFrames / totalAnimationTicks;
 	}
 
 	public final String name;
+	public final boolean cycle;
 	public boolean enabled;
-	private final byte[] frames;
-	private final boolean cycle;
-	private int index;
+
+	private byte[] frames;
+	private int majorIndex;
+	private int minorIndex;
+	private int frameLength;
+
+	public SpriteAnimation(String name, byte[] frames, int frameLength, boolean cycle) {
+		this.name = name;
+		this.cycle = cycle;
+		this.frames = frames;
+		this.frameLength = frameLength;
+		this.majorIndex = 0;
+		this.minorIndex = 0;
+	}
 
 	public SpriteAnimation(String name, byte[] frames, boolean cycle) {
-		this.name = name;
-		this.frames = frames;
-		this.enabled = true;
-		this.cycle = cycle;
+		this(name, frames, 1, cycle);
 	}
 
 	public SpriteAnimation(String name, int singleFrame, boolean cycle) {
@@ -42,20 +45,35 @@ public class SpriteAnimation {
 	}
 
 	public void reset() {
-		index = 0;
+		majorIndex = 0;
+		minorIndex = 0;
 	}
 
 	public int frame() {
-		return frames[index];
+		return frames[majorIndex];
 	}
 
 	public void advance() {
-		if (enabled) {
-			if (index < frames.length - 1) {
-				++index;
+		if (!enabled) {
+			return;
+		}
+		if (frameLength == 1) {
+			advanceMajorIndex();
+		} else {
+			if (minorIndex < frameLength - 1) {
+				++minorIndex;
 			} else {
-				index = cycle ? 0 : frames.length - 1;
+				advanceMajorIndex();
+				minorIndex = 0;
 			}
+		}
+	}
+
+	private void advanceMajorIndex() {
+		if (majorIndex < frames.length - 1) {
+			++majorIndex;
+		} else {
+			majorIndex = cycle ? 0 : frames.length - 1;
 		}
 	}
 }

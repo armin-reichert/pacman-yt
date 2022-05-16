@@ -27,7 +27,6 @@ import static de.amr.yt.pacman.lib.Direction.DOWN;
 import static de.amr.yt.pacman.lib.Direction.LEFT;
 import static de.amr.yt.pacman.lib.Direction.RIGHT;
 import static de.amr.yt.pacman.lib.Direction.UP;
-import static de.amr.yt.pacman.lib.SpriteAnimation.nfold;
 import static de.amr.yt.pacman.lib.Vector2.v;
 import static de.amr.yt.pacman.model.GameModel.BLINKY;
 import static de.amr.yt.pacman.model.GameModel.CLYDE;
@@ -61,8 +60,8 @@ public class Ghost extends Creature {
 		super(game.world);
 		this.game = game;
 		this.id = id;
-		animNormal = new SpriteAnimation("normal", nfold(8, new byte[] { 0, 1 }), true);
-		animFrightened = new SpriteAnimation("frightened", nfold(8, new byte[] { 0, 1 }), true);
+		animNormal = new SpriteAnimation("normal", new byte[] { 0, 1 }, 8, true);
+		animFrightened = new SpriteAnimation("frightened", new byte[] { 0, 1 }, 8, true);
 		reset();
 	}
 
