@@ -25,6 +25,7 @@ package de.amr.yt.pacman.ui;
 
 import static de.amr.yt.pacman.controller.GameController.sec;
 import static de.amr.yt.pacman.lib.Logging.log;
+import static de.amr.yt.pacman.lib.SpriteAnimation.frame;
 import static de.amr.yt.pacman.model.GameModel.BLINKY;
 import static de.amr.yt.pacman.model.GameModel.CLYDE;
 import static de.amr.yt.pacman.model.GameModel.INKY;
@@ -33,7 +34,6 @@ import static de.amr.yt.pacman.model.World.t;
 import static de.amr.yt.pacman.ui.Renderer.drawGhost;
 import static de.amr.yt.pacman.ui.Renderer.drawGhostValue;
 import static de.amr.yt.pacman.ui.Renderer.drawPacMan;
-import static de.amr.yt.pacman.ui.Renderer.frame;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -273,7 +273,7 @@ public class IntroScene implements GameScene {
 	private void drawPointsAwarded(Graphics2D g) {
 		g.setColor(Color.PINK);
 		g.fillRect(t(10) + 3, t(24) + 3, 2, 2);
-		if (!powerPelletsBlinking || frame(30, 2) == 0) {
+		if (!powerPelletsBlinking || frame(passed, 30, 2) == 0) {
 			g.fillOval(t(10), t(26), t(1), t(1));
 		}
 		g.setColor(Color.WHITE);
@@ -289,14 +289,14 @@ public class IntroScene implements GameScene {
 		if (pacManChasingGhosts) {
 			return;
 		}
-		if (!powerPelletsBlinking || frame(30, 2) == 0) {
+		if (!powerPelletsBlinking || frame(passed, 30, 2) == 0) {
 			g.setColor(Color.PINK);
 			g.fillOval(t(3), t(20), t(1), t(1));
 		}
 	}
 
 	private void drawPressSpaceToPlay(Graphics2D g) {
-		if (frame(60, 2) == 0) {
+		if (frame(passed, 60, 2) == 0) {
 			g.setColor(Color.WHITE);
 			g.setFont(Renderer.ARCADE_FONT);
 			g.drawString("PRESS SPACE TO PLAY", t(4), t(32));

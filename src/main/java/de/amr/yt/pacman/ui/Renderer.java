@@ -23,6 +23,7 @@ SOFTWARE.
 */
 package de.amr.yt.pacman.ui;
 
+import static de.amr.yt.pacman.lib.SpriteAnimation.frame;
 import static de.amr.yt.pacman.model.GameModel.BLINKY;
 import static de.amr.yt.pacman.model.GameModel.CLYDE;
 import static de.amr.yt.pacman.model.GameModel.INKY;
@@ -58,10 +59,6 @@ public class Renderer {
 		ARCADE_FONT = font;
 	}
 
-	public static int frame(int totalAnimationTicks, int numFrames) {
-		return (int) (GameController.ticks % totalAnimationTicks) * numFrames / totalAnimationTicks;
-	}
-
 	public static void drawPacMan(Graphics2D g, PacMan pacMan) {
 		if (pacMan.animation == pacMan.animDying) {
 			drawGuy(g, pacMan, Sprites.get().pacDead.get(pacMan.animation.frame()));
@@ -90,7 +87,7 @@ public class Renderer {
 		}
 
 		else if (ghost.animation == ghost.animFrightened) {
-			int blinkingOffset = !blinking || frame(20, 2) == 0 ? 0 : 2;
+			int blinkingOffset = !blinking || frame(GameController.ticks, 20, 2) == 0 ? 0 : 2;
 			drawGuy(g, ghost, Sprites.get().ghostBlue.get(ghost.animation.frame() + blinkingOffset));
 		}
 

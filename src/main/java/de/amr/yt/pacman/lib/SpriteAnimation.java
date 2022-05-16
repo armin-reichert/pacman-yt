@@ -15,6 +15,10 @@ public class SpriteAnimation {
 		return result;
 	}
 
+	public static int frame(long clock, int totalAnimationTicks, int numFrames) {
+		return (int) (clock % totalAnimationTicks) * numFrames / totalAnimationTicks;
+	}
+
 	public final String name;
 	public boolean enabled;
 	private final byte[] frames;
