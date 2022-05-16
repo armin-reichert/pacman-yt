@@ -60,12 +60,16 @@ public class SpriteAnimation {
 		if (frameLength == 1) {
 			advanceMajorIndex();
 		} else {
-			if (minorIndex < frameLength - 1) {
-				++minorIndex;
-			} else {
-				advanceMajorIndex();
-				minorIndex = 0;
-			}
+			advanceMinorIndex();
+		}
+	}
+
+	private void advanceMinorIndex() {
+		if (minorIndex < frameLength - 1) {
+			++minorIndex;
+		} else {
+			advanceMajorIndex();
+			minorIndex = 0;
 		}
 	}
 
