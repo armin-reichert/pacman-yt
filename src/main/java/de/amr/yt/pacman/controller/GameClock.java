@@ -21,51 +21,39 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-package de.amr.yt.pacman.lib;
+package de.amr.yt.pacman.controller;
+
+import de.amr.yt.pacman.lib.Clock;
+import de.amr.yt.pacman.lib.Logging;
 
 /**
  * @author Armin Reichert
  */
-public class Clock {
+public class GameClock extends Clock {
 
-	public int frequency = 60;
-	public long ticks;
-	public Runnable onTick = () -> Logging.log("Tick");
+	private static final GameClock IT = new GameClock();
 
-	private Thread thread;
-	private boolean running;
+	public static GameClock get() {
+		return IT;
+	}
 
+	public static int sec(double seconds) {
+		return (int) (IT.frequency * seconds);
+	}
+
+	public GameClock() {
+		frequency = 60;
+	}
+
+	@Override
 	public void start() {
-		running = true;
-		thread = new Thread(this::run);
-		thread.run();
+		Logging.log("Game clock starts");
+		super.start();
 	}
 
+	@Override
 	public void stop() {
-		running = false;
-		try {
-			thread.join();
-			Logging.log("Game clock stopped");
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-	}
-
-	private void run() {
-		while (running) {
-			long start = System.nanoTime();
-			onTick.run();
-			long duration = System.nanoTime() - start;
-			long period = 1_000_000_000L / frequency;
-			if (duration < period) {
-				long sleep = period - duration;
-				try {
-					Thread.sleep(sleep / 1_000_000);
-				} catch (InterruptedException e) {
-					// ignore
-				}
-			}
-			++ticks;
-		}
+		Logging.log("Game clock stopped");
+		super.stop();
 	}
 }

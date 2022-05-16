@@ -23,7 +23,7 @@ SOFTWARE.
 */
 package de.amr.yt.pacman.ui;
 
-import static de.amr.yt.pacman.lib.Clock.sec;
+import static de.amr.yt.pacman.controller.GameClock.sec;
 import static de.amr.yt.pacman.lib.Logging.log;
 import static de.amr.yt.pacman.lib.SpriteAnimation.frame;
 import static de.amr.yt.pacman.model.GameModel.BLINKY;
@@ -38,8 +38,8 @@ import static de.amr.yt.pacman.ui.Renderer.drawPacMan;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
+import de.amr.yt.pacman.controller.GameClock;
 import de.amr.yt.pacman.lib.Direction;
-import de.amr.yt.pacman.lib.Clock;
 import de.amr.yt.pacman.model.GameModel;
 import de.amr.yt.pacman.model.World;
 
@@ -66,7 +66,7 @@ public class IntroScene implements GameScene {
 
 	@Override
 	public void init() {
-		log("IntroScene init, start time=%d", Clock.ticks);
+		log("IntroScene init, start time=%d", GameClock.get().ticks);
 		passed = 0;
 		game.pacMan.reset();
 		game.pacMan.x = t(World.COLS);

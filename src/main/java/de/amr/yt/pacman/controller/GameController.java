@@ -23,7 +23,7 @@ SOFTWARE.
 */
 package de.amr.yt.pacman.controller;
 
-import static de.amr.yt.pacman.lib.Clock.sec;
+import static de.amr.yt.pacman.controller.GameClock.sec;
 import static de.amr.yt.pacman.lib.Logging.log;
 import static de.amr.yt.pacman.model.GameModel.BLINKY;
 import static de.amr.yt.pacman.model.GameModel.CLYDE;
@@ -34,7 +34,6 @@ import java.util.Objects;
 
 import de.amr.yt.pacman.lib.Direction;
 import de.amr.yt.pacman.lib.FPSCounter;
-import de.amr.yt.pacman.lib.Clock;
 import de.amr.yt.pacman.lib.Sounds;
 import de.amr.yt.pacman.lib.Vector2;
 import de.amr.yt.pacman.model.GameModel;
@@ -57,13 +56,13 @@ public class GameController {
 		window = new GameWindow(this, game, fpsCounter, scale);
 		window.show();
 		initGame();
-		Clock.onTick = this::step;
+		GameClock.get().onTick = this::step;
 		fpsCounter.start();
-		Clock.start();
+		GameClock.get().start();
 	}
 
 	public void exit() {
-		Clock.stop();
+		GameClock.get().stop();
 		System.exit(0);
 	}
 
