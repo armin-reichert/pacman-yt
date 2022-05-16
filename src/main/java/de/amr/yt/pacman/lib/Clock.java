@@ -42,6 +42,12 @@ public class Clock {
 		thread.run();
 	}
 
+	private void run() {
+		while (running) {
+			tick();
+		}
+	}
+
 	public void stop() {
 		running = false;
 		try {
@@ -67,11 +73,5 @@ public class Clock {
 		}
 		++ticks;
 		fpsCounter.update();
-	}
-
-	private void run() {
-		while (running) {
-			tick();
-		}
 	}
 }
