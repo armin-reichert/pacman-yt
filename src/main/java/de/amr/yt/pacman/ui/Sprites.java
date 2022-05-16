@@ -43,11 +43,11 @@ import de.amr.yt.pacman.lib.Direction;
  */
 public class Sprites {
 
-	private static Sprites IT;
+	private static Sprites THEM;
 
 	static {
 		try {
-			IT = new Sprites();
+			THEM = new Sprites();
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(42);
@@ -55,7 +55,7 @@ public class Sprites {
 	}
 
 	public static Sprites get() {
-		return IT;
+		return THEM;
 	}
 
 	public BufferedImage mazeImage;
@@ -71,6 +71,14 @@ public class Sprites {
 	public List<BufferedImage> bonusSymbols;
 	public Map<Integer, BufferedImage> bonusValues;
 	public BufferedImage liveCount;
+
+	private BufferedImage s(int col, int row) {
+		return s(16 * col, 16 * row, 16, 16);
+	}
+
+	private BufferedImage s(int x, int y, int w, int h) {
+		return sheetImage.getSubimage(x, y, w, h);
+	}
 
 	private Sprites() throws Exception {
 		sheetImage = ImageIO.read(getClass().getResource("/sprites.png"));
@@ -138,13 +146,5 @@ public class Sprites {
 				5000, s(60, 192, 24, 16)); //
 
 		liveCount = s(8, 1);
-	}
-
-	private BufferedImage s(int col, int row) {
-		return sheetImage.getSubimage(16 * col, 16 * row, 16, 16);
-	}
-
-	private BufferedImage s(int x, int y, int w, int h) {
-		return sheetImage.getSubimage(x, y, w, h);
 	}
 }
