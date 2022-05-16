@@ -33,7 +33,6 @@ import static de.amr.yt.pacman.model.GameModel.PINKY;
 import java.util.Objects;
 
 import de.amr.yt.pacman.lib.Direction;
-import de.amr.yt.pacman.lib.GameClock;
 import de.amr.yt.pacman.lib.Sounds;
 import de.amr.yt.pacman.lib.Vector2;
 import de.amr.yt.pacman.model.GameModel;
@@ -54,14 +53,6 @@ public class GameController {
 	public void createAndShowUI(double scale) {
 		window = new GameWindow(this, game, scale);
 		window.show();
-		initGame();
-		GameClock.get().onTick = this::step;
-		GameClock.get().start();
-	}
-
-	public void exit() {
-		GameClock.get().stop();
-		System.exit(0);
 	}
 
 	public void enterGameState(GameState state) {
@@ -92,7 +83,7 @@ public class GameController {
 		}
 	}
 
-	private void step() {
+	public void step() {
 		if (!game.paused) {
 			update();
 			window.update();

@@ -23,6 +23,8 @@ SOFTWARE.
 */
 package de.amr.yt.pacman.controller;
 
+import de.amr.yt.pacman.lib.GameClock;
+
 /**
  * @author Armin Reichert
  */
@@ -35,5 +37,8 @@ public class PacManApp {
 		}
 		GameController controller = new GameController();
 		controller.createAndShowUI(scale);
+		controller.initGame();
+		GameClock.get().onTick = controller::step;
+		GameClock.get().start();
 	}
 }
