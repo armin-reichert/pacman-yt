@@ -23,13 +23,13 @@ SOFTWARE.
 */
 package de.amr.yt.pacman.ui;
 
-import static de.amr.yt.pacman.controller.GameController.frame;
 import static de.amr.yt.pacman.model.World.t;
 import static de.amr.yt.pacman.ui.Renderer.drawGhost;
 import static de.amr.yt.pacman.ui.Renderer.drawGhostState;
 import static de.amr.yt.pacman.ui.Renderer.drawGhostTarget;
 import static de.amr.yt.pacman.ui.Renderer.drawPacMan;
 import static de.amr.yt.pacman.ui.Renderer.drawPacManState;
+import static de.amr.yt.pacman.ui.Renderer.frame;
 
 import java.awt.Color;
 import java.awt.Font;

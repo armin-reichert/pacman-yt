@@ -44,10 +44,10 @@ import de.amr.yt.pacman.lib.Vector2;
  */
 public class Ghost extends Creature {
 
-	public final SpriteAnimation normalAnimation = new SpriteAnimation("ghost-normal", nfold(8, new byte[] { 0, 1 }),
-			true);
+	public final SpriteAnimation normalAnimation = new SpriteAnimation("ghost-normal", //
+			nfold(8, new byte[] { 0, 1 }), true);
 
-	public final SpriteAnimation frightenedAnimation = new SpriteAnimation("ghost-frightened",
+	public final SpriteAnimation frightenedAnimation = new SpriteAnimation("ghost-frightened", //
 			nfold(8, new byte[] { 0, 1 }), true);
 
 	static final Direction[] DIR_ORDER = { UP, LEFT, DOWN, RIGHT };

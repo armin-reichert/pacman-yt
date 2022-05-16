@@ -23,7 +23,6 @@ SOFTWARE.
 */
 package de.amr.yt.pacman.ui;
 
-import static de.amr.yt.pacman.controller.GameController.frame;
 import static de.amr.yt.pacman.controller.GameController.sec;
 import static de.amr.yt.pacman.lib.Logging.log;
 import static de.amr.yt.pacman.model.GameModel.BLINKY;
@@ -35,6 +34,7 @@ import static de.amr.yt.pacman.ui.Renderer.drawGhost;
 import static de.amr.yt.pacman.ui.Renderer.drawGhostFrightened;
 import static de.amr.yt.pacman.ui.Renderer.drawGhostValue;
 import static de.amr.yt.pacman.ui.Renderer.drawPacMan;
+import static de.amr.yt.pacman.ui.Renderer.frame;
 
 import java.awt.Color;
 import java.awt.Graphics2D;

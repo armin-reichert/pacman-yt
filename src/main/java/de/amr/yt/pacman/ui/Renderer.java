@@ -23,7 +23,6 @@ SOFTWARE.
 */
 package de.amr.yt.pacman.ui;
 
-import static de.amr.yt.pacman.controller.GameController.frame;
 import static de.amr.yt.pacman.model.GameModel.BLINKY;
 import static de.amr.yt.pacman.model.GameModel.CLYDE;
 import static de.amr.yt.pacman.model.GameModel.INKY;
@@ -35,6 +34,7 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
+import de.amr.yt.pacman.controller.GameController;
 import de.amr.yt.pacman.model.Creature;
 import de.amr.yt.pacman.model.Ghost;
 import de.amr.yt.pacman.model.GhostState;
@@ -56,6 +56,10 @@ public class Renderer {
 			font = new Font(Font.SANS_SERIF, Font.BOLD, 8);
 		}
 		ARCADE_FONT = font;
+	}
+
+	public static int frame(int duration, int frames) {
+		return (int) (GameController.ticks % duration) * frames / duration;
 	}
 
 	public static void drawPacMan(Graphics2D g, PacMan pacMan) {
@@ -99,12 +103,8 @@ public class Renderer {
 	}
 
 	public static void drawGhostFrightened(Graphics2D g, Ghost ghost, boolean blinking) {
-		int frame = ghost.animation.frame();
-		if (blinking) {
-			int blinkOffset = frame(20, 2) == 0 ? 0 : 2;
-			frame += blinkOffset;
-		}
-		drawGuy(g, ghost, Sprites.get().ghostFrightened.get(frame));
+		int blinkingOffset = !blinking || frame(20, 2) == 0 ? 0 : 2;
+		drawGuy(g, ghost, Sprites.get().ghostFrightened.get(ghost.animation.frame() + blinkingOffset));
 		ghost.animation.advance();
 	}
 

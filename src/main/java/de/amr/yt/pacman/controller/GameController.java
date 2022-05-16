@@ -54,10 +54,6 @@ public class GameController {
 		return (int) (n * FPS);
 	}
 
-	public static int frame(int duration, int frames) {
-		return (int) (ticks % duration) * frames / duration;
-	}
-
 	private final GameModel game = new GameModel();
 
 	private final FPSCounter fpsCounter = new FPSCounter();
@@ -222,6 +218,7 @@ public class GameController {
 			for (Ghost ghost : game.ghosts) {
 				if (ghost.state == GhostState.CHASING || ghost.state == GhostState.SCATTERING) {
 					ghost.state = GhostState.FRIGHTENED;
+					ghost.animation.enabled = true;
 					ghost.reverse();
 				}
 			}

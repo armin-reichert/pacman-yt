@@ -171,14 +171,12 @@ public class GameModel {
 		pacMan.wishDir = Direction.LEFT;
 		pacMan.moveDir = Direction.LEFT;
 		pacMan.speed = playerSpeed;
-		pacMan.walkingAnimation.enabled = false;
 		pacMan.state = PacManState.NORMAL;
 
 		ghosts[BLINKY].placeAtTile(world.blinkyHomeTile, World.HTS, 0);
 		ghosts[BLINKY].wishDir = Direction.LEFT;
 		ghosts[BLINKY].moveDir = Direction.LEFT;
 		ghosts[BLINKY].speed = ghostSpeed;
-		ghosts[BLINKY].normalAnimation.enabled = false;
 		ghosts[BLINKY].targetTile = null;
 		ghosts[BLINKY].state = GhostState.LOCKED;
 
@@ -186,7 +184,6 @@ public class GameModel {
 		ghosts[INKY].wishDir = Direction.UP;
 		ghosts[INKY].moveDir = Direction.UP;
 		ghosts[INKY].speed = ghostSpeed;
-		ghosts[INKY].normalAnimation.enabled = false;
 		ghosts[INKY].targetTile = null;
 		ghosts[INKY].state = GhostState.LOCKED;
 
@@ -194,7 +191,6 @@ public class GameModel {
 		ghosts[PINKY].wishDir = Direction.DOWN;
 		ghosts[PINKY].moveDir = Direction.DOWN;
 		ghosts[PINKY].speed = ghostSpeed;
-		ghosts[PINKY].normalAnimation.enabled = false;
 		ghosts[PINKY].targetTile = null;
 		ghosts[PINKY].state = GhostState.LOCKED;
 
@@ -202,7 +198,6 @@ public class GameModel {
 		ghosts[CLYDE].wishDir = Direction.UP;
 		ghosts[CLYDE].moveDir = Direction.UP;
 		ghosts[CLYDE].speed = ghostSpeed;
-		ghosts[CLYDE].normalAnimation.enabled = false;
 		ghosts[CLYDE].targetTile = null;
 		ghosts[CLYDE].state = GhostState.LOCKED;
 	}
