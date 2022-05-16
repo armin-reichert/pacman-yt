@@ -81,11 +81,10 @@ public class Renderer {
 	}
 
 	public static void drawGhost(Graphics2D g, Ghost ghost, boolean blinking) {
-
 		// eaten (eyes) or eaten (value) look
 		if (ghost.state == GhostState.EATEN || ghost.state == GhostState.ENTERING_HOUSE) {
-			if (ghost.eatenTimer > 0) {
-				drawGuy(g, ghost, Sprites.get().ghostValues.get(ghost.eatenValue));
+			if (ghost.valueTimer > 0) {
+				drawGuy(g, ghost, Sprites.get().ghostValues.get(ghost.value));
 			} else {
 				drawGuy(g, ghost, Sprites.get().ghostEyes.get(ghost.moveDir));
 			}

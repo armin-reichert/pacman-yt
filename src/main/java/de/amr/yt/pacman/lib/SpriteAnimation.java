@@ -36,6 +36,13 @@ public class SpriteAnimation {
 		this.cycle = cycle;
 	}
 
+	public SpriteAnimation(String name, int singleFrame, boolean cycle) {
+		this.name = name;
+		this.frames = new byte[] { (byte) singleFrame };
+		this.enabled = true;
+		this.cycle = cycle;
+	}
+
 	@Override
 	public String toString() {
 		return "%s %s".formatted(name, (enabled ? " enabled" : "disabled"));

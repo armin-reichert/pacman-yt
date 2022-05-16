@@ -44,27 +44,25 @@ import de.amr.yt.pacman.lib.Vector2;
  */
 public class Ghost extends Creature {
 
-	public final SpriteAnimation normalAnimation = new SpriteAnimation("ghost-normal", //
-			nfold(8, new byte[] { 0, 1 }), true);
-
-	public final SpriteAnimation frightenedAnimation = new SpriteAnimation("ghost-frightened", //
-			nfold(8, new byte[] { 0, 1 }), true);
-
 	static final Direction[] DIR_ORDER = { UP, LEFT, DOWN, RIGHT };
 
 	public final int id;
 	public final GameModel game;
+	public final SpriteAnimation normalAnimation;
+	public final SpriteAnimation frightenedAnimation;
+
 	public GhostState state;
 	public Vector2 targetTile;
-	public long eatenTimer;
-	public int eatenValue;
-
+	public long valueTimer;
+	public int value;
 	public SpriteAnimation animation;
 
 	public Ghost(GameModel game, int id) {
 		super(game.world);
 		this.game = game;
 		this.id = id;
+		normalAnimation = new SpriteAnimation("ghost-normal", nfold(8, new byte[] { 0, 1 }), true);
+		frightenedAnimation = new SpriteAnimation("ghost-frightened", nfold(8, new byte[] { 0, 1 }), true);
 		reset();
 	}
 
@@ -74,8 +72,8 @@ public class Ghost extends Creature {
 		canReverse = false;
 		state = GhostState.CHASING;
 		targetTile = null;
-		eatenTimer = 0;
-		eatenValue = 0;
+		valueTimer = 0;
+		value = 0;
 		animation = normalAnimation;
 	}
 
@@ -89,7 +87,6 @@ public class Ghost extends Creature {
 		}
 		case ENTERING_HOUSE -> {
 			enterGhostHouse(world.houseEntry);
-			animation = normalAnimation;// TODO
 		}
 		case LEAVING_HOUSE -> {
 			leaveGhostHouse(world.houseEntry);
@@ -105,7 +102,6 @@ public class Ghost extends Creature {
 		}
 		case EATEN -> {
 			returnToGhostHouse(world.houseEntry);
-			animation = normalAnimation; // TODO
 		}
 		}
 		animation.advance();
@@ -297,9 +293,9 @@ public class Ghost extends Creature {
 		if (about(x, entry.x, 1) && y == entry.y) {
 			state = GhostState.ENTERING_HOUSE;
 		} else {
-			if (eatenTimer > 0) {
+			if (valueTimer > 0) {
 				// don't move while displaying ghost value
-				--eatenTimer;
+				--valueTimer;
 			} else {
 				aimTowardsTarget();
 			}

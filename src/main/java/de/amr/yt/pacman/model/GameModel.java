@@ -304,15 +304,15 @@ public class GameModel {
 					score += 12000;
 				}
 				ghost.state = GhostState.EATEN;
-				ghost.eatenTimer = sec(1);
-				ghost.eatenValue = switch (ghostsKilledByCurrentPowerPellet) {
+				ghost.valueTimer = sec(1);
+				ghost.value = switch (ghostsKilledByCurrentPowerPellet) {
 				case 1 -> 200;
 				case 2 -> 400;
 				case 3 -> 800;
 				case 4 -> 1600;
 				default -> 0;
 				};
-				score += ghost.eatenValue;
+				score += ghost.value;
 			}
 		}
 		return killedOne;

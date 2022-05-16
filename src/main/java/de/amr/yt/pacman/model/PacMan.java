@@ -50,15 +50,10 @@ public class PacMan extends Creature {
 	public PacMan(GameModel game) {
 		super(game.world);
 		this.game = game;
-		standingAnimation = new SpriteAnimation("pacman-standing", //
-				new byte[] { 2 }, false);
-		stuckAnimation = new SpriteAnimation("pacman-stuck", //
-				new byte[] { 1 }, false);
-		walkingAnimation = new SpriteAnimation("pacman-walking", //
-				nfold(2, bytes(1, 0, 1, 2)), true);
-		dyingAnimation = new SpriteAnimation("pacman-dying", //
-				nfold(6, bytes(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10)), false);
-
+		standingAnimation = new SpriteAnimation("pacman-standing", 2, false);
+		stuckAnimation = new SpriteAnimation("pacman-stuck", 1, false);
+		walkingAnimation = new SpriteAnimation("pacman-walking", nfold(2, bytes(1, 0, 1, 2)), true);
+		dyingAnimation = new SpriteAnimation("pacman-dying", nfold(6, bytes(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10)), false);
 		reset();
 	}
 
