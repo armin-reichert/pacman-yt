@@ -171,7 +171,7 @@ public class GameWindow {
 
 	private void drawScore(Graphics2D g) {
 		g.setColor(Color.WHITE);
-		g.setFont(Sprites.get().arcadeFont);
+		g.setFont(Renderer.ARCADE_FONT);
 		g.drawString("SCORE", t(1), t(1));
 		g.drawString("LEVEL", t(18), t(1));
 		if (scoreVisible) {

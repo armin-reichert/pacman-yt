@@ -26,7 +26,10 @@ package de.amr.yt.pacman.ui;
 import static de.amr.yt.pacman.controller.GameController.frame;
 import static de.amr.yt.pacman.model.World.t;
 import static de.amr.yt.pacman.ui.Renderer.drawGhost;
+import static de.amr.yt.pacman.ui.Renderer.drawGhostState;
+import static de.amr.yt.pacman.ui.Renderer.drawGhostTarget;
 import static de.amr.yt.pacman.ui.Renderer.drawPacMan;
+import static de.amr.yt.pacman.ui.Renderer.drawPacManState;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -36,7 +39,6 @@ import java.awt.image.BufferedImage;
 import de.amr.yt.pacman.controller.GameState;
 import de.amr.yt.pacman.model.GameModel;
 import de.amr.yt.pacman.model.Ghost;
-import de.amr.yt.pacman.model.PacMan;
 import de.amr.yt.pacman.model.World;
 
 /**
@@ -87,11 +89,11 @@ public class PlayScene implements GameScene {
 		}
 		if (game.state == GameState.READY) {
 			g.setColor(Color.YELLOW);
-			g.setFont(Sprites.get().arcadeFont.deriveFont(Font.ITALIC | Font.BOLD));
+			g.setFont(Renderer.ARCADE_FONT.deriveFont(Font.ITALIC | Font.BOLD));
 			g.drawString("READY!", t(11), t(21));
 		} else if (game.state == GameState.GAME_OVER) {
 			g.setColor(Color.RED);
-			g.setFont(Sprites.get().arcadeFont.deriveFont(Font.ITALIC | Font.BOLD));
+			g.setFont(Renderer.ARCADE_FONT.deriveFont(Font.ITALIC | Font.BOLD));
 			g.drawString("GAME  OVER", t(9), t(21));
 		}
 		int livesDisplayed = game.score == 0 && game.state == GameState.LEVEL_STARTING ? game.lives : game.lives - 1;
@@ -118,36 +120,4 @@ public class PlayScene implements GameScene {
 		}
 	}
 
-	private void drawPacManState(Graphics2D g, PacMan pacMan) {
-		if (pacMan.visible) {
-			g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 6));
-			g.setColor(Color.WHITE);
-			String text = pacMan.isLosingPower() ? "LOSING POWER" : pacMan.state.name();
-			int sw = g.getFontMetrics().stringWidth(text);
-			g.drawString(text, (int) pacMan.x - sw / 2, (int) pacMan.y - 8);
-			text = "(%d,%d)".formatted(pacMan.tile().x, pacMan.tile().y);
-			sw = g.getFontMetrics().stringWidth(text);
-			g.drawString(text, (int) pacMan.x - sw / 2, (int) pacMan.y + 12);
-		}
-	}
-
-	private void drawGhostState(Graphics2D g, Ghost ghost) {
-		if (ghost.visible) {
-			g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 6));
-			g.setColor(Color.WHITE);
-			String text = ghost.state.name();
-			int sw = g.getFontMetrics().stringWidth(text);
-			g.drawString(text, (int) ghost.x - sw / 2, (int) ghost.y - 8);
-			text = "(%d,%d)".formatted(ghost.tile().x, ghost.tile().y);
-			sw = g.getFontMetrics().stringWidth(text);
-			g.drawString(text, (int) ghost.x - sw / 2, (int) ghost.y + 12);
-		}
-	}
-
-	private void drawGhostTarget(Graphics2D g, Ghost ghost) {
-		if (ghost.visible && ghost.targetTile != null) {
-			g.setColor(Sprites.get().ghostColor(ghost.id));
-			g.drawRect(t(ghost.targetTile.x) + 2, t(ghost.targetTile.y) + 2, 4, 4);
-		}
-	}
 }

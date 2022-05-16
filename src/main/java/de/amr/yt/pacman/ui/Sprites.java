@@ -27,13 +27,7 @@ import static de.amr.yt.pacman.lib.Direction.DOWN;
 import static de.amr.yt.pacman.lib.Direction.LEFT;
 import static de.amr.yt.pacman.lib.Direction.RIGHT;
 import static de.amr.yt.pacman.lib.Direction.UP;
-import static de.amr.yt.pacman.model.GameModel.BLINKY;
-import static de.amr.yt.pacman.model.GameModel.CLYDE;
-import static de.amr.yt.pacman.model.GameModel.INKY;
-import static de.amr.yt.pacman.model.GameModel.PINKY;
 
-import java.awt.Color;
-import java.awt.Font;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -69,7 +63,6 @@ public class Sprites {
 
 	public BufferedImage mazeImage;
 	public BufferedImage sheetImage;
-	public Font arcadeFont;
 
 	// sprite caches
 	public EnumMap<Direction, List<BufferedImage>> pac = new EnumMap<>(Direction.class);
@@ -83,9 +76,6 @@ public class Sprites {
 	public BufferedImage liveCount;
 
 	private Sprites() throws Exception {
-		arcadeFont = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/emulogic.ttf"));
-		arcadeFont = arcadeFont.deriveFont(8.0f);
-
 		sheetImage = ImageIO.read(getClass().getResource("/sprites.png"));
 		mazeImage = ImageIO.read(getClass().getResource("/maze_empty.png"));
 
@@ -151,16 +141,6 @@ public class Sprites {
 				5000, s(60, 192, 24, 16)); //
 
 		liveCount = s(8, 1);
-	}
-
-	public Color ghostColor(int id) {
-		return switch (id) {
-		case BLINKY -> Color.RED;
-		case PINKY -> new Color(252, 181, 255);
-		case INKY -> Color.CYAN;
-		case CLYDE -> new Color(253, 192, 90);
-		default -> null;
-		};
 	}
 
 	private BufferedImage s(int col, int row) {

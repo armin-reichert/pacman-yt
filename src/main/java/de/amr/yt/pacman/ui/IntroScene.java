@@ -240,7 +240,7 @@ public class IntroScene implements GameScene {
 
 	private void drawHeading(Graphics2D g) {
 		g.setColor(Color.WHITE);
-		g.setFont(Sprites.get().arcadeFont);
+		g.setFont(Renderer.ARCADE_FONT);
 		g.drawString("CHARACTER / NICKNAME", t(6), t(6));
 	}
 
@@ -249,14 +249,14 @@ public class IntroScene implements GameScene {
 	}
 
 	private void drawGhostCharacter(Graphics2D g, int id) {
-		g.setColor(Sprites.get().ghostColor(id));
-		g.setFont(Sprites.get().arcadeFont);
+		g.setColor(Renderer.ghostColor(id));
+		g.setFont(Renderer.ARCADE_FONT);
 		g.drawString("-" + GHOST_CHARACTERS[id], t(6), t(6 + 3 * id) + World.HTS + 12);
 	}
 
 	private void drawGhostNickname(Graphics2D g, int id) {
-		g.setColor(Sprites.get().ghostColor(id));
-		g.setFont(Sprites.get().arcadeFont);
+		g.setColor(Renderer.ghostColor(id));
+		g.setFont(Renderer.ARCADE_FONT);
 		g.drawString("\"" + GHOST_NICKNAMES[id] + "\"", t(17), t(6 + 3 * id) + World.HTS + 12);
 	}
 
@@ -267,10 +267,10 @@ public class IntroScene implements GameScene {
 			g.fillOval(t(10), t(26), t(1), t(1));
 		}
 		g.setColor(Color.WHITE);
-		g.setFont(Sprites.get().arcadeFont);
+		g.setFont(Renderer.ARCADE_FONT);
 		g.drawString("10", t(12), t(25));
 		g.drawString("50", t(12), t(27));
-		g.setFont(Sprites.get().arcadeFont.deriveFont(6.0f));
+		g.setFont(Renderer.ARCADE_FONT.deriveFont(6.0f));
 		g.drawString("PTS", t(15), t(25));
 		g.drawString("PTS", t(15), t(27));
 	}
@@ -288,7 +288,7 @@ public class IntroScene implements GameScene {
 	private void drawPressSpaceToPlay(Graphics2D g) {
 		if (frame(60, 2) == 0) {
 			g.setColor(Color.WHITE);
-			g.setFont(Sprites.get().arcadeFont);
+			g.setFont(Renderer.ARCADE_FONT);
 			g.drawString("PRESS SPACE TO PLAY", t(4), t(32));
 		}
 	}

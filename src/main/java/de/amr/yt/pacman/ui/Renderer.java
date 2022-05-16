@@ -24,7 +24,14 @@ SOFTWARE.
 package de.amr.yt.pacman.ui;
 
 import static de.amr.yt.pacman.controller.GameController.frame;
+import static de.amr.yt.pacman.model.GameModel.BLINKY;
+import static de.amr.yt.pacman.model.GameModel.CLYDE;
+import static de.amr.yt.pacman.model.GameModel.INKY;
+import static de.amr.yt.pacman.model.GameModel.PINKY;
+import static de.amr.yt.pacman.model.World.t;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
@@ -38,6 +45,19 @@ import de.amr.yt.pacman.model.PacManState;
  * @author Armin Reichert
  */
 public class Renderer {
+
+	public static final Font ARCADE_FONT;
+
+	static {
+		Font font;
+		try {
+			font = Font.createFont(Font.TRUETYPE_FONT, Renderer.class.getResourceAsStream("/emulogic.ttf")).deriveFont(8f);
+		} catch (Exception e) {
+			e.printStackTrace();
+			font = new Font(Font.SANS_SERIF, Font.BOLD, 8);
+		}
+		ARCADE_FONT = font;
+	}
 
 	public static void drawPacMan(Graphics2D g, PacMan pacMan) {
 		if (pacMan.state == PacManState.DEAD) {
@@ -63,6 +83,16 @@ public class Renderer {
 					: frame(Sprites.PACMAN_MOUTH_ANIMATION);
 		}
 		drawGuy(g, pacMan, Sprites.get().pac.get(pacMan.moveDir).get(pacMan.animFrame));
+	}
+
+	public static Color ghostColor(int id) {
+		return switch (id) {
+		case BLINKY -> Color.RED;
+		case PINKY -> new Color(252, 181, 255);
+		case INKY -> Color.CYAN;
+		case CLYDE -> new Color(253, 192, 90);
+		default -> null;
+		};
 	}
 
 	public static void drawGhost(Graphics2D g, Ghost ghost, boolean pacManHasPower, boolean pacManLosingPower) {
@@ -111,6 +141,39 @@ public class Renderer {
 			int x = (int) guy.x - sprite.getWidth() / 2;
 			int y = (int) guy.y - sprite.getHeight() / 2;
 			g.drawImage(sprite, x, y, sprite.getWidth(), sprite.getHeight(), null);
+		}
+	}
+
+	public static void drawPacManState(Graphics2D g, PacMan pacMan) {
+		if (pacMan.visible) {
+			g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 6));
+			g.setColor(Color.WHITE);
+			String text = pacMan.isLosingPower() ? "LOSING POWER" : pacMan.state.name();
+			int sw = g.getFontMetrics().stringWidth(text);
+			g.drawString(text, (int) pacMan.x - sw / 2, (int) pacMan.y - 8);
+			text = "(%d,%d)".formatted(pacMan.tile().x, pacMan.tile().y);
+			sw = g.getFontMetrics().stringWidth(text);
+			g.drawString(text, (int) pacMan.x - sw / 2, (int) pacMan.y + 12);
+		}
+	}
+
+	public static void drawGhostState(Graphics2D g, Ghost ghost) {
+		if (ghost.visible) {
+			g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 6));
+			g.setColor(Color.WHITE);
+			String text = ghost.state.name();
+			int sw = g.getFontMetrics().stringWidth(text);
+			g.drawString(text, (int) ghost.x - sw / 2, (int) ghost.y - 8);
+			text = "(%d,%d)".formatted(ghost.tile().x, ghost.tile().y);
+			sw = g.getFontMetrics().stringWidth(text);
+			g.drawString(text, (int) ghost.x - sw / 2, (int) ghost.y + 12);
+		}
+	}
+
+	public static void drawGhostTarget(Graphics2D g, Ghost ghost) {
+		if (ghost.visible && ghost.targetTile != null) {
+			g.setColor(ghostColor(ghost.id));
+			g.drawRect(t(ghost.targetTile.x) + 2, t(ghost.targetTile.y) + 2, 4, 4);
 		}
 	}
 }
