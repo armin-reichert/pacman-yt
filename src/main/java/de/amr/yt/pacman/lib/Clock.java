@@ -31,25 +31,16 @@ public class Clock {
 	public int frequency = 60;
 	public long ticks;
 	public Runnable onTick = () -> Logging.log("Tick");
-	private long frameRate;
+
+	private Thread thread;
+	private boolean running;
+	private long lastFameRate;
 	private long frameCount;
 	private long countStart;
 
 	public long getFrameRate() {
-		return frameRate;
+		return lastFameRate;
 	}
-
-	public void update() {
-		++frameCount;
-		if (System.nanoTime() - countStart >= 1_000_000_000) {
-			frameRate = frameCount;
-			frameCount = 0;
-			countStart = System.nanoTime();
-		}
-	}
-
-	private Thread thread;
-	private boolean running;
 
 	public void start() {
 		countStart = System.nanoTime();
@@ -74,7 +65,7 @@ public class Clock {
 		}
 	}
 
-	public void tick() {
+	private void tick() {
 		long start = System.nanoTime();
 		onTick.run();
 		long duration = System.nanoTime() - start;
@@ -90,7 +81,7 @@ public class Clock {
 		++ticks;
 		++frameCount;
 		if (System.nanoTime() - countStart >= 1_000_000_000) {
-			frameRate = frameCount;
+			lastFameRate = frameCount;
 			frameCount = 0;
 			countStart = System.nanoTime();
 		}
