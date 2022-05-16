@@ -25,7 +25,9 @@ package de.amr.yt.pacman.model;
 
 import static de.amr.yt.pacman.controller.GameController.sec;
 
+import de.amr.yt.pacman.lib.SpriteAnimation;
 import de.amr.yt.pacman.lib.Vector2;
+import de.amr.yt.pacman.ui.Sprites;
 
 /**
  * @author Armin Reichert
@@ -39,6 +41,7 @@ public class PacMan extends Creature {
 	public int dyingAnimationCountdown;
 	public final int dyingAnimationDuration = sec(1.5);
 	public final int losingPowerDuration = sec(2);
+	public SpriteAnimation mouthAnimation = new SpriteAnimation(Sprites.PACMAN_MOUTH_ANIMATION);
 
 	public PacMan(GameModel game) {
 		super(game.world);

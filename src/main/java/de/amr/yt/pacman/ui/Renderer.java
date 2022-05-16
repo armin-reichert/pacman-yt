@@ -71,7 +71,7 @@ public class Renderer {
 		if (pacMan.dyingAnimationCountdown > 0) {
 			int frame = 10 - (10 * pacMan.dyingAnimationCountdown / pacMan.dyingAnimationDuration);
 			drawGuy(g, pacMan, Sprites.get().pacDeadAnimation.get(frame));
-		} else if (!pacMan.animated) {
+		} else if (false /* TODO */) {
 			drawGuy(g, pacMan, Sprites.get().pac.get(pacMan.moveDir).get(2)); // full face
 		}
 	}
@@ -80,8 +80,8 @@ public class Renderer {
 		if (pacMan.stuck) {
 			drawGuy(g, pacMan, Sprites.get().pac.get(pacMan.moveDir).get(1));
 		} else {
-			drawGuy(g, pacMan, Sprites.get().pac.get(pacMan.moveDir).get(pacMan.animFrame(Sprites.PACMAN_MOUTH_ANIMATION)));
-			pacMan.advanceAnimation(Sprites.PACMAN_MOUTH_ANIMATION);
+			drawGuy(g, pacMan, Sprites.get().pac.get(pacMan.moveDir).get(pacMan.mouthAnimation.frame()));
+			pacMan.mouthAnimation.advance();
 		}
 	}
 
@@ -115,19 +115,18 @@ public class Renderer {
 	}
 
 	public static void drawGhostNormal(Graphics2D g, Ghost ghost) {
-		drawGuy(g, ghost,
-				Sprites.get().ghosts.get(ghost.id).get(ghost.moveDir).get(ghost.animFrame(Sprites.GHOST_ANIMATION)));
-		ghost.advanceAnimation(Sprites.GHOST_ANIMATION);
+		drawGuy(g, ghost, Sprites.get().ghosts.get(ghost.id).get(ghost.moveDir).get(ghost.feetAnimation.frame()));
+		ghost.feetAnimation.advance();
 	}
 
 	public static void drawGhostFrightened(Graphics2D g, Ghost ghost, boolean blinking) {
-		int frame = ghost.animFrame(Sprites.GHOST_ANIMATION);
+		int frame = ghost.feetAnimation.frame();
 		if (blinking) {
 			int blinkOffset = frame(20, 2) == 0 ? 0 : 2;
 			frame += blinkOffset;
 		}
 		drawGuy(g, ghost, Sprites.get().ghostFrightened.get(frame));
-		ghost.advanceAnimation(Sprites.GHOST_ANIMATION);
+		ghost.feetAnimation.advance();
 	}
 
 	public static void drawGhostValue(Graphics2D g, Ghost ghost, int value) {

@@ -35,7 +35,9 @@ import static de.amr.yt.pacman.model.GameModel.PINKY;
 import static de.amr.yt.pacman.model.World.t;
 
 import de.amr.yt.pacman.lib.Direction;
+import de.amr.yt.pacman.lib.SpriteAnimation;
 import de.amr.yt.pacman.lib.Vector2;
+import de.amr.yt.pacman.ui.Sprites;
 
 /**
  * @author Armin Reichert
@@ -50,6 +52,8 @@ public class Ghost extends Creature {
 	public Vector2 targetTile;
 	public long eatenTimer;
 	public int eatenValue;
+
+	public SpriteAnimation feetAnimation = new SpriteAnimation(Sprites.GHOST_ANIMATION);
 
 	public Ghost(GameModel game, int id) {
 		super(game.world);

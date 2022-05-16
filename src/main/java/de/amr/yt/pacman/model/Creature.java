@@ -48,8 +48,6 @@ public abstract class Creature {
 	public boolean enteredNewTile;
 	public boolean canReverse;
 	public boolean stuck;
-	public boolean animated;
-	public int animationIndex;
 	public boolean visible;
 	public Direction moveDir;
 	public Direction wishDir;
@@ -66,8 +64,6 @@ public abstract class Creature {
 		enteredNewTile = false;
 		canReverse = false;
 		stuck = false;
-		animated = false;
-		animationIndex = 0;
 		visible = true;
 		moveDir = Direction.LEFT;
 		wishDir = Direction.LEFT;
@@ -128,16 +124,6 @@ public abstract class Creature {
 			moveDir = wishDir;
 		}
 		enteredNewTile = true;
-	}
-
-	public int animFrame(byte[] animation) {
-		return animation[animationIndex];
-	}
-
-	public void advanceAnimation(byte[] animation) {
-		if (animated) {
-			animationIndex = (animationIndex + 1) % animation.length;
-		}
 	}
 
 	public void moveThroughWorld() {

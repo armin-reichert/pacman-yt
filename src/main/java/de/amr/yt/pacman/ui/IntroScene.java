@@ -74,14 +74,14 @@ public class IntroScene implements GameScene {
 		game.pacMan.y = t(20) + World.HTS;
 		game.pacMan.speed = game.playerSpeed;
 		game.pacMan.moveDir = Direction.LEFT;
-		game.pacMan.animated = true;
+		game.pacMan.mouthAnimation.enabled = true;
 		for (var ghost : game.ghosts) {
 			ghost.reset();
 			ghost.x = game.pacMan.x + t(3) + ghost.id * 16;
 			ghost.y = game.pacMan.y;
 			ghost.speed = game.pacMan.speed * 1.05f;
 			ghost.moveDir = game.pacMan.moveDir;
-			ghost.animated = true;
+			ghost.feetAnimation.enabled = true;
 		}
 		powerPelletsBlinking = false;
 		pacManChasingGhosts = false;
@@ -219,12 +219,12 @@ public class IntroScene implements GameScene {
 				game.ghosts[ghostEaten].visible = false;
 			}
 			for (var ghost : game.ghosts) {
-				ghost.animated = false;
+				ghost.feetAnimation.enabled = false;
 			}
 		} else {
 			game.pacMan.move(game.pacMan.moveDir);
 			for (var ghost : game.ghosts) {
-				ghost.animated = true;
+				ghost.feetAnimation.enabled = true;
 				ghost.move(ghost.moveDir);
 			}
 			if (game.pacMan.x > game.ghosts[3].x) {
