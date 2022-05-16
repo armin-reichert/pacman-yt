@@ -31,6 +31,7 @@ import de.amr.yt.pacman.lib.Logging;
 public class GameClock {
 
 	public static final int FPS = 60;
+	public static final long FRAME_NANOS = 1_000_000_000L / FPS;
 
 	public static long ticks;
 
@@ -61,14 +62,13 @@ public class GameClock {
 
 	private static void run() {
 		while (running) {
-			long frameStart = System.nanoTime();
+			long start = System.nanoTime();
 			onTick.run();
-			long frameDuration = System.nanoTime() - frameStart;
-			long targetFrameDuration = 1_000_000_000L / FPS;
-			if (frameDuration < targetFrameDuration) {
-				long sleepMillis = (targetFrameDuration - frameDuration) / 1_000_000;
+			long duration = System.nanoTime() - start;
+			if (duration < FRAME_NANOS) {
+				long sleep = FRAME_NANOS - duration;
 				try {
-					Thread.sleep(sleepMillis);
+					Thread.sleep(sleep / 1_000_000);
 				} catch (InterruptedException e) {
 					// ignore
 				}
