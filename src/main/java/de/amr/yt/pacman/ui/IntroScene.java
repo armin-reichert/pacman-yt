@@ -104,40 +104,40 @@ public class IntroScene implements GameScene {
 			drawHeading(g);
 		}
 		if (passed >= sec(2.0)) {
-			drawGhostImage(g, BLINKY);
+			drawGhostImage(g, BLINKY, t(3), t(6) + World.HTS);
 		}
 		if (passed >= sec(3.0)) {
-			drawGhostCharacter(g, BLINKY);
+			drawGhostCharacter(g, BLINKY, t(6), t(6) + World.HTS + 12);
 		}
 		if (passed >= sec(3.5)) {
-			drawGhostNickname(g, BLINKY);
+			drawGhostNickname(g, BLINKY, t(17), t(6) + World.HTS + 12);
 		}
 		if (passed >= sec(4.0)) {
-			drawGhostImage(g, PINKY);
+			drawGhostImage(g, PINKY, t(3), t(9) + World.HTS);
 		}
 		if (passed >= sec(5.0)) {
-			drawGhostCharacter(g, PINKY);
+			drawGhostCharacter(g, PINKY, t(6), t(9) + World.HTS + 12);
 		}
 		if (passed >= sec(5.5)) {
-			drawGhostNickname(g, PINKY);
+			drawGhostNickname(g, PINKY, t(17), t(9) + World.HTS + 12);
 		}
 		if (passed >= sec(6.0)) {
-			drawGhostImage(g, INKY);
+			drawGhostImage(g, INKY, t(3), t(12) + World.HTS);
 		}
 		if (passed >= sec(7.0)) {
-			drawGhostCharacter(g, INKY);
+			drawGhostCharacter(g, INKY, t(6), t(12) + World.HTS + 12);
 		}
 		if (passed >= sec(7.5)) {
-			drawGhostNickname(g, INKY);
+			drawGhostNickname(g, INKY, t(17), t(12) + World.HTS + 12);
 		}
 		if (passed >= sec(8.0)) {
-			drawGhostImage(g, CLYDE);
+			drawGhostImage(g, CLYDE, t(3), t(15) + World.HTS);
 		}
 		if (passed >= sec(9.0)) {
-			drawGhostCharacter(g, CLYDE);
+			drawGhostCharacter(g, CLYDE, t(6), t(15) + World.HTS + 12);
 		}
 		if (passed >= sec(9.5)) {
-			drawGhostNickname(g, CLYDE);
+			drawGhostNickname(g, CLYDE, t(17), t(15) + World.HTS + 12);
 		}
 		if (passed >= sec(10.0)) {
 			drawPointsAwarded(g);
@@ -254,20 +254,20 @@ public class IntroScene implements GameScene {
 		g.drawString("CHARACTER / NICKNAME", t(6), t(6));
 	}
 
-	private void drawGhostImage(Graphics2D g, int id) {
-		g.drawImage(Sprites.get().ghosts.get(id).get(Direction.RIGHT).get(0), t(3), t(6 + 3 * id) + World.HTS, null);
+	private void drawGhostImage(Graphics2D g, int id, int x, int y) {
+		g.drawImage(Sprites.get().ghosts.get(id).get(Direction.RIGHT).get(0), x, y, null);
 	}
 
-	private void drawGhostCharacter(Graphics2D g, int id) {
+	private void drawGhostCharacter(Graphics2D g, int id, int x, int y) {
 		g.setColor(Renderer.ghostColor(id));
 		g.setFont(Renderer.ARCADE_FONT);
-		g.drawString("-" + GHOST_CHARACTERS[id], t(6), t(6 + 3 * id) + World.HTS + 12);
+		g.drawString("-" + GHOST_CHARACTERS[id], x, y);
 	}
 
-	private void drawGhostNickname(Graphics2D g, int id) {
+	private void drawGhostNickname(Graphics2D g, int id, int x, int y) {
 		g.setColor(Renderer.ghostColor(id));
 		g.setFont(Renderer.ARCADE_FONT);
-		g.drawString("\"" + GHOST_NICKNAMES[id] + "\"", t(17), t(6 + 3 * id) + World.HTS + 12);
+		g.drawString("\"" + GHOST_NICKNAMES[id] + "\"", x, y);
 	}
 
 	private void drawPointsAwarded(Graphics2D g) {
