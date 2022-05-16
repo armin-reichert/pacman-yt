@@ -21,14 +21,12 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-package de.amr.yt.pacman.controller;
-
-import de.amr.yt.pacman.lib.Logging;
+package de.amr.yt.pacman.lib;
 
 /**
  * @author Armin Reichert
  */
-public class GameClock {
+public class Clock {
 
 	public static final int FPS = 60;
 	public static final long FRAME_NANOS = 1_000_000_000L / FPS;
@@ -41,7 +39,7 @@ public class GameClock {
 
 	public static Runnable onTick = () -> System.out.println("Tick");
 
-	private static final Thread thread = new Thread(GameClock::run);
+	private static final Thread thread = new Thread(Clock::run);
 	private static boolean running;
 
 	public static void start() {

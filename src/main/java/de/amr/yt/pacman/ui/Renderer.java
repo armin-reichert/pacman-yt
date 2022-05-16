@@ -35,7 +35,7 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
-import de.amr.yt.pacman.controller.GameClock;
+import de.amr.yt.pacman.lib.Clock;
 import de.amr.yt.pacman.model.Creature;
 import de.amr.yt.pacman.model.Ghost;
 import de.amr.yt.pacman.model.GhostState;
@@ -87,7 +87,7 @@ public class Renderer {
 		}
 
 		else if (ghost.animation == ghost.animFrightened) {
-			int blinkingOffset = !blinking || frame(GameClock.ticks, 20, 2) == 0 ? 0 : 2;
+			int blinkingOffset = !blinking || frame(Clock.ticks, 20, 2) == 0 ? 0 : 2;
 			drawGuy(g, ghost, Sprites.get().ghostBlue.get(ghost.animation.frame() + blinkingOffset));
 		}
 

@@ -23,7 +23,7 @@ SOFTWARE.
 */
 package de.amr.yt.pacman.model;
 
-import static de.amr.yt.pacman.controller.GameClock.sec;
+import static de.amr.yt.pacman.lib.Clock.sec;
 
 import java.util.ArrayList;
 import java.util.List;
