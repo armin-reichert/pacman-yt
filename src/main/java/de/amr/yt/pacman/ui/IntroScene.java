@@ -203,7 +203,6 @@ public class IntroScene implements GameScene {
 				ghost.moveDir = Direction.RIGHT;
 				ghost.speed = game.ghostSpeedFrightened;
 				ghost.animation = ghost.animFrightened;
-				ghost.animFrightened.enabled = true;
 			}
 			pacManChasingGhosts = true;
 		}

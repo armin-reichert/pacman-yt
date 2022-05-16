@@ -25,6 +25,7 @@ public class SpriteAnimation {
 	public SpriteAnimation(String name, byte[] frames, int frameLength, boolean cycle) {
 		this.name = name;
 		this.cycle = cycle;
+		this.enabled = true;
 		this.frames = frames;
 		this.frameLength = frameLength;
 		this.majorIndex = 0;
