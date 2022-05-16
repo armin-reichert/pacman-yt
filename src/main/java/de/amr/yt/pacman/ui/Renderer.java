@@ -68,7 +68,6 @@ public class Renderer {
 		} else {
 			drawGuy(g, pacMan, Sprites.get().pac.get(pacMan.moveDir).get(pacMan.animation.frame()));
 		}
-		pacMan.animation.advance();
 	}
 
 	public static Color ghostColor(int id) {
@@ -98,14 +97,12 @@ public class Renderer {
 
 		else { // normal look
 			drawGuy(g, ghost, Sprites.get().ghosts.get(ghost.id).get(ghost.moveDir).get(ghost.animation.frame()));
-			ghost.animation.advance();
 		}
 	}
 
 	public static void drawGhostFrightened(Graphics2D g, Ghost ghost, boolean blinking) {
 		int blinkingOffset = !blinking || frame(20, 2) == 0 ? 0 : 2;
 		drawGuy(g, ghost, Sprites.get().ghostFrightened.get(ghost.animation.frame() + blinkingOffset));
-		ghost.animation.advance();
 	}
 
 	public static void drawGhostValue(Graphics2D g, Ghost ghost, int value) {
@@ -128,7 +125,7 @@ public class Renderer {
 			int sw = g.getFontMetrics().stringWidth(text);
 			g.drawString(text, (int) pacMan.x - sw / 2, (int) pacMan.y - 8);
 			text = "(%d,%d)".formatted(pacMan.tile().x, pacMan.tile().y);
-			text += " " + pacMan.animation.name;
+			text += " " + pacMan.animation;
 			sw = g.getFontMetrics().stringWidth(text);
 			g.drawString(text, (int) pacMan.x - sw / 2, (int) pacMan.y + 12);
 		}
@@ -142,7 +139,7 @@ public class Renderer {
 			int sw = g.getFontMetrics().stringWidth(text);
 			g.drawString(text, (int) ghost.x - sw / 2, (int) ghost.y - 8);
 			text = "(%d,%d)".formatted(ghost.tile().x, ghost.tile().y);
-			text += " " + ghost.animation.name;
+			text += " " + ghost.animation;
 			sw = g.getFontMetrics().stringWidth(text);
 			g.drawString(text, (int) ghost.x - sw / 2, (int) ghost.y + 12);
 		}

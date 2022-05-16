@@ -193,8 +193,10 @@ public class IntroScene implements GameScene {
 	 */
 	private void updateGhostsChasingPacMan() {
 		game.pacMan.move(game.pacMan.moveDir);
+		game.pacMan.animation.advance();
 		for (var ghost : game.ghosts) {
 			ghost.move(ghost.moveDir);
+			ghost.animation.advance();
 		}
 		if (game.pacMan.x <= t(3)) { // finds power pellet
 			game.pacMan.moveDir = Direction.RIGHT;
@@ -225,9 +227,11 @@ public class IntroScene implements GameScene {
 			}
 		} else {
 			game.pacMan.move(game.pacMan.moveDir);
+			game.pacMan.animation.advance();
 			for (var ghost : game.ghosts) {
 				ghost.normalAnimation.enabled = true;
 				ghost.move(ghost.moveDir);
+				ghost.animation.advance();
 			}
 			if (game.pacMan.x > game.ghosts[3].x) {
 				ghostEaten = 4;

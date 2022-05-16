@@ -35,29 +35,30 @@ import de.amr.yt.pacman.lib.Vector2;
  */
 public class PacMan extends Creature {
 
-	public final SpriteAnimation standingAnimation = new SpriteAnimation("pacman-standing", //
-			new byte[] { 2 }, false);
-
-	public final SpriteAnimation stuckAnimation = new SpriteAnimation("pacman-stuck", //
-			new byte[] { 1 }, false);
-
-	public final SpriteAnimation walkingAnimation = new SpriteAnimation("pacman-walking", //
-			nfold(2, bytes(1, 0, 1, 2)), true);
-
-	public final SpriteAnimation dyingAnimation = new SpriteAnimation("pacman-dying", //
-			nfold(6, bytes(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10)), false);
+	public final SpriteAnimation standingAnimation;
+	public final SpriteAnimation stuckAnimation;
+	public final SpriteAnimation walkingAnimation;
+	public final SpriteAnimation dyingAnimation;
 
 	public final GameModel game;
 	public PacManState state;
+	public SpriteAnimation animation;
 	public int powerCountdown;
 	public int idleCountdown;
-	public final int losingPowerDuration = sec(2);
-
-	public SpriteAnimation animation;
+	public final int losingPowerDuration = sec(2); // TODO guess
 
 	public PacMan(GameModel game) {
 		super(game.world);
 		this.game = game;
+		standingAnimation = new SpriteAnimation("pacman-standing", //
+				new byte[] { 2 }, false);
+		stuckAnimation = new SpriteAnimation("pacman-stuck", //
+				new byte[] { 1 }, false);
+		walkingAnimation = new SpriteAnimation("pacman-walking", //
+				nfold(2, bytes(1, 0, 1, 2)), true);
+		dyingAnimation = new SpriteAnimation("pacman-dying", //
+				nfold(6, bytes(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10)), false);
+
 		reset();
 	}
 
@@ -69,6 +70,7 @@ public class PacMan extends Creature {
 		powerCountdown = 0;
 		idleCountdown = 0;
 		animation = standingAnimation;
+		animation.enabled = true;
 	}
 
 	public void update() {
@@ -91,6 +93,7 @@ public class PacMan extends Creature {
 			animation = dyingAnimation;
 		}
 		}
+		animation.advance();
 	}
 
 	@Override

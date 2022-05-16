@@ -218,7 +218,7 @@ public class GameController {
 			for (Ghost ghost : game.ghosts) {
 				if (ghost.state == GhostState.CHASING || ghost.state == GhostState.SCATTERING) {
 					ghost.state = GhostState.FRIGHTENED;
-					ghost.animation.enabled = true;
+					ghost.frightenedAnimation.enabled = true;
 					ghost.reverse();
 				}
 			}
@@ -304,12 +304,12 @@ public class GameController {
 			}
 		}
 
-		else if (game.stateTimer == sec(1.5)) {
+		else if (game.stateTimer == sec(2)) {
 			game.pacMan.animation.enabled = true;
 			Sounds.play("pacman_death");
 		}
 
-		else if (game.stateTimer == sec(3)) {
+		else if (game.stateTimer == sec(4)) {
 			--game.lives;
 			if (game.lives > 0) {
 				enterGameState(GameState.READY);

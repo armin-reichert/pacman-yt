@@ -54,7 +54,15 @@ public abstract class Creature {
 
 	protected Creature(World world) {
 		this.world = world;
-		reset();
+		x = Float.MIN_VALUE;
+		y = Float.MIN_VALUE;
+		speed = 0;
+		enteredNewTile = false;
+		canReverse = false;
+		stuck = false;
+		visible = true;
+		moveDir = Direction.LEFT;
+		wishDir = Direction.LEFT;
 	}
 
 	public void reset() {

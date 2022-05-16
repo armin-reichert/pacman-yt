@@ -89,7 +89,7 @@ public class Ghost extends Creature {
 		}
 		case ENTERING_HOUSE -> {
 			enterGhostHouse(world.houseEntry);
-//			currentAnimation = eyesAnimation; 
+			animation = normalAnimation;// TODO
 		}
 		case LEAVING_HOUSE -> {
 			leaveGhostHouse(world.houseEntry);
@@ -105,9 +105,10 @@ public class Ghost extends Creature {
 		}
 		case EATEN -> {
 			returnToGhostHouse(world.houseEntry);
-//			currentAnimation = eatenTimer > 0 ? valueAnimation : eyesAnimation;
+			animation = normalAnimation; // TODO
 		}
 		}
+		animation.advance();
 	}
 
 	@Override
