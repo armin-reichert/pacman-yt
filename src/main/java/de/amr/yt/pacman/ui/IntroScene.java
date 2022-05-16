@@ -51,6 +51,7 @@ public class IntroScene implements GameScene {
 	private static final String[] GHOST_CHARACTERS = { "SHADOW", "SPEEDY", "BASHFUL", "POKEY" };
 	private static final String[] GHOST_NICKNAMES = { "BLINKY", "PINKY", "INKY", "CLYDE" };
 	private static final int[] GHOST_VALUES = { 200, 400, 800, 1600 };
+	private static final int COL_LEFT = t(3), COL_MIDDLE = t(6), COL_RIGHT = t(17);
 
 	private final GameModel game;
 
@@ -98,46 +99,50 @@ public class IntroScene implements GameScene {
 		++passed;
 	}
 
+	private int row(int ghostID) {
+		return t(6 + 3 * ghostID) + World.HTS;
+	}
+
 	@Override
 	public void draw(Graphics2D g) {
 		if (passed >= sec(1.0)) {
 			drawHeading(g);
 		}
 		if (passed >= sec(2.0)) {
-			drawGhostImage(g, BLINKY, t(3), t(6) + World.HTS);
+			drawGhostImage(g, BLINKY);
 		}
 		if (passed >= sec(3.0)) {
-			drawGhostCharacter(g, BLINKY, t(6), t(6) + World.HTS + 12);
+			drawGhostCharacter(g, BLINKY);
 		}
 		if (passed >= sec(3.5)) {
-			drawGhostNickname(g, BLINKY, t(17), t(6) + World.HTS + 12);
+			drawGhostNickname(g, BLINKY);
 		}
 		if (passed >= sec(4.0)) {
-			drawGhostImage(g, PINKY, t(3), t(9) + World.HTS);
+			drawGhostImage(g, PINKY);
 		}
 		if (passed >= sec(5.0)) {
-			drawGhostCharacter(g, PINKY, t(6), t(9) + World.HTS + 12);
+			drawGhostCharacter(g, PINKY);
 		}
 		if (passed >= sec(5.5)) {
-			drawGhostNickname(g, PINKY, t(17), t(9) + World.HTS + 12);
+			drawGhostNickname(g, PINKY);
 		}
 		if (passed >= sec(6.0)) {
-			drawGhostImage(g, INKY, t(3), t(12) + World.HTS);
+			drawGhostImage(g, INKY);
 		}
 		if (passed >= sec(7.0)) {
-			drawGhostCharacter(g, INKY, t(6), t(12) + World.HTS + 12);
+			drawGhostCharacter(g, INKY);
 		}
 		if (passed >= sec(7.5)) {
-			drawGhostNickname(g, INKY, t(17), t(12) + World.HTS + 12);
+			drawGhostNickname(g, INKY);
 		}
 		if (passed >= sec(8.0)) {
-			drawGhostImage(g, CLYDE, t(3), t(15) + World.HTS);
+			drawGhostImage(g, CLYDE);
 		}
 		if (passed >= sec(9.0)) {
-			drawGhostCharacter(g, CLYDE, t(6), t(15) + World.HTS + 12);
+			drawGhostCharacter(g, CLYDE);
 		}
 		if (passed >= sec(9.5)) {
-			drawGhostNickname(g, CLYDE, t(17), t(15) + World.HTS + 12);
+			drawGhostNickname(g, CLYDE);
 		}
 		if (passed >= sec(10.0)) {
 			drawPointsAwarded(g);
@@ -254,20 +259,20 @@ public class IntroScene implements GameScene {
 		g.drawString("CHARACTER / NICKNAME", t(6), t(6));
 	}
 
-	private void drawGhostImage(Graphics2D g, int id, int x, int y) {
-		g.drawImage(Sprites.get().ghosts.get(id).get(Direction.RIGHT).get(0), x, y, null);
+	private void drawGhostImage(Graphics2D g, int id) {
+		g.drawImage(Sprites.get().ghosts.get(id).get(Direction.RIGHT).get(0), COL_LEFT, row(id), null);
 	}
 
-	private void drawGhostCharacter(Graphics2D g, int id, int x, int y) {
+	private void drawGhostCharacter(Graphics2D g, int id) {
 		g.setColor(Renderer.ghostColor(id));
 		g.setFont(Renderer.ARCADE_FONT);
-		g.drawString("-" + GHOST_CHARACTERS[id], x, y);
+		g.drawString("-" + GHOST_CHARACTERS[id], COL_MIDDLE, row(id) + 12);
 	}
 
-	private void drawGhostNickname(Graphics2D g, int id, int x, int y) {
+	private void drawGhostNickname(Graphics2D g, int id) {
 		g.setColor(Renderer.ghostColor(id));
 		g.setFont(Renderer.ARCADE_FONT);
-		g.drawString("\"" + GHOST_NICKNAMES[id] + "\"", x, y);
+		g.drawString("\"" + GHOST_NICKNAMES[id] + "\"", COL_RIGHT, row(id) + 12);
 	}
 
 	private void drawPointsAwarded(Graphics2D g) {
