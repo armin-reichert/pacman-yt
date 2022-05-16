@@ -171,7 +171,6 @@ public class GameModel {
 		pacMan.wishDir = Direction.LEFT;
 		pacMan.moveDir = Direction.LEFT;
 		pacMan.speed = playerSpeed;
-		pacMan.walkingAnimation.index = 0;
 		pacMan.walkingAnimation.enabled = false;
 		pacMan.state = PacManState.NORMAL;
 

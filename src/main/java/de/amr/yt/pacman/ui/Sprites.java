@@ -66,7 +66,7 @@ public class Sprites {
 	public List<BufferedImage> pacDead;
 	public List<EnumMap<Direction, List<BufferedImage>>> ghosts = new ArrayList<>();
 	public List<BufferedImage> ghostFrightened;
-	public EnumMap<Direction, BufferedImage> ghostEaten = new EnumMap<>(Direction.class);
+	public EnumMap<Direction, BufferedImage> ghostEyes = new EnumMap<>(Direction.class);
 	public Map<Integer, BufferedImage> ghostValues;
 	public List<BufferedImage> bonusSymbols;
 	public Map<Integer, BufferedImage> bonusValues;
@@ -114,10 +114,10 @@ public class Sprites {
 
 		ghostFrightened = List.of(s(8, 4), s(9, 4), s(10, 4), s(11, 4));
 
-		ghostEaten.put(RIGHT, s(8, 5));
-		ghostEaten.put(LEFT, s(9, 5));
-		ghostEaten.put(UP, s(10, 5));
-		ghostEaten.put(DOWN, s(11, 5));
+		ghostEyes.put(RIGHT, s(8, 5));
+		ghostEyes.put(LEFT, s(9, 5));
+		ghostEyes.put(UP, s(10, 5));
+		ghostEyes.put(DOWN, s(11, 5));
 
 		ghostValues = Map.of( //
 				200, s(0, 8), //

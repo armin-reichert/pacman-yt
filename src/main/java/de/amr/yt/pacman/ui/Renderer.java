@@ -85,10 +85,11 @@ public class Renderer {
 
 		// eaten (eyes) or eaten (value) look
 		else if (ghost.state == GhostState.EATEN || ghost.state == GhostState.ENTERING_HOUSE) {
-			var sprite = ghost.eatenTimer > 0 //
-					? Sprites.get().ghostValues.get(ghost.eatenValue) //
-					: Sprites.get().ghostEaten.get(ghost.moveDir);
-			drawGuy(g, ghost, sprite);
+			if (ghost.eatenTimer > 0) {
+				drawGuy(g, ghost, Sprites.get().ghostValues.get(ghost.eatenValue));
+			} else {
+				drawGuy(g, ghost, Sprites.get().ghostEyes.get(ghost.moveDir));
+			}
 		}
 
 		else { // normal look

@@ -297,6 +297,7 @@ public class GameController {
 
 		if (game.stateTimer == 0) {
 			game.pacMan.animation.enabled = false;
+			game.pacMan.animation.reset();
 			game.bonus = -1;
 		}
 

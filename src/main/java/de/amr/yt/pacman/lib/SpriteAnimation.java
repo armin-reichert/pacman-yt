@@ -24,8 +24,8 @@ public class SpriteAnimation {
 	}
 
 	private final byte[] frames;
+	private int index;
 	public String name;
-	public int index;
 	public boolean enabled;
 	public boolean cycle;
 
@@ -34,6 +34,10 @@ public class SpriteAnimation {
 		this.frames = frames;
 		this.enabled = false;
 		this.cycle = cycle;
+	}
+
+	public void reset() {
+		index = 0;
 	}
 
 	public int frame() {
