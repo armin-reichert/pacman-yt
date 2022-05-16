@@ -58,10 +58,6 @@ public class GameController {
 		return (int) (ticks % duration) * frames / duration;
 	}
 
-	public static int frame(byte[] animation) {
-		return animation[(int) ticks % animation.length];
-	}
-
 	private final GameModel game = new GameModel();
 
 	private final FPSCounter fpsCounter = new FPSCounter();
@@ -184,6 +180,7 @@ public class GameController {
 			game.reset();
 			game.pacMan.visible = true;
 			game.pacMan.animated = false;
+			game.pacMan.animationIndex = 6; // full face
 			for (Ghost ghost : game.ghosts) {
 				ghost.visible = true;
 				ghost.animated = false;
@@ -351,7 +348,7 @@ public class GameController {
 	private void update_LEVEL_COMPLETE() {
 		if (game.stateTimer == 0) {
 			game.pacMan.animated = false;
-			game.pacMan.animFrame = 2; // full face
+			game.pacMan.animationIndex = 2; // full face
 			for (Ghost ghost : game.ghosts) {
 				ghost.animated = false;
 			}

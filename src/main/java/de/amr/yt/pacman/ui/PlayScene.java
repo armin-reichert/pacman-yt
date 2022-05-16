@@ -119,5 +119,4 @@ public class PlayScene implements GameScene {
 			}
 		}
 	}
-
 }

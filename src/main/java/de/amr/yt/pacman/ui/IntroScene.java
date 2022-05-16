@@ -169,7 +169,7 @@ public class IntroScene implements GameScene {
 	private void drawPacManChasingGhosts(Graphics2D g) {
 		for (var ghost : game.ghosts) {
 			if (ghost.id > ghostEaten) {
-				drawGhostFrightened(g, ghost);
+				drawGhostFrightened(g, ghost, false);
 			} else if (ghost.id == ghostEaten) {
 				drawGhostValue(g, ghost, GHOST_VALUES[ghost.id]);
 			}
@@ -218,9 +218,13 @@ public class IntroScene implements GameScene {
 			} else if (ghostEatenCountdown == 15) {
 				game.ghosts[ghostEaten].visible = false;
 			}
+			for (var ghost : game.ghosts) {
+				ghost.animated = false;
+			}
 		} else {
 			game.pacMan.move(game.pacMan.moveDir);
 			for (var ghost : game.ghosts) {
+				ghost.animated = true;
 				ghost.move(ghost.moveDir);
 			}
 			if (game.pacMan.x > game.ghosts[3].x) {
