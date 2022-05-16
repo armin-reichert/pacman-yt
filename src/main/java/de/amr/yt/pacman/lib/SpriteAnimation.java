@@ -55,10 +55,10 @@ public class SpriteAnimation {
 
 	public void advance() {
 		if (enabled) {
-			if (index + 1 == frames.length) {
-				index = cycle ? 0 : frames.length - 1;
+			if (index < frames.length - 1) {
+				++index;
 			} else {
-				index++;
+				index = cycle ? 0 : frames.length - 1;
 			}
 		}
 	}
