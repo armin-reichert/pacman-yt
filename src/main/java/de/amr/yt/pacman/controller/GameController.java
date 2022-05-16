@@ -106,7 +106,7 @@ public class GameController {
 	}
 
 	private void update_INTRO() {
-		if (game.stateTimer == sec(28)) {
+		if (game.stateTimer == sec(25)) {
 			initGame(); // restart intro
 		}
 	}
