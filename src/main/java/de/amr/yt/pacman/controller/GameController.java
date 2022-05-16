@@ -131,9 +131,11 @@ public class GameController {
 			game.reset();
 			game.pacMan.visible = true;
 			game.pacMan.animation = game.pacMan.animStanding;
+			game.pacMan.animation.reset();
 			for (Ghost ghost : game.ghosts) {
 				ghost.visible = true;
 				ghost.animation = ghost.animNormal;
+				ghost.animation.reset();
 				ghost.animation.enabled = false;
 			}
 		}
