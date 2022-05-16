@@ -45,24 +45,21 @@ import de.amr.yt.pacman.ui.GameWindow;
  */
 public class GameController {
 
-	private final GameModel game = new GameModel();
-
-	private Direction steering;
+	private final GameModel game;
 	private GameWindow window;
+	private Direction pacManSteering;
+
+	public GameController() {
+		game = new GameModel();
+	}
 
 	public void createAndShowUI(double scale) {
 		window = new GameWindow(this, game, scale);
 		window.show();
 	}
 
-	public void enterGameState(GameState state) {
-		game.state = state;
-		game.stateTimer = -1;
-		log("Game state changed to %s", game.state);
-	}
-
 	public void steerPacMan(Direction direction) {
-		steering = Objects.requireNonNull(direction);
+		pacManSteering = Objects.requireNonNull(direction);
 	}
 
 	public void initGame() {
@@ -77,6 +74,12 @@ public class GameController {
 		window.currentScene().init();
 	}
 
+	public void enterGameState(GameState state) {
+		game.state = state;
+		game.stateTimer = -1;
+		log("Game state changed to %s", game.state);
+	}
+
 	public void startLevel() {
 		if (game.state == GameState.INTRO) {
 			enterGameState(GameState.LEVEL_STARTING);
@@ -85,25 +88,21 @@ public class GameController {
 
 	public void step() {
 		if (!game.paused) {
-			update();
+			++game.stateTimer;
+			switch (game.state) {
+			case INTRO -> update_INTRO();
+			case LEVEL_STARTING -> update_LEVEL_STARTING();
+			case READY -> update_READY();
+			case PLAYING -> update_PLAYING();
+			case PACMAN_DEAD -> update_PACMAN_DEAD();
+			case GHOST_DYING -> update_GHOST_DYING();
+			case LEVEL_COMPLETE -> update_LEVEL_COMPLETE();
+			case GAME_OVER -> update_GAME_OVER();
+			}
+			pacManSteering = null;
 			window.update();
 		}
 		window.render();
-	}
-
-	private void update() {
-		++game.stateTimer;
-		switch (game.state) {
-		case INTRO -> update_INTRO();
-		case LEVEL_STARTING -> update_LEVEL_STARTING();
-		case READY -> update_READY();
-		case PLAYING -> update_PLAYING();
-		case PACMAN_DEAD -> update_PACMAN_DEAD();
-		case GHOST_DYING -> update_GHOST_DYING();
-		case LEVEL_COMPLETE -> update_LEVEL_COMPLETE();
-		case GAME_OVER -> update_GAME_OVER();
-		}
-		steering = null;
 	}
 
 	private void update_INTRO() {
@@ -162,8 +161,8 @@ public class GameController {
 		}
 
 		// Pac-Man behavior
-		if (steering != null) {
-			game.pacMan.wishDir = steering;
+		if (pacManSteering != null) {
+			game.pacMan.wishDir = pacManSteering;
 		}
 		game.pacMan.update();
 		final Vector2 pacManTile = game.pacMan.tile();
