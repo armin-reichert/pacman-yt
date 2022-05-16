@@ -24,7 +24,6 @@ SOFTWARE.
 package de.amr.yt.pacman.model;
 
 import static de.amr.yt.pacman.controller.GameController.sec;
-import static de.amr.yt.pacman.lib.SpriteAnimation.bytes;
 import static de.amr.yt.pacman.lib.SpriteAnimation.nfold;
 
 import de.amr.yt.pacman.lib.SpriteAnimation;
@@ -35,10 +34,10 @@ import de.amr.yt.pacman.lib.Vector2;
  */
 public class PacMan extends Creature {
 
-	public final SpriteAnimation standingAnimation;
-	public final SpriteAnimation stuckAnimation;
-	public final SpriteAnimation walkingAnimation;
-	public final SpriteAnimation dyingAnimation;
+	public final SpriteAnimation animStanding;
+	public final SpriteAnimation animStuck;
+	public final SpriteAnimation animWalking;
+	public final SpriteAnimation animDying;
 
 	public final GameModel game;
 	public PacManState state;
@@ -50,10 +49,10 @@ public class PacMan extends Creature {
 	public PacMan(GameModel game) {
 		super(game.world);
 		this.game = game;
-		standingAnimation = new SpriteAnimation("pacman-standing", 2, false);
-		stuckAnimation = new SpriteAnimation("pacman-stuck", 1, false);
-		walkingAnimation = new SpriteAnimation("pacman-walking", nfold(2, bytes(1, 0, 1, 2)), true);
-		dyingAnimation = new SpriteAnimation("pacman-dying", nfold(6, bytes(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10)), false);
+		animStanding = new SpriteAnimation("standing", 2, false);
+		animStuck = new SpriteAnimation("stuck", 1, false);
+		animWalking = new SpriteAnimation("walking", nfold(2, new byte[] { 1, 0, 1, 2 }), true);
+		animDying = new SpriteAnimation("dying", nfold(6, new byte[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }), false);
 		reset();
 	}
 
@@ -64,7 +63,7 @@ public class PacMan extends Creature {
 		state = PacManState.NO_POWER;
 		powerCountdown = 0;
 		idleCountdown = 0;
-		animation = standingAnimation;
+		animation = animStanding;
 		animation.enabled = true;
 	}
 
@@ -72,7 +71,7 @@ public class PacMan extends Creature {
 		switch (state) {
 		case NO_POWER -> {
 			restOrWalk();
-			animation = stuck ? stuckAnimation : walkingAnimation;
+			animation = stuck ? animStuck : animWalking;
 		}
 		case POWER -> {
 			restOrWalk();
@@ -82,10 +81,10 @@ public class PacMan extends Creature {
 			} else {
 				--powerCountdown;
 			}
-			animation = stuck ? stuckAnimation : walkingAnimation;
+			animation = stuck ? animStuck : animWalking;
 		}
 		case DEAD -> {
-			animation = dyingAnimation;
+			animation = animDying;
 		}
 		}
 		animation.advance();

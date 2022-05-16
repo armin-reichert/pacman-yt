@@ -175,17 +175,17 @@ public class GameController {
 		if (game.stateTimer == 0) {
 			game.reset();
 			game.pacMan.visible = true;
-			game.pacMan.animation = game.pacMan.standingAnimation;
+			game.pacMan.animation = game.pacMan.animStanding;
 			for (Ghost ghost : game.ghosts) {
 				ghost.visible = true;
-				ghost.animation = ghost.normalAnimation;
+				ghost.animation = ghost.animNormal;
 				ghost.animation.enabled = false;
 			}
 		}
 
 		else if (game.stateTimer == sec(5)) {
 			game.powerPelletsBlinking = true;
-			game.pacMan.walkingAnimation.enabled = true;
+			game.pacMan.animWalking.enabled = true;
 			for (Ghost ghost : game.ghosts) {
 				ghost.animation.enabled = true;
 			}
@@ -219,7 +219,7 @@ public class GameController {
 			for (Ghost ghost : game.ghosts) {
 				if (ghost.state == GhostState.CHASING || ghost.state == GhostState.SCATTERING) {
 					ghost.state = GhostState.FRIGHTENED;
-					ghost.frightenedAnimation.enabled = true;
+					ghost.animFrightened.enabled = true;
 					ghost.reverse();
 				}
 			}
@@ -344,9 +344,9 @@ public class GameController {
 
 	private void update_LEVEL_COMPLETE() {
 		if (game.stateTimer == 0) {
-			game.pacMan.animation = game.pacMan.standingAnimation;
+			game.pacMan.animation = game.pacMan.animStanding;
 			for (Ghost ghost : game.ghosts) {
-				ghost.normalAnimation.enabled = false;
+				ghost.animNormal.enabled = false;
 			}
 		}
 
@@ -365,7 +365,7 @@ public class GameController {
 				game.levelSymbols.remove(0);
 			}
 			game.pacMan.visible = false;
-			game.pacMan.animation = game.pacMan.walkingAnimation;
+			game.pacMan.animation = game.pacMan.animWalking;
 			enterGameState(GameState.LEVEL_STARTING);
 		}
 	}
@@ -374,9 +374,9 @@ public class GameController {
 		if (game.stateTimer == 0) {
 			game.powerPelletsBlinking = false;
 			for (Ghost ghost : game.ghosts) {
-				ghost.normalAnimation.enabled = false;
+				ghost.animNormal.enabled = false;
 			}
-			game.pacMan.walkingAnimation.enabled = false;
+			game.pacMan.animWalking.enabled = false;
 		}
 
 		else if (game.stateTimer == sec(5)) {

@@ -5,14 +5,6 @@ package de.amr.yt.pacman.lib;
  */
 public class SpriteAnimation {
 
-	public static byte[] bytes(int... numbers) {
-		byte[] bytes = new byte[numbers.length];
-		for (int i = 0; i < bytes.length; ++i) {
-			bytes[i] = (byte) numbers[i];
-		}
-		return bytes;
-	}
-
 	public static byte[] nfold(int n, byte[] frames) {
 		byte[] result = new byte[frames.length * n];
 		for (int i = 0; i < frames.length; ++i) {
@@ -42,7 +34,7 @@ public class SpriteAnimation {
 
 	@Override
 	public String toString() {
-		return "%s %s".formatted(name, (enabled ? " enabled" : "disabled"));
+		return "%s %s".formatted(name, enabled ? "" : "disabled");
 	}
 
 	public void reset() {

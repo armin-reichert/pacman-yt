@@ -63,7 +63,7 @@ public class Renderer {
 	}
 
 	public static void drawPacMan(Graphics2D g, PacMan pacMan) {
-		if (pacMan.animation == pacMan.dyingAnimation) {
+		if (pacMan.animation == pacMan.animDying) {
 			drawGuy(g, pacMan, Sprites.get().pacDead.get(pacMan.animation.frame()));
 		} else {
 			drawGuy(g, pacMan, Sprites.get().pac.get(pacMan.moveDir).get(pacMan.animation.frame()));
@@ -90,7 +90,7 @@ public class Renderer {
 			}
 		}
 
-		else if (ghost.animation == ghost.frightenedAnimation) {
+		else if (ghost.animation == ghost.animFrightened) {
 			int blinkingOffset = !blinking || frame(20, 2) == 0 ? 0 : 2;
 			drawGuy(g, ghost, Sprites.get().ghostBlue.get(ghost.animation.frame() + blinkingOffset));
 		}

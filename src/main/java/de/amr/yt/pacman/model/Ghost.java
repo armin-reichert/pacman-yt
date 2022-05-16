@@ -48,8 +48,8 @@ public class Ghost extends Creature {
 
 	public final int id;
 	public final GameModel game;
-	public final SpriteAnimation normalAnimation;
-	public final SpriteAnimation frightenedAnimation;
+	public final SpriteAnimation animNormal;
+	public final SpriteAnimation animFrightened;
 
 	public GhostState state;
 	public Vector2 targetTile;
@@ -61,8 +61,8 @@ public class Ghost extends Creature {
 		super(game.world);
 		this.game = game;
 		this.id = id;
-		normalAnimation = new SpriteAnimation("ghost-normal", nfold(8, new byte[] { 0, 1 }), true);
-		frightenedAnimation = new SpriteAnimation("ghost-frightened", nfold(8, new byte[] { 0, 1 }), true);
+		animNormal = new SpriteAnimation("normal", nfold(8, new byte[] { 0, 1 }), true);
+		animFrightened = new SpriteAnimation("frightened", nfold(8, new byte[] { 0, 1 }), true);
 		reset();
 	}
 
@@ -74,7 +74,7 @@ public class Ghost extends Creature {
 		targetTile = null;
 		valueTimer = 0;
 		value = 0;
-		animation = normalAnimation;
+		animation = animNormal;
 	}
 
 	public void update() {
@@ -83,22 +83,22 @@ public class Ghost extends Creature {
 			if (id != BLINKY) {
 				bounce(world.houseTop, world.houseBottom);
 			}
-			animation = game.pacMan.hasPower() ? frightenedAnimation : normalAnimation;
+			animation = game.pacMan.hasPower() ? animFrightened : animNormal;
 		}
 		case ENTERING_HOUSE -> {
 			enterGhostHouse(world.houseEntry);
 		}
 		case LEAVING_HOUSE -> {
 			leaveGhostHouse(world.houseEntry);
-			animation = normalAnimation;
+			animation = animNormal;
 		}
 		case CHASING, SCATTERING -> {
 			aimTowardsTarget();
-			animation = normalAnimation;
+			animation = animNormal;
 		}
 		case FRIGHTENED -> {
 			aimTowardsTarget();
-			animation = frightenedAnimation;
+			animation = animFrightened;
 		}
 		case EATEN -> {
 			returnToGhostHouse(world.houseEntry);
