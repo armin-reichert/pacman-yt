@@ -23,7 +23,7 @@ SOFTWARE.
 */
 package de.amr.yt.pacman.model;
 
-import static de.amr.yt.pacman.controller.GameController.sec;
+import static de.amr.yt.pacman.controller.GameClock.sec;
 import static de.amr.yt.pacman.lib.SpriteAnimation.nfold;
 
 import de.amr.yt.pacman.lib.SpriteAnimation;

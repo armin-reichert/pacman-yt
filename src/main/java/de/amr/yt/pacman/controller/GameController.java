@@ -23,6 +23,7 @@ SOFTWARE.
 */
 package de.amr.yt.pacman.controller;
 
+import static de.amr.yt.pacman.controller.GameClock.sec;
 import static de.amr.yt.pacman.lib.Logging.log;
 import static de.amr.yt.pacman.model.GameModel.BLINKY;
 import static de.amr.yt.pacman.model.GameModel.CLYDE;
@@ -33,7 +34,6 @@ import java.util.Objects;
 
 import de.amr.yt.pacman.lib.Direction;
 import de.amr.yt.pacman.lib.FPSCounter;
-import de.amr.yt.pacman.lib.Logging;
 import de.amr.yt.pacman.lib.Sounds;
 import de.amr.yt.pacman.lib.Vector2;
 import de.amr.yt.pacman.model.GameModel;
@@ -46,65 +46,24 @@ import de.amr.yt.pacman.ui.GameWindow;
  */
 public class GameController {
 
-	public static final int FPS = 60;
-
-	public static long ticks;
-
-	public static int sec(double n) {
-		return (int) (n * FPS);
-	}
-
 	private final GameModel game = new GameModel();
 
 	private final FPSCounter fpsCounter = new FPSCounter();
-	private final Thread gameLoop = new Thread(this::gameLoop);
-	private boolean gameLoopRunning;
 	private Direction steering;
 	private GameWindow window;
 
 	public void createAndShowUI(double scale) {
-		ticks = 0;
 		window = new GameWindow(this, game, fpsCounter, scale);
 		window.show();
 		initGame();
-		gameLoopRunning = true;
-		gameLoop.run();
+		GameClock.onTick = this::step;
+		fpsCounter.start();
+		GameClock.start();
 	}
 
 	public void exit() {
-		gameLoopRunning = false;
-		try {
-			gameLoop.join();
-			Logging.log("Game loop stopped");
-			System.exit(0);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-	}
-
-	private void gameLoop() {
-		log("Game loop starting...");
-		fpsCounter.start();
-		while (gameLoopRunning) {
-			long frameStart = System.nanoTime();
-			if (!game.paused) {
-				update();
-				window.update();
-			}
-			long frameDuration = System.nanoTime() - frameStart;
-			long targetFrameDuration = 1_000_000_000L / FPS;
-			if (frameDuration < targetFrameDuration) {
-				long sleepMillis = (targetFrameDuration - frameDuration) / 1_000_000;
-				try {
-					Thread.sleep(sleepMillis);
-				} catch (InterruptedException e) {
-					// ignore
-				}
-			}
-			fpsCounter.update();
-			++ticks;
-			window.render();
-		}
+		GameClock.stop();
+		System.exit(0);
 	}
 
 	public void enterGameState(GameState state) {
@@ -133,6 +92,15 @@ public class GameController {
 		if (game.state == GameState.INTRO) {
 			enterGameState(GameState.LEVEL_STARTING);
 		}
+	}
+
+	private void step() {
+		if (!game.paused) {
+			update();
+			window.update();
+		}
+		window.render();
+		fpsCounter.update();
 	}
 
 	private void update() {

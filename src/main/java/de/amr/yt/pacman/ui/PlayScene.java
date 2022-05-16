@@ -36,7 +36,7 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
-import de.amr.yt.pacman.controller.GameController;
+import de.amr.yt.pacman.controller.GameClock;
 import de.amr.yt.pacman.controller.GameState;
 import de.amr.yt.pacman.model.GameModel;
 import de.amr.yt.pacman.model.Ghost;
@@ -63,7 +63,7 @@ public class PlayScene implements GameScene {
 
 	@Override
 	public void draw(Graphics2D g) {
-		if (!game.mazeFlashing || frame(GameController.ticks, 30, 2) == 0) {
+		if (!game.mazeFlashing || frame(GameClock.ticks, 30, 2) == 0) {
 			g.drawImage(Sprites.get().mazeImage, 0, t(3), null);
 		}
 		g.setColor(Color.PINK);
@@ -72,7 +72,7 @@ public class PlayScene implements GameScene {
 				if (game.world.isPellet(row, col)) {
 					g.fillOval(t(col) + 3, t(row) + 3, 2, 2);
 				} else if (game.world.isPowerPellet(row, col)) {
-					if (!game.powerPelletsBlinking || frame(GameController.ticks, 30, 2) == 0) {
+					if (!game.powerPelletsBlinking || frame(GameClock.ticks, 30, 2) == 0) {
 						g.fillOval(t(col), t(row), t(1), t(1));
 					}
 				}
