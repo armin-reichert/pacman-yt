@@ -38,8 +38,8 @@ import static de.amr.yt.pacman.ui.Renderer.drawPacMan;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-import de.amr.yt.pacman.lib.Direction;
 import de.amr.yt.pacman.lib.GameClock;
+import de.amr.yt.pacman.lib.Direction;
 import de.amr.yt.pacman.model.GameModel;
 import de.amr.yt.pacman.model.World;
 

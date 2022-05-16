@@ -26,31 +26,71 @@ package de.amr.yt.pacman.lib;
 /**
  * @author Armin Reichert
  */
-public class GameClock extends Clock {
+public class GameClock {
 
-	private static final GameClock THE_GAME_CLOCK = new GameClock();
+	private static GameClock theClock = new GameClock();
 
 	public static GameClock get() {
-		return THE_GAME_CLOCK;
+		return theClock;
 	}
 
 	public static int sec(double seconds) {
-		return (int) (THE_GAME_CLOCK.frequency * seconds);
+		return (int) (theClock.frequency * seconds);
 	}
 
-	public GameClock() {
-		frequency = 60;
+	public int frequency = 60;
+	public long ticks;
+	public Runnable onTick = () -> Logging.log("Tick");
+
+	private Thread thread;
+	private boolean running;
+	private long lastFameRate;
+	private long frameCount;
+	private long countStart;
+
+	public long getFrameRate() {
+		return lastFameRate;
 	}
 
-	@Override
 	public void start() {
-		Logging.log("Game clock starts");
-		super.start();
+		countStart = System.nanoTime();
+		running = true;
+		thread = new Thread(() -> {
+			while (running) {
+				tick();
+			}
+		});
+		thread.run();
 	}
 
-	@Override
 	public void stop() {
-		Logging.log("Game clock stopped");
-		super.stop();
+		running = false;
+		try {
+			thread.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void tick() {
+		long start = System.nanoTime();
+		onTick.run();
+		long duration = System.nanoTime() - start;
+		long period = 1_000_000_000L / frequency;
+		if (duration < period) {
+			long sleep = period - duration;
+			try {
+				Thread.sleep(sleep / 1_000_000);
+			} catch (InterruptedException e) {
+				// ignore
+			}
+		}
+		++ticks;
+		++frameCount;
+		if (System.nanoTime() - countStart >= 1_000_000_000) {
+			lastFameRate = frameCount;
+			frameCount = 0;
+			countStart = System.nanoTime();
+		}
 	}
 }

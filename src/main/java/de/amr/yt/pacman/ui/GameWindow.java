@@ -43,8 +43,8 @@ import javax.swing.JFrame;
 
 import de.amr.yt.pacman.controller.GameController;
 import de.amr.yt.pacman.controller.GameState;
-import de.amr.yt.pacman.lib.Direction;
 import de.amr.yt.pacman.lib.GameClock;
+import de.amr.yt.pacman.lib.Direction;
 import de.amr.yt.pacman.model.GameModel;
 import de.amr.yt.pacman.model.World;
 
@@ -194,8 +194,7 @@ public class GameWindow {
 		}
 		g.setColor(Color.WHITE);
 		g.setFont(new Font(Font.DIALOG, Font.PLAIN, 6));
-		g.drawString("%2d FPS (Target=%d)".formatted(GameClock.get().getFrameRate(), GameClock.get().frequency), t(1),
-				t(2));
+		g.drawString("%2d FPS (Target=%d)".formatted(GameClock.get().getFrameRate(), GameClock.get().frequency), t(1), t(2));
 		String text = "%s (%d)".formatted(game.state.name(), game.stateTimer);
 		if (game.state == GameState.PLAYING) {
 			if (game.chasingPhase) {
