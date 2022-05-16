@@ -178,7 +178,8 @@ public class GameController {
 			game.pacMan.animation = game.pacMan.standingAnimation;
 			for (Ghost ghost : game.ghosts) {
 				ghost.visible = true;
-				ghost.normalAnimation.enabled = false;
+				ghost.animation = ghost.normalAnimation;
+				ghost.animation.enabled = false;
 			}
 		}
 
@@ -186,7 +187,7 @@ public class GameController {
 			game.powerPelletsBlinking = true;
 			game.pacMan.walkingAnimation.enabled = true;
 			for (Ghost ghost : game.ghosts) {
-				ghost.normalAnimation.enabled = true;
+				ghost.animation.enabled = true;
 			}
 			enterGameState(GameState.PLAYING);
 			return;

@@ -85,7 +85,7 @@ public class PlayScene implements GameScene {
 		}
 		drawPacMan(g, game.pacMan);
 		for (Ghost ghost : game.ghosts) {
-			drawGhost(g, ghost, game.pacMan.hasPower(), game.pacMan.isLosingPower());
+			drawGhost(g, ghost, game.pacMan.isLosingPower());
 		}
 		if (game.state == GameState.READY) {
 			g.setColor(Color.YELLOW);

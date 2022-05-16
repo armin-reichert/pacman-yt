@@ -31,7 +31,6 @@ import static de.amr.yt.pacman.model.GameModel.INKY;
 import static de.amr.yt.pacman.model.GameModel.PINKY;
 import static de.amr.yt.pacman.model.World.t;
 import static de.amr.yt.pacman.ui.Renderer.drawGhost;
-import static de.amr.yt.pacman.ui.Renderer.drawGhostFrightened;
 import static de.amr.yt.pacman.ui.Renderer.drawGhostValue;
 import static de.amr.yt.pacman.ui.Renderer.drawPacMan;
 import static de.amr.yt.pacman.ui.Renderer.frame;
@@ -154,7 +153,7 @@ public class IntroScene implements GameScene {
 				drawPacManChasingGhosts(g);
 			} else {
 				for (var ghost : game.ghosts) {
-					drawGhost(g, ghost, false, false);
+					drawGhost(g, ghost, false);
 				}
 				drawPacMan(g, game.pacMan);
 			}
@@ -171,7 +170,7 @@ public class IntroScene implements GameScene {
 	private void drawPacManChasingGhosts(Graphics2D g) {
 		for (var ghost : game.ghosts) {
 			if (ghost.id > ghostEaten) {
-				drawGhostFrightened(g, ghost, false);
+				drawGhost(g, ghost, false);
 			} else if (ghost.id == ghostEaten) {
 				drawGhostValue(g, ghost, GHOST_VALUES[ghost.id]);
 			}
@@ -203,6 +202,7 @@ public class IntroScene implements GameScene {
 			for (var ghost : game.ghosts) {
 				ghost.moveDir = Direction.RIGHT;
 				ghost.speed = game.ghostSpeedFrightened;
+				ghost.animation = ghost.frightenedAnimation;
 			}
 			pacManChasingGhosts = true;
 		}

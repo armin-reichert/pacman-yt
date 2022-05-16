@@ -80,14 +80,10 @@ public class Renderer {
 		};
 	}
 
-	public static void drawGhost(Graphics2D g, Ghost ghost, boolean pacManHasPower, boolean pacManLosingPower) {
-		// frightened look (also when locked and Pac-Man has power)
-		if (ghost.state == GhostState.FRIGHTENED || ghost.state == GhostState.LOCKED && pacManHasPower) {
-			drawGhostFrightened(g, ghost, pacManLosingPower);
-		}
+	public static void drawGhost(Graphics2D g, Ghost ghost, boolean blinking) {
 
 		// eaten (eyes) or eaten (value) look
-		else if (ghost.state == GhostState.EATEN || ghost.state == GhostState.ENTERING_HOUSE) {
+		if (ghost.state == GhostState.EATEN || ghost.state == GhostState.ENTERING_HOUSE) {
 			if (ghost.eatenTimer > 0) {
 				drawGuy(g, ghost, Sprites.get().ghostValues.get(ghost.eatenValue));
 			} else {
@@ -95,14 +91,14 @@ public class Renderer {
 			}
 		}
 
-		else { // normal look
+		else if (ghost.animation == ghost.frightenedAnimation) {
+			int blinkingOffset = !blinking || frame(20, 2) == 0 ? 0 : 2;
+			drawGuy(g, ghost, Sprites.get().ghostBlue.get(ghost.animation.frame() + blinkingOffset));
+		}
+
+		else {
 			drawGuy(g, ghost, Sprites.get().ghosts.get(ghost.id).get(ghost.moveDir).get(ghost.animation.frame()));
 		}
-	}
-
-	public static void drawGhostFrightened(Graphics2D g, Ghost ghost, boolean blinking) {
-		int blinkingOffset = !blinking || frame(20, 2) == 0 ? 0 : 2;
-		drawGuy(g, ghost, Sprites.get().ghostFrightened.get(ghost.animation.frame() + blinkingOffset));
 	}
 
 	public static void drawGhostValue(Graphics2D g, Ghost ghost, int value) {
