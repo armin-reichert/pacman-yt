@@ -23,7 +23,7 @@ SOFTWARE.
 */
 package de.amr.yt.pacman.controller;
 
-import static de.amr.yt.pacman.controller.GameClock.sec;
+import static de.amr.yt.pacman.lib.GameClock.sec;
 import static de.amr.yt.pacman.lib.Logging.log;
 import static de.amr.yt.pacman.model.GameModel.BLINKY;
 import static de.amr.yt.pacman.model.GameModel.CLYDE;
@@ -34,6 +34,7 @@ import java.util.Objects;
 
 import de.amr.yt.pacman.lib.Direction;
 import de.amr.yt.pacman.lib.FPSCounter;
+import de.amr.yt.pacman.lib.GameClock;
 import de.amr.yt.pacman.lib.Sounds;
 import de.amr.yt.pacman.lib.Vector2;
 import de.amr.yt.pacman.model.GameModel;
