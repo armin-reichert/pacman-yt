@@ -51,7 +51,12 @@ public class IntroScene implements GameScene {
 	private static final String[] GHOST_CHARACTERS = { "SHADOW", "SPEEDY", "BASHFUL", "POKEY" };
 	private static final String[] GHOST_NICKNAMES = { "BLINKY", "PINKY", "INKY", "CLYDE" };
 	private static final int[] GHOST_VALUES = { 200, 400, 800, 1600 };
+
 	private static final int COL_LEFT = t(3), COL_MIDDLE = t(6), COL_RIGHT = t(17);
+
+	private static int row(int ghostID) {
+		return t(6 + 3 * ghostID) + World.HTS;
+	}
 
 	private final GameModel game;
 
@@ -65,10 +70,19 @@ public class IntroScene implements GameScene {
 		this.game = game;
 	}
 
+	private boolean between(long begin, long end) {
+		return begin <= passed && passed <= end;
+	}
+
 	@Override
 	public void init() {
 		log("IntroScene init, start time=%d", GameClock.get().ticks);
 		passed = 0;
+		powerPelletsBlinking = false;
+		pacManChasingGhosts = false;
+		ghostEaten = -1;
+		ghostEatenCountdown = 0;
+
 		game.pacMan.reset();
 		game.pacMan.x = t(World.COLS);
 		game.pacMan.y = t(20) + World.HTS;
@@ -76,19 +90,16 @@ public class IntroScene implements GameScene {
 		game.pacMan.moveDir = Direction.LEFT;
 		game.pacMan.animation = game.pacMan.animWalking;
 		game.pacMan.animation.enabled = true;
+
 		for (var ghost : game.ghosts) {
 			ghost.reset();
 			ghost.x = game.pacMan.x + t(3) + ghost.id * 16;
 			ghost.y = game.pacMan.y;
 			ghost.speed = game.pacMan.speed * 1.05f;
-			ghost.moveDir = game.pacMan.moveDir;
+			ghost.moveDir = Direction.LEFT;
 			ghost.animation = ghost.animNormal;
 			ghost.animation.enabled = true;
 		}
-		powerPelletsBlinking = false;
-		pacManChasingGhosts = false;
-		ghostEaten = -1;
-		ghostEatenCountdown = 0;
 	}
 
 	@Override
@@ -97,10 +108,6 @@ public class IntroScene implements GameScene {
 			updateGuys();
 		}
 		++passed;
-	}
-
-	private int row(int ghostID) {
-		return t(6 + 3 * ghostID) + World.HTS;
 	}
 
 	@Override
@@ -168,10 +175,6 @@ public class IntroScene implements GameScene {
 		}
 	}
 
-	private boolean between(long begin, long end) {
-		return begin <= passed && passed <= end;
-	}
-
 	private void drawPacManChasingGhosts(Graphics2D g) {
 		for (var ghost : game.ghosts) {
 			if (ghost.id > ghostEaten) {
@@ -191,17 +194,21 @@ public class IntroScene implements GameScene {
 		}
 	}
 
-	/*
-	 * Phase 1: Guys come in from right side, when Pac-Man finds the power pellet, they reverse direction and chase
-	 * begins.
-	 */
-	private void updateGhostsChasingPacMan() {
+	private void moveGuys() {
 		game.pacMan.move(game.pacMan.moveDir);
 		game.pacMan.animation.advance();
 		for (var ghost : game.ghosts) {
 			ghost.move(ghost.moveDir);
 			ghost.animation.advance();
 		}
+	}
+
+	/*
+	 * Phase 1: Guys come in from right side, when Pac-Man finds the power pellet, they reverse direction and chase
+	 * begins.
+	 */
+	private void updateGhostsChasingPacMan() {
+		moveGuys();
 		if (game.pacMan.x <= COL_LEFT) { // finds power pellet
 			game.pacMan.moveDir = Direction.RIGHT;
 			for (var ghost : game.ghosts) {
@@ -227,17 +234,8 @@ public class IntroScene implements GameScene {
 			} else if (ghostEatenCountdown == 15) {
 				game.ghosts[ghostEaten].visible = false;
 			}
-			for (var ghost : game.ghosts) {
-				ghost.animNormal.enabled = false;
-			}
 		} else {
-			game.pacMan.move(game.pacMan.moveDir);
-			game.pacMan.animation.advance();
-			for (var ghost : game.ghosts) {
-				ghost.animNormal.enabled = true;
-				ghost.move(ghost.moveDir);
-				ghost.animation.advance();
-			}
+			moveGuys();
 			if (game.pacMan.x > game.ghosts[3].x) {
 				ghostEaten = 4;
 			} else {
@@ -277,7 +275,7 @@ public class IntroScene implements GameScene {
 
 	private void drawPointsAwarded(Graphics2D g) {
 		g.setColor(Color.PINK);
-		g.fillRect(t(10) + 3, t(24) + 3, 2, 2);
+		g.fillOval(t(10) + 3, t(24) + 3, 2, 2);
 		if (!powerPelletsBlinking || frame(passed, 30, 2) == 0) {
 			g.fillOval(t(10), t(26), t(1), t(1));
 		}
