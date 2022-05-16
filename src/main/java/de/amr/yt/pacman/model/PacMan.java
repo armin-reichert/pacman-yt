@@ -66,7 +66,7 @@ public class PacMan extends Creature {
 	public void reset() {
 		super.reset();
 		canReverse = true;
-		state = PacManState.NORMAL;
+		state = PacManState.NO_POWER;
 		powerCountdown = 0;
 		idleCountdown = 0;
 		animation = standingAnimation;
@@ -75,15 +75,15 @@ public class PacMan extends Creature {
 
 	public void update() {
 		switch (state) {
-		case NORMAL -> {
+		case NO_POWER -> {
 			restOrWalk();
-			animation = stuck ? stuckAnimation : speed == 0 ? standingAnimation : walkingAnimation;
+			animation = stuck ? stuckAnimation : walkingAnimation;
 		}
 		case POWER -> {
 			restOrWalk();
 			if (powerCountdown == 0) {
 				game.onPacPowerEnding();
-				state = PacManState.NORMAL;
+				state = PacManState.NO_POWER;
 			} else {
 				--powerCountdown;
 			}

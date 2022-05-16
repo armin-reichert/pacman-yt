@@ -171,7 +171,7 @@ public class GameModel {
 		pacMan.wishDir = Direction.LEFT;
 		pacMan.moveDir = Direction.LEFT;
 		pacMan.speed = playerSpeed;
-		pacMan.state = PacManState.NORMAL;
+		pacMan.state = PacManState.NO_POWER;
 
 		ghosts[BLINKY].placeAtTile(world.blinkyHomeTile, World.HTS, 0);
 		ghosts[BLINKY].wishDir = Direction.LEFT;
