@@ -23,11 +23,11 @@ public class SpriteAnimation {
 		return result;
 	}
 
-	private final byte[] frames;
-	private int index;
-	public String name;
+	public final String name;
 	public boolean enabled;
-	public boolean cycle;
+	private final byte[] frames;
+	private final boolean cycle;
+	private int index;
 
 	public SpriteAnimation(String name, byte[] frames, boolean cycle) {
 		this.name = name;
@@ -37,10 +37,7 @@ public class SpriteAnimation {
 	}
 
 	public SpriteAnimation(String name, int singleFrame, boolean cycle) {
-		this.name = name;
-		this.frames = new byte[] { (byte) singleFrame };
-		this.enabled = true;
-		this.cycle = cycle;
+		this(name, new byte[] { (byte) singleFrame }, cycle);
 	}
 
 	@Override
