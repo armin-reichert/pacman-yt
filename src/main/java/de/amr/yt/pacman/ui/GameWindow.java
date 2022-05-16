@@ -45,6 +45,7 @@ import de.amr.yt.pacman.controller.GameController;
 import de.amr.yt.pacman.controller.GameState;
 import de.amr.yt.pacman.lib.Direction;
 import de.amr.yt.pacman.lib.FPSCounter;
+import de.amr.yt.pacman.lib.GameClock;
 import de.amr.yt.pacman.model.GameModel;
 import de.amr.yt.pacman.model.World;
 
@@ -86,6 +87,15 @@ public class GameWindow {
 				case KeyEvent.VK_Q -> gameController.initGame();
 				case KeyEvent.VK_S -> game.pacSafe = !game.pacSafe;
 				case KeyEvent.VK_SPACE -> gameController.startLevel();
+				case KeyEvent.VK_PLUS -> {
+					GameClock.get().frequency += 10;
+				}
+				case KeyEvent.VK_MINUS -> {
+					GameClock.get().frequency -= 10;
+					if (GameClock.get().frequency < 0) {
+						GameClock.get().frequency = 10;
+					}
+				}
 				}
 			}
 		});
@@ -186,7 +196,7 @@ public class GameWindow {
 		}
 		g.setColor(Color.WHITE);
 		g.setFont(new Font(Font.DIALOG, Font.PLAIN, 6));
-		g.drawString("%2d FPS".formatted(fpsCounter.getFrameRate()), t(1), t(2));
+		g.drawString("%2d FPS (Target=%d)".formatted(fpsCounter.getFrameRate(), GameClock.get().frequency), t(1), t(2));
 		String text = "%s (%d)".formatted(game.state.name(), game.stateTimer);
 		if (game.state == GameState.PLAYING) {
 			if (game.chasingPhase) {
