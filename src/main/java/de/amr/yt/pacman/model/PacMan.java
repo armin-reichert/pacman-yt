@@ -24,6 +24,8 @@ SOFTWARE.
 package de.amr.yt.pacman.model;
 
 import static de.amr.yt.pacman.controller.GameController.sec;
+import static de.amr.yt.pacman.lib.SpriteAnimation.bytes;
+import static de.amr.yt.pacman.lib.SpriteAnimation.nfold;
 
 import de.amr.yt.pacman.lib.SpriteAnimation;
 import de.amr.yt.pacman.lib.Vector2;
@@ -33,25 +35,17 @@ import de.amr.yt.pacman.lib.Vector2;
  */
 public class PacMan extends Creature {
 
-	static byte[] multiplied(byte[] frames, int n) {
-		byte[] result = new byte[frames.length * n];
-		for (int i = 0; i < frames.length; ++i) {
-			for (int j = 0; j < n; ++j) {
-				result[n * i + j] = frames[i];
-			}
-		}
-		return result;
-	}
+	public final SpriteAnimation standingAnimation = new SpriteAnimation("pacman-standing", //
+			new byte[] { 2 }, false);
 
-	static final byte[] STANDING_ANIMATION = { 2 };
-	static final byte[] STUCK_ANIMATION = { 1 };
-	static final byte[] WALKING_ANIMATION = { 1, 1, 0, 0, 1, 1, 2, 2 };
-	static final byte[] DYING_ANIMATION = multiplied(new byte[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }, 4);
+	public final SpriteAnimation stuckAnimation = new SpriteAnimation("pacman-stuck", //
+			new byte[] { 1 }, false);
 
-	public final SpriteAnimation standingAnimation = new SpriteAnimation("pacman-standing", STANDING_ANIMATION, false);
-	public final SpriteAnimation stuckAnimation = new SpriteAnimation("pacman-stuck", STUCK_ANIMATION, false);
-	public final SpriteAnimation walkingAnimation = new SpriteAnimation("pacman-walking", WALKING_ANIMATION, true);
-	public final SpriteAnimation dyingAnimation = new SpriteAnimation("pacman-dying", DYING_ANIMATION, false);
+	public final SpriteAnimation walkingAnimation = new SpriteAnimation("pacman-walking", //
+			nfold(2, bytes(1, 0, 1, 2)), true);
+
+	public final SpriteAnimation dyingAnimation = new SpriteAnimation("pacman-dying", //
+			nfold(6, bytes(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10)), false);
 
 	public final GameModel game;
 	public PacManState state;

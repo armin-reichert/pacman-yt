@@ -27,6 +27,7 @@ import static de.amr.yt.pacman.lib.Direction.DOWN;
 import static de.amr.yt.pacman.lib.Direction.LEFT;
 import static de.amr.yt.pacman.lib.Direction.RIGHT;
 import static de.amr.yt.pacman.lib.Direction.UP;
+import static de.amr.yt.pacman.lib.SpriteAnimation.nfold;
 import static de.amr.yt.pacman.lib.Vector2.v;
 import static de.amr.yt.pacman.model.GameModel.BLINKY;
 import static de.amr.yt.pacman.model.GameModel.CLYDE;
@@ -43,8 +44,11 @@ import de.amr.yt.pacman.lib.Vector2;
  */
 public class Ghost extends Creature {
 
-	static final byte[] NORMAL_ANIMATION = { 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1 };
-	static final byte[] FRIGHTENED_ANIMATION = { 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1 };
+	public final SpriteAnimation normalAnimation = new SpriteAnimation("ghost-normal", nfold(8, new byte[] { 0, 1 }),
+			true);
+
+	public final SpriteAnimation frightenedAnimation = new SpriteAnimation("ghost-frightened",
+			nfold(8, new byte[] { 0, 1 }), true);
 
 	static final Direction[] DIR_ORDER = { UP, LEFT, DOWN, RIGHT };
 
@@ -56,8 +60,6 @@ public class Ghost extends Creature {
 	public int eatenValue;
 
 	public SpriteAnimation animation;
-	public SpriteAnimation normalAnimation = new SpriteAnimation("ghost-normal", NORMAL_ANIMATION, true);
-	public SpriteAnimation frightenedAnimation = new SpriteAnimation("ghost-frightened", FRIGHTENED_ANIMATION, true);
 
 	public Ghost(GameModel game, int id) {
 		super(game.world);

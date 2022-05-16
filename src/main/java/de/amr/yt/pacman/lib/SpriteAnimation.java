@@ -5,6 +5,24 @@ package de.amr.yt.pacman.lib;
  */
 public class SpriteAnimation {
 
+	public static byte[] bytes(int... numbers) {
+		byte[] bytes = new byte[numbers.length];
+		for (int i = 0; i < bytes.length; ++i) {
+			bytes[i] = (byte) numbers[i];
+		}
+		return bytes;
+	}
+
+	public static byte[] nfold(int n, byte[] frames) {
+		byte[] result = new byte[frames.length * n];
+		for (int i = 0; i < frames.length; ++i) {
+			for (int j = 0; j < n; ++j) {
+				result[n * i + j] = frames[i];
+			}
+		}
+		return result;
+	}
+
 	private final byte[] frames;
 	public String name;
 	public int index;
