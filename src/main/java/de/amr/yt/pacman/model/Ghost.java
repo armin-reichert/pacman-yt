@@ -106,7 +106,7 @@ public class Ghost extends Creature {
 		switch (state) {
 		case LOCKED -> {
 			if (id != BLINKY)
-				bounce(world.houseBottom, world.houseTop);
+				bounce(world.houseTop, world.houseBottom);
 		}
 		case ENTERING_HOUSE -> enterGhostHouse(world.houseEntry);
 		case LEAVING_HOUSE -> leaveGhostHouse(world.houseEntry);
@@ -276,10 +276,10 @@ public class Ghost extends Creature {
 		}
 	}
 
-	private void bounce(float bottomY, float topY) {
-		if (y >= bottomY) {
+	private void bounce(float top, float bottom) {
+		if (y >= bottom) {
 			moveDir = wishDir = UP;
-		} else if (y <= topY) {
+		} else if (y <= top) {
 			moveDir = wishDir = DOWN;
 		}
 		speed = currentSpeed();
