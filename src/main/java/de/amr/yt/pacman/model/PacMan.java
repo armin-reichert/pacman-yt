@@ -33,20 +33,30 @@ import de.amr.yt.pacman.lib.Vector2;
  */
 public class PacMan extends Creature {
 
+	static byte[] multiplied(byte[] frames, int n) {
+		byte[] result = new byte[frames.length * n];
+		for (int i = 0; i < frames.length; ++i) {
+			for (int j = 0; j < n; ++j) {
+				result[n * i + j] = frames[i];
+			}
+		}
+		return result;
+	}
+
 	static final byte[] STANDING_ANIMATION = { 2 };
 	static final byte[] STUCK_ANIMATION = { 1 };
 	static final byte[] WALKING_ANIMATION = { 1, 1, 0, 0, 1, 1, 2, 2 };
+	static final byte[] DYING_ANIMATION = multiplied(new byte[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }, 4);
 
 	public final SpriteAnimation standingAnimation = new SpriteAnimation("pacman-standing", STANDING_ANIMATION, false);
 	public final SpriteAnimation stuckAnimation = new SpriteAnimation("pacman-stuck", STUCK_ANIMATION, false);
 	public final SpriteAnimation walkingAnimation = new SpriteAnimation("pacman-walking", WALKING_ANIMATION, true);
+	public final SpriteAnimation dyingAnimation = new SpriteAnimation("pacman-dying", DYING_ANIMATION, false);
 
 	public final GameModel game;
 	public PacManState state;
 	public int powerCountdown;
 	public int idleCountdown;
-	public int dyingAnimationCountdown;
-	public final int dyingAnimationDuration = sec(1.5);
 	public final int losingPowerDuration = sec(2);
 
 	public SpriteAnimation animation;
@@ -64,7 +74,6 @@ public class PacMan extends Creature {
 		state = PacManState.NORMAL;
 		powerCountdown = 0;
 		idleCountdown = 0;
-		dyingAnimationCountdown = 0;
 		animation = standingAnimation;
 	}
 
@@ -85,10 +94,7 @@ public class PacMan extends Creature {
 			animation = stuck ? stuckAnimation : walkingAnimation;
 		}
 		case DEAD -> {
-			if (dyingAnimationCountdown > 0) {
-				--dyingAnimationCountdown;
-			}
-//			currentAnimation = dyingAnimation;
+			animation = dyingAnimation;
 		}
 		}
 	}

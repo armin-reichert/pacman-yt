@@ -39,7 +39,6 @@ import de.amr.yt.pacman.model.Creature;
 import de.amr.yt.pacman.model.Ghost;
 import de.amr.yt.pacman.model.GhostState;
 import de.amr.yt.pacman.model.PacMan;
-import de.amr.yt.pacman.model.PacManState;
 
 /**
  * @author Armin Reichert
@@ -60,24 +59,11 @@ public class Renderer {
 	}
 
 	public static void drawPacMan(Graphics2D g, PacMan pacMan) {
-		if (pacMan.state == PacManState.DEAD) {
-			drawPacManDead(g, pacMan);
-		} else {
-			drawPacManAlive(g, pacMan);
-		}
-	}
-
-	public static void drawPacManDead(Graphics2D g, PacMan pacMan) {
-		if (pacMan.dyingAnimationCountdown > 0) {
-			int frame = 10 - (10 * pacMan.dyingAnimationCountdown / pacMan.dyingAnimationDuration);
-			drawGuy(g, pacMan, Sprites.get().pacDeadAnimation.get(frame));
+		if (pacMan.animation == pacMan.dyingAnimation) {
+			drawGuy(g, pacMan, Sprites.get().pacDead.get(pacMan.animation.frame()));
 		} else {
 			drawGuy(g, pacMan, Sprites.get().pac.get(pacMan.moveDir).get(pacMan.animation.frame()));
 		}
-	}
-
-	public static void drawPacManAlive(Graphics2D g, PacMan pacMan) {
-		drawGuy(g, pacMan, Sprites.get().pac.get(pacMan.moveDir).get(pacMan.animation.frame()));
 		pacMan.animation.advance();
 	}
 

@@ -179,8 +179,7 @@ public class GameController {
 		if (game.stateTimer == 0) {
 			game.reset();
 			game.pacMan.visible = true;
-			game.pacMan.walkingAnimation.enabled = false;
-//			game.pacMan.animationIndex = 6; // full face
+			game.pacMan.animation = game.pacMan.standingAnimation;
 			for (Ghost ghost : game.ghosts) {
 				ghost.visible = true;
 				ghost.normalAnimation.enabled = false;
@@ -297,7 +296,7 @@ public class GameController {
 		game.pacMan.update();
 
 		if (game.stateTimer == 0) {
-			game.pacMan.walkingAnimation.enabled = false;
+			game.pacMan.animation.enabled = false;
 			game.bonus = -1;
 		}
 
@@ -308,12 +307,11 @@ public class GameController {
 		}
 
 		else if (game.stateTimer == sec(1.5)) {
-			game.pacMan.dyingAnimationCountdown = game.pacMan.dyingAnimationDuration;
-			game.pacMan.walkingAnimation.enabled = true;
+			game.pacMan.animation.enabled = true;
 			Sounds.play("pacman_death");
 		}
 
-		else if (game.stateTimer == sec(5)) {
+		else if (game.stateTimer == sec(3)) {
 			--game.lives;
 			if (game.lives > 0) {
 				enterGameState(GameState.READY);

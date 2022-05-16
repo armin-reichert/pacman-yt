@@ -63,7 +63,7 @@ public class Sprites {
 
 	// sprite caches
 	public EnumMap<Direction, List<BufferedImage>> pac = new EnumMap<>(Direction.class);
-	public List<BufferedImage> pacDeadAnimation;
+	public List<BufferedImage> pacDead;
 	public List<EnumMap<Direction, List<BufferedImage>>> ghosts = new ArrayList<>();
 	public List<BufferedImage> ghostFrightened;
 	public EnumMap<Direction, BufferedImage> ghostEaten = new EnumMap<>(Direction.class);
@@ -81,9 +81,9 @@ public class Sprites {
 		pac.put(UP, List.of(s(0, 2), s(1, 2), s(2, 0)));
 		pac.put(DOWN, List.of(s(0, 3), s(1, 3), s(2, 0)));
 
-		pacDeadAnimation = new ArrayList<>();
+		pacDead = new ArrayList<>();
 		for (int col = 3; col <= 13; ++col) {
-			pacDeadAnimation.add(s(col, 0));
+			pacDead.add(s(col, 0));
 		}
 
 		EnumMap<Direction, List<BufferedImage>> redGhost = new EnumMap<>(Direction.class);

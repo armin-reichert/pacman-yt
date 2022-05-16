@@ -25,7 +25,7 @@ public class SpriteAnimation {
 	public void advance() {
 		if (enabled) {
 			if (index + 1 == frames.length) {
-				index = cycle ? 0 : frames.length;
+				index = cycle ? 0 : frames.length - 1;
 			} else {
 				index++;
 			}
