@@ -27,12 +27,19 @@ import static de.amr.yt.pacman.controller.GameController.sec;
 
 import de.amr.yt.pacman.lib.SpriteAnimation;
 import de.amr.yt.pacman.lib.Vector2;
-import de.amr.yt.pacman.ui.Sprites;
 
 /**
  * @author Armin Reichert
  */
 public class PacMan extends Creature {
+
+	static final byte[] STANDING_ANIMATION = { 2 };
+	static final byte[] STUCK_ANIMATION = { 1 };
+	static final byte[] WALKING_ANIMATION = { 1, 1, 0, 0, 1, 1, 2, 2 };
+
+	public final SpriteAnimation standingAnimation = new SpriteAnimation("pacman-standing", STANDING_ANIMATION, false);
+	public final SpriteAnimation stuckAnimation = new SpriteAnimation("pacman-stuck", STUCK_ANIMATION, false);
+	public final SpriteAnimation walkingAnimation = new SpriteAnimation("pacman-walking", WALKING_ANIMATION, true);
 
 	public final GameModel game;
 	public PacManState state;
@@ -41,7 +48,8 @@ public class PacMan extends Creature {
 	public int dyingAnimationCountdown;
 	public final int dyingAnimationDuration = sec(1.5);
 	public final int losingPowerDuration = sec(2);
-	public SpriteAnimation mouthAnimation = new SpriteAnimation(Sprites.PACMAN_MOUTH_ANIMATION);
+
+	public SpriteAnimation animation;
 
 	public PacMan(GameModel game) {
 		super(game.world);
@@ -57,6 +65,32 @@ public class PacMan extends Creature {
 		powerCountdown = 0;
 		idleCountdown = 0;
 		dyingAnimationCountdown = 0;
+		animation = standingAnimation;
+	}
+
+	public void update() {
+		switch (state) {
+		case NORMAL -> {
+			restOrWalk();
+			animation = stuck ? stuckAnimation : speed == 0 ? standingAnimation : walkingAnimation;
+		}
+		case POWER -> {
+			restOrWalk();
+			if (powerCountdown == 0) {
+				game.onPacPowerEnding();
+				state = PacManState.NORMAL;
+			} else {
+				--powerCountdown;
+			}
+			animation = stuck ? stuckAnimation : walkingAnimation;
+		}
+		case DEAD -> {
+			if (dyingAnimationCountdown > 0) {
+				--dyingAnimationCountdown;
+			}
+//			currentAnimation = dyingAnimation;
+		}
+		}
 	}
 
 	@Override
@@ -81,26 +115,6 @@ public class PacMan extends Creature {
 
 	public boolean isLosingPower() {
 		return 0 < powerCountdown && powerCountdown <= losingPowerDuration;
-	}
-
-	public void update() {
-		switch (state) {
-		case NORMAL -> restOrWalk();
-		case POWER -> {
-			restOrWalk();
-			if (powerCountdown == 0) {
-				game.onPacPowerEnding();
-				state = PacManState.NORMAL;
-			} else {
-				--powerCountdown;
-			}
-		}
-		case DEAD -> {
-			if (dyingAnimationCountdown > 0) {
-				--dyingAnimationCountdown;
-			}
-		}
-		}
 	}
 
 	private void restOrWalk() {

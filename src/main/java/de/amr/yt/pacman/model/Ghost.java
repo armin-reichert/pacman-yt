@@ -37,12 +37,14 @@ import static de.amr.yt.pacman.model.World.t;
 import de.amr.yt.pacman.lib.Direction;
 import de.amr.yt.pacman.lib.SpriteAnimation;
 import de.amr.yt.pacman.lib.Vector2;
-import de.amr.yt.pacman.ui.Sprites;
 
 /**
  * @author Armin Reichert
  */
 public class Ghost extends Creature {
+
+	static final byte[] NORMAL_ANIMATION = { 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1 };
+	static final byte[] FRIGHTENED_ANIMATION = { 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1 };
 
 	static final Direction[] DIR_ORDER = { UP, LEFT, DOWN, RIGHT };
 
@@ -53,7 +55,9 @@ public class Ghost extends Creature {
 	public long eatenTimer;
 	public int eatenValue;
 
-	public SpriteAnimation feetAnimation = new SpriteAnimation(Sprites.GHOST_ANIMATION);
+	public SpriteAnimation animation;
+	public SpriteAnimation normalAnimation = new SpriteAnimation("ghost-normal", NORMAL_ANIMATION, true);
+	public SpriteAnimation frightenedAnimation = new SpriteAnimation("ghost-frightened", FRIGHTENED_ANIMATION, true);
 
 	public Ghost(GameModel game, int id) {
 		super(game.world);
@@ -70,6 +74,38 @@ public class Ghost extends Creature {
 		targetTile = null;
 		eatenTimer = 0;
 		eatenValue = 0;
+		animation = normalAnimation;
+	}
+
+	public void update() {
+		switch (state) {
+		case LOCKED -> {
+			if (id != BLINKY) {
+				bounce(world.houseTop, world.houseBottom);
+			}
+			animation = game.pacMan.hasPower() ? frightenedAnimation : normalAnimation;
+		}
+		case ENTERING_HOUSE -> {
+			enterGhostHouse(world.houseEntry);
+//			currentAnimation = eyesAnimation; 
+		}
+		case LEAVING_HOUSE -> {
+			leaveGhostHouse(world.houseEntry);
+			animation = normalAnimation;
+		}
+		case CHASING, SCATTERING -> {
+			aimTowardsTarget();
+			animation = normalAnimation;
+		}
+		case FRIGHTENED -> {
+			aimTowardsTarget();
+			animation = frightenedAnimation;
+		}
+		case EATEN -> {
+			returnToGhostHouse(world.houseEntry);
+//			currentAnimation = eatenTimer > 0 ? valueAnimation : eyesAnimation;
+		}
+		}
 	}
 
 	@Override
@@ -104,19 +140,6 @@ public class Ghost extends Creature {
 		case LOCKED -> 0.4f * GameModel.BASE_SPEED;// TODO guess
 		case SCATTERING -> tunnel ? game.ghostSpeedTunnel : game.ghostSpeed;
 		};
-	}
-
-	public void update() {
-		switch (state) {
-		case LOCKED -> {
-			if (id != BLINKY)
-				bounce(world.houseTop, world.houseBottom);
-		}
-		case ENTERING_HOUSE -> enterGhostHouse(world.houseEntry);
-		case LEAVING_HOUSE -> leaveGhostHouse(world.houseEntry);
-		case CHASING, SCATTERING, FRIGHTENED -> aimTowardsTarget();
-		case EATEN -> returnToGhostHouse(world.houseEntry);
-		}
 	}
 
 	private void aimTowardsTarget() {

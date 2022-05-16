@@ -58,9 +58,6 @@ public class Sprites {
 		return IT;
 	}
 
-	public static final byte[] PACMAN_MOUTH_ANIMATION = { 1, 1, 0, 0, 1, 1, 2, 2 };
-	public static final byte[] GHOST_ANIMATION = { 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1 };
-
 	public BufferedImage mazeImage;
 	public BufferedImage sheetImage;
 

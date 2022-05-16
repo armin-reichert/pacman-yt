@@ -6,11 +6,16 @@ package de.amr.yt.pacman.lib;
 public class SpriteAnimation {
 
 	private final byte[] frames;
+	public String name;
 	public int index;
 	public boolean enabled;
+	public boolean cycle;
 
-	public SpriteAnimation(byte[] frames) {
+	public SpriteAnimation(String name, byte[] frames, boolean cycle) {
+		this.name = name;
 		this.frames = frames;
+		this.enabled = false;
+		this.cycle = cycle;
 	}
 
 	public int frame() {
@@ -19,7 +24,11 @@ public class SpriteAnimation {
 
 	public void advance() {
 		if (enabled) {
-			index = (index + 1) % frames.length;
+			if (index + 1 == frames.length) {
+				index = cycle ? 0 : frames.length;
+			} else {
+				index++;
+			}
 		}
 	}
 }

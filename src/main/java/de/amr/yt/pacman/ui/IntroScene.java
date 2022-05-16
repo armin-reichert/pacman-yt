@@ -31,8 +31,8 @@ import static de.amr.yt.pacman.model.GameModel.CLYDE;
 import static de.amr.yt.pacman.model.GameModel.INKY;
 import static de.amr.yt.pacman.model.GameModel.PINKY;
 import static de.amr.yt.pacman.model.World.t;
+import static de.amr.yt.pacman.ui.Renderer.drawGhost;
 import static de.amr.yt.pacman.ui.Renderer.drawGhostFrightened;
-import static de.amr.yt.pacman.ui.Renderer.drawGhostNormal;
 import static de.amr.yt.pacman.ui.Renderer.drawGhostValue;
 import static de.amr.yt.pacman.ui.Renderer.drawPacMan;
 
@@ -74,14 +74,16 @@ public class IntroScene implements GameScene {
 		game.pacMan.y = t(20) + World.HTS;
 		game.pacMan.speed = game.playerSpeed;
 		game.pacMan.moveDir = Direction.LEFT;
-		game.pacMan.mouthAnimation.enabled = true;
+		game.pacMan.animation = game.pacMan.walkingAnimation;
+		game.pacMan.animation.enabled = true;
 		for (var ghost : game.ghosts) {
 			ghost.reset();
 			ghost.x = game.pacMan.x + t(3) + ghost.id * 16;
 			ghost.y = game.pacMan.y;
 			ghost.speed = game.pacMan.speed * 1.05f;
 			ghost.moveDir = game.pacMan.moveDir;
-			ghost.feetAnimation.enabled = true;
+			ghost.animation = ghost.normalAnimation;
+			ghost.animation.enabled = true;
 		}
 		powerPelletsBlinking = false;
 		pacManChasingGhosts = false;
@@ -152,7 +154,7 @@ public class IntroScene implements GameScene {
 				drawPacManChasingGhosts(g);
 			} else {
 				for (var ghost : game.ghosts) {
-					drawGhostNormal(g, ghost);
+					drawGhost(g, ghost, false, false);
 				}
 				drawPacMan(g, game.pacMan);
 			}
@@ -219,12 +221,12 @@ public class IntroScene implements GameScene {
 				game.ghosts[ghostEaten].visible = false;
 			}
 			for (var ghost : game.ghosts) {
-				ghost.feetAnimation.enabled = false;
+				ghost.normalAnimation.enabled = false;
 			}
 		} else {
 			game.pacMan.move(game.pacMan.moveDir);
 			for (var ghost : game.ghosts) {
-				ghost.feetAnimation.enabled = true;
+				ghost.normalAnimation.enabled = true;
 				ghost.move(ghost.moveDir);
 			}
 			if (game.pacMan.x > game.ghosts[3].x) {

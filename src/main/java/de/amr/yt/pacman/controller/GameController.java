@@ -179,19 +179,19 @@ public class GameController {
 		if (game.stateTimer == 0) {
 			game.reset();
 			game.pacMan.visible = true;
-			game.pacMan.mouthAnimation.enabled = false;
+			game.pacMan.walkingAnimation.enabled = false;
 //			game.pacMan.animationIndex = 6; // full face
 			for (Ghost ghost : game.ghosts) {
 				ghost.visible = true;
-				ghost.feetAnimation.enabled = false;
+				ghost.normalAnimation.enabled = false;
 			}
 		}
 
 		else if (game.stateTimer == sec(5)) {
 			game.powerPelletsBlinking = true;
-			game.pacMan.mouthAnimation.enabled = true;
+			game.pacMan.walkingAnimation.enabled = true;
 			for (Ghost ghost : game.ghosts) {
-				ghost.feetAnimation.enabled = true;
+				ghost.normalAnimation.enabled = true;
 			}
 			enterGameState(GameState.PLAYING);
 			return;
@@ -297,7 +297,7 @@ public class GameController {
 		game.pacMan.update();
 
 		if (game.stateTimer == 0) {
-			game.pacMan.mouthAnimation.enabled = false;
+			game.pacMan.walkingAnimation.enabled = false;
 			game.bonus = -1;
 		}
 
@@ -309,7 +309,7 @@ public class GameController {
 
 		else if (game.stateTimer == sec(1.5)) {
 			game.pacMan.dyingAnimationCountdown = game.pacMan.dyingAnimationDuration;
-			game.pacMan.mouthAnimation.enabled = true;
+			game.pacMan.walkingAnimation.enabled = true;
 			Sounds.play("pacman_death");
 		}
 
@@ -347,10 +347,9 @@ public class GameController {
 
 	private void update_LEVEL_COMPLETE() {
 		if (game.stateTimer == 0) {
-			game.pacMan.mouthAnimation.enabled = false;
-//			game.pacMan.animationIndex = 2; // full face
+			game.pacMan.animation = game.pacMan.standingAnimation;
 			for (Ghost ghost : game.ghosts) {
-				ghost.feetAnimation.enabled = false;
+				ghost.normalAnimation.enabled = false;
 			}
 		}
 
@@ -363,12 +362,13 @@ public class GameController {
 
 		else if (game.stateTimer == sec(3)) {
 			game.mazeFlashing = false;
-			game.pacMan.visible = false;
 			game.initLevel(game.levelNumber + 1);
 			game.levelSymbols.add(game.bonusSymbol);
 			if (game.levelSymbols.size() == 8) {
 				game.levelSymbols.remove(0);
 			}
+			game.pacMan.visible = false;
+			game.pacMan.animation = game.pacMan.walkingAnimation;
 			enterGameState(GameState.LEVEL_STARTING);
 		}
 	}
@@ -377,9 +377,9 @@ public class GameController {
 		if (game.stateTimer == 0) {
 			game.powerPelletsBlinking = false;
 			for (Ghost ghost : game.ghosts) {
-				ghost.feetAnimation.enabled = false;
+				ghost.normalAnimation.enabled = false;
 			}
-			game.pacMan.mouthAnimation.enabled = false;
+			game.pacMan.walkingAnimation.enabled = false;
 		}
 
 		else if (game.stateTimer == sec(5)) {

@@ -71,18 +71,14 @@ public class Renderer {
 		if (pacMan.dyingAnimationCountdown > 0) {
 			int frame = 10 - (10 * pacMan.dyingAnimationCountdown / pacMan.dyingAnimationDuration);
 			drawGuy(g, pacMan, Sprites.get().pacDeadAnimation.get(frame));
-		} else if (false /* TODO */) {
-			drawGuy(g, pacMan, Sprites.get().pac.get(pacMan.moveDir).get(2)); // full face
+		} else {
+			drawGuy(g, pacMan, Sprites.get().pac.get(pacMan.moveDir).get(pacMan.animation.frame()));
 		}
 	}
 
 	public static void drawPacManAlive(Graphics2D g, PacMan pacMan) {
-		if (pacMan.stuck) {
-			drawGuy(g, pacMan, Sprites.get().pac.get(pacMan.moveDir).get(1));
-		} else {
-			drawGuy(g, pacMan, Sprites.get().pac.get(pacMan.moveDir).get(pacMan.mouthAnimation.frame()));
-			pacMan.mouthAnimation.advance();
-		}
+		drawGuy(g, pacMan, Sprites.get().pac.get(pacMan.moveDir).get(pacMan.animation.frame()));
+		pacMan.animation.advance();
 	}
 
 	public static Color ghostColor(int id) {
@@ -110,23 +106,19 @@ public class Renderer {
 		}
 
 		else { // normal look
-			drawGhostNormal(g, ghost);
+			drawGuy(g, ghost, Sprites.get().ghosts.get(ghost.id).get(ghost.moveDir).get(ghost.animation.frame()));
+			ghost.animation.advance();
 		}
 	}
 
-	public static void drawGhostNormal(Graphics2D g, Ghost ghost) {
-		drawGuy(g, ghost, Sprites.get().ghosts.get(ghost.id).get(ghost.moveDir).get(ghost.feetAnimation.frame()));
-		ghost.feetAnimation.advance();
-	}
-
 	public static void drawGhostFrightened(Graphics2D g, Ghost ghost, boolean blinking) {
-		int frame = ghost.feetAnimation.frame();
+		int frame = ghost.animation.frame();
 		if (blinking) {
 			int blinkOffset = frame(20, 2) == 0 ? 0 : 2;
 			frame += blinkOffset;
 		}
 		drawGuy(g, ghost, Sprites.get().ghostFrightened.get(frame));
-		ghost.feetAnimation.advance();
+		ghost.animation.advance();
 	}
 
 	public static void drawGhostValue(Graphics2D g, Ghost ghost, int value) {
@@ -149,6 +141,7 @@ public class Renderer {
 			int sw = g.getFontMetrics().stringWidth(text);
 			g.drawString(text, (int) pacMan.x - sw / 2, (int) pacMan.y - 8);
 			text = "(%d,%d)".formatted(pacMan.tile().x, pacMan.tile().y);
+			text += " " + pacMan.animation.name;
 			sw = g.getFontMetrics().stringWidth(text);
 			g.drawString(text, (int) pacMan.x - sw / 2, (int) pacMan.y + 12);
 		}
@@ -162,6 +155,7 @@ public class Renderer {
 			int sw = g.getFontMetrics().stringWidth(text);
 			g.drawString(text, (int) ghost.x - sw / 2, (int) ghost.y - 8);
 			text = "(%d,%d)".formatted(ghost.tile().x, ghost.tile().y);
+			text += " " + ghost.animation.name;
 			sw = g.getFontMetrics().stringWidth(text);
 			g.drawString(text, (int) ghost.x - sw / 2, (int) ghost.y + 12);
 		}
