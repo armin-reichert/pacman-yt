@@ -144,20 +144,7 @@ public class GameController {
 
 	private void update_PLAYING() {
 
-		// Control the attack waves
-		int chasePhase = game.chaseStartTicks.indexOf(game.attackTimer);
-		if (chasePhase != -1) {
-			startChasingPhase();
-			log("Starting chasing phase #%d, time=%d", chasePhase + 1, GameClock.get().ticks);
-		}
-		int scatterPhase = game.scatterStartTicks.indexOf(game.attackTimer);
-		if (scatterPhase != -1) {
-			startScatteringPhase();
-			log("Starting scattering phase #%d, time=%d", scatterPhase + 1, GameClock.get().ticks);
-		}
-		if (!game.pacMan.hasPower()) {
-			++game.attackTimer;
-		}
+		updateAttacWave();
 
 		// Let Pac-Man do his stuff
 		if (joystickPosition != null) {
@@ -193,6 +180,21 @@ public class GameController {
 		game.updateBonus();
 	}
 
+	private void updateAttacWave() {
+		int chaseStart = game.chaseStartTicks.indexOf(game.attackTimer);
+		if (chaseStart != -1) {
+			startChase(chaseStart);
+		}
+		int scatterStart = game.scatterStartTicks.indexOf(game.attackTimer);
+		if (scatterStart != -1) {
+			startScatter(scatterStart);
+		}
+		if (!game.pacMan.hasPower()) {
+			// timer is stopped while Pac-Man has power
+			++game.attackTimer;
+		}
+	}
+
 	private void unlockGhosts() {
 		// TODO this is just some arbitrary logic, the real game uses dot counters and stuff
 		if (game.ghosts[BLINKY].state == GhostState.LOCKED && game.stateTimer == sec(0)) {
@@ -209,7 +211,7 @@ public class GameController {
 		}
 	}
 
-	private void startScatteringPhase() {
+	private void startScatter(int phase) {
 		for (Ghost ghost : game.ghosts) {
 			if (ghost.state == GhostState.CHASING) {
 				ghost.state = GhostState.SCATTERING;
@@ -217,10 +219,10 @@ public class GameController {
 			}
 			game.chasingPhase = false;
 		}
-		log("Scattering phase started");
+		log("Scattering phase %d started at clock time %d", phase + 1, GameClock.get().ticks);
 	}
 
-	private void startChasingPhase() {
+	private void startChase(int phase) {
 		for (Ghost ghost : game.ghosts) {
 			if (ghost.state == GhostState.SCATTERING) {
 				ghost.state = GhostState.CHASING;
@@ -228,7 +230,7 @@ public class GameController {
 			}
 			game.chasingPhase = true;
 		}
-		log("Chasing phase started");
+		log("Chasing phase %d started at clock time %d", phase + 1, GameClock.get().ticks);
 	}
 
 	private void update_PACMAN_DEAD() {
