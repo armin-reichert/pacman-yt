@@ -115,7 +115,20 @@ public class World {
 	public final float houseTop = t(17);
 	public final float houseBottom = t(18);
 
+	public final int totalFoodCount;
 	public int eatenFoodCount;
+
+	public World() {
+		int count = 0;
+		for (int row = 0; row < ROWS; ++row) {
+			for (int col = 0; col < COLS; ++col) {
+				if (isPellet(row, col) || isPowerPellet(row, col)) {
+					++count;
+				}
+			}
+		}
+		totalFoodCount = count;
+	}
 
 	private boolean inRange(int begin, int end, int value) {
 		return begin <= value && value <= end;
