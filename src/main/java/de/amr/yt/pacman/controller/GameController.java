@@ -96,8 +96,8 @@ public class GameController {
 			case GAME_OVER -> update_GAME_OVER();
 			}
 			joystickPosition = null;
+			window.update();
 		}
-		window.update();
 		window.render();
 	}
 
