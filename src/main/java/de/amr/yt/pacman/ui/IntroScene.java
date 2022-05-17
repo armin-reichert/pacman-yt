@@ -34,6 +34,8 @@ import static de.amr.yt.pacman.model.World.t;
 import static de.amr.yt.pacman.ui.Renderer.drawGhost;
 import static de.amr.yt.pacman.ui.Renderer.drawGhostValue;
 import static de.amr.yt.pacman.ui.Renderer.drawPacMan;
+import static de.amr.yt.pacman.ui.Renderer.drawPellet;
+import static de.amr.yt.pacman.ui.Renderer.drawPowerPellet;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -155,7 +157,7 @@ public class IntroScene implements GameScene {
 			drawPointsAwarded(g);
 		}
 		if (passed >= sec(11.0)) {
-			drawPowerPellet(g);
+			drawPacManTargetPowerPellet(g);
 		}
 		if (passed == sec(11.5)) {
 			powerPelletsBlinking = true;
@@ -274,10 +276,9 @@ public class IntroScene implements GameScene {
 	}
 
 	private void drawPointsAwarded(Graphics2D g) {
-		g.setColor(Color.PINK);
-		g.fillOval(t(10) + 3, t(24) + 3, 2, 2);
+		drawPellet(g, t(10), t(24));
 		if (!powerPelletsBlinking || frame(passed, 2, 15) == 0) {
-			g.fillOval(t(10), t(26), t(1), t(1));
+			drawPowerPellet(g, t(10), t(26));
 		}
 		g.setColor(Color.WHITE);
 		g.setFont(Renderer.ARCADE_FONT);
@@ -288,13 +289,12 @@ public class IntroScene implements GameScene {
 		g.drawString("PTS", t(15), t(27));
 	}
 
-	private void drawPowerPellet(Graphics2D g) {
+	private void drawPacManTargetPowerPellet(Graphics2D g) {
 		if (pacManChasingGhosts) {
 			return;
 		}
 		if (!powerPelletsBlinking || frame(passed, 2, 15) == 0) {
-			g.setColor(Color.PINK);
-			g.fillOval(COL_LEFT, t(20), t(1), t(1));
+			drawPowerPellet(g, COL_LEFT, t(20));
 		}
 	}
 

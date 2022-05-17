@@ -58,6 +58,16 @@ public class Renderer {
 		ARCADE_FONT = font;
 	}
 
+	public static void drawPellet(Graphics2D g, int x, int y) {
+		g.setColor(Color.PINK);
+		g.fillOval(x + 3, y + 3, 2, 2);
+	}
+
+	public static void drawPowerPellet(Graphics2D g, int x, int y) {
+		g.setColor(Color.PINK);
+		g.fillOval(x, y, 8, 8);
+	}
+
 	public static void drawPacMan(Graphics2D g, PacMan pacMan) {
 		if (pacMan.animation == pacMan.animDying) {
 			drawGuy(g, pacMan, Sprites.get().pacDead.get(pacMan.animation.frame()));
