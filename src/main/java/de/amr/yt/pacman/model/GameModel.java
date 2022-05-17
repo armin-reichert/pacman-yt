@@ -230,7 +230,7 @@ public class GameModel {
 	public boolean pacManFindsPellet(Vector2 tile) {
 		int oldScore = score;
 		if (world.eatPellet(tile)) {
-			pacMan.idleCountdown = 1;
+			pacMan.restCountdown = 1;
 			score += 10;
 			checkBonusAwarded();
 			checkExtraLife(oldScore);
@@ -246,7 +246,7 @@ public class GameModel {
 		int oldScore = score;
 		if (world.eatPowerPellet(tile)) {
 			pacMan.state = PacManState.POWER;
-			pacMan.idleCountdown = 3;
+			pacMan.restCountdown = 3;
 			score += 50;
 			checkBonusAwarded();
 			checkExtraLife(oldScore);

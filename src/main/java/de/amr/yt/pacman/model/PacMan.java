@@ -33,8 +33,9 @@ import de.amr.yt.pacman.lib.Vector2;
  */
 public class PacMan extends Creature {
 
+	public final int losingPowerDuration = sec(2); // TODO just a guess
+
 	public final SpriteAnimation animStanding;
-	public final SpriteAnimation animStuck;
 	public final SpriteAnimation animWalking;
 	public final SpriteAnimation animDying;
 
@@ -42,14 +43,12 @@ public class PacMan extends Creature {
 	public PacManState state;
 	public SpriteAnimation animation;
 	public int powerCountdown;
-	public int idleCountdown;
-	public final int losingPowerDuration = sec(2); // TODO guess
+	public int restCountdown;
 
 	public PacMan(GameModel game) {
 		super(game.world);
 		this.game = game;
 		animStanding = new SpriteAnimation("standing", 2);
-		animStuck = new SpriteAnimation("stuck", 1);
 		animWalking = new SpriteAnimation("walking", new byte[] { 1, 0, 1, 2 }, 2, true);
 		animDying = new SpriteAnimation("dying", new byte[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }, 6, false);
 		reset();
@@ -61,16 +60,25 @@ public class PacMan extends Creature {
 		canReverse = true;
 		state = PacManState.NO_POWER;
 		powerCountdown = 0;
-		idleCountdown = 0;
+		restCountdown = 0;
 		animation = animStanding;
 		animation.setEnabled(true);
+	}
+
+	private void restOrWalk() {
+		if (restCountdown > 0) {
+			--restCountdown;
+		} else {
+			moveThroughWorld();
+		}
+		animation = animWalking;
+		animation.setEnabled(!stuck);
 	}
 
 	public void update() {
 		switch (state) {
 		case NO_POWER -> {
 			restOrWalk();
-			animation = stuck ? animStuck : animWalking;
 		}
 		case POWER -> {
 			restOrWalk();
@@ -80,7 +88,6 @@ public class PacMan extends Creature {
 			} else {
 				--powerCountdown;
 			}
-			animation = stuck ? animStuck : animWalking;
 		}
 		case DEAD -> {
 			animation = animDying;
@@ -113,11 +120,4 @@ public class PacMan extends Creature {
 		return 0 < powerCountdown && powerCountdown <= losingPowerDuration;
 	}
 
-	private void restOrWalk() {
-		if (idleCountdown > 0) {
-			--idleCountdown;
-		} else {
-			moveThroughWorld();
-		}
-	}
 }
