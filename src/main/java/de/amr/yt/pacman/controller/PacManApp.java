@@ -23,6 +23,8 @@ SOFTWARE.
 */
 package de.amr.yt.pacman.controller;
 
+import javax.swing.SwingUtilities;
+
 import de.amr.yt.pacman.lib.GameClock;
 
 /**
@@ -33,7 +35,9 @@ public class PacManApp {
 	public static void main(String[] args) {
 		double scale = args.length > 0 ? Double.parseDouble(args[0]) : 2.0;
 		GameController controller = new GameController();
-		controller.createAndShowUI(scale);
-		GameClock.get().start(controller::step);
+		SwingUtilities.invokeLater(() -> {
+			controller.createAndShowUI(scale);
+			GameClock.get().start(controller::step);
+		});
 	}
 }
