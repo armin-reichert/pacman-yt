@@ -227,6 +227,14 @@ public class GameModel {
 		log("Game state changed to %s", state);
 	}
 
+	private void scorePoints(int points) {
+		int oldScore = score;
+		score += points;
+		if (oldScore < 10_000 && score >= 10_000) {
+			lives++;
+		}
+	}
+
 	public void onPacPowerEnding() {
 		for (Ghost ghost : ghosts) {
 			if (ghost.state == GhostState.FRIGHTENED) {
@@ -235,71 +243,55 @@ public class GameModel {
 		}
 	}
 
-	public void checkPelletEaten() {
-		int oldScore = score;
+	public boolean checkPelletEaten() {
 		if (world.pelletEaten(pacMan.tile())) {
-			onPacFoundPellet(oldScore);
+			pacMan.restCountdown = 1;
+			scorePoints(10);
+			checkBonusAwarded();
+			return true;
 		}
+		return false;
 	}
 
-	private void onPacFoundPellet(int oldScore) {
-		pacMan.restCountdown = 1;
-		score += 10;
-		checkBonusAwarded();
-		checkExtraLife(oldScore);
-	}
-
-	public void checkPowerPelletEaten() {
-		int oldScore = score;
+	public boolean checkPowerPelletEaten() {
 		if (world.powerPelletEaten(pacMan.tile())) {
-			onPacFoundPowerPellet(oldScore);
-		}
-	}
-
-	private void onPacFoundPowerPellet(int oldScore) {
-		pacMan.state = PacManState.POWER;
-		pacMan.powerCountdown = sec(ghostFrightenedSeconds);
-		pacMan.restCountdown = 3;
-		score += 50;
-		checkBonusAwarded();
-		checkExtraLife(oldScore);
-		ghostsKilledByCurrentPowerPellet = 0;
-		for (var ghost : ghosts) {
-			if (ghost.state == GhostState.CHASING || ghost.state == GhostState.SCATTERING) {
-				ghost.state = GhostState.FRIGHTENED;
-				ghost.animFrightened.setEnabled(true);
-				ghost.reverse();
+			pacMan.state = PacManState.POWER;
+			pacMan.powerCountdown = sec(ghostFrightenedSeconds);
+			pacMan.restCountdown = 3;
+			scorePoints(50);
+			checkBonusAwarded();
+			ghostsKilledByCurrentPowerPellet = 0;
+			for (var ghost : ghosts) {
+				if (ghost.state == GhostState.CHASING || ghost.state == GhostState.SCATTERING) {
+					ghost.state = GhostState.FRIGHTENED;
+					ghost.animFrightened.setEnabled(true);
+					ghost.reverse();
+				}
 			}
+			log("Pac-Man gets power for %d ticks", pacMan.powerCountdown);
+			return true;
 		}
-		log("Pac-Man gets power for %d ticks", pacMan.powerCountdown);
+		return false;
 	}
 
-	public void checkBonusAwarded() {
+	public boolean checkBonusAwarded() {
 		if (world.eatenFoodCount == 70 || world.eatenFoodCount == 170) {
 			bonus = bonusSymbol;
 			bonusTimer = sec(9 + new Random().nextDouble());
 			bonusEaten = false;
+			return true;
 		}
+		return false;
 	}
 
-	public void checkExtraLife(int oldScore) {
-		if (oldScore < 10_000 && score >= 10_000) {
-			lives++;
-		}
-	}
-
-	public void checkBonusEaten() {
-		int oldScore = score;
-		if (pacManFindsBonus()) {
+	public boolean checkBonusEaten() {
+		if (bonus != -1 && !bonusEaten && pacMan.tile().equals(world.bonusTile)) {
 			bonusTimer = sec(2);
 			bonusEaten = true;
-			score += bonusValue(bonusSymbol);
-			checkExtraLife(oldScore);
+			scorePoints(bonusValue(bonusSymbol));
+			return true;
 		}
-	}
-
-	private boolean pacManFindsBonus() {
-		return bonus != -1 && !bonusEaten && pacMan.tile().equals(world.bonusTile);
+		return false;
 	}
 
 	/**
