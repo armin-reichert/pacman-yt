@@ -80,7 +80,6 @@ public class GameModel {
 		pacMan = new PacMan(this);
 		ghosts = new Ghost[] { //
 				new Ghost(this, BLINKY), new Ghost(this, PINKY), new Ghost(this, INKY), new Ghost(this, CLYDE) };
-		setLevel(1);
 		bonus = -1;
 	}
 
