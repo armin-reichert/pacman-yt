@@ -40,8 +40,8 @@ public class GameClock {
 
 	public int frequency = 60;
 	public long ticks;
-	public Runnable onTick = () -> Logging.log("Tick");
 
+	private Runnable onTick = () -> Logging.log("Tick");
 	private Thread thread;
 	private boolean running;
 	private long lastFameRate;
@@ -52,7 +52,8 @@ public class GameClock {
 		return lastFameRate;
 	}
 
-	public void start() {
+	public void run(Runnable callback) {
+		onTick = callback;
 		countStart = System.nanoTime();
 		running = true;
 		thread = new Thread(() -> {
