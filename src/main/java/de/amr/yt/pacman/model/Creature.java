@@ -134,35 +134,46 @@ public abstract class Creature {
 		enteredNewTile = true;
 	}
 
-	public void moveThroughWorld() {
-		// teleport?
+	public void exploreWorld() {
+		var tileBeforeMoving = tile();
+
 		if (x > World.COLS * World.TS + World.HTS) {
+			// traverse portal on right edge of world
 			x = 0;
-			return;
-		}
-		if (x < 0) {
-			x = World.COLS * World.TS + World.HTS;
+			enteredNewTile = true;
 			return;
 		}
 
-		var tileBeforeMove = tile();
+		if (x < 0) {
+			// traverse portal on left edge of world
+			x = World.COLS * World.TS + World.HTS;
+			enteredNewTile = true;
+			return;
+		}
+
 		speed = currentSpeed();
 		stuck = false;
 		boolean moved = false;
+
+		// first try moving towards the current wish direction
 		if (canReverse || wishDir != moveDir.opposite()) {
 			moved = tryMove(moveDir, wishDir);
 		}
+
 		if (moved) {
+			// make the wish direction the new move direction
 			moveDir = wishDir;
 		} else {
+			// moving towards the wish direction was not possible, try moving towards the current move direction
 			moved = tryMove(moveDir, moveDir);
 			if (!moved) {
+				// we got stuck, center exactly on current tile
+				stuck = true;
 				x = centerX();
 				y = centerY();
-				stuck = true;
 			}
 		}
-		enteredNewTile = !tileBeforeMove.equals(tile());
+		enteredNewTile = !tile().equals(tileBeforeMoving);
 	}
 
 	public void move(Direction dir) {

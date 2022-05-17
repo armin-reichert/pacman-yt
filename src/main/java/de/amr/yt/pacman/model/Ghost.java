@@ -147,7 +147,7 @@ public class Ghost extends Creature {
 				takeDirectionTowardsTarget();
 			}
 		}
-		moveThroughWorld();
+		exploreWorld();
 	}
 
 	private void takeDirectionTowardsTarget() {

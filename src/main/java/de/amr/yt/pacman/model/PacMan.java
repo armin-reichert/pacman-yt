@@ -65,7 +65,7 @@ public class PacMan extends Creature {
 		if (restCountdown > 0) {
 			--restCountdown;
 		} else {
-			moveThroughWorld();
+			exploreWorld();
 		}
 		animation = animWalking;
 		animation.setEnabled(!stuck);
@@ -79,8 +79,8 @@ public class PacMan extends Creature {
 		case POWER -> {
 			restOrWalk();
 			if (powerCountdown == 0) {
-				game.onPacPowerEnding();
 				state = PacManState.NO_POWER;
+				game.onPacPowerEnding();
 			} else {
 				--powerCountdown;
 			}
