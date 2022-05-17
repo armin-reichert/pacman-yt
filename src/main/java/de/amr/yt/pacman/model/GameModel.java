@@ -61,6 +61,40 @@ public class GameModel {
 		};
 	}
 
+	public static class Level {
+
+		public List<Integer> scatterStartTicks;
+		public List<Integer> chaseStartTicks;
+
+		public int bonusSymbol;
+		public float playerSpeed;
+		public float ghostSpeed;
+		public float ghostSpeedTunnel;
+		public int elroy1DotsLeft;
+		public float elroy1Speed;
+		public int elroy2DotsLeft;
+		public float elroy2Speed;
+		public float playerSpeedPowered;
+		public float ghostSpeedFrightened;
+		public int ghostFrightenedSeconds;
+		public int numFlashes;
+
+		public Level(Object... data) {
+			bonusSymbol = (int) data[0];
+			playerSpeed = (float) data[1] * BASE_SPEED;
+			ghostSpeed = (float) data[2] * BASE_SPEED;
+			ghostSpeedTunnel = (float) data[3] * BASE_SPEED;
+			elroy1DotsLeft = (int) data[4];
+			elroy1Speed = (float) data[5] * BASE_SPEED;
+			elroy2DotsLeft = (int) data[6];
+			elroy2Speed = (float) data[7] * BASE_SPEED;
+			playerSpeedPowered = (float) data[8] * BASE_SPEED;
+			ghostSpeedFrightened = (float) data[9] * BASE_SPEED;
+			ghostFrightenedSeconds = (int) data[10];
+			numFlashes = (int) data[11];
+		}
+	}
+
 	public boolean paused;
 	public boolean pacSafe;
 
@@ -76,9 +110,6 @@ public class GameModel {
 	public long stateTimer;
 	public int attackTimer;
 
-	public List<Integer> scatterStartTicks;
-	public List<Integer> chaseStartTicks;
-
 	public boolean chasingPhase;
 	public boolean mazeFlashing;
 	public boolean powerPelletsBlinking;
@@ -87,23 +118,10 @@ public class GameModel {
 	public int pacManLosingPowerTicks = 120; // TODO just a guess
 	public int score;
 	public int lives;
+	public final List<Integer> levelCounter = new ArrayList<>();
 
 	public int levelNumber; // 1, 2, ...
-	public final List<Integer> levelSymbols = new ArrayList<>();
-
-	// level-specific settings:
-	public int bonusSymbol;
-	public float playerSpeed;
-	public float ghostSpeed;
-	public float ghostSpeedTunnel;
-	public int elroy1DotsLeft;
-	public float elroy1Speed;
-	public int elroy2DotsLeft;
-	public float elroy2Speed;
-	public float playerSpeedPowered;
-	public float ghostSpeedFrightened;
-	public int ghostFrightenedSeconds;
-	public int numFlashes;
+	public Level level;
 
 	public GameModel() {
 		world = new World();
@@ -111,65 +129,50 @@ public class GameModel {
 		ghosts = new Ghost[] { //
 				new Ghost(this, BLINKY), new Ghost(this, PINKY), new Ghost(this, INKY), new Ghost(this, CLYDE) };
 		setLevel(1);
-		levelSymbols.add(bonusSymbol);
+		levelCounter.add(level.bonusSymbol);
 		bonus = -1;
-	}
-
-	private void setLevelData(Object... data) {
-		bonusSymbol = (int) data[0];
-		playerSpeed = (float) data[1] * BASE_SPEED;
-		ghostSpeed = (float) data[2] * BASE_SPEED;
-		ghostSpeedTunnel = (float) data[3] * BASE_SPEED;
-		elroy1DotsLeft = (int) data[4];
-		elroy1Speed = (float) data[5] * BASE_SPEED;
-		elroy2DotsLeft = (int) data[6];
-		elroy2Speed = (float) data[7] * BASE_SPEED;
-		playerSpeedPowered = (float) data[8] * BASE_SPEED;
-		ghostSpeedFrightened = (float) data[9] * BASE_SPEED;
-		ghostFrightenedSeconds = (int) data[10];
-		numFlashes = (int) data[11];
 	}
 
 	public void setLevel(int number) {
 		if (number < 1) {
 			throw new IllegalArgumentException("Level number must be at least 1");
 		}
-		this.levelNumber = number;
-		switch (levelNumber) {
+		levelNumber = number;
+		level = switch (levelNumber) {
 		//@formatter:off
-		case  1 -> setLevelData(CHERRIES,   0.80f, 0.75f, 0.40f,  20, 0.80f, 10, 0.85f, 0.90f, 0.50f, 6, 5);
-		case  2 -> setLevelData(STRAWBERRY, 0.90f, 0.85f, 0.45f,  30, 0.90f, 15, 0.95f, 0.95f, 0.55f, 5, 5);
-		case  3 -> setLevelData(PEACH,      0.90f, 0.85f, 0.45f,  40, 0.90f, 20, 0.95f, 0.95f, 0.55f, 4, 5);
-		case  4 -> setLevelData(PEACH,      0.90f, 0.85f, 0.45f,  40, 0.90f, 20, 0.95f, 0.95f, 0.55f, 3, 5);
-		case  5 -> setLevelData(APPLE,      1.00f, 0.95f, 0.50f,  40, 1.00f, 20, 1.05f, 1.00f, 0.60f, 2, 5);
-		case  6 -> setLevelData(APPLE,      1.00f, 0.95f, 0.50f,  50, 1.00f, 25, 1.05f, 1.00f, 0.60f, 5, 5);
+		case  1 -> new Level(CHERRIES,   0.80f, 0.75f, 0.40f,  20, 0.80f, 10, 0.85f, 0.90f, 0.50f, 6, 5);
+		case  2 -> new Level(STRAWBERRY, 0.90f, 0.85f, 0.45f,  30, 0.90f, 15, 0.95f, 0.95f, 0.55f, 5, 5);
+		case  3 -> new Level(PEACH,      0.90f, 0.85f, 0.45f,  40, 0.90f, 20, 0.95f, 0.95f, 0.55f, 4, 5);
+		case  4 -> new Level(PEACH,      0.90f, 0.85f, 0.45f,  40, 0.90f, 20, 0.95f, 0.95f, 0.55f, 3, 5);
+		case  5 -> new Level(APPLE,      1.00f, 0.95f, 0.50f,  40, 1.00f, 20, 1.05f, 1.00f, 0.60f, 2, 5);
+		case  6 -> new Level(APPLE,      1.00f, 0.95f, 0.50f,  50, 1.00f, 25, 1.05f, 1.00f, 0.60f, 5, 5);
 		case  7, 
-		      8 -> setLevelData(GRAPES,     1.00f, 0.95f, 0.50f,  50, 1.00f, 25, 1.05f, 1.00f, 0.60f, 2, 5);
-		case  9 -> setLevelData(GALAXIAN,   1.00f, 0.95f, 0.50f,  60, 1.00f, 30, 1.05f, 1.00f, 0.60f, 1, 3);
-		case 10 -> setLevelData(GALAXIAN,   1.00f, 0.95f, 0.50f,  60, 1.00f, 30, 1.05f, 1.00f, 0.60f, 5, 5);
-		case 11 -> setLevelData(BELL,       1.00f, 0.95f, 0.50f,  60, 1.00f, 30, 1.05f, 1.00f, 0.60f, 2, 5);
-		case 12 -> setLevelData(BELL,       1.00f, 0.95f, 0.50f,  80, 1.00f, 40, 1.05f, 1.00f, 0.60f, 1, 3);
-		case 13 -> setLevelData(KEY,        1.00f, 0.95f, 0.50f,  80, 1.00f, 40, 1.05f, 1.00f, 0.60f, 1, 3);
-		case 14 -> setLevelData(KEY,        1.00f, 0.95f, 0.50f,  80, 1.00f, 40, 1.05f, 1.00f, 0.60f, 3, 5);
+		      8 -> new Level(GRAPES,     1.00f, 0.95f, 0.50f,  50, 1.00f, 25, 1.05f, 1.00f, 0.60f, 2, 5);
+		case  9 -> new Level(GALAXIAN,   1.00f, 0.95f, 0.50f,  60, 1.00f, 30, 1.05f, 1.00f, 0.60f, 1, 3);
+		case 10 -> new Level(GALAXIAN,   1.00f, 0.95f, 0.50f,  60, 1.00f, 30, 1.05f, 1.00f, 0.60f, 5, 5);
+		case 11 -> new Level(BELL,       1.00f, 0.95f, 0.50f,  60, 1.00f, 30, 1.05f, 1.00f, 0.60f, 2, 5);
+		case 12 -> new Level(BELL,       1.00f, 0.95f, 0.50f,  80, 1.00f, 40, 1.05f, 1.00f, 0.60f, 1, 3);
+		case 13 -> new Level(KEY,        1.00f, 0.95f, 0.50f,  80, 1.00f, 40, 1.05f, 1.00f, 0.60f, 1, 3);
+		case 14 -> new Level(KEY,        1.00f, 0.95f, 0.50f,  80, 1.00f, 40, 1.05f, 1.00f, 0.60f, 3, 5);
 		case 15, 
-		     16 -> setLevelData(KEY,        1.00f, 0.95f, 0.50f, 100, 1.00f, 50, 1.05f, 1.00f, 0.60f, 1, 3);
-		case 17 -> setLevelData(KEY,        1.00f, 0.95f, 0.50f, 100, 1.00f, 50, 1.05f, 0.00f, 0.00f, 0, 0);
-		case 18 -> setLevelData(KEY,        1.00f, 0.95f, 0.50f, 100, 1.00f, 50, 1.05f, 1.00f, 0.60f, 1, 3);
+		     16 -> new Level(KEY,        1.00f, 0.95f, 0.50f, 100, 1.00f, 50, 1.05f, 1.00f, 0.60f, 1, 3);
+		case 17 -> new Level(KEY,        1.00f, 0.95f, 0.50f, 100, 1.00f, 50, 1.05f, 0.00f, 0.00f, 0, 0);
+		case 18 -> new Level(KEY,        1.00f, 0.95f, 0.50f, 100, 1.00f, 50, 1.05f, 1.00f, 0.60f, 1, 3);
 		case 19, 
-		     20 -> setLevelData(KEY,        1.00f, 0.95f, 0.50f, 120, 1.00f, 60, 1.05f, 0.00f, 0.00f, 0, 0);
-		default -> setLevelData(KEY,        0.90f, 0.95f, 0.50f, 120, 1.00f, 60, 1.05f, 0.00f, 0.00f, 0, 0);
+		     20 -> new Level(KEY,        1.00f, 0.95f, 0.50f, 120, 1.00f, 60, 1.05f, 0.00f, 0.00f, 0, 0);
+		default -> new Level(KEY,        0.90f, 0.95f, 0.50f, 120, 1.00f, 60, 1.05f, 0.00f, 0.00f, 0, 0);
 		//@formatter:on
-		}
+		};
 
 		if (levelNumber == 1) {
-			scatterStartTicks = List.of(0, sec(27), sec(54), sec(79));
-			chaseStartTicks = List.of(sec(7), sec(34), sec(59), sec(84));
+			level.scatterStartTicks = List.of(0, sec(27), sec(54), sec(79));
+			level.chaseStartTicks = List.of(sec(7), sec(34), sec(59), sec(84));
 		} else if (levelNumber <= 4) {
-			scatterStartTicks = List.of(0, sec(27), sec(54), sec(1092));
-			chaseStartTicks = List.of(sec(7), sec(34), sec(59), sec(1092) + 1);
+			level.scatterStartTicks = List.of(0, sec(27), sec(54), sec(1092));
+			level.chaseStartTicks = List.of(sec(7), sec(34), sec(59), sec(1092) + 1);
 		} else {
-			scatterStartTicks = List.of(0, sec(25), sec(50), sec(1092));
-			chaseStartTicks = List.of(sec(5), sec(30), sec(55), sec(1092) + 1);
+			level.scatterStartTicks = List.of(0, sec(25), sec(50), sec(1092));
+			level.chaseStartTicks = List.of(sec(5), sec(30), sec(55), sec(1092) + 1);
 		}
 
 		ghostsKilledInLevel = 0;
@@ -187,14 +190,14 @@ public class GameModel {
 		pacMan.placeAtTile(world.pacManHomeTile, World.HTS, 0);
 		pacMan.wishDir = Direction.LEFT;
 		pacMan.moveDir = Direction.LEFT;
-		pacMan.speed = playerSpeed;
+		pacMan.speed = level.playerSpeed;
 		pacMan.state = PacManState.NO_POWER;
 		pacMan.visible = true;
 		pacMan.animation = pacMan.animStanding;
 		pacMan.animation.reset();
 
 		for (var ghost : ghosts) {
-			ghost.speed = ghostSpeed;
+			ghost.speed = level.ghostSpeed;
 			ghost.targetTile = null;
 			ghost.state = GhostState.LOCKED;
 			ghost.visible = true;
@@ -237,11 +240,11 @@ public class GameModel {
 	}
 
 	public void updateAttacWave() {
-		int chaseStart = chaseStartTicks.indexOf(attackTimer);
+		int chaseStart = level.chaseStartTicks.indexOf(attackTimer);
 		if (chaseStart != -1) {
 			startChase(chaseStart);
 		}
-		int scatterStart = scatterStartTicks.indexOf(attackTimer);
+		int scatterStart = level.scatterStartTicks.indexOf(attackTimer);
 		if (scatterStart != -1) {
 			startScatter(scatterStart);
 		}
@@ -294,7 +297,7 @@ public class GameModel {
 	public boolean checkPowerPelletEaten() {
 		if (world.powerPelletEaten(pacMan.tile())) {
 			pacMan.state = PacManState.POWER;
-			pacMan.powerCountdown = sec(ghostFrightenedSeconds);
+			pacMan.powerCountdown = sec(level.ghostFrightenedSeconds);
 			pacMan.restCountdown = 3;
 			scorePoints(50);
 			checkBonusAwarded();
@@ -314,7 +317,7 @@ public class GameModel {
 
 	public boolean checkBonusAwarded() {
 		if (world.eatenFoodCount == 70 || world.eatenFoodCount == 170) {
-			bonus = bonusSymbol;
+			bonus = level.bonusSymbol;
 			bonusTimer = sec(9 + new Random().nextDouble());
 			bonusEaten = false;
 			return true;
@@ -326,7 +329,7 @@ public class GameModel {
 		if (bonus != -1 && !bonusEaten && pacMan.tile().equals(world.bonusTile)) {
 			bonusTimer = sec(2);
 			bonusEaten = true;
-			scorePoints(bonusValue(bonusSymbol));
+			scorePoints(bonusValue(level.bonusSymbol));
 			return true;
 		}
 		return false;

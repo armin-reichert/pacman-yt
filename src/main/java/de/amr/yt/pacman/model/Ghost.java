@@ -130,13 +130,13 @@ public class Ghost extends Creature {
 	public float currentSpeed() {
 		boolean tunnel = game.world.isTunnel(tile());
 		return switch (state) {
-		case CHASING -> tunnel ? game.ghostSpeedTunnel : game.ghostSpeed;
-		case EATEN -> 2 * game.ghostSpeed; // TODO guess
-		case ENTERING_HOUSE -> 2 * game.ghostSpeed;// TODO guess
-		case FRIGHTENED -> tunnel ? game.ghostSpeedTunnel : game.ghostSpeedFrightened;
+		case CHASING -> tunnel ? game.level.ghostSpeedTunnel : game.level.ghostSpeed;
+		case EATEN -> 2 * game.level.ghostSpeed; // TODO guess
+		case ENTERING_HOUSE -> 2 * game.level.ghostSpeed;// TODO guess
+		case FRIGHTENED -> tunnel ? game.level.ghostSpeedTunnel : game.level.ghostSpeedFrightened;
 		case LEAVING_HOUSE -> 0.4f * GameModel.BASE_SPEED;// TODO guess
 		case LOCKED -> 0.4f * GameModel.BASE_SPEED;// TODO guess
-		case SCATTERING -> tunnel ? game.ghostSpeedTunnel : game.ghostSpeed;
+		case SCATTERING -> tunnel ? game.level.ghostSpeedTunnel : game.level.ghostSpeed;
 		};
 	}
 

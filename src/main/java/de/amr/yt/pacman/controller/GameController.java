@@ -45,7 +45,7 @@ public class GameController {
 
 	private final GameModel game;
 	private GameWindow window;
-	private Direction joystickPosition;
+	private Direction joystick;
 
 	public GameController() {
 		game = new GameModel();
@@ -56,8 +56,8 @@ public class GameController {
 		game.score = 0;
 		game.lives = 3;
 		game.setLevel(1);
-		game.levelSymbols.clear();
-		game.levelSymbols.add(game.bonusSymbol);
+		game.levelCounter.clear();
+		game.levelCounter.add(game.level.bonusSymbol);
 		game.enterState(GameState.INTRO);
 		Sounds.stopAll();
 		// TODO: fixme (must call init explicitly in case of restart of intro scene)
@@ -72,7 +72,7 @@ public class GameController {
 	}
 
 	public void moveJoystick(Direction direction) {
-		joystickPosition = Objects.requireNonNull(direction);
+		joystick = Objects.requireNonNull(direction);
 	}
 
 	public void startLevel() {
@@ -94,7 +94,7 @@ public class GameController {
 			case LEVEL_COMPLETE -> update_LEVEL_COMPLETE();
 			case GAME_OVER -> update_GAME_OVER();
 			}
-			joystickPosition = null;
+			joystick = null;
 			window.update();
 		}
 		window.render();
@@ -142,8 +142,8 @@ public class GameController {
 
 	private void update_PLAYING() {
 		game.updateAttacWave();
-		if (joystickPosition != null) {
-			game.pacMan.wishDir = joystickPosition;
+		if (joystick != null) {
+			game.pacMan.wishDir = joystick;
 		}
 		game.pacMan.update();
 		game.checkPelletEaten();
@@ -254,9 +254,9 @@ public class GameController {
 		else if (game.stateTimer == sec(3)) {
 			game.mazeFlashing = false;
 			game.setLevel(game.levelNumber + 1);
-			game.levelSymbols.add(game.bonusSymbol);
-			if (game.levelSymbols.size() == 8) {
-				game.levelSymbols.remove(0);
+			game.levelCounter.add(game.level.bonusSymbol);
+			if (game.levelCounter.size() == 8) {
+				game.levelCounter.remove(0);
 			}
 			game.pacMan.visible = false;
 			game.pacMan.animation = game.pacMan.animWalking;

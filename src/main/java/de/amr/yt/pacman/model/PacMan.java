@@ -99,7 +99,7 @@ public class PacMan extends Creature {
 
 	@Override
 	public float currentSpeed() {
-		return hasPower() ? game.playerSpeedPowered : game.playerSpeed;
+		return hasPower() ? game.level.playerSpeedPowered : game.level.playerSpeed;
 	}
 
 	@Override

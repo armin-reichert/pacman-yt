@@ -100,10 +100,10 @@ public class PlayScene implements GameScene {
 		for (int i = 0; i < livesDisplayed; ++i) {
 			g.drawImage(Sprites.get().liveCount, t(2 + 2 * i), t(World.ROWS - 2), null);
 		}
-		for (int i = 0; i < game.levelSymbols.size(); ++i) {
+		for (int i = 0; i < game.levelCounter.size(); ++i) {
 			int x = t(World.COLS - 4 - 2 * i);
 			int y = t(World.ROWS - 2);
-			int symbol = game.levelSymbols.get(i);
+			int symbol = game.levelCounter.get(i);
 			g.drawImage(Sprites.get().bonusSymbols.get(symbol), x, y, null);
 		}
 	}
