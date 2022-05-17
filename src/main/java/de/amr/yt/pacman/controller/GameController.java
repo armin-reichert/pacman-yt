@@ -34,7 +34,6 @@ import java.util.Objects;
 
 import de.amr.yt.pacman.lib.Direction;
 import de.amr.yt.pacman.lib.Sounds;
-import de.amr.yt.pacman.lib.Vector2;
 import de.amr.yt.pacman.model.GameModel;
 import de.amr.yt.pacman.model.Ghost;
 import de.amr.yt.pacman.model.GhostState;
@@ -164,30 +163,30 @@ public class GameController {
 			game.pacMan.wishDir = pacManSteering;
 		}
 		game.pacMan.update();
-		final Vector2 pacManTile = game.pacMan.tile();
-		if (game.pacManFindsPellet(pacManTile)) {
-			// found normal pellet
+
+		int oldScore;
+
+		oldScore = game.score;
+		if (game.world.pelletEaten(game.pacMan.tile())) {
+			game.onPacFoundPellet(oldScore);
 		}
-		if (game.pacManFindsPowerPellet(pacManTile)) {
-			game.ghostsKilledByCurrentPowerPellet = 0;
-			for (Ghost ghost : game.ghosts) {
-				if (ghost.state == GhostState.CHASING || ghost.state == GhostState.SCATTERING) {
-					ghost.state = GhostState.FRIGHTENED;
-					ghost.animFrightened.setEnabled(true);
-					ghost.reverse();
-				}
-			}
-			game.pacMan.powerCountdown = sec(game.ghostFrightenedSeconds);
-			log("Pac-Man gets power for %d ticks", game.pacMan.powerCountdown);
+
+		oldScore = game.score;
+		if (game.world.powerPelletEaten(game.pacMan.tile())) {
+			game.onPacFoundPowerPellet(oldScore);
 		}
+
+		oldScore = game.score;
+		if (game.pacManFindsBonus()) {
+			game.onPacManFoundBonus(oldScore);
+		}
+
 		if (game.world.allPelletsEaten()) {
 			enterGameState(GameState.LEVEL_COMPLETE);
 			return;
 		}
-		if (game.pacManFindsBonus(pacManTile)) {
-			// found bonus
-		}
-		if (game.isPacManKilledByGhost(pacManTile)) {
+
+		if (game.isPacManKilledByGhost(game.pacMan.tile())) {
 			enterGameState(GameState.PACMAN_DEAD);
 			return;
 		}

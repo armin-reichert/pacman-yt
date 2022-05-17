@@ -24,6 +24,7 @@ SOFTWARE.
 package de.amr.yt.pacman.model;
 
 import static de.amr.yt.pacman.lib.GameClock.sec;
+import static de.amr.yt.pacman.lib.Logging.log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -228,6 +229,31 @@ public class GameModel {
 		}
 	}
 
+	public void onPacFoundPellet(int oldScore) {
+		pacMan.restCountdown = 1;
+		score += 10;
+		checkBonusAwarded();
+		checkExtraLife(oldScore);
+	}
+
+	public void onPacFoundPowerPellet(int oldScore) {
+		pacMan.state = PacManState.POWER;
+		pacMan.powerCountdown = sec(ghostFrightenedSeconds);
+		pacMan.restCountdown = 3;
+		score += 50;
+		checkBonusAwarded();
+		checkExtraLife(oldScore);
+		ghostsKilledByCurrentPowerPellet = 0;
+		for (var ghost : ghosts) {
+			if (ghost.state == GhostState.CHASING || ghost.state == GhostState.SCATTERING) {
+				ghost.state = GhostState.FRIGHTENED;
+				ghost.animFrightened.setEnabled(true);
+				ghost.reverse();
+			}
+		}
+		log("Pac-Man gets power for %d ticks", pacMan.powerCountdown);
+	}
+
 	public void checkBonusAwarded() {
 		if (world.eatenFoodCount == 70 || world.eatenFoodCount == 170) {
 			bonus = bonusSymbol;
@@ -243,47 +269,16 @@ public class GameModel {
 	}
 
 	/**
-	 * @return {@code true} if a pellet has been found
-	 */
-	public boolean pacManFindsPellet(Vector2 tile) {
-		int oldScore = score;
-		if (world.eatPellet(tile)) {
-			pacMan.restCountdown = 1;
-			score += 10;
-			checkBonusAwarded();
-			checkExtraLife(oldScore);
-			return true;
-		}
-		return false;
-	}
-
-	/**
-	 * @return {@code true} if a power pellet has been found
-	 */
-	public boolean pacManFindsPowerPellet(Vector2 tile) {
-		int oldScore = score;
-		if (world.eatPowerPellet(tile)) {
-			pacMan.state = PacManState.POWER;
-			pacMan.restCountdown = 3;
-			score += 50;
-			checkBonusAwarded();
-			checkExtraLife(oldScore);
-			return true;
-		}
-		return false;
-	}
-
-	/**
 	 * @return {@code true} if edible bonus symbol has been found
 	 */
-	public boolean pacManFindsBonus(Vector2 tile) {
-		if (bonus != -1 && !bonusEaten && tile.equals(world.bonusTile)) {
-			bonusTimer = sec(2);
-			bonusEaten = true;
-			score += bonusValue(bonusSymbol);
-			return true;
-		}
-		return false;
+	public boolean pacManFindsBonus() {
+		return bonus != -1 && !bonusEaten && pacMan.tile().equals(world.bonusTile);
+	}
+
+	public void onPacManFoundBonus(int oldScore) {
+		bonusTimer = sec(2);
+		bonusEaten = true;
+		score += bonusValue(bonusSymbol);
 	}
 
 	/**
