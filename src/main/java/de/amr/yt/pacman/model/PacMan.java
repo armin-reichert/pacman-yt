@@ -23,8 +23,6 @@ SOFTWARE.
 */
 package de.amr.yt.pacman.model;
 
-import static de.amr.yt.pacman.lib.GameClock.sec;
-
 import de.amr.yt.pacman.lib.SpriteAnimation;
 import de.amr.yt.pacman.lib.Vector2;
 
@@ -32,8 +30,6 @@ import de.amr.yt.pacman.lib.Vector2;
  * @author Armin Reichert
  */
 public class PacMan extends Creature {
-
-	public final int losingPowerDuration = sec(2); // TODO just a guess
 
 	public final SpriteAnimation animStanding;
 	public final SpriteAnimation animWalking;
@@ -117,7 +113,6 @@ public class PacMan extends Creature {
 	}
 
 	public boolean isLosingPower() {
-		return 0 < powerCountdown && powerCountdown <= losingPowerDuration;
+		return 0 < powerCountdown && powerCountdown <= game.pacManLosingPowerTicks;
 	}
-
 }

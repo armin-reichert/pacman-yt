@@ -68,6 +68,7 @@ public class GameModel {
 	public boolean powerPelletsBlinking;
 	public int ghostsKilledByCurrentPowerPellet;
 	public int ghostsKilledInLevel;
+	public int pacManLosingPowerTicks = 120; // TODO just a guess
 	public int score;
 	public int lives;
 
