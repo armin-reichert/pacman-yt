@@ -32,6 +32,7 @@ import java.util.Random;
 
 import de.amr.yt.pacman.controller.GameState;
 import de.amr.yt.pacman.lib.Direction;
+import de.amr.yt.pacman.lib.GameClock;
 import de.amr.yt.pacman.lib.Vector2;
 
 /**
@@ -109,7 +110,7 @@ public class GameModel {
 		pacMan = new PacMan(this);
 		ghosts = new Ghost[] { //
 				new Ghost(this, BLINKY), new Ghost(this, PINKY), new Ghost(this, INKY), new Ghost(this, CLYDE) };
-		initLevel(1);
+		setLevel(1);
 		levelSymbols.add(bonusSymbol);
 		bonus = -1;
 	}
@@ -129,7 +130,7 @@ public class GameModel {
 		numFlashes = (int) data[11];
 	}
 
-	public void initLevel(int number) {
+	public void setLevel(int number) {
 		if (number < 1) {
 			throw new IllegalArgumentException("Level number must be at least 1");
 		}
@@ -235,6 +236,43 @@ public class GameModel {
 		}
 	}
 
+	public void updateAttacWave() {
+		int chaseStart = chaseStartTicks.indexOf(attackTimer);
+		if (chaseStart != -1) {
+			startChase(chaseStart);
+		}
+		int scatterStart = scatterStartTicks.indexOf(attackTimer);
+		if (scatterStart != -1) {
+			startScatter(scatterStart);
+		}
+		if (!pacMan.hasPower()) {
+			// timer is stopped while Pac-Man has power
+			++attackTimer;
+		}
+	}
+
+	private void startScatter(int phase) {
+		for (var ghost : ghosts) {
+			if (ghost.state == GhostState.CHASING) {
+				ghost.state = GhostState.SCATTERING;
+				ghost.reverse();
+			}
+			chasingPhase = false;
+		}
+		log("Scattering phase %d started at clock time %d", phase + 1, GameClock.get().ticks);
+	}
+
+	private void startChase(int phase) {
+		for (var ghost : ghosts) {
+			if (ghost.state == GhostState.SCATTERING) {
+				ghost.state = GhostState.CHASING;
+				ghost.reverse();
+			}
+			chasingPhase = true;
+		}
+		log("Chasing phase %d started at clock time %d", phase + 1, GameClock.get().ticks);
+	}
+
 	public void onPacPowerEnding() {
 		for (Ghost ghost : ghosts) {
 			if (ghost.state == GhostState.FRIGHTENED) {
@@ -297,7 +335,7 @@ public class GameModel {
 	/**
 	 * @return {@code true} if Pac-Man has been killed
 	 */
-	public boolean isPacManKilledByGhost(Vector2 tile) {
+	public boolean checkPacManKilledByGhost(Vector2 tile) {
 		if (pacSafe || pacMan.hasPower()) {
 			return false;
 		}
@@ -315,7 +353,7 @@ public class GameModel {
 	/**
 	 * @return {@code true} if at least one ghost got killed
 	 */
-	public boolean isGhostKilledByPacMan() {
+	public boolean checkGhostKilledByPacMan() {
 		if (!pacMan.hasPower()) {
 			return false;
 		}

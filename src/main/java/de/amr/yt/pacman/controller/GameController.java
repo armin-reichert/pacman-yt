@@ -24,7 +24,6 @@ SOFTWARE.
 package de.amr.yt.pacman.controller;
 
 import static de.amr.yt.pacman.lib.GameClock.sec;
-import static de.amr.yt.pacman.lib.Logging.log;
 import static de.amr.yt.pacman.model.GameModel.BLINKY;
 import static de.amr.yt.pacman.model.GameModel.CLYDE;
 import static de.amr.yt.pacman.model.GameModel.INKY;
@@ -33,7 +32,6 @@ import static de.amr.yt.pacman.model.GameModel.PINKY;
 import java.util.Objects;
 
 import de.amr.yt.pacman.lib.Direction;
-import de.amr.yt.pacman.lib.GameClock;
 import de.amr.yt.pacman.lib.Sounds;
 import de.amr.yt.pacman.model.GameModel;
 import de.amr.yt.pacman.model.Ghost;
@@ -51,7 +49,21 @@ public class GameController {
 
 	public GameController() {
 		game = new GameModel();
-		initGame();
+		newGame();
+	}
+
+	public void newGame() {
+		game.score = 0;
+		game.lives = 3;
+		game.setLevel(1);
+		game.levelSymbols.clear();
+		game.levelSymbols.add(game.bonusSymbol);
+		game.enterState(GameState.INTRO);
+		Sounds.stopAll();
+		// TODO: fixme (must call init explicitly in case of restart of intro scene)
+		if (window != null) {
+			window.currentScene().init();
+		}
 	}
 
 	public void createAndShowUI(double scale) {
@@ -61,20 +73,6 @@ public class GameController {
 
 	public void moveJoystick(Direction direction) {
 		joystickPosition = Objects.requireNonNull(direction);
-	}
-
-	public void initGame() {
-		Sounds.stopAll();
-		game.initLevel(1);
-		game.levelSymbols.clear();
-		game.levelSymbols.add(game.bonusSymbol);
-		game.lives = 3;
-		game.score = 0;
-		game.enterState(GameState.INTRO);
-		// TODO: fixme (must call init explicitly in case of restart of intro scene)
-		if (window != null) {
-			window.currentScene().init();
-		}
 	}
 
 	public void startLevel() {
@@ -104,7 +102,7 @@ public class GameController {
 
 	private void update_INTRO() {
 		if (game.stateTimer == sec(25)) {
-			initGame(); // restart intro
+			newGame(); // restart intro
 		}
 	}
 
@@ -143,10 +141,7 @@ public class GameController {
 	}
 
 	private void update_PLAYING() {
-
-		updateAttacWave();
-
-		// Let Pac-Man do his stuff
+		game.updateAttacWave();
 		if (joystickPosition != null) {
 			game.pacMan.wishDir = joystickPosition;
 		}
@@ -154,45 +149,23 @@ public class GameController {
 		game.checkPelletEaten();
 		game.checkPowerPelletEaten();
 		game.checkBonusEaten();
-
-		if (game.world.allPelletsEaten()) {
+		if (game.world.checkAllPelletsEaten()) {
 			game.enterState(GameState.LEVEL_COMPLETE);
 			return;
 		}
-
-		if (game.isPacManKilledByGhost(game.pacMan.tile())) {
+		if (game.checkPacManKilledByGhost(game.pacMan.tile())) {
 			game.enterState(GameState.PACMAN_DEAD);
 			return;
 		}
-
-		if (game.isGhostKilledByPacMan()) {
+		if (game.checkGhostKilledByPacMan()) {
 			game.enterState(GameState.GHOST_DYING);
 			return;
 		}
-
-		// Ghost stuff
 		unlockGhosts();
 		for (Ghost ghost : game.ghosts) {
 			ghost.update();
 		}
-
-		// Bonus stuff
 		game.updateBonus();
-	}
-
-	private void updateAttacWave() {
-		int chaseStart = game.chaseStartTicks.indexOf(game.attackTimer);
-		if (chaseStart != -1) {
-			startChase(chaseStart);
-		}
-		int scatterStart = game.scatterStartTicks.indexOf(game.attackTimer);
-		if (scatterStart != -1) {
-			startScatter(scatterStart);
-		}
-		if (!game.pacMan.hasPower()) {
-			// timer is stopped while Pac-Man has power
-			++game.attackTimer;
-		}
 	}
 
 	private void unlockGhosts() {
@@ -209,28 +182,6 @@ public class GameController {
 		if (game.ghosts[CLYDE].state == GhostState.LOCKED && game.stateTimer == sec(7)) {
 			game.ghosts[CLYDE].state = GhostState.LEAVING_HOUSE;
 		}
-	}
-
-	private void startScatter(int phase) {
-		for (Ghost ghost : game.ghosts) {
-			if (ghost.state == GhostState.CHASING) {
-				ghost.state = GhostState.SCATTERING;
-				ghost.reverse();
-			}
-			game.chasingPhase = false;
-		}
-		log("Scattering phase %d started at clock time %d", phase + 1, GameClock.get().ticks);
-	}
-
-	private void startChase(int phase) {
-		for (Ghost ghost : game.ghosts) {
-			if (ghost.state == GhostState.SCATTERING) {
-				ghost.state = GhostState.CHASING;
-				ghost.reverse();
-			}
-			game.chasingPhase = true;
-		}
-		log("Chasing phase %d started at clock time %d", phase + 1, GameClock.get().ticks);
 	}
 
 	private void update_PACMAN_DEAD() {
@@ -302,7 +253,7 @@ public class GameController {
 
 		else if (game.stateTimer == sec(3)) {
 			game.mazeFlashing = false;
-			game.initLevel(game.levelNumber + 1);
+			game.setLevel(game.levelNumber + 1);
 			game.levelSymbols.add(game.bonusSymbol);
 			if (game.levelSymbols.size() == 8) {
 				game.levelSymbols.remove(0);
@@ -323,7 +274,7 @@ public class GameController {
 		}
 
 		else if (game.stateTimer == sec(5)) {
-			initGame();
+			newGame();
 		}
 	}
 }

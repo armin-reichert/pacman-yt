@@ -210,7 +210,7 @@ public class World {
 		return false;
 	}
 
-	public boolean allPelletsEaten() {
+	public boolean checkAllPelletsEaten() {
 		for (int row = 0; row < ROWS; ++row) {
 			for (int col = 0; col < COLS; ++col) {
 				if (isPellet(row, col)) {

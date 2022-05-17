@@ -81,7 +81,7 @@ public class GameWindow {
 				case KeyEvent.VK_RIGHT -> gameController.moveJoystick(Direction.RIGHT);
 				case KeyEvent.VK_I -> showInfo = !showInfo;
 				case KeyEvent.VK_P -> game.paused = !game.paused;
-				case KeyEvent.VK_Q -> gameController.initGame();
+				case KeyEvent.VK_Q -> gameController.newGame();
 				case KeyEvent.VK_S -> game.pacSafe = !game.pacSafe;
 				case KeyEvent.VK_SPACE -> {
 					if (game.paused) {
