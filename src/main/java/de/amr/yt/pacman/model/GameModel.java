@@ -93,7 +93,6 @@ public class GameModel {
 		ghosts = new Ghost[] { //
 				new Ghost(this, BLINKY), new Ghost(this, PINKY), new Ghost(this, INKY), new Ghost(this, CLYDE) };
 		setLevel(1);
-		levelCounter.add(level.bonusSymbol);
 		bonus = -1;
 	}
 
@@ -126,6 +125,15 @@ public class GameModel {
 		default -> new GameLevel(n, KEY,        0.90f, 0.95f, 0.50f, 120, 1.00f, 60, 1.05f, 0.00f, 0.00f, 0, 0);
 		//@formatter:on
 		};
+
+		if (n == 1) {
+			levelCounter.clear();
+		}
+		levelCounter.add(level.bonusSymbol);
+		if (levelCounter.size() == 8) {
+			levelCounter.remove(0);
+		}
+
 		log("Level %d created", level.number);
 	}
 

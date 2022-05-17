@@ -56,8 +56,6 @@ public class GameController {
 		game.score = 0;
 		game.lives = 3;
 		game.setLevel(1);
-		game.levelCounter.clear();
-		game.levelCounter.add(game.level.bonusSymbol);
 		game.enterState(GameState.INTRO);
 		Sounds.stopAll();
 		// TODO: fixme (must call init explicitly in case of restart of intro scene)
@@ -254,10 +252,6 @@ public class GameController {
 		else if (game.stateTimer == sec(3)) {
 			game.mazeFlashing = false;
 			game.setLevel(game.level.number + 1);
-			game.levelCounter.add(game.level.bonusSymbol);
-			if (game.levelCounter.size() == 8) {
-				game.levelCounter.remove(0);
-			}
 			game.pacMan.visible = false;
 			game.pacMan.animation = game.pacMan.animWalking;
 			game.enterState(GameState.LEVEL_STARTING);
