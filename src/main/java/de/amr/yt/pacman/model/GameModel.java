@@ -185,23 +185,25 @@ public class GameModel {
 			ghost.animation = ghost.animNormal;
 			ghost.animation.reset();
 			ghost.animation.setEnabled(false);
+			switch (ghost.id) {
+			case BLINKY -> {
+				ghost.placeAtTile(world.blinkyHomeTile, World.HTS, 0);
+				ghost.wishDir = ghost.moveDir = Direction.LEFT;
+			}
+			case PINKY -> {
+				ghost.placeAtTile(world.pinkyHomeTile, World.HTS, 0);
+				ghost.wishDir = ghost.moveDir = Direction.DOWN;
+			}
+			case INKY -> {
+				ghost.placeAtTile(world.inkyHomeTile, World.HTS, 0);
+				ghost.wishDir = ghost.moveDir = Direction.UP;
+			}
+			case CLYDE -> {
+				ghost.placeAtTile(world.clydeHomeTile, World.HTS, 0);
+				ghost.wishDir = ghost.moveDir = Direction.UP;
+			}
+			}
 		}
-
-		ghosts[BLINKY].placeAtTile(world.blinkyHomeTile, World.HTS, 0);
-		ghosts[BLINKY].wishDir = Direction.LEFT;
-		ghosts[BLINKY].moveDir = Direction.LEFT;
-
-		ghosts[INKY].placeAtTile(world.inkyHomeTile, World.HTS, 0);
-		ghosts[INKY].wishDir = Direction.UP;
-		ghosts[INKY].moveDir = Direction.UP;
-
-		ghosts[PINKY].placeAtTile(world.pinkyHomeTile, World.HTS, 0);
-		ghosts[PINKY].wishDir = Direction.DOWN;
-		ghosts[PINKY].moveDir = Direction.DOWN;
-
-		ghosts[CLYDE].placeAtTile(world.clydeHomeTile, World.HTS, 0);
-		ghosts[CLYDE].wishDir = Direction.UP;
-		ghosts[CLYDE].moveDir = Direction.UP;
 	}
 
 	public void onPacPowerEnding() {
