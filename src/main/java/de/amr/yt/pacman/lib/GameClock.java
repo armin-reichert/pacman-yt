@@ -44,24 +44,24 @@ public class GameClock {
 	private Runnable onTick = () -> Logging.log("Tick");
 	private Thread thread;
 	private boolean running;
-	private long lastFameRate;
+	private long lastFrameRate;
 	private long frameCount;
-	private long countStart;
+	private long frameCountStart;
 
 	public long getFrameRate() {
-		return lastFameRate;
+		return lastFrameRate;
 	}
 
-	public void run(Runnable callback) {
-		onTick = callback;
-		countStart = System.nanoTime();
-		running = true;
+	public void start(Runnable onTick) {
+		this.onTick = onTick;
 		thread = new Thread(() -> {
 			while (running) {
 				tick();
 			}
-		});
-		thread.run();
+		}, "GameClock");
+		running = true;
+		frameCountStart = System.nanoTime();
+		thread.start();
 	}
 
 	public void stop() {
@@ -76,7 +76,8 @@ public class GameClock {
 	private void tick() {
 		long start = System.nanoTime();
 		onTick.run();
-		long duration = System.nanoTime() - start;
+		long end = System.nanoTime();
+		long duration = end - start;
 		long period = 1_000_000_000L / frequency;
 		if (duration < period) {
 			long sleep = period - duration;
@@ -88,10 +89,10 @@ public class GameClock {
 		}
 		++ticks;
 		++frameCount;
-		if (System.nanoTime() - countStart >= 1_000_000_000) {
-			lastFameRate = frameCount;
+		if (end - frameCountStart >= 1_000_000_000) {
+			lastFrameRate = frameCount;
 			frameCount = 0;
-			countStart = System.nanoTime();
+			frameCountStart = end;
 		}
 	}
 }

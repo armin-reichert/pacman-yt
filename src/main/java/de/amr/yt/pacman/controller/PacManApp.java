@@ -31,12 +31,9 @@ import de.amr.yt.pacman.lib.GameClock;
 public class PacManApp {
 
 	public static void main(String[] args) {
-		double scale = 2.0;
-		if (args.length > 0) {
-			scale = Double.parseDouble(args[0]);
-		}
+		double scale = args.length > 0 ? Double.parseDouble(args[0]) : 2.0;
 		GameController controller = new GameController();
 		controller.createAndShowUI(scale);
-		GameClock.get().run(controller::step);
+		GameClock.get().start(controller::step);
 	}
 }
