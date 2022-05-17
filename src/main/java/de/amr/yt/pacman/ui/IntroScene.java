@@ -276,7 +276,7 @@ public class IntroScene implements GameScene {
 	private void drawPointsAwarded(Graphics2D g) {
 		g.setColor(Color.PINK);
 		g.fillOval(t(10) + 3, t(24) + 3, 2, 2);
-		if (!powerPelletsBlinking || frame(passed, 30, 2) == 0) {
+		if (!powerPelletsBlinking || frame(passed, 2, 15) == 0) {
 			g.fillOval(t(10), t(26), t(1), t(1));
 		}
 		g.setColor(Color.WHITE);
@@ -292,14 +292,14 @@ public class IntroScene implements GameScene {
 		if (pacManChasingGhosts) {
 			return;
 		}
-		if (!powerPelletsBlinking || frame(passed, 30, 2) == 0) {
+		if (!powerPelletsBlinking || frame(passed, 2, 15) == 0) {
 			g.setColor(Color.PINK);
 			g.fillOval(COL_LEFT, t(20), t(1), t(1));
 		}
 	}
 
 	private void drawPressSpaceToPlay(Graphics2D g) {
-		if (frame(passed, 60, 2) == 0) {
+		if (frame(passed, 2, 30) == 0) {
 			g.setColor(Color.WHITE);
 			g.setFont(Renderer.ARCADE_FONT);
 			g.drawString("PRESS SPACE TO PLAY", t(4), t(32));

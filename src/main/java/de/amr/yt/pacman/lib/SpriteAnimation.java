@@ -28,8 +28,34 @@ package de.amr.yt.pacman.lib;
  */
 public class SpriteAnimation {
 
-	public static int frame(long clock, int totalAnimationTicks, int numFrames) {
-		return (int) (clock % totalAnimationTicks) * numFrames / totalAnimationTicks;
+	/**
+	 * Returns an animation frame for the current game clock time.
+	 * 
+	 * @param numFrames  number of frames of the complete animation
+	 * @param frameTicks duration of a single frame in ticks
+	 * @return <code>frame(3, 4)</code> returns for example the current entry from the sequence
+	 *         <code>0 0 0 0 1 1 1 1 2 2 2 2...</code>
+	 */
+	public static int frame(int numFrames, int frameTicks) {
+		return frame(GameClock.get().ticks, numFrames, frameTicks);
+	}
+
+	/**
+	 * Returns an animation frame for the given time (tick).
+	 * 
+	 * @param numFrames  number of frames of the complete animation
+	 * @param frameTicks duration of a single frame in ticks
+	 * @return <code>frame(3, 4)</code> returns for example the current entry from the sequence
+	 *         <code>0 0 0 0 1 1 1 1 2 2 2 2...</code>
+	 */
+	public static int frame(long time, int numFrames, int frameTicks) {
+		int animationLength = numFrames * frameTicks;
+		return (int) (time % animationLength) / frameTicks;
+	}
+
+	public static void main(String[] args) {
+		GameClock.get().onTick = () -> System.out.print(frame(GameClock.get().ticks, 3, 4) + " ");
+		GameClock.get().start();
 	}
 
 	public final String name;
