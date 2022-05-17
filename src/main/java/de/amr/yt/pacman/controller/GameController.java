@@ -33,6 +33,7 @@ import static de.amr.yt.pacman.model.GameModel.PINKY;
 import java.util.Objects;
 
 import de.amr.yt.pacman.lib.Direction;
+import de.amr.yt.pacman.lib.GameClock;
 import de.amr.yt.pacman.lib.Sounds;
 import de.amr.yt.pacman.model.GameModel;
 import de.amr.yt.pacman.model.Ghost;
@@ -144,10 +145,15 @@ public class GameController {
 	private void update_PLAYING() {
 
 		// Control the attack waves
-		if (game.chaseStartTicks.contains(game.attackTimer)) {
+		int chasePhase = game.chaseStartTicks.indexOf(game.attackTimer);
+		if (chasePhase != -1) {
 			startChasingPhase();
-		} else if (game.scatterStartTicks.contains(game.attackTimer)) {
+			log("Starting chasing phase #%d, time=%d", chasePhase + 1, GameClock.get().ticks);
+		}
+		int scatterPhase = game.scatterStartTicks.indexOf(game.attackTimer);
+		if (scatterPhase != -1) {
 			startScatteringPhase();
+			log("Starting scattering phase #%d, time=%d", scatterPhase + 1, GameClock.get().ticks);
 		}
 		if (!game.pacMan.hasPower()) {
 			++game.attackTimer;
