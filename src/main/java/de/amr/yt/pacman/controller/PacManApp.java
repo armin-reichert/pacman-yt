@@ -37,7 +37,7 @@ public class PacManApp {
 		GameController controller = new GameController();
 		SwingUtilities.invokeLater(() -> {
 			controller.createAndShowUI(scale);
-			GameClock.get().start(controller::step);
+			GameClock.get().start(() -> controller.step(false));
 		});
 	}
 }

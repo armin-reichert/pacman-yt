@@ -89,8 +89,8 @@ public class GameController {
 		}
 	}
 
-	public void step() {
-		if (!game.paused) {
+	public void step(boolean singleStepMode) {
+		if (!game.paused || singleStepMode) {
 			++game.stateTimer;
 			switch (game.state) {
 			case INTRO -> update_INTRO();
@@ -103,8 +103,8 @@ public class GameController {
 			case GAME_OVER -> update_GAME_OVER();
 			}
 			pacManSteering = null;
-			window.update();
 		}
+		window.update();
 		window.render();
 	}
 
