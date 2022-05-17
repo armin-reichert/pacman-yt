@@ -117,7 +117,7 @@ public class GameController {
 		}
 
 		else if (game.stateTimer == sec(1)) {
-			if (game.levelNumber == 1) {
+			if (game.level.number == 1) {
 				Sounds.play("game_start");
 			}
 			game.enterState(GameState.READY);
@@ -253,7 +253,7 @@ public class GameController {
 
 		else if (game.stateTimer == sec(3)) {
 			game.mazeFlashing = false;
-			game.setLevel(game.levelNumber + 1);
+			game.setLevel(game.level.number + 1);
 			game.levelCounter.add(game.level.bonusSymbol);
 			if (game.levelCounter.size() == 8) {
 				game.levelCounter.remove(0);

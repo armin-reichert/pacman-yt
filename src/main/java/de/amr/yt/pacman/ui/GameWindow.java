@@ -190,7 +190,7 @@ public class GameWindow {
 		g.drawString("LEVEL", t(18), t(1));
 		if (scoreVisible) {
 			g.drawString("%07d".formatted(game.score), t(7), t(1));
-			g.drawString("%03d".formatted(game.levelNumber), t(24), t(1));
+			g.drawString("%03d".formatted(game.level.number), t(24), t(1));
 		}
 	}
 
