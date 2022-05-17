@@ -46,6 +46,7 @@ public class GameController {
 	private final GameModel game;
 	private GameWindow window;
 	private Direction joystick;
+	private boolean playing;
 
 	public GameController() {
 		game = new GameModel();
@@ -106,6 +107,7 @@ public class GameController {
 
 	private void update_LEVEL_STARTING() {
 		if (game.stateTimer == 0) {
+			playing = false;
 			game.powerPelletsBlinking = false;
 			game.world.resetFood();
 			for (Ghost ghost : game.ghosts) {
@@ -127,12 +129,13 @@ public class GameController {
 			game.reset();
 		}
 
-		else if (game.stateTimer == sec(5)) {
+		else if (game.stateTimer == sec(playing ? 1 : 5)) {
 			game.powerPelletsBlinking = true;
 			game.pacMan.animWalking.setEnabled(true);
 			for (Ghost ghost : game.ghosts) {
 				ghost.animation.setEnabled(true);
 			}
+			playing = true;
 			game.enterState(GameState.PLAYING);
 			return;
 		}
