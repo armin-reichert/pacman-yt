@@ -75,10 +75,10 @@ public class GameWindow {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				switch (e.getKeyCode()) {
-				case KeyEvent.VK_UP -> gameController.steerPacMan(Direction.UP);
-				case KeyEvent.VK_DOWN -> gameController.steerPacMan(Direction.DOWN);
-				case KeyEvent.VK_LEFT -> gameController.steerPacMan(Direction.LEFT);
-				case KeyEvent.VK_RIGHT -> gameController.steerPacMan(Direction.RIGHT);
+				case KeyEvent.VK_UP -> gameController.moveJoystick(Direction.UP);
+				case KeyEvent.VK_DOWN -> gameController.moveJoystick(Direction.DOWN);
+				case KeyEvent.VK_LEFT -> gameController.moveJoystick(Direction.LEFT);
+				case KeyEvent.VK_RIGHT -> gameController.moveJoystick(Direction.RIGHT);
 				case KeyEvent.VK_I -> showInfo = !showInfo;
 				case KeyEvent.VK_P -> game.paused = !game.paused;
 				case KeyEvent.VK_Q -> gameController.initGame();

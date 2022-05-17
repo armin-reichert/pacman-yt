@@ -46,7 +46,7 @@ public class GameController {
 
 	private final GameModel game;
 	private GameWindow window;
-	private Direction pacManSteering;
+	private Direction joystickPosition;
 
 	public GameController() {
 		game = new GameModel();
@@ -58,8 +58,8 @@ public class GameController {
 		window.show();
 	}
 
-	public void steerPacMan(Direction direction) {
-		pacManSteering = Objects.requireNonNull(direction);
+	public void moveJoystick(Direction direction) {
+		joystickPosition = Objects.requireNonNull(direction);
 	}
 
 	public void initGame() {
@@ -69,22 +69,16 @@ public class GameController {
 		game.levelSymbols.add(game.bonusSymbol);
 		game.lives = 3;
 		game.score = 0;
-		enterGameState(GameState.INTRO);
+		game.enterState(GameState.INTRO);
 		// TODO: fixme (must call init explicitly in case of restart of intro scene)
 		if (window != null) {
 			window.currentScene().init();
 		}
 	}
 
-	public void enterGameState(GameState state) {
-		game.state = state;
-		game.stateTimer = -1;
-		log("Game state changed to %s", game.state);
-	}
-
 	public void startLevel() {
 		if (game.state == GameState.INTRO) {
-			enterGameState(GameState.LEVEL_STARTING);
+			game.enterState(GameState.LEVEL_STARTING);
 		}
 	}
 
@@ -101,7 +95,7 @@ public class GameController {
 			case LEVEL_COMPLETE -> update_LEVEL_COMPLETE();
 			case GAME_OVER -> update_GAME_OVER();
 			}
-			pacManSteering = null;
+			joystickPosition = null;
 		}
 		window.update();
 		window.render();
@@ -127,7 +121,7 @@ public class GameController {
 			if (game.levelNumber == 1) {
 				Sounds.play("game_start");
 			}
-			enterGameState(GameState.READY);
+			game.enterState(GameState.READY);
 		}
 	}
 
@@ -142,13 +136,14 @@ public class GameController {
 			for (Ghost ghost : game.ghosts) {
 				ghost.animation.setEnabled(true);
 			}
-			enterGameState(GameState.PLAYING);
+			game.enterState(GameState.PLAYING);
 			return;
 		}
 	}
 
 	private void update_PLAYING() {
-		// Attack logic
+
+		// Control the attack waves
 		if (game.chaseStartTicks.contains(game.attackTimer)) {
 			startChasingPhase();
 		} else if (game.scatterStartTicks.contains(game.attackTimer)) {
@@ -158,40 +153,27 @@ public class GameController {
 			++game.attackTimer;
 		}
 
-		// Pac-Man behavior
-		if (pacManSteering != null) {
-			game.pacMan.wishDir = pacManSteering;
+		// Let Pac-Man do his stuff
+		if (joystickPosition != null) {
+			game.pacMan.wishDir = joystickPosition;
 		}
 		game.pacMan.update();
-
-		int oldScore;
-
-		oldScore = game.score;
-		if (game.world.pelletEaten(game.pacMan.tile())) {
-			game.onPacFoundPellet(oldScore);
-		}
-
-		oldScore = game.score;
-		if (game.world.powerPelletEaten(game.pacMan.tile())) {
-			game.onPacFoundPowerPellet(oldScore);
-		}
-
-		oldScore = game.score;
-		if (game.pacManFindsBonus()) {
-			game.onPacManFoundBonus(oldScore);
-		}
+		game.checkPelletEaten();
+		game.checkPowerPelletEaten();
+		game.checkBonusEaten();
 
 		if (game.world.allPelletsEaten()) {
-			enterGameState(GameState.LEVEL_COMPLETE);
+			game.enterState(GameState.LEVEL_COMPLETE);
 			return;
 		}
 
 		if (game.isPacManKilledByGhost(game.pacMan.tile())) {
-			enterGameState(GameState.PACMAN_DEAD);
+			game.enterState(GameState.PACMAN_DEAD);
 			return;
 		}
+
 		if (game.isGhostKilledByPacMan()) {
-			enterGameState(GameState.GHOST_DYING);
+			game.enterState(GameState.GHOST_DYING);
 			return;
 		}
 
@@ -266,12 +248,12 @@ public class GameController {
 		else if (game.stateTimer == sec(4)) {
 			--game.lives;
 			if (game.lives > 0) {
-				enterGameState(GameState.READY);
+				game.enterState(GameState.READY);
 			} else {
 				for (Ghost ghost : game.ghosts) {
 					ghost.visible = true;
 				}
-				enterGameState(GameState.GAME_OVER);
+				game.enterState(GameState.GAME_OVER);
 			}
 		}
 	}
@@ -283,7 +265,7 @@ public class GameController {
 
 		else if (game.stateTimer == sec(1)) {
 			game.pacMan.visible = true;
-			enterGameState(GameState.PLAYING);
+			game.enterState(GameState.PLAYING);
 			return;
 		}
 
@@ -319,7 +301,7 @@ public class GameController {
 			}
 			game.pacMan.visible = false;
 			game.pacMan.animation = game.pacMan.animWalking;
-			enterGameState(GameState.LEVEL_STARTING);
+			game.enterState(GameState.LEVEL_STARTING);
 		}
 	}
 

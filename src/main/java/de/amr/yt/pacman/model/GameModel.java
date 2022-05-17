@@ -221,6 +221,12 @@ public class GameModel {
 		}
 	}
 
+	public void enterState(GameState state) {
+		this.state = state;
+		stateTimer = -1;
+		log("Game state changed to %s", state);
+	}
+
 	public void onPacPowerEnding() {
 		for (Ghost ghost : ghosts) {
 			if (ghost.state == GhostState.FRIGHTENED) {
@@ -229,14 +235,28 @@ public class GameModel {
 		}
 	}
 
-	public void onPacFoundPellet(int oldScore) {
+	public void checkPelletEaten() {
+		int oldScore = score;
+		if (world.pelletEaten(pacMan.tile())) {
+			onPacFoundPellet(oldScore);
+		}
+	}
+
+	private void onPacFoundPellet(int oldScore) {
 		pacMan.restCountdown = 1;
 		score += 10;
 		checkBonusAwarded();
 		checkExtraLife(oldScore);
 	}
 
-	public void onPacFoundPowerPellet(int oldScore) {
+	public void checkPowerPelletEaten() {
+		int oldScore = score;
+		if (world.powerPelletEaten(pacMan.tile())) {
+			onPacFoundPowerPellet(oldScore);
+		}
+	}
+
+	private void onPacFoundPowerPellet(int oldScore) {
 		pacMan.state = PacManState.POWER;
 		pacMan.powerCountdown = sec(ghostFrightenedSeconds);
 		pacMan.restCountdown = 3;
@@ -268,17 +288,18 @@ public class GameModel {
 		}
 	}
 
-	/**
-	 * @return {@code true} if edible bonus symbol has been found
-	 */
-	public boolean pacManFindsBonus() {
-		return bonus != -1 && !bonusEaten && pacMan.tile().equals(world.bonusTile);
+	public void checkBonusEaten() {
+		int oldScore = score;
+		if (pacManFindsBonus()) {
+			bonusTimer = sec(2);
+			bonusEaten = true;
+			score += bonusValue(bonusSymbol);
+			checkExtraLife(oldScore);
+		}
 	}
 
-	public void onPacManFoundBonus(int oldScore) {
-		bonusTimer = sec(2);
-		bonusEaten = true;
-		score += bonusValue(bonusSymbol);
+	private boolean pacManFindsBonus() {
+		return bonus != -1 && !bonusEaten && pacMan.tile().equals(world.bonusTile);
 	}
 
 	/**
