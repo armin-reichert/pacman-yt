@@ -136,15 +136,15 @@ public class GameController {
 				ghost.visible = true;
 				ghost.animation = ghost.animNormal;
 				ghost.animation.reset();
-				ghost.animation.enabled = false;
+				ghost.animation.setEnabled(false);
 			}
 		}
 
 		else if (game.stateTimer == sec(5)) {
 			game.powerPelletsBlinking = true;
-			game.pacMan.animWalking.enabled = true;
+			game.pacMan.animWalking.setEnabled(true);
 			for (Ghost ghost : game.ghosts) {
-				ghost.animation.enabled = true;
+				ghost.animation.setEnabled(true);
 			}
 			enterGameState(GameState.PLAYING);
 			return;
@@ -176,7 +176,7 @@ public class GameController {
 			for (Ghost ghost : game.ghosts) {
 				if (ghost.state == GhostState.CHASING || ghost.state == GhostState.SCATTERING) {
 					ghost.state = GhostState.FRIGHTENED;
-					ghost.animFrightened.enabled = true;
+					ghost.animFrightened.setEnabled(true);
 					ghost.reverse();
 				}
 			}
@@ -251,7 +251,7 @@ public class GameController {
 		game.pacMan.update();
 
 		if (game.stateTimer == 0) {
-			game.pacMan.animation.enabled = false;
+			game.pacMan.animation.setEnabled(false);
 			game.pacMan.animation.reset();
 			game.bonus = -1;
 		}
@@ -263,7 +263,7 @@ public class GameController {
 		}
 
 		else if (game.stateTimer == sec(2)) {
-			game.pacMan.animation.enabled = true;
+			game.pacMan.animation.setEnabled(true);
 			Sounds.play("pacman_death");
 		}
 
@@ -303,7 +303,7 @@ public class GameController {
 		if (game.stateTimer == 0) {
 			game.pacMan.animation = game.pacMan.animStanding;
 			for (Ghost ghost : game.ghosts) {
-				ghost.animNormal.enabled = false;
+				ghost.animNormal.setEnabled(false);
 			}
 		}
 
@@ -331,9 +331,9 @@ public class GameController {
 		if (game.stateTimer == 0) {
 			game.powerPelletsBlinking = false;
 			for (Ghost ghost : game.ghosts) {
-				ghost.animNormal.enabled = false;
+				ghost.animNormal.setEnabled(false);
 			}
-			game.pacMan.animWalking.enabled = false;
+			game.pacMan.animWalking.setEnabled(false);
 		}
 
 		else if (game.stateTimer == sec(5)) {

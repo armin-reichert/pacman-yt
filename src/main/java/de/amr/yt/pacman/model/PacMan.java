@@ -48,8 +48,8 @@ public class PacMan extends Creature {
 	public PacMan(GameModel game) {
 		super(game.world);
 		this.game = game;
-		animStanding = new SpriteAnimation("standing", 2, false);
-		animStuck = new SpriteAnimation("stuck", 1, false);
+		animStanding = new SpriteAnimation("standing", 2);
+		animStuck = new SpriteAnimation("stuck", 1);
 		animWalking = new SpriteAnimation("walking", new byte[] { 1, 0, 1, 2 }, 2, true);
 		animDying = new SpriteAnimation("dying", new byte[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }, 6, false);
 		reset();
@@ -63,7 +63,7 @@ public class PacMan extends Creature {
 		powerCountdown = 0;
 		idleCountdown = 0;
 		animation = animStanding;
-		animation.enabled = true;
+		animation.setEnabled(true);
 	}
 
 	public void update() {

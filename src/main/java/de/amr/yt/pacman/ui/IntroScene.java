@@ -89,7 +89,7 @@ public class IntroScene implements GameScene {
 		game.pacMan.speed = game.playerSpeed;
 		game.pacMan.moveDir = Direction.LEFT;
 		game.pacMan.animation = game.pacMan.animWalking;
-		game.pacMan.animation.enabled = true;
+		game.pacMan.animation.setEnabled(true);
 
 		for (var ghost : game.ghosts) {
 			ghost.reset();
@@ -98,7 +98,7 @@ public class IntroScene implements GameScene {
 			ghost.speed = game.pacMan.speed * 1.05f;
 			ghost.moveDir = Direction.LEFT;
 			ghost.animation = ghost.animNormal;
-			ghost.animation.enabled = true;
+			ghost.animation.setEnabled(true);
 		}
 	}
 

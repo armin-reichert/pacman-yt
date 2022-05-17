@@ -23,6 +23,8 @@ SOFTWARE.
 */
 package de.amr.yt.pacman.lib;
 
+import java.util.Arrays;
+
 /**
  * @author Armin Reichert
  */
@@ -54,35 +56,73 @@ public class SpriteAnimation {
 	}
 
 	public final String name;
-	public final boolean cycle;
-	public boolean enabled;
-
+	public final boolean loop;
+	private boolean enabled;
 	private byte[] frames;
 	private int majorIndex;
 	private int minorIndex;
 	private int frameLength;
 
-	public SpriteAnimation(String name, byte[] frames, int frameLength, boolean cycle) {
+	/**
+	 * Creates a sprite animation (frame pattern).
+	 * <p>
+	 * For example, <code>new SpriteAnimation("my-animation", new byte[] {0,1,2}, 3, true)</code> creates the repeated
+	 * pattern <code>0 0 0 1 1 1 2 2 2</code>.
+	 * 
+	 * @param name        animation name
+	 * @param frames      frame indices
+	 * @param frameLength length of a single frame in ticks
+	 * @param loop        if the animation should repeat from start endlessly
+	 */
+	public SpriteAnimation(String name, byte[] frames, int frameLength, boolean loop) {
 		this.name = name;
-		this.cycle = cycle;
+		this.loop = loop;
 		this.enabled = true;
-		this.frames = frames;
+		this.frames = Arrays.copyOf(frames, frames.length);
 		this.frameLength = frameLength;
 		this.majorIndex = 0;
 		this.minorIndex = 0;
 	}
 
-	public SpriteAnimation(String name, byte[] frames, boolean cycle) {
-		this(name, frames, 1, cycle);
+	/**
+	 * Creates a sprite animation (frame pattern) where each frame takes one tick.
+	 * <p>
+	 * For example, <code>new SpriteAnimation("my-animation", new byte[] {0,1,2}, true)</code> creates the repeated
+	 * pattern <code>0 1 2</code>.
+	 * 
+	 * @param name        animation name
+	 * @param frames      frame indices
+	 * @param frameLength length of a single frame in ticks
+	 * @param loop        if the animation should repeat from start endlessly
+	 */
+	public SpriteAnimation(String name, byte[] frames, boolean loop) {
+		this(name, frames, 1, loop);
 	}
 
-	public SpriteAnimation(String name, int singleFrame, boolean cycle) {
-		this(name, new byte[] { (byte) singleFrame }, cycle);
+	/**
+	 * Creates a sprite animation (frame pattern) consisting of a single frame.
+	 * <p>
+	 * For example, <code>new SpriteAnimation("my-animation", 2)</code> creates the pattern <code>2</code>.
+	 * 
+	 * @param name        animation name
+	 * @param frames      frame indices
+	 * @param frameLength length of a single frame in ticks
+	 */
+	public SpriteAnimation(String name, int singleFrame) {
+		this(name, new byte[] { (byte) singleFrame }, false);
 	}
 
 	@Override
 	public String toString() {
 		return "%s %s".formatted(name, enabled ? "" : "disabled");
+	}
+
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
 	}
 
 	public void reset() {
@@ -105,20 +145,20 @@ public class SpriteAnimation {
 		}
 	}
 
+	private void advanceMajorIndex() {
+		if (majorIndex < frames.length - 1) {
+			++majorIndex;
+		} else {
+			majorIndex = loop ? 0 : frames.length - 1;
+		}
+	}
+
 	private void advanceMinorIndex() {
 		if (minorIndex < frameLength - 1) {
 			++minorIndex;
 		} else {
 			advanceMajorIndex();
 			minorIndex = 0;
-		}
-	}
-
-	private void advanceMajorIndex() {
-		if (majorIndex < frames.length - 1) {
-			++majorIndex;
-		} else {
-			majorIndex = cycle ? 0 : frames.length - 1;
 		}
 	}
 }
