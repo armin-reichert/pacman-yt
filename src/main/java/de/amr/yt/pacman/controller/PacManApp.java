@@ -37,7 +37,6 @@ public class PacManApp {
 		}
 		GameController controller = new GameController();
 		controller.createAndShowUI(scale);
-		controller.initGame();
 		GameClock.get().run(controller::step);
 	}
 }

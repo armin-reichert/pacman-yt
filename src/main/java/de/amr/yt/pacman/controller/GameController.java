@@ -51,6 +51,7 @@ public class GameController {
 
 	public GameController() {
 		game = new GameModel();
+		initGame();
 	}
 
 	public void createAndShowUI(double scale) {
@@ -71,7 +72,9 @@ public class GameController {
 		game.score = 0;
 		enterGameState(GameState.INTRO);
 		// TODO: fixme (must call init explicitly in case of restart of intro scene)
-		window.currentScene().init();
+		if (window != null) {
+			window.currentScene().init();
+		}
 	}
 
 	public void enterGameState(GameState state) {
