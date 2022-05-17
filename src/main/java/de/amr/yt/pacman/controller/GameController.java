@@ -115,13 +115,16 @@ public class GameController {
 	}
 
 	private void update_LEVEL_STARTING() {
-		game.powerPelletsBlinking = false;
-		game.world.resetFood();
-		for (Ghost ghost : game.ghosts) {
-			ghost.visible = false;
+		if (game.stateTimer == 0) {
+			game.powerPelletsBlinking = false;
+			game.world.resetFood();
+			for (Ghost ghost : game.ghosts) {
+				ghost.visible = false;
+			}
+			game.pacMan.visible = false;
 		}
-		game.pacMan.visible = false;
-		if (game.stateTimer == sec(1)) {
+
+		else if (game.stateTimer == sec(1)) {
 			if (game.levelNumber == 1) {
 				Sounds.play("game_start");
 			}
