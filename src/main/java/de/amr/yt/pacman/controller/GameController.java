@@ -24,10 +24,6 @@ SOFTWARE.
 package de.amr.yt.pacman.controller;
 
 import static de.amr.yt.pacman.lib.GameClock.sec;
-import static de.amr.yt.pacman.model.GameModel.BLINKY;
-import static de.amr.yt.pacman.model.GameModel.CLYDE;
-import static de.amr.yt.pacman.model.GameModel.INKY;
-import static de.amr.yt.pacman.model.GameModel.PINKY;
 
 import java.util.Objects;
 
@@ -162,27 +158,11 @@ public class GameController {
 			game.enterState(GameState.GHOST_DYING);
 			return;
 		}
-		unlockGhosts();
+		game.unlockGhosts();
 		for (Ghost ghost : game.ghosts) {
 			ghost.update();
 		}
 		game.updateBonus();
-	}
-
-	private void unlockGhosts() {
-		// TODO this is just some arbitrary logic, the real game uses dot counters and stuff
-		if (game.ghosts[BLINKY].state == GhostState.LOCKED && game.stateTimer == sec(0)) {
-			game.ghosts[BLINKY].state = GhostState.SCATTERING;
-		}
-		if (game.ghosts[PINKY].state == GhostState.LOCKED && game.stateTimer == sec(1)) {
-			game.ghosts[PINKY].state = GhostState.LEAVING_HOUSE;
-		}
-		if (game.ghosts[INKY].state == GhostState.LOCKED && game.stateTimer == sec(3)) {
-			game.ghosts[INKY].state = GhostState.LEAVING_HOUSE;
-		}
-		if (game.ghosts[CLYDE].state == GhostState.LOCKED && game.stateTimer == sec(7)) {
-			game.ghosts[CLYDE].state = GhostState.LEAVING_HOUSE;
-		}
 	}
 
 	private void update_PACMAN_DEAD() {

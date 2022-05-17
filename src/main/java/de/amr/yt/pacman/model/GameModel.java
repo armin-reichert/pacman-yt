@@ -235,6 +235,22 @@ public class GameModel {
 		log("Chasing phase %d started at clock time %d", phase + 1, GameClock.get().ticks);
 	}
 
+	public void unlockGhosts() {
+		// TODO this is just some arbitrary logic, the real game uses dot counters and stuff
+		if (ghosts[BLINKY].state == GhostState.LOCKED && stateTimer == sec(0)) {
+			ghosts[BLINKY].state = GhostState.SCATTERING;
+		}
+		if (ghosts[PINKY].state == GhostState.LOCKED && stateTimer == sec(1)) {
+			ghosts[PINKY].state = GhostState.LEAVING_HOUSE;
+		}
+		if (ghosts[INKY].state == GhostState.LOCKED && stateTimer == sec(3)) {
+			ghosts[INKY].state = GhostState.LEAVING_HOUSE;
+		}
+		if (ghosts[CLYDE].state == GhostState.LOCKED && stateTimer == sec(7)) {
+			ghosts[CLYDE].state = GhostState.LEAVING_HOUSE;
+		}
+	}
+
 	public void onPacPowerEnding() {
 		for (Ghost ghost : ghosts) {
 			if (ghost.state == GhostState.FRIGHTENED) {
