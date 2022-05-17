@@ -177,49 +177,31 @@ public class GameModel {
 		pacMan.animation = pacMan.animStanding;
 		pacMan.animation.reset();
 
+		for (var ghost : ghosts) {
+			ghost.speed = ghostSpeed;
+			ghost.targetTile = null;
+			ghost.state = GhostState.LOCKED;
+			ghost.visible = true;
+			ghost.animation = ghost.animNormal;
+			ghost.animation.reset();
+			ghost.animation.setEnabled(false);
+		}
+
 		ghosts[BLINKY].placeAtTile(world.blinkyHomeTile, World.HTS, 0);
 		ghosts[BLINKY].wishDir = Direction.LEFT;
 		ghosts[BLINKY].moveDir = Direction.LEFT;
-		ghosts[BLINKY].speed = ghostSpeed;
-		ghosts[BLINKY].targetTile = null;
-		ghosts[BLINKY].state = GhostState.LOCKED;
-		ghosts[BLINKY].visible = true;
-		ghosts[BLINKY].animation = ghosts[BLINKY].animNormal;
-		ghosts[BLINKY].animation.reset();
-		ghosts[BLINKY].animation.setEnabled(false);
 
 		ghosts[INKY].placeAtTile(world.inkyHomeTile, World.HTS, 0);
 		ghosts[INKY].wishDir = Direction.UP;
 		ghosts[INKY].moveDir = Direction.UP;
-		ghosts[INKY].speed = ghostSpeed;
-		ghosts[INKY].targetTile = null;
-		ghosts[INKY].state = GhostState.LOCKED;
-		ghosts[INKY].visible = true;
-		ghosts[INKY].animation = ghosts[INKY].animNormal;
-		ghosts[INKY].animation.reset();
-		ghosts[INKY].animation.setEnabled(false);
 
 		ghosts[PINKY].placeAtTile(world.pinkyHomeTile, World.HTS, 0);
 		ghosts[PINKY].wishDir = Direction.DOWN;
 		ghosts[PINKY].moveDir = Direction.DOWN;
-		ghosts[PINKY].speed = ghostSpeed;
-		ghosts[PINKY].targetTile = null;
-		ghosts[PINKY].state = GhostState.LOCKED;
-		ghosts[PINKY].visible = true;
-		ghosts[PINKY].animation = ghosts[PINKY].animNormal;
-		ghosts[PINKY].animation.reset();
-		ghosts[PINKY].animation.setEnabled(false);
 
 		ghosts[CLYDE].placeAtTile(world.clydeHomeTile, World.HTS, 0);
 		ghosts[CLYDE].wishDir = Direction.UP;
 		ghosts[CLYDE].moveDir = Direction.UP;
-		ghosts[CLYDE].speed = ghostSpeed;
-		ghosts[CLYDE].targetTile = null;
-		ghosts[CLYDE].state = GhostState.LOCKED;
-		ghosts[CLYDE].visible = true;
-		ghosts[CLYDE].animation = ghosts[INKY].animNormal;
-		ghosts[CLYDE].animation.reset();
-		ghosts[CLYDE].animation.setEnabled(false);
 	}
 
 	public void onPacPowerEnding() {
