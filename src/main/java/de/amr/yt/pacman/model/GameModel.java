@@ -47,19 +47,7 @@ public class GameModel {
 	public static final int CHERRIES = 0, STRAWBERRY = 1, PEACH = 2, APPLE = 3, GRAPES = 4, GALAXIAN = 5, BELL = 6,
 			KEY = 7;
 
-	public static int bonusValue(int symbol) {
-		return switch (symbol) {
-		case CHERRIES -> 100;
-		case STRAWBERRY -> 300;
-		case PEACH -> 500;
-		case APPLE -> 700;
-		case GRAPES -> 1000;
-		case GALAXIAN -> 2000;
-		case BELL -> 3000;
-		case KEY -> 5000;
-		default -> throw new IllegalArgumentException("Unknown symbol ID: " + symbol);
-		};
-	}
+	public static final int[] BONUS_VALUES = { 100, 300, 500, 700, 1000, 2000, 3000, 5000 };
 
 	public boolean paused;
 	public boolean pacSafe;
@@ -142,7 +130,7 @@ public class GameModel {
 		bonus = -1;
 		bonusTimer = 0;
 		bonusEaten = false;
-		chasingPhase = false;
+		chasingPhase = true;
 		powerPelletsBlinking = false;
 		ghostsKilledByEnergizer = 0;
 
@@ -201,11 +189,15 @@ public class GameModel {
 	public void updateAttacWave() {
 		int chaseStart = level.chaseStartTicks.indexOf(attackTimer);
 		if (chaseStart != -1) {
-			startChase(chaseStart);
+			if (!chasingPhase) {
+				startChase(chaseStart);
+			}
 		}
 		int scatterStart = level.scatterStartTicks.indexOf(attackTimer);
 		if (scatterStart != -1) {
-			startScatter(scatterStart);
+			if (chasingPhase) {
+				startScatter(scatterStart);
+			}
 		}
 		if (!pacMan.hasPower()) {
 			// timer is stopped while Pac-Man has power
@@ -304,7 +296,7 @@ public class GameModel {
 		if (bonus != -1 && !bonusEaten && pacMan.tile().equals(world.bonusTile)) {
 			bonusTimer = sec(2);
 			bonusEaten = true;
-			scorePoints(bonusValue(level.bonusSymbol));
+			scorePoints(BONUS_VALUES[level.bonusSymbol]);
 			return true;
 		}
 		return false;
