@@ -53,11 +53,6 @@ public class SpriteAnimation {
 		return (int) (time % animationLength) / frameTicks;
 	}
 
-	public static void main(String[] args) {
-		GameClock.get().onTick = () -> System.out.print(frame(GameClock.get().ticks, 3, 4) + " ");
-		GameClock.get().start();
-	}
-
 	public final String name;
 	public final boolean cycle;
 	public boolean enabled;
