@@ -135,15 +135,6 @@ public class GameController {
 	private void update_READY() {
 		if (game.stateTimer == 0) {
 			game.reset();
-			game.pacMan.visible = true;
-			game.pacMan.animation = game.pacMan.animStanding;
-			game.pacMan.animation.reset();
-			for (Ghost ghost : game.ghosts) {
-				ghost.visible = true;
-				ghost.animation = ghost.animNormal;
-				ghost.animation.reset();
-				ghost.animation.setEnabled(false);
-			}
 		}
 
 		else if (game.stateTimer == sec(5)) {
