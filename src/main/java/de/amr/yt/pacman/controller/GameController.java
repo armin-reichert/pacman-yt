@@ -113,7 +113,7 @@ public class GameController {
 		}
 
 		else if (game.stateTimer == sec(1)) {
-			if (game.level.number == 1) {
+			if (!playing) {
 				Sounds.play("game_start");
 			}
 			game.enterState(GameState.READY);
@@ -123,21 +123,21 @@ public class GameController {
 	private void update_READY() {
 		if (game.stateTimer == 0) {
 			game.reset();
+		} else if (game.stateTimer == sec(playing ? 1 : 5)) {
+			game.enterState(GameState.PLAYING);
 		}
+	}
 
-		else if (game.stateTimer == sec(playing ? 1 : 5)) {
+	private void update_PLAYING() {
+		if (game.stateTimer == 0) {
 			game.powerPelletsBlinking = true;
 			game.pacMan.animWalking.setEnabled(true);
 			for (Ghost ghost : game.ghosts) {
 				ghost.animation.setEnabled(true);
 			}
 			playing = true;
-			game.enterState(GameState.PLAYING);
-			return;
 		}
-	}
 
-	private void update_PLAYING() {
 		game.updateAttacWave();
 		if (joystick != null) {
 			game.pacMan.wishDir = joystick;

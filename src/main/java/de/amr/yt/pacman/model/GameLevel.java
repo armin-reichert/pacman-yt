@@ -64,15 +64,19 @@ public class GameLevel {
 		ghostFrightenedSeconds = (int) data[10];
 		numFlashes = (int) data[11];
 
-		if (levelNumber == 1) {
+		switch (levelNumber) {
+		case 1 -> {
 			scatterStartTicks = List.of(0, sec(27), sec(54), sec(79));
 			chaseStartTicks = List.of(sec(7), sec(34), sec(59), sec(84));
-		} else if (levelNumber <= 4) {
+		}
+		case 2, 3, 4 -> {
 			scatterStartTicks = List.of(0, sec(27), sec(54), sec(1092));
 			chaseStartTicks = List.of(sec(7), sec(34), sec(59), sec(1092) + 1);
-		} else {
+		}
+		default -> {
 			scatterStartTicks = List.of(0, sec(25), sec(50), sec(1092));
 			chaseStartTicks = List.of(sec(5), sec(30), sec(55), sec(1092) + 1);
+		}
 		}
 	}
 }
