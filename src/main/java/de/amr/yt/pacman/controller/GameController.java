@@ -242,9 +242,9 @@ public class GameController {
 		if (game.stateTimer == 0) {
 			game.powerPelletsBlinking = false;
 			for (Ghost ghost : game.ghosts) {
-				ghost.animNormal.setEnabled(false);
+				ghost.animation.setEnabled(false);
 			}
-			game.pacMan.animWalking.setEnabled(false);
+			game.pacMan.animation.setEnabled(false);
 		}
 
 		else if (game.stateTimer == sec(5)) {
