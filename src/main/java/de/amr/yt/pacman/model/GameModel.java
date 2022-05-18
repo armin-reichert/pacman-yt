@@ -278,16 +278,7 @@ public class GameModel {
 	}
 
 	public boolean checkAllPelletsEaten() {
-		for (int row = 0; row < World.ROWS; ++row) {
-			for (int col = 0; col < World.COLS; ++col) {
-				if (world.isPellet(row, col)) {
-					return false;
-				} else if (world.isPowerPellet(row, col)) {
-					return false;
-				}
-			}
-		}
-		return true;
+		return world.eatenFoodCount == world.totalFoodCount;
 	}
 
 	public boolean checkBonusAwarded() {
