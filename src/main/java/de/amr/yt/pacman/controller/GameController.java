@@ -29,7 +29,7 @@ import de.amr.yt.pacman.lib.Sounds;
 import de.amr.yt.pacman.model.GameModel;
 import de.amr.yt.pacman.model.Ghost;
 import de.amr.yt.pacman.model.GhostState;
-import de.amr.yt.pacman.ui.GameWindow;
+import de.amr.yt.pacman.ui.GameUI;
 import de.amr.yt.pacman.ui.IntroScene;
 
 /**
@@ -38,7 +38,7 @@ import de.amr.yt.pacman.ui.IntroScene;
 public class GameController {
 
 	private final GameModel game;
-	private GameWindow window;
+	private GameUI ui;
 
 	public GameController() {
 		game = new GameModel();
@@ -51,14 +51,14 @@ public class GameController {
 		Sounds.stopAll();
 
 		// TODO: avoid need for calling init() explicitly
-		if (window != null) {
-			window.currentScene().init();
+		if (ui != null) {
+			ui.currentScene().init();
 		}
 	}
 
 	public void createAndShowUI(double scale) {
-		window = new GameWindow(this, game, scale);
-		window.show();
+		ui = new GameUI(this, game, scale);
+		ui.show();
 	}
 
 	public void step(boolean singleStepMode) {
@@ -74,9 +74,9 @@ public class GameController {
 			case LEVEL_COMPLETE -> update_LEVEL_COMPLETE();
 			case GAME_OVER -> update_GAME_OVER();
 			}
-			window.update();
+			ui.update();
 		}
-		window.render();
+		ui.render();
 	}
 
 	private void update_INTRO() {
@@ -122,8 +122,8 @@ public class GameController {
 		}
 
 		game.updateAttackWave();
-		if (window.getJoystickPosition() != null) {
-			game.pacMan.wishDir = window.getJoystickPosition();
+		if (ui.getJoystickPosition() != null) {
+			game.pacMan.wishDir = ui.getJoystickPosition();
 		}
 		game.pacMan.update();
 		game.checkPelletEaten();

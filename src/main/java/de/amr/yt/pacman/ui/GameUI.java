@@ -51,7 +51,7 @@ import de.amr.yt.pacman.model.World;
 /**
  * @author Armin Reichert
  */
-public class GameWindow {
+public class GameUI {
 
 	public static final double SCALE_MAX = -1;
 
@@ -67,7 +67,7 @@ public class GameWindow {
 	private boolean scoreVisible;
 	private Direction joystickPosition;
 
-	public GameWindow(GameController gameController, GameModel game, double scaleValue) {
+	public GameUI(GameController gameController, GameModel game, double scaleValue) {
 		this.game = game;
 		introScene = new IntroScene(game);
 		playScene = new PlayScene(game);
