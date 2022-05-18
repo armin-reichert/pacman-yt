@@ -186,7 +186,7 @@ public class GameModel {
 		}
 	}
 
-	public void updateAttacWave() {
+	public void updateAttackWave() {
 		if (!chasingPhase) {
 			// is next chasing phase due?
 			int phaseStart = level.chaseStartTicks.indexOf(attackTimer);

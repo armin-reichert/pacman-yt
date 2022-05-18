@@ -136,7 +136,7 @@ public class GameController {
 			}
 		}
 
-		game.updateAttacWave();
+		game.updateAttackWave();
 		if (joystick != null) {
 			game.pacMan.wishDir = joystick;
 		}
