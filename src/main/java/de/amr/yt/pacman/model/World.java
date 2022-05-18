@@ -210,19 +210,6 @@ public class World {
 		return false;
 	}
 
-	public boolean checkAllPelletsEaten() {
-		for (int row = 0; row < ROWS; ++row) {
-			for (int col = 0; col < COLS; ++col) {
-				if (isPellet(row, col)) {
-					return false;
-				} else if (isPowerPellet(row, col)) {
-					return false;
-				}
-			}
-		}
-		return true;
-	}
-
 	public void resetFood() {
 		for (int row = 0; row < ROWS; ++row) {
 			for (int col = 0; col < COLS; ++col) {

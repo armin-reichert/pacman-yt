@@ -283,6 +283,19 @@ public class GameModel {
 		return false;
 	}
 
+	public boolean checkAllPelletsEaten() {
+		for (int row = 0; row < World.ROWS; ++row) {
+			for (int col = 0; col < World.COLS; ++col) {
+				if (world.isPellet(row, col)) {
+					return false;
+				} else if (world.isPowerPellet(row, col)) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
 	public boolean checkBonusAwarded() {
 		if (world.eatenFoodCount == 70 || world.eatenFoodCount == 170) {
 			bonus = level.bonusSymbol;

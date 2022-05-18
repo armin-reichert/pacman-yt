@@ -144,7 +144,7 @@ public class GameController {
 		game.checkPelletEaten();
 		game.checkPowerPelletEaten();
 		game.checkBonusEaten();
-		if (game.world.checkAllPelletsEaten()) {
+		if (game.checkAllPelletsEaten()) {
 			game.setState(GameState.LEVEL_COMPLETE);
 			return;
 		}
