@@ -43,11 +43,11 @@ import de.amr.yt.pacman.lib.Direction;
  */
 public class Sprites {
 
-	private static Sprites THEM;
+	private static Sprites theSprites;
 
 	static {
 		try {
-			THEM = new Sprites();
+			theSprites = new Sprites();
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(42);
@@ -55,7 +55,7 @@ public class Sprites {
 	}
 
 	public static Sprites get() {
-		return THEM;
+		return theSprites;
 	}
 
 	public BufferedImage mazeImage;
