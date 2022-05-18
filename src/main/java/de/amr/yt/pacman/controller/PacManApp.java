@@ -26,6 +26,7 @@ package de.amr.yt.pacman.controller;
 import javax.swing.SwingUtilities;
 
 import de.amr.yt.pacman.lib.GameClock;
+import de.amr.yt.pacman.ui.Sprites;
 
 /**
  * @author Armin Reichert
@@ -33,6 +34,7 @@ import de.amr.yt.pacman.lib.GameClock;
 public class PacManApp {
 
 	public static void main(String[] args) {
+		Sprites.get(); // when failing, fail early
 		double scale = args.length > 0 ? Double.parseDouble(args[0]) : 2.0;
 		GameController controller = new GameController();
 		SwingUtilities.invokeLater(() -> {
