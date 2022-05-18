@@ -84,7 +84,7 @@ public class GameController {
 			case LEVEL_STARTING -> update_LEVEL_STARTING();
 			case READY -> update_READY();
 			case PLAYING -> update_PLAYING();
-			case PACMAN_DEAD -> update_PACMAN_DEAD();
+			case PACMAN_DYING -> update_PACMAN_DEAD();
 			case GHOST_DYING -> update_GHOST_DYING();
 			case LEVEL_COMPLETE -> update_LEVEL_COMPLETE();
 			case GAME_OVER -> update_GAME_OVER();
@@ -151,7 +151,7 @@ public class GameController {
 			return;
 		}
 		if (game.checkPacManKilledByGhost(game.pacMan.tile())) {
-			game.enterState(GameState.PACMAN_DEAD);
+			game.enterState(GameState.PACMAN_DYING);
 			return;
 		}
 		if (game.checkGhostKilledByPacMan()) {
