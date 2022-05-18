@@ -115,6 +115,8 @@ public class GameModel {
 		};
 
 		if (n == 1) {
+			score = 0;
+			lives = 3;
 			levelCounter.clear();
 		}
 		levelCounter.add(level.bonusSymbol);

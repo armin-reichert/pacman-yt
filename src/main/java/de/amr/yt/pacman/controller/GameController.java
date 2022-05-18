@@ -49,12 +49,11 @@ public class GameController {
 	}
 
 	public void newGame() {
-		game.score = 0;
-		game.lives = 3;
 		game.setLevel(1);
 		game.setState(GameState.INTRO);
 		Sounds.stopAll();
-		// TODO: fixme (must call init explicitly in case of restart of intro scene)
+
+		// TODO: avoid need for calling init() explicitly
 		if (window != null) {
 			window.currentScene().init();
 		}
