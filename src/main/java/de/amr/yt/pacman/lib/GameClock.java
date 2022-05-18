@@ -48,6 +48,11 @@ public class GameClock {
 	private long frameCount;
 	private long frameCountStart;
 
+	@Override
+	public String toString() {
+		return "tick %d (second %.2f)".formatted(ticks, ticks / (float) frequency);
+	}
+
 	public long getFrameRate() {
 		return lastFrameRate;
 	}

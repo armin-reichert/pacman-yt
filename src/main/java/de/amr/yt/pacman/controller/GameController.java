@@ -131,8 +131,7 @@ public class GameController {
 	private void update_PLAYING() {
 		if (game.stateTimer == 0) {
 			game.powerPelletsBlinking = true;
-			game.pacMan.animWalking.setEnabled(true);
-			for (Ghost ghost : game.ghosts) {
+			for (var ghost : game.ghosts) {
 				ghost.animation.setEnabled(true);
 			}
 		}

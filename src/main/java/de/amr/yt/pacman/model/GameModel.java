@@ -187,16 +187,17 @@ public class GameModel {
 	}
 
 	public void updateAttacWave() {
-		int chaseStart = level.chaseStartTicks.indexOf(attackTimer);
-		if (chaseStart != -1) {
-			if (!chasingPhase) {
-				startChase(chaseStart);
+		if (!chasingPhase) {
+			// is next chasing phase due?
+			int phaseStart = level.chaseStartTicks.indexOf(attackTimer);
+			if (phaseStart != -1) {
+				startChasingPhase(phaseStart);
 			}
-		}
-		int scatterStart = level.scatterStartTicks.indexOf(attackTimer);
-		if (scatterStart != -1) {
-			if (chasingPhase) {
-				startScatter(scatterStart);
+		} else {
+			// is next scattering phase due?
+			int phaseStart = level.scatterStartTicks.indexOf(attackTimer);
+			if (phaseStart != -1) {
+				startScatteringPhase(phaseStart);
 			}
 		}
 		if (!pacMan.hasPower()) {
@@ -205,7 +206,7 @@ public class GameModel {
 		}
 	}
 
-	private void startScatter(int phase) {
+	private void startScatteringPhase(int phase) {
 		for (var ghost : ghosts) {
 			if (ghost.state == GhostState.CHASING) {
 				ghost.state = GhostState.SCATTERING;
@@ -213,10 +214,10 @@ public class GameModel {
 			}
 			chasingPhase = false;
 		}
-		log("Scattering phase %d started at clock time %d", phase + 1, GameClock.get().ticks);
+		log("Scattering phase %d started at %s", phase + 1, GameClock.get());
 	}
 
-	private void startChase(int phase) {
+	private void startChasingPhase(int phase) {
 		for (var ghost : ghosts) {
 			if (ghost.state == GhostState.SCATTERING) {
 				ghost.state = GhostState.CHASING;
@@ -224,7 +225,7 @@ public class GameModel {
 			}
 			chasingPhase = true;
 		}
-		log("Chasing phase %d started at clock time %d", phase + 1, GameClock.get().ticks);
+		log("Chasing phase %d started at %s", phase + 1, GameClock.get());
 	}
 
 	public void unlockGhosts() {

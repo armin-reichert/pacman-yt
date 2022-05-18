@@ -78,7 +78,7 @@ public class IntroScene implements GameScene {
 
 	@Override
 	public void init() {
-		log("IntroScene init, start time=%d", GameClock.get().ticks);
+		log("IntroScene initialized at %s", GameClock.get());
 		passed = 0;
 		powerPelletsBlinking = false;
 		pacManChasingGhosts = false;
