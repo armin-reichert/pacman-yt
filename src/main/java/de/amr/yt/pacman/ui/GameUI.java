@@ -25,6 +25,7 @@ package de.amr.yt.pacman.ui;
 
 import static de.amr.yt.pacman.lib.Logging.log;
 import static de.amr.yt.pacman.model.World.t;
+import static de.amr.yt.pacman.ui.Renderer.drawGhostTargetTiles;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -56,6 +57,7 @@ public class GameUI {
 	public static final double SCALE_MAX = -1;
 
 	public boolean showInfo = false;
+	public boolean showTargetTiles = false;
 
 	private final GameController gameController;
 	private final GameModel game;
@@ -117,6 +119,7 @@ public class GameUI {
 		case KeyEvent.VK_P -> game.paused = !game.paused;
 		case KeyEvent.VK_Q -> gameController.newGame();
 		case KeyEvent.VK_S -> game.pacSafe = !game.pacSafe;
+		case KeyEvent.VK_T -> showTargetTiles = !showTargetTiles;
 		case KeyEvent.VK_SPACE -> {
 			if (game.paused) {
 				gameController.step(true);
@@ -204,7 +207,12 @@ public class GameUI {
 		g2D.scale(scale, scale);
 		drawScore(g2D);
 		currentScene().draw(g2D);
-		drawInfo(g2D);
+		if (showInfo) {
+			drawInfo(g2D);
+		}
+		if (showTargetTiles) {
+			drawGhostTargetTiles(g2D, game.ghosts);
+		}
 		g2D.dispose();
 	}
 
@@ -220,9 +228,6 @@ public class GameUI {
 	}
 
 	private void drawInfo(Graphics2D g) {
-		if (!showInfo) {
-			return;
-		}
 		g.setColor(Color.WHITE);
 		g.setFont(new Font(Font.DIALOG, Font.PLAIN, 6));
 

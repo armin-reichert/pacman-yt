@@ -30,6 +30,7 @@ import static de.amr.yt.pacman.model.GameModel.INKY;
 import static de.amr.yt.pacman.model.GameModel.PINKY;
 import static de.amr.yt.pacman.model.World.t;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
@@ -39,6 +40,7 @@ import de.amr.yt.pacman.model.Creature;
 import de.amr.yt.pacman.model.Ghost;
 import de.amr.yt.pacman.model.GhostState;
 import de.amr.yt.pacman.model.PacMan;
+import de.amr.yt.pacman.model.World;
 
 /**
  * @author Armin Reichert
@@ -145,10 +147,14 @@ public class Renderer {
 		}
 	}
 
-	public static void drawGhostTarget(Graphics2D g, Ghost ghost) {
-		if (ghost.visible && ghost.targetTile != null) {
-			g.setColor(ghostColor(ghost.id));
-			g.drawRect(t(ghost.targetTile.x) + 2, t(ghost.targetTile.y) + 2, 4, 4);
+	public static void drawGhostTargetTiles(Graphics2D g, Ghost[] ghosts) {
+		for (Ghost ghost : ghosts) {
+			if (ghost.visible && ghost.targetTile != null) {
+				g.setColor(ghostColor(ghost.id));
+				g.fillRect(t(ghost.targetTile.x) + 2, t(ghost.targetTile.y) + 2, 4, 4);
+				g.setStroke(new BasicStroke(0.5f));
+				g.drawLine((int) ghost.x, (int) ghost.y, t(ghost.targetTile.x) + World.HTS, t(ghost.targetTile.y) + World.HTS);
+			}
 		}
 	}
 }

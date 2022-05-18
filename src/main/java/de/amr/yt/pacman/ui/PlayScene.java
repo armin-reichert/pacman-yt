@@ -27,7 +27,6 @@ import static de.amr.yt.pacman.lib.SpriteAnimation.frame;
 import static de.amr.yt.pacman.model.World.t;
 import static de.amr.yt.pacman.ui.Renderer.drawGhost;
 import static de.amr.yt.pacman.ui.Renderer.drawGhostState;
-import static de.amr.yt.pacman.ui.Renderer.drawGhostTarget;
 import static de.amr.yt.pacman.ui.Renderer.drawPacMan;
 import static de.amr.yt.pacman.ui.Renderer.drawPacManState;
 
@@ -114,7 +113,6 @@ public class PlayScene implements GameScene {
 		if (game.state != GameState.INTRO) {
 			drawPacManState(g, game.pacMan);
 			for (Ghost ghost : game.ghosts) {
-				drawGhostTarget(g, ghost);
 				drawGhostState(g, ghost);
 			}
 		}
