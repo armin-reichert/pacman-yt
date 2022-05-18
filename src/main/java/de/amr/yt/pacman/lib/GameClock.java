@@ -28,7 +28,7 @@ package de.amr.yt.pacman.lib;
  */
 public class GameClock {
 
-	private static GameClock theClock = new GameClock();
+	private static GameClock theClock = new GameClock(60);
 
 	public static GameClock get() {
 		return theClock;
@@ -38,9 +38,9 @@ public class GameClock {
 		return (int) (theClock.frequency * seconds);
 	}
 
-	public int frequency = 60;
 	public long ticks;
 
+	private int frequency;
 	private Runnable onTick = () -> Logging.log("Tick");
 	private Thread thread;
 	private boolean running;
@@ -48,9 +48,21 @@ public class GameClock {
 	private long frameCount;
 	private long frameCountStart;
 
+	public GameClock(int frequency) {
+		this.frequency = frequency;
+	}
+
 	@Override
 	public String toString() {
 		return "tick %d (second %.2f)".formatted(ticks, ticks / (float) frequency);
+	}
+
+	public int getFrequency() {
+		return frequency;
+	}
+
+	public void setFrequency(int frequency) {
+		this.frequency = frequency;
 	}
 
 	public long getFrameRate() {
@@ -59,23 +71,14 @@ public class GameClock {
 
 	public void start(Runnable onTick) {
 		this.onTick = onTick;
+		running = true;
+		frameCountStart = System.nanoTime();
 		thread = new Thread(() -> {
 			while (running) {
 				tick();
 			}
 		}, "GameClock");
-		running = true;
-		frameCountStart = System.nanoTime();
 		thread.start();
-	}
-
-	public void stop() {
-		running = false;
-		try {
-			thread.join();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
 	}
 
 	private void tick() {
@@ -98,6 +101,15 @@ public class GameClock {
 			lastFrameRate = frameCount;
 			frameCount = 0;
 			frameCountStart = end;
+		}
+	}
+
+	public void stop() {
+		running = false;
+		try {
+			thread.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
 	}
 }

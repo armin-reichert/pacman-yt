@@ -91,13 +91,13 @@ public class GameWindow {
 					}
 				}
 				case KeyEvent.VK_PLUS -> {
-					GameClock.get().frequency += 10;
+					int freq = GameClock.get().getFrequency();
+					GameClock.get().setFrequency(freq + 10);
 				}
 				case KeyEvent.VK_MINUS -> {
-					GameClock.get().frequency -= 10;
-					if (GameClock.get().frequency < 0) {
-						GameClock.get().frequency = 10;
-					}
+					int freq = GameClock.get().getFrequency();
+					freq = Math.max(10, freq - 10);
+					GameClock.get().setFrequency(freq);
 				}
 				}
 			}
@@ -200,7 +200,7 @@ public class GameWindow {
 		}
 		g.setColor(Color.WHITE);
 		g.setFont(new Font(Font.DIALOG, Font.PLAIN, 6));
-		g.drawString("%2d FPS (Target=%d)".formatted(GameClock.get().getFrameRate(), GameClock.get().frequency), t(1),
+		g.drawString("%2d FPS (Target=%d)".formatted(GameClock.get().getFrameRate(), GameClock.get().getFrequency()), t(1),
 				t(2));
 		String text = "%s (%d)".formatted(game.state.name(), game.stateTimer);
 		if (game.state == GameState.PLAYING) {
