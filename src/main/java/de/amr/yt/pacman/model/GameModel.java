@@ -237,7 +237,7 @@ public class GameModel {
 	}
 
 	public boolean checkPelletEaten() {
-		if (world.pelletEaten(pacMan.tile())) {
+		if (world.isPelletEaten(pacMan.tile())) {
 			pacMan.restCountdown = 1;
 			scorePoints(10);
 			checkBonusAwarded();
@@ -247,7 +247,7 @@ public class GameModel {
 	}
 
 	public boolean checkPowerPelletEaten() {
-		if (world.powerPelletEaten(pacMan.tile())) {
+		if (world.isPowerPelletEaten(pacMan.tile())) {
 			pacMan.state = PacManState.POWER;
 			pacMan.powerCountdown = sec(level.ghostFrightenedSeconds);
 			pacMan.restCountdown = 3;

@@ -170,15 +170,7 @@ public class World {
 		return inMapRange(row, col) && map[row][col] == ENERGIZER;
 	}
 
-	public boolean isEatenPellet(int row, int col) {
-		return inMapRange(row, col) && map[row][col] == PELLET_EATEN;
-	}
-
-	public boolean isEatenPowerPellet(int row, int col) {
-		return inMapRange(row, col) && map[row][col] == ENERGIZER_EATEN;
-	}
-
-	public boolean pelletEaten(Vector2 tile) {
+	public boolean isPelletEaten(Vector2 tile) {
 		if (isPellet(tile)) {
 			map[tile.y][tile.x] = PELLET_EATEN;
 			eatenFoodCount++;
@@ -187,7 +179,7 @@ public class World {
 		return false;
 	}
 
-	public boolean powerPelletEaten(Vector2 tile) {
+	public boolean isPowerPelletEaten(Vector2 tile) {
 		if (isPowerPellet(tile)) {
 			map[tile.y][tile.x] = ENERGIZER_EATEN;
 			eatenFoodCount++;
@@ -199,9 +191,9 @@ public class World {
 	public void resetFood() {
 		for (int row = 0; row < ROWS; ++row) {
 			for (int col = 0; col < COLS; ++col) {
-				if (isEatenPellet(row, col)) {
+				if (map[row][col] == PELLET_EATEN) {
 					map[row][col] = PELLET;
-				} else if (isEatenPowerPellet(row, col)) {
+				} else if (map[row][col] == ENERGIZER_EATEN) {
 					map[row][col] = ENERGIZER;
 				}
 			}
