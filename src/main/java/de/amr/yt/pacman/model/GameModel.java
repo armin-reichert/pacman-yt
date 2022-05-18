@@ -56,9 +56,7 @@ public class GameModel {
 	public final PacMan pacMan;
 	public final Ghost[] ghosts;
 
-	public int bonus; // bonus symbol ID, -1 if inactive
-	public int bonusTimer;
-	public boolean bonusEaten;
+	public Bonus bonus;
 
 	public GameState state;
 	public long stateTimer;
@@ -81,7 +79,7 @@ public class GameModel {
 		pacMan = new PacMan(this);
 		ghosts = new Ghost[] { //
 				new Ghost(this, BLINKY), new Ghost(this, PINKY), new Ghost(this, INKY), new Ghost(this, CLYDE) };
-		bonus = -1;
+		bonus = null;
 	}
 
 	public void setLevel(int n) {
@@ -129,9 +127,7 @@ public class GameModel {
 
 	public void reset() {
 		attackTimer = 0;
-		bonus = -1;
-		bonusTimer = 0;
-		bonusEaten = false;
+		bonus = null;
 		chasingPhase = true;
 		powerPelletsBlinking = false;
 		ghostsKilledByEnergizer = 0;
@@ -247,9 +243,11 @@ public class GameModel {
 	}
 
 	public void onPacPowerEnding() {
-		for (Ghost ghost : ghosts) {
+		for (var ghost : ghosts) {
 			if (ghost.state == GhostState.FRIGHTENED) {
 				ghost.state = chasingPhase ? GhostState.CHASING : GhostState.SCATTERING;
+				// TODO not sure about this workaround to avoid ghost gets stuck:
+				ghost.enteredNewTile = true;
 			}
 		}
 	}
@@ -300,19 +298,18 @@ public class GameModel {
 
 	public boolean checkBonusAwarded() {
 		if (world.eatenFoodCount == 70 || world.eatenFoodCount == 170) {
-			bonus = level.bonusSymbol;
-			bonusTimer = sec(9 + new Random().nextDouble());
-			bonusEaten = false;
+			bonus = new Bonus(level.bonusSymbol);
+			bonus.timer = sec(9 + new Random().nextDouble());
 			return true;
 		}
 		return false;
 	}
 
 	public boolean checkBonusEaten() {
-		if (bonus != -1 && !bonusEaten && pacMan.tile().equals(world.bonusTile)) {
-			bonusTimer = sec(2);
-			bonusEaten = true;
-			scorePoints(BONUS_VALUES[level.bonusSymbol]);
+		if (bonus != null && !bonus.eaten && pacMan.tile().equals(world.bonusTile)) {
+			bonus.timer = sec(2);
+			bonus.eaten = true;
+			scorePoints(BONUS_VALUES[bonus.symbol]);
 			return true;
 		}
 		return false;
@@ -325,7 +322,7 @@ public class GameModel {
 		if (pacSafe || pacMan.hasPower()) {
 			return false;
 		}
-		for (Ghost ghost : ghosts) {
+		for (var ghost : ghosts) {
 			if (ghost.tile().equals(tile)) {
 				if (ghost.state == GhostState.CHASING || ghost.state == GhostState.SCATTERING) {
 					pacMan.state = PacManState.DEAD;
@@ -344,7 +341,7 @@ public class GameModel {
 			return false;
 		}
 		boolean killed = false;
-		for (Ghost ghost : ghosts) {
+		for (var ghost : ghosts) {
 			if (ghost.state == GhostState.FRIGHTENED && ghost.tile().equals(pacMan.tile())) {
 				killed = true;
 				ghostsKilledByEnergizer++;
@@ -361,10 +358,12 @@ public class GameModel {
 	}
 
 	public void updateBonus() {
-		if (bonusTimer > 0) {
-			--bonusTimer;
-			if (bonusTimer == 0) {
-				bonus = -1;
+		if (bonus != null) {
+			if (bonus.timer > 0) {
+				--bonus.timer;
+				if (bonus.timer == 0) {
+					bonus = null;
+				}
 			}
 		}
 	}

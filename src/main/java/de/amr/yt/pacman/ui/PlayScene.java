@@ -76,10 +76,10 @@ public class PlayScene implements GameScene {
 				}
 			}
 		}
-		if (game.bonus != -1) {
-			int bonusValue = GameModel.BONUS_VALUES[game.bonus];
-			BufferedImage sprite = game.bonusEaten ? Sprites.get().bonusValues.get(bonusValue)
-					: Sprites.get().bonusSymbols.get(game.bonus);
+		if (game.bonus != null) {
+			int bonusValue = GameModel.BONUS_VALUES[game.bonus.symbol];
+			BufferedImage sprite = game.bonus.eaten ? Sprites.get().bonusValues.get(bonusValue)
+					: Sprites.get().bonusSymbols.get(game.bonus.symbol);
 			g.drawImage(sprite, t(14) - sprite.getWidth() / 2, t(20) - World.HTS, null);
 		}
 		drawPacMan(g, game.pacMan);

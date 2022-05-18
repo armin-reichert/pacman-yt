@@ -164,7 +164,7 @@ public class GameController {
 		if (game.stateTimer == 0) {
 			game.pacMan.animation.setEnabled(false);
 			game.pacMan.animation.reset();
-			game.bonus = -1;
+			game.bonus = null;
 		}
 
 		else if (game.stateTimer == sec(1)) {
