@@ -57,6 +57,7 @@ public class GameUI {
 
 	public boolean showInfo = false;
 
+	private final GameController gameController;
 	private final GameModel game;
 	private final IntroScene introScene;
 	private final PlayScene playScene;
@@ -65,57 +66,22 @@ public class GameUI {
 	private double scale;
 	private GameScene previousScene;
 	private boolean scoreVisible;
-	private Direction joystickPosition;
 
 	public GameUI(GameController gameController, GameModel game, double scaleValue) {
+		this.gameController = gameController;
 		this.game = game;
 		introScene = new IntroScene(game);
 		playScene = new PlayScene(game);
 		frame = new JFrame("Pac-Man");
 		frame.addKeyListener(new KeyAdapter() {
-
 			@Override
 			public void keyReleased(KeyEvent e) {
-				switch (e.getKeyCode()) {
-				case KeyEvent.VK_UP, KeyEvent.VK_DOWN, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT -> {
-					joystickPosition = null;
-				}
-				}
+				handleKeyReleased(e.getKeyCode());
 			}
 
 			@Override
 			public void keyPressed(KeyEvent e) {
-				switch (e.getKeyCode()) {
-				case KeyEvent.VK_UP -> joystickPosition = Direction.UP;
-				case KeyEvent.VK_DOWN -> joystickPosition = Direction.DOWN;
-				case KeyEvent.VK_LEFT -> joystickPosition = Direction.LEFT;
-				case KeyEvent.VK_RIGHT -> joystickPosition = Direction.RIGHT;
-				case KeyEvent.VK_I -> showInfo = !showInfo;
-				case KeyEvent.VK_P -> game.paused = !game.paused;
-				case KeyEvent.VK_Q -> gameController.newGame();
-				case KeyEvent.VK_S -> game.pacSafe = !game.pacSafe;
-				case KeyEvent.VK_SPACE -> {
-					if (game.paused) {
-						gameController.step(true);
-					} else if (game.state == GameState.INTRO && game.stateTimer >= IntroScene.READY_TO_PLAY_TIME) {
-						game.setState(GameState.LEVEL_STARTING);
-					}
-				}
-				case KeyEvent.VK_ENTER -> {
-					if (!game.paused && game.state == GameState.INTRO) {
-						game.setState(GameState.LEVEL_STARTING);
-					}
-				}
-				case KeyEvent.VK_PLUS -> {
-					int freq = GameClock.get().getFrequency();
-					GameClock.get().setFrequency(freq + 10);
-				}
-				case KeyEvent.VK_MINUS -> {
-					int freq = GameClock.get().getFrequency();
-					freq = Math.max(10, freq - 10);
-					GameClock.get().setFrequency(freq);
-				}
-				}
+				handleKeyPressed(e.getKeyCode());
 			}
 
 		});
@@ -139,6 +105,48 @@ public class GameUI {
 		setScale(scaleValue);
 		frame.add(canvas);
 		frame.setResizable(false);
+	}
+
+	private void handleKeyPressed(int key) {
+		switch (key) {
+		case KeyEvent.VK_UP -> gameController.setJoystickState(Direction.UP);
+		case KeyEvent.VK_DOWN -> gameController.setJoystickState(Direction.DOWN);
+		case KeyEvent.VK_LEFT -> gameController.setJoystickState(Direction.LEFT);
+		case KeyEvent.VK_RIGHT -> gameController.setJoystickState(Direction.RIGHT);
+		case KeyEvent.VK_I -> showInfo = !showInfo;
+		case KeyEvent.VK_P -> game.paused = !game.paused;
+		case KeyEvent.VK_Q -> gameController.newGame();
+		case KeyEvent.VK_S -> game.pacSafe = !game.pacSafe;
+		case KeyEvent.VK_SPACE -> {
+			if (game.paused) {
+				gameController.step(true);
+			} else if (game.state == GameState.INTRO && game.stateTimer >= IntroScene.READY_TO_PLAY_TIME) {
+				game.setState(GameState.LEVEL_STARTING);
+			}
+		}
+		case KeyEvent.VK_ENTER -> {
+			if (!game.paused && game.state == GameState.INTRO) {
+				game.setState(GameState.LEVEL_STARTING);
+			}
+		}
+		case KeyEvent.VK_PLUS -> {
+			int freq = GameClock.get().getFrequency();
+			GameClock.get().setFrequency(freq + 10);
+		}
+		case KeyEvent.VK_MINUS -> {
+			int freq = GameClock.get().getFrequency();
+			freq = Math.max(10, freq - 10);
+			GameClock.get().setFrequency(freq);
+		}
+		}
+	}
+
+	private void handleKeyReleased(int key) {
+		switch (key) {
+		case KeyEvent.VK_UP, KeyEvent.VK_DOWN, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT -> {
+			gameController.setJoystickState(null);
+		}
+		}
 	}
 
 	public void setScale(double value) {
@@ -169,10 +177,6 @@ public class GameUI {
 			previousScene = scene;
 		}
 		scene.update();
-	}
-
-	public Direction getJoystickPosition() {
-		return joystickPosition;
 	}
 
 	public GameScene currentScene() {
@@ -221,6 +225,7 @@ public class GameUI {
 		}
 		g.setColor(Color.WHITE);
 		g.setFont(new Font(Font.DIALOG, Font.PLAIN, 6));
+
 		g.drawString("%2d FPS (Target=%d)".formatted(GameClock.get().getFrameRate(), GameClock.get().getFrequency()), t(1),
 				t(2));
 		String text = "%s (%d)".formatted(game.state.name(), game.stateTimer);
@@ -231,6 +236,9 @@ public class GameUI {
 				text += " SCATTERING (%d)".formatted(game.attackTimer);
 			}
 		}
+		String joystickState = "Joystick %s"
+				.formatted(gameController.getJoystickState() == null ? "middle" : gameController.getJoystickState());
+		g.drawString(joystickState, t(18), t(2));
 		g.drawString(text, t(1), t(3));
 		if (game.pacSafe) {
 			g.drawString("Pac-Man is safe", t(18), t(3));
