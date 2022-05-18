@@ -33,6 +33,7 @@ import de.amr.yt.pacman.model.GameModel;
 import de.amr.yt.pacman.model.Ghost;
 import de.amr.yt.pacman.model.GhostState;
 import de.amr.yt.pacman.ui.GameWindow;
+import de.amr.yt.pacman.ui.IntroScene;
 
 /**
  * @author Armin Reichert
@@ -68,12 +69,6 @@ public class GameController {
 		joystick = Objects.requireNonNull(direction);
 	}
 
-	public void startLevel() {
-		if (game.state == GameState.INTRO) {
-			game.setState(GameState.LEVEL_STARTING);
-		}
-	}
-
 	public void step(boolean singleStepMode) {
 		if (!game.paused || singleStepMode) {
 			++game.stateTimer;
@@ -94,7 +89,7 @@ public class GameController {
 	}
 
 	private void update_INTRO() {
-		if (game.stateTimer == sec(25)) {
+		if (game.stateTimer == IntroScene.EXPIRATION_TIME) {
 			newGame(); // restart intro
 		}
 	}

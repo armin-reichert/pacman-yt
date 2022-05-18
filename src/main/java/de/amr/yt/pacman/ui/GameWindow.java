@@ -86,8 +86,8 @@ public class GameWindow {
 				case KeyEvent.VK_SPACE -> {
 					if (game.paused) {
 						gameController.step(true);
-					} else {
-						gameController.startLevel();
+					} else if (game.state == GameState.INTRO && game.stateTimer >= IntroScene.READY_TO_PLAY_TIME) {
+						game.setState(GameState.LEVEL_STARTING);
 					}
 				}
 				case KeyEvent.VK_PLUS -> {

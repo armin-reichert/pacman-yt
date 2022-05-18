@@ -50,6 +50,9 @@ import de.amr.yt.pacman.model.World;
  */
 public class IntroScene implements GameScene {
 
+	public static final int READY_TO_PLAY_TIME = sec(20);
+	public static final int EXPIRATION_TIME = sec(25);
+
 	private static final String[] GHOST_CHARACTERS = { "SHADOW", "SPEEDY", "BASHFUL", "POKEY" };
 	private static final String[] GHOST_NICKNAMES = { "BLINKY", "PINKY", "INKY", "CLYDE" };
 	private static final int[] GHOST_VALUES = { 200, 400, 800, 1600 };
@@ -106,7 +109,7 @@ public class IntroScene implements GameScene {
 
 	@Override
 	public void update() {
-		if (between(sec(12), sec(20))) {
+		if (between(sec(12), READY_TO_PLAY_TIME)) {
 			updateGuys();
 		}
 		++passed;
@@ -162,7 +165,7 @@ public class IntroScene implements GameScene {
 		if (passed == sec(11.5)) {
 			powerPelletsBlinking = true;
 		}
-		if (between(sec(12), sec(20))) {
+		if (between(sec(12), READY_TO_PLAY_TIME)) {
 			if (pacManChasingGhosts) {
 				drawPacManChasingGhosts(g);
 			} else {
@@ -172,8 +175,8 @@ public class IntroScene implements GameScene {
 				drawPacMan(g, game.pacMan);
 			}
 		}
-		if (passed >= sec(20)) {
-			drawPressSpaceToPlay(g);
+		if (passed >= READY_TO_PLAY_TIME) {
+			drawReadyToPlay(g);
 		}
 	}
 
@@ -298,7 +301,7 @@ public class IntroScene implements GameScene {
 		}
 	}
 
-	private void drawPressSpaceToPlay(Graphics2D g) {
+	private void drawReadyToPlay(Graphics2D g) {
 		if (frame(passed, 2, 30) == 0) {
 			g.setColor(Color.WHITE);
 			g.setFont(Renderer.ARCADE_FONT);
