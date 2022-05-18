@@ -25,9 +25,6 @@ package de.amr.yt.pacman.controller;
 
 import static de.amr.yt.pacman.lib.GameClock.sec;
 
-import java.util.Objects;
-
-import de.amr.yt.pacman.lib.Direction;
 import de.amr.yt.pacman.lib.Sounds;
 import de.amr.yt.pacman.model.GameModel;
 import de.amr.yt.pacman.model.Ghost;
@@ -42,7 +39,6 @@ public class GameController {
 
 	private final GameModel game;
 	private GameWindow window;
-	private Direction joystick;
 
 	public GameController() {
 		game = new GameModel();
@@ -65,10 +61,6 @@ public class GameController {
 		window.show();
 	}
 
-	public void moveJoystick(Direction direction) {
-		joystick = Objects.requireNonNull(direction);
-	}
-
 	public void step(boolean singleStepMode) {
 		if (!game.paused || singleStepMode) {
 			++game.stateTimer;
@@ -82,7 +74,6 @@ public class GameController {
 			case LEVEL_COMPLETE -> update_LEVEL_COMPLETE();
 			case GAME_OVER -> update_GAME_OVER();
 			}
-			joystick = null;
 			window.update();
 		}
 		window.render();
@@ -131,8 +122,8 @@ public class GameController {
 		}
 
 		game.updateAttackWave();
-		if (joystick != null) {
-			game.pacMan.wishDir = joystick;
+		if (window.getJoystickPosition() != null) {
+			game.pacMan.wishDir = window.getJoystickPosition();
 		}
 		game.pacMan.update();
 		game.checkPelletEaten();

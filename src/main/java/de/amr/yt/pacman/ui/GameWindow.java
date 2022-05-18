@@ -65,6 +65,7 @@ public class GameWindow {
 	private double scale;
 	private GameScene previousScene;
 	private boolean scoreVisible;
+	private Direction joystickPosition;
 
 	public GameWindow(GameController gameController, GameModel game, double scaleValue) {
 		this.game = game;
@@ -72,13 +73,23 @@ public class GameWindow {
 		playScene = new PlayScene(game);
 		frame = new JFrame("Pac-Man");
 		frame.addKeyListener(new KeyAdapter() {
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+				switch (e.getKeyCode()) {
+				case KeyEvent.VK_UP, KeyEvent.VK_DOWN, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT -> {
+					joystickPosition = null;
+				}
+				}
+			}
+
 			@Override
 			public void keyPressed(KeyEvent e) {
 				switch (e.getKeyCode()) {
-				case KeyEvent.VK_UP -> gameController.moveJoystick(Direction.UP);
-				case KeyEvent.VK_DOWN -> gameController.moveJoystick(Direction.DOWN);
-				case KeyEvent.VK_LEFT -> gameController.moveJoystick(Direction.LEFT);
-				case KeyEvent.VK_RIGHT -> gameController.moveJoystick(Direction.RIGHT);
+				case KeyEvent.VK_UP -> joystickPosition = Direction.UP;
+				case KeyEvent.VK_DOWN -> joystickPosition = Direction.DOWN;
+				case KeyEvent.VK_LEFT -> joystickPosition = Direction.LEFT;
+				case KeyEvent.VK_RIGHT -> joystickPosition = Direction.RIGHT;
 				case KeyEvent.VK_I -> showInfo = !showInfo;
 				case KeyEvent.VK_P -> game.paused = !game.paused;
 				case KeyEvent.VK_Q -> gameController.newGame();
@@ -87,6 +98,11 @@ public class GameWindow {
 					if (game.paused) {
 						gameController.step(true);
 					} else if (game.state == GameState.INTRO && game.stateTimer >= IntroScene.READY_TO_PLAY_TIME) {
+						game.setState(GameState.LEVEL_STARTING);
+					}
+				}
+				case KeyEvent.VK_ENTER -> {
+					if (!game.paused && game.state == GameState.INTRO) {
 						game.setState(GameState.LEVEL_STARTING);
 					}
 				}
@@ -101,6 +117,7 @@ public class GameWindow {
 				}
 				}
 			}
+
 		});
 		frame.addWindowListener(new WindowAdapter() {
 			@Override
@@ -152,6 +169,10 @@ public class GameWindow {
 			previousScene = scene;
 		}
 		scene.update();
+	}
+
+	public Direction getJoystickPosition() {
+		return joystickPosition;
 	}
 
 	public GameScene currentScene() {
