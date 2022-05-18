@@ -29,12 +29,16 @@ package de.amr.yt.pacman.model;
  */
 public class Bonus {
 
+	public static final int CHERRIES = 0, STRAWBERRY = 1, PEACH = 2, APPLE = 3, GRAPES = 4, GALAXIAN = 5, BELL = 6,
+			KEY = 7;
+
 	public final int symbol;
+	public final int value;
 	public int timer;
 	public boolean eaten;
 
-	public Bonus(int symbol) {
+	public Bonus(int symbol, int value) {
 		this.symbol = symbol;
+		this.value = value;
 	}
-
 }

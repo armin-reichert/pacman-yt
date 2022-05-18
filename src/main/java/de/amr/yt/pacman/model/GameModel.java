@@ -41,13 +41,7 @@ import de.amr.yt.pacman.lib.Vector2;
 public class GameModel {
 
 	public static final int BLINKY = 0, PINKY = 1, INKY = 2, CLYDE = 3;
-
 	public static final float BASE_SPEED = 1.25f;
-
-	public static final int CHERRIES = 0, STRAWBERRY = 1, PEACH = 2, APPLE = 3, GRAPES = 4, GALAXIAN = 5, BELL = 6,
-			KEY = 7;
-
-	public static final int[] BONUS_VALUES = { 100, 300, 500, 700, 1000, 2000, 3000, 5000 };
 
 	public boolean paused;
 	public boolean pacSafe;
@@ -88,27 +82,27 @@ public class GameModel {
 		}
 		level = switch (n) {
 		//@formatter:off
-		case  1 -> new GameLevel(n, CHERRIES,   0.80f, 0.75f, 0.40f,  20, 0.80f, 10, 0.85f, 0.90f, 0.50f, 6, 5);
-		case  2 -> new GameLevel(n, STRAWBERRY, 0.90f, 0.85f, 0.45f,  30, 0.90f, 15, 0.95f, 0.95f, 0.55f, 5, 5);
-		case  3 -> new GameLevel(n, PEACH,      0.90f, 0.85f, 0.45f,  40, 0.90f, 20, 0.95f, 0.95f, 0.55f, 4, 5);
-		case  4 -> new GameLevel(n, PEACH,      0.90f, 0.85f, 0.45f,  40, 0.90f, 20, 0.95f, 0.95f, 0.55f, 3, 5);
-		case  5 -> new GameLevel(n, APPLE,      1.00f, 0.95f, 0.50f,  40, 1.00f, 20, 1.05f, 1.00f, 0.60f, 2, 5);
-		case  6 -> new GameLevel(n, APPLE,      1.00f, 0.95f, 0.50f,  50, 1.00f, 25, 1.05f, 1.00f, 0.60f, 5, 5);
+		case  1 -> new GameLevel(n, Bonus.CHERRIES,    100, 0.80f, 0.75f, 0.40f,  20, 0.80f, 10, 0.85f, 0.90f, 0.50f, 6, 5);
+		case  2 -> new GameLevel(n, Bonus.STRAWBERRY,  300, 0.90f, 0.85f, 0.45f,  30, 0.90f, 15, 0.95f, 0.95f, 0.55f, 5, 5);
+		case  3 -> new GameLevel(n, Bonus.PEACH,       500, 0.90f, 0.85f, 0.45f,  40, 0.90f, 20, 0.95f, 0.95f, 0.55f, 4, 5);
+		case  4 -> new GameLevel(n, Bonus.PEACH,       500, 0.90f, 0.85f, 0.45f,  40, 0.90f, 20, 0.95f, 0.95f, 0.55f, 3, 5);
+		case  5 -> new GameLevel(n, Bonus.APPLE,       700, 1.00f, 0.95f, 0.50f,  40, 1.00f, 20, 1.05f, 1.00f, 0.60f, 2, 5);
+		case  6 -> new GameLevel(n, Bonus.APPLE,       700, 1.00f, 0.95f, 0.50f,  50, 1.00f, 25, 1.05f, 1.00f, 0.60f, 5, 5);
 		case  7, 
-		      8 -> new GameLevel(n, GRAPES,     1.00f, 0.95f, 0.50f,  50, 1.00f, 25, 1.05f, 1.00f, 0.60f, 2, 5);
-		case  9 -> new GameLevel(n, GALAXIAN,   1.00f, 0.95f, 0.50f,  60, 1.00f, 30, 1.05f, 1.00f, 0.60f, 1, 3);
-		case 10 -> new GameLevel(n, GALAXIAN,   1.00f, 0.95f, 0.50f,  60, 1.00f, 30, 1.05f, 1.00f, 0.60f, 5, 5);
-		case 11 -> new GameLevel(n, BELL,       1.00f, 0.95f, 0.50f,  60, 1.00f, 30, 1.05f, 1.00f, 0.60f, 2, 5);
-		case 12 -> new GameLevel(n, BELL,       1.00f, 0.95f, 0.50f,  80, 1.00f, 40, 1.05f, 1.00f, 0.60f, 1, 3);
-		case 13 -> new GameLevel(n, KEY,        1.00f, 0.95f, 0.50f,  80, 1.00f, 40, 1.05f, 1.00f, 0.60f, 1, 3);
-		case 14 -> new GameLevel(n, KEY,        1.00f, 0.95f, 0.50f,  80, 1.00f, 40, 1.05f, 1.00f, 0.60f, 3, 5);
+		      8 -> new GameLevel(n, Bonus.GRAPES,     1000, 1.00f, 0.95f, 0.50f,  50, 1.00f, 25, 1.05f, 1.00f, 0.60f, 2, 5);
+		case  9 -> new GameLevel(n, Bonus.GALAXIAN,   2000, 1.00f, 0.95f, 0.50f,  60, 1.00f, 30, 1.05f, 1.00f, 0.60f, 1, 3);
+		case 10 -> new GameLevel(n, Bonus.GALAXIAN,   2000, 1.00f, 0.95f, 0.50f,  60, 1.00f, 30, 1.05f, 1.00f, 0.60f, 5, 5);
+		case 11 -> new GameLevel(n, Bonus.BELL,       3000, 1.00f, 0.95f, 0.50f,  60, 1.00f, 30, 1.05f, 1.00f, 0.60f, 2, 5);
+		case 12 -> new GameLevel(n, Bonus.BELL,       3000, 1.00f, 0.95f, 0.50f,  80, 1.00f, 40, 1.05f, 1.00f, 0.60f, 1, 3);
+		case 13 -> new GameLevel(n, Bonus.KEY,        5000, 1.00f, 0.95f, 0.50f,  80, 1.00f, 40, 1.05f, 1.00f, 0.60f, 1, 3);
+		case 14 -> new GameLevel(n, Bonus.KEY,        5000, 1.00f, 0.95f, 0.50f,  80, 1.00f, 40, 1.05f, 1.00f, 0.60f, 3, 5);
 		case 15, 
-		     16 -> new GameLevel(n, KEY,        1.00f, 0.95f, 0.50f, 100, 1.00f, 50, 1.05f, 1.00f, 0.60f, 1, 3);
-		case 17 -> new GameLevel(n, KEY,        1.00f, 0.95f, 0.50f, 100, 1.00f, 50, 1.05f, 0.00f, 0.00f, 0, 0);
-		case 18 -> new GameLevel(n, KEY,        1.00f, 0.95f, 0.50f, 100, 1.00f, 50, 1.05f, 1.00f, 0.60f, 1, 3);
+		     16 -> new GameLevel(n, Bonus.KEY,        5000, 1.00f, 0.95f, 0.50f, 100, 1.00f, 50, 1.05f, 1.00f, 0.60f, 1, 3);
+		case 17 -> new GameLevel(n, Bonus.KEY,        5000, 1.00f, 0.95f, 0.50f, 100, 1.00f, 50, 1.05f, 0.00f, 0.00f, 0, 0);
+		case 18 -> new GameLevel(n, Bonus.KEY,        5000, 1.00f, 0.95f, 0.50f, 100, 1.00f, 50, 1.05f, 1.00f, 0.60f, 1, 3);
 		case 19, 
-		     20 -> new GameLevel(n, KEY,        1.00f, 0.95f, 0.50f, 120, 1.00f, 60, 1.05f, 0.00f, 0.00f, 0, 0);
-		default -> new GameLevel(n, KEY,        0.90f, 0.95f, 0.50f, 120, 1.00f, 60, 1.05f, 0.00f, 0.00f, 0, 0);
+		     20 -> new GameLevel(n, Bonus.KEY,        5000, 1.00f, 0.95f, 0.50f, 120, 1.00f, 60, 1.05f, 0.00f, 0.00f, 0, 0);
+		default -> new GameLevel(n, Bonus.KEY,        5000, 0.90f, 0.95f, 0.50f, 120, 1.00f, 60, 1.05f, 0.00f, 0.00f, 0, 0);
 		//@formatter:on
 		};
 
@@ -298,7 +292,7 @@ public class GameModel {
 
 	public boolean checkBonusAwarded() {
 		if (world.eatenFoodCount == 70 || world.eatenFoodCount == 170) {
-			bonus = new Bonus(level.bonusSymbol);
+			bonus = new Bonus(level.bonusSymbol, level.bonusValue);
 			bonus.timer = sec(9 + new Random().nextDouble());
 			return true;
 		}
@@ -309,7 +303,7 @@ public class GameModel {
 		if (bonus != null && !bonus.eaten && pacMan.tile().equals(world.bonusTile)) {
 			bonus.timer = sec(2);
 			bonus.eaten = true;
-			scorePoints(BONUS_VALUES[bonus.symbol]);
+			scorePoints(bonus.value);
 			return true;
 		}
 		return false;

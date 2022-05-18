@@ -35,6 +35,7 @@ public class GameLevel {
 	public final List<Integer> scatterStartTicks;
 	public final List<Integer> chaseStartTicks;
 	public final int bonusSymbol;
+	public final int bonusValue;
 	public final float playerSpeed;
 	public final float ghostSpeed;
 	public final float ghostSpeedTunnel;
@@ -52,17 +53,18 @@ public class GameLevel {
 	public GameLevel(int levelNumber, Object... data) {
 		number = levelNumber;
 		bonusSymbol = (int) data[0];
-		playerSpeed = (float) data[1] * GameModel.BASE_SPEED;
-		ghostSpeed = (float) data[2] * GameModel.BASE_SPEED;
-		ghostSpeedTunnel = (float) data[3] * GameModel.BASE_SPEED;
-		elroy1DotsLeft = (int) data[4];
-		elroy1Speed = (float) data[5] * GameModel.BASE_SPEED;
-		elroy2DotsLeft = (int) data[6];
-		elroy2Speed = (float) data[7] * GameModel.BASE_SPEED;
-		playerSpeedPowered = (float) data[8] * GameModel.BASE_SPEED;
-		ghostSpeedFrightened = (float) data[9] * GameModel.BASE_SPEED;
-		ghostFrightenedSeconds = (int) data[10];
-		numFlashes = (int) data[11];
+		bonusValue = (int) data[1];
+		playerSpeed = (float) data[2] * GameModel.BASE_SPEED;
+		ghostSpeed = (float) data[3] * GameModel.BASE_SPEED;
+		ghostSpeedTunnel = (float) data[4] * GameModel.BASE_SPEED;
+		elroy1DotsLeft = (int) data[5];
+		elroy1Speed = (float) data[6] * GameModel.BASE_SPEED;
+		elroy2DotsLeft = (int) data[7];
+		elroy2Speed = (float) data[8] * GameModel.BASE_SPEED;
+		playerSpeedPowered = (float) data[9] * GameModel.BASE_SPEED;
+		ghostSpeedFrightened = (float) data[10] * GameModel.BASE_SPEED;
+		ghostFrightenedSeconds = (int) data[11];
+		numFlashes = (int) data[12];
 
 		switch (levelNumber) {
 		case 1 -> {
