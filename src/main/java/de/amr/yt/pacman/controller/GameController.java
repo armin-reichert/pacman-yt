@@ -53,7 +53,7 @@ public class GameController {
 		game.score = 0;
 		game.lives = 3;
 		game.setLevel(1);
-		game.enterState(GameState.INTRO);
+		game.setState(GameState.INTRO);
 		Sounds.stopAll();
 		// TODO: fixme (must call init explicitly in case of restart of intro scene)
 		if (window != null) {
@@ -72,7 +72,7 @@ public class GameController {
 
 	public void startLevel() {
 		if (game.state == GameState.INTRO) {
-			game.enterState(GameState.LEVEL_STARTING);
+			game.setState(GameState.LEVEL_STARTING);
 		}
 	}
 
@@ -116,7 +116,7 @@ public class GameController {
 			if (!playing) {
 				Sounds.play("game_start");
 			}
-			game.enterState(GameState.READY);
+			game.setState(GameState.READY);
 		}
 	}
 
@@ -124,7 +124,7 @@ public class GameController {
 		if (game.stateTimer == 0) {
 			game.reset();
 		} else if (game.stateTimer == sec(playing ? 1 : 5)) {
-			game.enterState(GameState.PLAYING);
+			game.setState(GameState.PLAYING);
 		}
 	}
 
@@ -147,15 +147,15 @@ public class GameController {
 		game.checkPowerPelletEaten();
 		game.checkBonusEaten();
 		if (game.world.checkAllPelletsEaten()) {
-			game.enterState(GameState.LEVEL_COMPLETE);
+			game.setState(GameState.LEVEL_COMPLETE);
 			return;
 		}
 		if (game.checkPacManKilledByGhost(game.pacMan.tile())) {
-			game.enterState(GameState.PACMAN_DYING);
+			game.setState(GameState.PACMAN_DYING);
 			return;
 		}
 		if (game.checkGhostKilledByPacMan()) {
-			game.enterState(GameState.GHOST_DYING);
+			game.setState(GameState.GHOST_DYING);
 			return;
 		}
 		game.unlockGhosts();
@@ -188,12 +188,12 @@ public class GameController {
 		else if (game.stateTimer == sec(4)) {
 			--game.lives;
 			if (game.lives > 0) {
-				game.enterState(GameState.READY);
+				game.setState(GameState.READY);
 			} else {
 				for (Ghost ghost : game.ghosts) {
 					ghost.visible = true;
 				}
-				game.enterState(GameState.GAME_OVER);
+				game.setState(GameState.GAME_OVER);
 			}
 		}
 	}
@@ -205,7 +205,7 @@ public class GameController {
 
 		else if (game.stateTimer == sec(1)) {
 			game.pacMan.visible = true;
-			game.enterState(GameState.PLAYING);
+			game.setState(GameState.PLAYING);
 			return;
 		}
 
@@ -237,7 +237,7 @@ public class GameController {
 			game.setLevel(game.level.number + 1);
 			game.pacMan.visible = false;
 			game.pacMan.animation = game.pacMan.animWalking;
-			game.enterState(GameState.LEVEL_STARTING);
+			game.setState(GameState.LEVEL_STARTING);
 		}
 	}
 

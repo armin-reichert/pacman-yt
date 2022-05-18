@@ -171,10 +171,10 @@ public class GameModel {
 		}
 	}
 
-	public void enterState(GameState state) {
+	public void setState(GameState state) {
 		this.state = state;
 		stateTimer = -1;
-		log("Game state changed to %s", state);
+		log("Game state set to %s", state);
 	}
 
 	private void scorePoints(int points) {
