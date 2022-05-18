@@ -26,10 +26,6 @@ package de.amr.yt.pacman.ui;
 import static de.amr.yt.pacman.lib.GameClock.sec;
 import static de.amr.yt.pacman.lib.Logging.log;
 import static de.amr.yt.pacman.lib.SpriteAnimation.frame;
-import static de.amr.yt.pacman.model.GameModel.BLINKY;
-import static de.amr.yt.pacman.model.GameModel.CLYDE;
-import static de.amr.yt.pacman.model.GameModel.INKY;
-import static de.amr.yt.pacman.model.GameModel.PINKY;
 import static de.amr.yt.pacman.model.World.t;
 import static de.amr.yt.pacman.ui.Renderer.drawGhost;
 import static de.amr.yt.pacman.ui.Renderer.drawGhostValue;
@@ -43,6 +39,7 @@ import java.awt.Graphics2D;
 import de.amr.yt.pacman.lib.Direction;
 import de.amr.yt.pacman.lib.GameClock;
 import de.amr.yt.pacman.model.GameModel;
+import de.amr.yt.pacman.model.Ghost;
 import de.amr.yt.pacman.model.World;
 
 /**
@@ -121,40 +118,40 @@ public class IntroScene implements GameScene {
 			drawHeading(g);
 		}
 		if (passed >= sec(2.0)) {
-			drawGhostImage(g, BLINKY);
+			drawGhostImage(g, Ghost.BLINKY);
 		}
 		if (passed >= sec(3.0)) {
-			drawGhostCharacter(g, BLINKY);
+			drawGhostCharacter(g, Ghost.BLINKY);
 		}
 		if (passed >= sec(3.5)) {
-			drawGhostNickname(g, BLINKY);
+			drawGhostNickname(g, Ghost.BLINKY);
 		}
 		if (passed >= sec(4.0)) {
-			drawGhostImage(g, PINKY);
+			drawGhostImage(g, Ghost.PINKY);
 		}
 		if (passed >= sec(5.0)) {
-			drawGhostCharacter(g, PINKY);
+			drawGhostCharacter(g, Ghost.PINKY);
 		}
 		if (passed >= sec(5.5)) {
-			drawGhostNickname(g, PINKY);
+			drawGhostNickname(g, Ghost.PINKY);
 		}
 		if (passed >= sec(6.0)) {
-			drawGhostImage(g, INKY);
+			drawGhostImage(g, Ghost.INKY);
 		}
 		if (passed >= sec(7.0)) {
-			drawGhostCharacter(g, INKY);
+			drawGhostCharacter(g, Ghost.INKY);
 		}
 		if (passed >= sec(7.5)) {
-			drawGhostNickname(g, INKY);
+			drawGhostNickname(g, Ghost.INKY);
 		}
 		if (passed >= sec(8.0)) {
-			drawGhostImage(g, CLYDE);
+			drawGhostImage(g, Ghost.CLYDE);
 		}
 		if (passed >= sec(9.0)) {
-			drawGhostCharacter(g, CLYDE);
+			drawGhostCharacter(g, Ghost.CLYDE);
 		}
 		if (passed >= sec(9.5)) {
-			drawGhostNickname(g, CLYDE);
+			drawGhostNickname(g, Ghost.CLYDE);
 		}
 		if (passed >= sec(10.0)) {
 			drawPointsAwarded(g);

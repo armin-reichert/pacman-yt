@@ -94,12 +94,6 @@ public class World {
 		//@formatter:on
 	};
 
-	// scattering targets
-	public final Vector2 leftUpperTarget = v(2, 0);
-	public final Vector2 rightUpperTarget = v(25, 0);
-	public final Vector2 leftLowerTarget = v(0, 34);
-	public final Vector2 rightLowerTarget = v(27, 34);
-
 	public final Vector2 bonusTile = v(13, 20);
 	/** Left house entry tile */
 	public final Vector2 houseEntryTile = v(13, 14);

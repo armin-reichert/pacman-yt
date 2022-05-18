@@ -41,11 +41,12 @@ import de.amr.yt.pacman.lib.Vector2;
  */
 public class GameModel {
 
-	public static final int BLINKY = 0, PINKY = 1, INKY = 2, CLYDE = 3;
-	public static final Vector2 PACMAN_HOME = v(13, 26);
-	public static final Vector2[] GHOST_HOMES = { v(13, 14), v(13, 17), v(11, 17), v(15, 17) };
-	public static final Direction[] GHOST_DIRECTIONS = { Direction.LEFT, Direction.DOWN, Direction.UP, Direction.UP };
 	public static final float BASE_SPEED = 1.25f;
+
+	public final Vector2 pacManHome = v(13, 26);
+	public final Vector2[] ghostHomes = { v(13, 14), v(13, 17), v(11, 17), v(15, 17) };
+	public final Vector2[] ghostScatterTargets = { v(25, 0), v(2, 0), v(27, 34), v(0, 34) };
+	public final Direction[] ghostStartDirections = { Direction.LEFT, Direction.DOWN, Direction.UP, Direction.UP };
 
 	public boolean paused;
 	public boolean pacSafe;
@@ -76,7 +77,11 @@ public class GameModel {
 		world = new World();
 		pacMan = new PacMan(this);
 		ghosts = new Ghost[] { //
-				new Ghost(this, BLINKY), new Ghost(this, PINKY), new Ghost(this, INKY), new Ghost(this, CLYDE) };
+				new Ghost(this, Ghost.BLINKY), //
+				new Ghost(this, Ghost.PINKY), //
+				new Ghost(this, Ghost.INKY), //
+				new Ghost(this, Ghost.CLYDE) //
+		};
 		bonus = null;
 	}
 
@@ -130,7 +135,7 @@ public class GameModel {
 		powerPelletsBlinking = false;
 		ghostsKilledByEnergizer = 0;
 
-		pacMan.placeAtTile(PACMAN_HOME, World.HTS, 0);
+		pacMan.placeAtTile(pacManHome, World.HTS, 0);
 		pacMan.wishDir = Direction.LEFT;
 		pacMan.moveDir = Direction.LEFT;
 		pacMan.speed = level.playerSpeed;
@@ -140,8 +145,8 @@ public class GameModel {
 		pacMan.animation.reset();
 
 		for (var ghost : ghosts) {
-			ghost.placeAtTile(GHOST_HOMES[ghost.id], World.HTS, 0);
-			ghost.wishDir = ghost.moveDir = GHOST_DIRECTIONS[ghost.id];
+			ghost.placeAtTile(ghostHomes[ghost.id], World.HTS, 0);
+			ghost.wishDir = ghost.moveDir = ghostStartDirections[ghost.id];
 			ghost.speed = level.ghostSpeed;
 			ghost.targetTile = null;
 			ghost.state = GhostState.LOCKED;
@@ -208,19 +213,15 @@ public class GameModel {
 		log("Chasing phase %d started at %s", phase + 1, GameClock.get());
 	}
 
+	// TODO this is just some arbitrary logic, the real game uses dot counters and stuff
 	public void unlockGhosts() {
-		// TODO this is just some arbitrary logic, the real game uses dot counters and stuff
-		if (ghosts[BLINKY].state == GhostState.LOCKED && stateTimer == sec(0)) {
-			ghosts[BLINKY].state = GhostState.SCATTERING;
-		}
-		if (ghosts[PINKY].state == GhostState.LOCKED && stateTimer == sec(1)) {
-			ghosts[PINKY].state = GhostState.LEAVING_HOUSE;
-		}
-		if (ghosts[INKY].state == GhostState.LOCKED && stateTimer == sec(3)) {
-			ghosts[INKY].state = GhostState.LEAVING_HOUSE;
-		}
-		if (ghosts[CLYDE].state == GhostState.LOCKED && stateTimer == sec(7)) {
-			ghosts[CLYDE].state = GhostState.LEAVING_HOUSE;
+		final int[] startSeconds = { sec(0), sec(1), sec(5), sec(10) };
+		final GhostState[] startStates = { GhostState.SCATTERING, GhostState.LEAVING_HOUSE, GhostState.LEAVING_HOUSE,
+				GhostState.LEAVING_HOUSE };
+		for (var ghost : ghosts) {
+			if (ghost.state == GhostState.LOCKED && stateTimer == startSeconds[ghost.id]) {
+				ghost.state = startStates[ghost.id];
+			}
 		}
 	}
 

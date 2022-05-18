@@ -24,10 +24,6 @@ SOFTWARE.
 package de.amr.yt.pacman.ui;
 
 import static de.amr.yt.pacman.lib.SpriteAnimation.frame;
-import static de.amr.yt.pacman.model.GameModel.BLINKY;
-import static de.amr.yt.pacman.model.GameModel.CLYDE;
-import static de.amr.yt.pacman.model.GameModel.INKY;
-import static de.amr.yt.pacman.model.GameModel.PINKY;
 import static de.amr.yt.pacman.model.World.t;
 
 import java.awt.BasicStroke;
@@ -47,6 +43,7 @@ import de.amr.yt.pacman.model.World;
  */
 public class Renderer {
 
+	public static Color[] GHOST_COLORS = { Color.RED, new Color(252, 181, 255), Color.CYAN, new Color(253, 192, 90) };
 	public static final Font ARCADE_FONT;
 
 	static {
@@ -79,13 +76,7 @@ public class Renderer {
 	}
 
 	public static Color ghostColor(int id) {
-		return switch (id) {
-		case BLINKY -> Color.RED;
-		case PINKY -> new Color(252, 181, 255);
-		case INKY -> Color.CYAN;
-		case CLYDE -> new Color(253, 192, 90);
-		default -> null;
-		};
+		return GHOST_COLORS[id];
 	}
 
 	public static void drawGhost(Graphics2D g, Ghost ghost, boolean blinking) {

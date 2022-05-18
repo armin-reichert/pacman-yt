@@ -28,10 +28,6 @@ import static de.amr.yt.pacman.lib.Direction.LEFT;
 import static de.amr.yt.pacman.lib.Direction.RIGHT;
 import static de.amr.yt.pacman.lib.Direction.UP;
 import static de.amr.yt.pacman.lib.Vector2.v;
-import static de.amr.yt.pacman.model.GameModel.BLINKY;
-import static de.amr.yt.pacman.model.GameModel.CLYDE;
-import static de.amr.yt.pacman.model.GameModel.INKY;
-import static de.amr.yt.pacman.model.GameModel.PINKY;
 import static de.amr.yt.pacman.model.World.t;
 
 import de.amr.yt.pacman.lib.Direction;
@@ -42,6 +38,8 @@ import de.amr.yt.pacman.lib.Vector2;
  * @author Armin Reichert
  */
 public class Ghost extends Creature {
+
+	public static final int BLINKY = 0, PINKY = 1, INKY = 2, CLYDE = 3;
 
 	static final Direction[] DIR_ORDER = { UP, LEFT, DOWN, RIGHT };
 
@@ -172,7 +170,7 @@ public class Ghost extends Creature {
 		case CHASING -> computeChasingTarget();
 		case EATEN -> world.houseEntryTile;
 		case FRIGHTENED -> selectRandomNeighbor();
-		case SCATTERING -> computeScatteringTarget();
+		case SCATTERING -> game.ghostScatterTargets[id];
 		default -> null;
 		};
 	}
@@ -188,16 +186,6 @@ public class Ghost extends Creature {
 			}
 		}
 		return null;
-	}
-
-	private Vector2 computeScatteringTarget() {
-		return switch (id) {
-		case BLINKY -> world.rightUpperTarget;
-		case PINKY -> world.leftUpperTarget;
-		case INKY -> world.rightLowerTarget;
-		case CLYDE -> world.leftLowerTarget;
-		default -> null;
-		};
 	}
 
 	private Vector2 computeChasingTarget() {
@@ -218,7 +206,7 @@ public class Ghost extends Creature {
 			}
 			yield pacPlus2.times(2).minus(game.ghosts[BLINKY].tile());
 		}
-		case CLYDE -> tile().euclideanDist(pacMan.tile()) < 8 ? world.leftLowerTarget : pacMan.tile();
+		case CLYDE -> tile().euclideanDist(pacMan.tile()) < 8 ? game.ghostScatterTargets[CLYDE] : pacMan.tile();
 		default -> null;
 		};
 	}
