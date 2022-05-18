@@ -214,7 +214,7 @@ public class GameModel {
 			}
 			chasingPhase = false;
 		}
-		log("Scattering phase %d started at %s", phase + 1, GameClock.get());
+		log("Scatter phase %d started at %s", phase + 1, GameClock.get());
 	}
 
 	private void startChasingPhase(int phase) {

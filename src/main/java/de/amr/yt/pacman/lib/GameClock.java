@@ -54,7 +54,7 @@ public class GameClock {
 
 	@Override
 	public String toString() {
-		return "tick %d (second %.2f)".formatted(ticks, ticks / (float) frequency);
+		return "tick: %8d (second: %8.2f)".formatted(ticks, ticks / (float) frequency);
 	}
 
 	public int getFrequency() {
