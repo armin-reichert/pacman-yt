@@ -53,7 +53,7 @@ public class World {
 		return n * TS;
 	}
 
-	protected byte[][] map = {
+	private byte[][] map = {
 		//@formatter:off
 		{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,},
 		{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,},
@@ -96,10 +96,7 @@ public class World {
 
 	// home tiles
 	public final Vector2 pacManHomeTile = v(13, 26);
-	public final Vector2 blinkyHomeTile = v(13, 14);
-	public final Vector2 pinkyHomeTile = v(13, 17);
-	public final Vector2 inkyHomeTile = v(11, 17);
-	public final Vector2 clydeHomeTile = v(15, 17);
+	public final Vector2[] ghostHomeTiles = { v(13, 14), v(13, 17), v(11, 17), v(15, 17) };
 
 	// scattering targets
 	public final Vector2 leftUpperTarget = v(2, 0);

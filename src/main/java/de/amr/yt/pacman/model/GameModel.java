@@ -41,6 +41,7 @@ import de.amr.yt.pacman.lib.Vector2;
 public class GameModel {
 
 	public static final int BLINKY = 0, PINKY = 1, INKY = 2, CLYDE = 3;
+	public static final Direction[] GHOST_DIRECTIONS = { Direction.LEFT, Direction.DOWN, Direction.UP, Direction.UP };
 	public static final float BASE_SPEED = 1.25f;
 
 	public boolean paused;
@@ -136,6 +137,8 @@ public class GameModel {
 		pacMan.animation.reset();
 
 		for (var ghost : ghosts) {
+			ghost.placeAtTile(world.ghostHomeTiles[ghost.id], World.HTS, 0);
+			ghost.wishDir = ghost.moveDir = GHOST_DIRECTIONS[ghost.id];
 			ghost.speed = level.ghostSpeed;
 			ghost.targetTile = null;
 			ghost.state = GhostState.LOCKED;
@@ -143,24 +146,6 @@ public class GameModel {
 			ghost.animation = ghost.animNormal;
 			ghost.animation.reset();
 			ghost.animation.setEnabled(false);
-			switch (ghost.id) {
-			case BLINKY -> {
-				ghost.placeAtTile(world.blinkyHomeTile, World.HTS, 0);
-				ghost.wishDir = ghost.moveDir = Direction.LEFT;
-			}
-			case PINKY -> {
-				ghost.placeAtTile(world.pinkyHomeTile, World.HTS, 0);
-				ghost.wishDir = ghost.moveDir = Direction.DOWN;
-			}
-			case INKY -> {
-				ghost.placeAtTile(world.inkyHomeTile, World.HTS, 0);
-				ghost.wishDir = ghost.moveDir = Direction.UP;
-			}
-			case CLYDE -> {
-				ghost.placeAtTile(world.clydeHomeTile, World.HTS, 0);
-				ghost.wishDir = ghost.moveDir = Direction.UP;
-			}
-			}
 		}
 	}
 
