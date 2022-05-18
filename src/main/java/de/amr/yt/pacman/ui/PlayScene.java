@@ -23,6 +23,7 @@ SOFTWARE.
 */
 package de.amr.yt.pacman.ui;
 
+import static de.amr.yt.pacman.lib.Logging.log;
 import static de.amr.yt.pacman.lib.SpriteAnimation.frame;
 import static de.amr.yt.pacman.model.World.t;
 import static de.amr.yt.pacman.ui.Renderer.drawGhost;
@@ -36,6 +37,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 import de.amr.yt.pacman.controller.GameState;
+import de.amr.yt.pacman.lib.GameClock;
 import de.amr.yt.pacman.model.GameModel;
 import de.amr.yt.pacman.model.Ghost;
 import de.amr.yt.pacman.model.World;
@@ -53,6 +55,7 @@ public class PlayScene implements GameScene {
 
 	@Override
 	public void init() {
+		log("Initializing PlayScene at game time: %s", GameClock.get());
 	}
 
 	@Override
