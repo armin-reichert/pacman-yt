@@ -94,7 +94,6 @@ public class World {
 		//@formatter:on
 	};
 
-	public final Vector2 bonusTile = v(13, 20);
 	/** Left house entry tile */
 	public final Vector2 houseEntryTile = v(13, 14);
 	/** Pixel position of house entry */

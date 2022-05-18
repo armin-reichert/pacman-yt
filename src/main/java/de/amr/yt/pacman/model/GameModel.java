@@ -47,6 +47,7 @@ public class GameModel {
 	public final Vector2[] ghostHomes = { v(13, 14), v(13, 17), v(11, 17), v(15, 17) };
 	public final Vector2[] ghostScatterTargets = { v(25, 0), v(2, 0), v(27, 34), v(0, 34) };
 	public final Direction[] ghostStartDirections = { Direction.LEFT, Direction.DOWN, Direction.UP, Direction.UP };
+	public final Vector2 bonusTile = v(13, 20);
 
 	public boolean paused;
 	public boolean pacSafe;
@@ -280,7 +281,7 @@ public class GameModel {
 	}
 
 	public boolean checkBonusEaten() {
-		if (bonus != null && !bonus.eaten && pacMan.tile().equals(world.bonusTile)) {
+		if (bonus != null && !bonus.eaten && pacMan.tile().equals(bonusTile)) {
 			bonus.timer = sec(2);
 			bonus.eaten = true;
 			scorePoints(bonus.value);
