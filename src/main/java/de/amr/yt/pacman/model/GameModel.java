@@ -25,6 +25,7 @@ package de.amr.yt.pacman.model;
 
 import static de.amr.yt.pacman.lib.GameClock.sec;
 import static de.amr.yt.pacman.lib.Logging.log;
+import static de.amr.yt.pacman.lib.Vector2.v;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +42,8 @@ import de.amr.yt.pacman.lib.Vector2;
 public class GameModel {
 
 	public static final int BLINKY = 0, PINKY = 1, INKY = 2, CLYDE = 3;
+	public static final Vector2 PACMAN_HOME = v(13, 26);
+	public static final Vector2[] GHOST_HOMES = { v(13, 14), v(13, 17), v(11, 17), v(15, 17) };
 	public static final Direction[] GHOST_DIRECTIONS = { Direction.LEFT, Direction.DOWN, Direction.UP, Direction.UP };
 	public static final float BASE_SPEED = 1.25f;
 
@@ -127,7 +130,7 @@ public class GameModel {
 		powerPelletsBlinking = false;
 		ghostsKilledByEnergizer = 0;
 
-		pacMan.placeAtTile(world.pacManHomeTile, World.HTS, 0);
+		pacMan.placeAtTile(PACMAN_HOME, World.HTS, 0);
 		pacMan.wishDir = Direction.LEFT;
 		pacMan.moveDir = Direction.LEFT;
 		pacMan.speed = level.playerSpeed;
@@ -137,7 +140,7 @@ public class GameModel {
 		pacMan.animation.reset();
 
 		for (var ghost : ghosts) {
-			ghost.placeAtTile(world.ghostHomeTiles[ghost.id], World.HTS, 0);
+			ghost.placeAtTile(GHOST_HOMES[ghost.id], World.HTS, 0);
 			ghost.wishDir = ghost.moveDir = GHOST_DIRECTIONS[ghost.id];
 			ghost.speed = level.ghostSpeed;
 			ghost.targetTile = null;

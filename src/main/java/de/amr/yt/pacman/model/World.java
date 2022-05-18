@@ -94,10 +94,6 @@ public class World {
 		//@formatter:on
 	};
 
-	// home tiles
-	public final Vector2 pacManHomeTile = v(13, 26);
-	public final Vector2[] ghostHomeTiles = { v(13, 14), v(13, 17), v(11, 17), v(15, 17) };
-
 	// scattering targets
 	public final Vector2 leftUpperTarget = v(2, 0);
 	public final Vector2 rightUpperTarget = v(25, 0);
