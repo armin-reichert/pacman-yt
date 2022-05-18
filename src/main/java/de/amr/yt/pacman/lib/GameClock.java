@@ -71,14 +71,16 @@ public class GameClock {
 
 	public void start(Runnable onTick) {
 		this.onTick = onTick;
+		thread = new Thread(this::loop, "GameClock");
 		running = true;
-		frameCountStart = System.nanoTime();
-		thread = new Thread(() -> {
-			while (running) {
-				tick();
-			}
-		}, "GameClock");
 		thread.start();
+	}
+
+	private void loop() {
+		frameCountStart = System.nanoTime();
+		while (running) {
+			tick();
+		}
 	}
 
 	private void tick() {
@@ -86,18 +88,17 @@ public class GameClock {
 		onTick.run();
 		long end = System.nanoTime();
 		long duration = end - start;
-		long period = 1_000_000_000L / frequency;
-		if (duration < period) {
-			long sleep = period - duration;
+		long targetDuration = 1_000_000_000L / frequency;
+		if (duration < targetDuration) {
 			try {
-				Thread.sleep(sleep / 1_000_000);
+				Thread.sleep((targetDuration - duration) / 1_000_000L);
 			} catch (InterruptedException e) {
-				// ignore
+				e.printStackTrace();
 			}
 		}
 		++ticks;
 		++frameCount;
-		if (end - frameCountStart >= 1_000_000_000) {
+		if (end - frameCountStart >= 1_000_000_000L) {
 			lastFrameRate = frameCount;
 			frameCount = 0;
 			frameCountStart = end;
