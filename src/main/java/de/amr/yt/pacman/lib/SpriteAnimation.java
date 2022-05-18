@@ -39,7 +39,7 @@ public class SpriteAnimation {
 	 *         <code>0 0 0 0 1 1 1 1 2 2 2 2...</code>
 	 */
 	public static int frame(int numFrames, int frameTicks) {
-		return frame(GameClock.get().ticks, numFrames, frameTicks);
+		return frame(GameClock.get().getTicks(), numFrames, frameTicks);
 	}
 
 	/**

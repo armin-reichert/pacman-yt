@@ -34,12 +34,17 @@ public class GameClock {
 		return theClock;
 	}
 
+	/**
+	 * Returns the number of ticks corresponding to the given seconds at current clock speed.
+	 * 
+	 * @param seconds seconds
+	 * @return ticks corresponding to seconds
+	 */
 	public static int sec(double seconds) {
 		return (int) (theClock.frequency * seconds);
 	}
 
-	public long ticks;
-
+	private long ticks;
 	private int frequency;
 	private Runnable onTick = () -> Logging.log("Tick");
 	private Thread thread;
@@ -55,6 +60,10 @@ public class GameClock {
 	@Override
 	public String toString() {
 		return "tick: %8d (second: %8.2f)".formatted(ticks, ticks / (float) frequency);
+	}
+
+	public long getTicks() {
+		return ticks;
 	}
 
 	public int getFrequency() {
