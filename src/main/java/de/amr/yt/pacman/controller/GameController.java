@@ -42,7 +42,6 @@ public class GameController {
 	private final GameModel game;
 	private GameWindow window;
 	private Direction joystick;
-	private boolean playing;
 
 	public GameController() {
 		game = new GameModel();
@@ -103,7 +102,7 @@ public class GameController {
 
 	private void update_LEVEL_STARTING() {
 		if (game.stateTimer == 0) {
-			playing = false;
+			game.levelStarted = false;
 			game.powerPelletsBlinking = false;
 			game.world.resetFood();
 			for (Ghost ghost : game.ghosts) {
@@ -113,9 +112,6 @@ public class GameController {
 		}
 
 		else if (game.stateTimer == sec(1)) {
-			if (!playing) {
-				Sounds.play("game_start");
-			}
 			game.setState(GameState.READY);
 		}
 	}
@@ -123,7 +119,11 @@ public class GameController {
 	private void update_READY() {
 		if (game.stateTimer == 0) {
 			game.reset();
-		} else if (game.stateTimer == sec(playing ? 1 : 5)) {
+			if (!game.levelStarted) {
+				Sounds.play("level_start");
+			}
+		} else if (game.stateTimer == sec(game.levelStarted ? 1 : 5)) {
+			game.levelStarted = true;
 			game.setState(GameState.PLAYING);
 		}
 	}
@@ -135,7 +135,6 @@ public class GameController {
 			for (Ghost ghost : game.ghosts) {
 				ghost.animation.setEnabled(true);
 			}
-			playing = true;
 		}
 
 		game.updateAttacWave();

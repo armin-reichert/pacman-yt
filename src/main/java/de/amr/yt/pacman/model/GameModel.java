@@ -64,6 +64,7 @@ public class GameModel {
 	public long stateTimer;
 	public int attackTimer;
 
+	public boolean levelStarted;
 	public boolean chasingPhase;
 	public boolean mazeFlashing;
 	public boolean powerPelletsBlinking;
