@@ -225,16 +225,34 @@ public class GameModel {
 		log("Chasing phase %d started at %s", phase + 1, GameClock.get());
 	}
 
-	// TODO this is just some arbitrary logic, the real game uses dot counters and stuff
+	// TODO this is just some arbitrary sample logic, the real game uses dot counters and stuff
+
 	public void unlockGhosts() {
-		final int[] seconds = { 0, 1, 5, 10 };
-		final GhostState[] states = { GhostState.SCATTERING, GhostState.LEAVING_HOUSE, GhostState.LEAVING_HOUSE,
-				GhostState.LEAVING_HOUSE };
 		for (var ghost : ghosts) {
-			if (ghost.state == GhostState.LOCKED && stateTimer == sec(seconds[ghost.id])) {
-				ghost.state = states[ghost.id];
+			int unlockSeconds = unlockSeconds(ghost);
+			if (ghost.state == GhostState.LOCKED && stateTimer == sec(unlockSeconds)) {
+				ghost.state = unlockState(ghost);
+				log("Ghost %d unlocked after %d seconds. State=%s", ghost.id, unlockSeconds, ghost.state);
 			}
 		}
+	}
+
+	private GhostState unlockState(Ghost ghost) {
+		return switch (ghost.id) {
+		case Ghost.BLINKY -> GhostState.SCATTERING;
+		default -> GhostState.LEAVING_HOUSE;
+		};
+	}
+
+	private int unlockSeconds(Ghost ghost) {
+		return switch (ghost.id) {
+		case Ghost.BLINKY -> 0;
+		case Ghost.PINKY -> 1;
+		case Ghost.INKY -> 5;
+		case Ghost.CLYDE -> 15;
+		default -> 0;
+		};
+
 	}
 
 	public void onPacPowerEnding() {
