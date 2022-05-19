@@ -98,6 +98,7 @@ public class GameController {
 
 	private void update_LEVEL_STARTING() {
 		if (game.state.timer == 0) {
+			game.attackTimer = 0;
 			game.levelStarted = false;
 			game.powerPelletsBlinking = false;
 			game.world.resetFood();
@@ -162,9 +163,10 @@ public class GameController {
 	}
 
 	private void update_PACMAN_DEAD() {
-		game.pacMan.update();
 
 		if (game.state.timer == 0) {
+			game.attackTimer = 0;
+			game.pacMan.animation = game.pacMan.animDying;
 			game.pacMan.animation.setEnabled(false);
 			game.pacMan.animation.reset();
 			game.bonus = null;
@@ -190,8 +192,11 @@ public class GameController {
 					ghost.visible = true;
 				}
 				game.setState(GameState.GAME_OVER);
+				return;
 			}
 		}
+
+		game.pacMan.update();
 	}
 
 	private void update_GHOST_DYING() {

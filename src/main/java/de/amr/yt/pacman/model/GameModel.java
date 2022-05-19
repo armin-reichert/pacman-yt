@@ -126,7 +126,6 @@ public class GameModel {
 	}
 
 	public void getReadyToRumble() {
-		attackTimer = 0;
 		bonus = null;
 		chasingPhase = true;
 		powerPelletsBlinking = false;
@@ -237,7 +236,6 @@ public class GameModel {
 			};
 			if (ghost.state == GhostState.LOCKED && state.timer == sec(unlockSeconds)) {
 				ghost.state = ghost.id == Ghost.BLINKY ? GhostState.SCATTERING : GhostState.LEAVING_HOUSE;
-				log("Ghost %d unlocked after %d seconds. State=%s", ghost.id, unlockSeconds, ghost.state);
 			}
 		}
 	}
