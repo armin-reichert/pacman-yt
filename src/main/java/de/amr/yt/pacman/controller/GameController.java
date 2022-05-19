@@ -216,7 +216,7 @@ public class GameController {
 		if (game.stateTimer == 0) {
 			game.pacMan.animation = game.pacMan.animStanding;
 			for (Ghost ghost : game.ghosts) {
-				ghost.animNormal.setEnabled(false);
+				ghost.animWalking.setEnabled(false);
 			}
 		}
 

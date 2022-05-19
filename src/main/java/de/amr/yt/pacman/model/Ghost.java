@@ -45,7 +45,7 @@ public class Ghost extends Creature {
 
 	public final int id;
 	public final GameModel game;
-	public final SpriteAnimation animNormal;
+	public final SpriteAnimation animWalking;
 	public final SpriteAnimation animFrightened;
 
 	public GhostState state;
@@ -60,7 +60,7 @@ public class Ghost extends Creature {
 		super(game.world);
 		this.game = game;
 		this.id = id;
-		animNormal = new SpriteAnimation("normal", new byte[] { 0, 1 }, 8, true);
+		animWalking = new SpriteAnimation("walking", new byte[] { 0, 1 }, 8, true);
 		animFrightened = new SpriteAnimation("frightened", new byte[] { 0, 1 }, 8, true);
 		reset();
 	}
@@ -74,7 +74,7 @@ public class Ghost extends Creature {
 		targetTile = null;
 		valueTimer = 0;
 		value = 0;
-		animation = animNormal;
+		animation = animWalking;
 	}
 
 	public void update() {
@@ -83,18 +83,18 @@ public class Ghost extends Creature {
 			if (id != BLINKY) {
 				bounce(world.houseTop, world.houseBottom);
 			}
-			animation = game.pacMan.hasPower() ? animFrightened : animNormal;
+			animation = game.pacMan.hasPower() ? animFrightened : animWalking;
 		}
 		case ENTERING_HOUSE -> {
 			enterGhostHouse(world.houseEntry);
 		}
 		case LEAVING_HOUSE -> {
 			leaveGhostHouse(world.houseEntry);
-			animation = animNormal;
+			animation = animWalking;
 		}
 		case CHASING, SCATTERING -> {
 			aimTowardsTarget();
-			animation = animNormal;
+			animation = animWalking;
 		}
 		case FRIGHTENED -> {
 			aimTowardsTarget();

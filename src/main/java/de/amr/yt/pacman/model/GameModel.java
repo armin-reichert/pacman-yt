@@ -148,7 +148,7 @@ public class GameModel {
 			ghost.targetTile = null;
 			ghost.state = GhostState.LOCKED;
 			ghost.visible = true;
-			ghost.animation = ghost.animNormal;
+			ghost.animation = ghost.animWalking;
 			ghost.animation.reset();
 			ghost.animation.setEnabled(false);
 		}

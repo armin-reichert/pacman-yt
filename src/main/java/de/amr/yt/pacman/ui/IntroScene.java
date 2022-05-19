@@ -99,7 +99,7 @@ public class IntroScene implements GameScene {
 			ghost.y = game.pacMan.y;
 			ghost.speed = game.pacMan.speed * 1.05f;
 			ghost.moveDir = Direction.LEFT;
-			ghost.animation = ghost.animNormal;
+			ghost.animation = ghost.animWalking;
 			ghost.animation.setEnabled(true);
 		}
 	}

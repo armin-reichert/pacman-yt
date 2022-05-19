@@ -114,13 +114,18 @@ public class Renderer {
 		if (pacMan.visible) {
 			g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 6));
 			g.setColor(Color.WHITE);
-			String text = pacMan.isLosingPower() ? "LOSING POWER" : pacMan.state.name();
-			int sw = g.getFontMetrics().stringWidth(text);
-			g.drawString(text, (int) pacMan.x - sw / 2, (int) pacMan.y - 8);
-			text = "(%d,%d)".formatted(pacMan.tile().x, pacMan.tile().y);
-			text += " " + pacMan.animation;
-			sw = g.getFontMetrics().stringWidth(text);
-			g.drawString(text, (int) pacMan.x - sw / 2, (int) pacMan.y + 12);
+
+			int offset = 0;
+
+			String textAbove = pacMan.isLosingPower() ? "LOSING POWER" : pacMan.state.name();
+			textAbove += " %.2f px/tick".formatted(pacMan.currentSpeed());
+			offset = -g.getFontMetrics().stringWidth(textAbove) / 2;
+			g.drawString(textAbove, (int) pacMan.x + offset, (int) pacMan.y - 8);
+
+			String textBelow = "(%d,%d)".formatted(pacMan.tile().x, pacMan.tile().y);
+			textBelow += " " + pacMan.animation;
+			offset = -g.getFontMetrics().stringWidth(textBelow) / 2;
+			g.drawString(textBelow, (int) pacMan.x + offset, (int) pacMan.y + 12);
 		}
 	}
 
@@ -128,16 +133,19 @@ public class Renderer {
 		if (ghost.visible) {
 			g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 6));
 			g.setColor(Color.WHITE);
-			String text = ghost.state.name();
-			if (ghost.elroyState > 0) {
-				text += " Elroy " + ghost.elroyState;
-			}
-			int sw = g.getFontMetrics().stringWidth(text);
-			g.drawString(text, (int) ghost.x - sw / 2, (int) ghost.y - 8);
-			text = "(%d,%d)".formatted(ghost.tile().x, ghost.tile().y);
-			text += " " + ghost.animation;
-			sw = g.getFontMetrics().stringWidth(text);
-			g.drawString(text, (int) ghost.x - sw / 2, (int) ghost.y + 12);
+
+			int offset = 0;
+
+			String textAbove = ghost.state.name();
+			textAbove += ghost.elroyState > 0 ? " Elroy %d".formatted(ghost.elroyState) : "";
+			textAbove += " %.2f px/tick".formatted(ghost.currentSpeed());
+			offset = -g.getFontMetrics().stringWidth(textAbove) / 2;
+			g.drawString(textAbove, (int) ghost.x + offset, (int) ghost.y - 8);
+
+			String textBelow = "(%d,%d)".formatted(ghost.tile().x, ghost.tile().y);
+			textBelow += " " + ghost.animation;
+			offset = -g.getFontMetrics().stringWidth(textBelow) / 2;
+			g.drawString(textBelow, (int) ghost.x + offset, (int) ghost.y + 12);
 		}
 	}
 
