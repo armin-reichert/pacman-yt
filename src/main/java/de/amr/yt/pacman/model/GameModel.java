@@ -28,6 +28,7 @@ import static de.amr.yt.pacman.lib.Logging.log;
 import static de.amr.yt.pacman.lib.Vector2.v;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -49,30 +50,28 @@ public class GameModel {
 	public final Direction[] ghostStartDirections = { Direction.LEFT, Direction.DOWN, Direction.UP, Direction.UP };
 	public final Vector2 bonusTile = v(13, 20);
 
-	public boolean paused;
-	public boolean pacSafe;
-
 	public final World world;
+	public final List<Integer> levelCounter = new ArrayList<>();
 	public final PacMan pacMan;
 	public final Ghost[] ghosts;
-
 	public Bonus bonus;
 
+	public GameLevel level;
 	public GameState state;
 	public long stateTimer;
-	public int attackTimer;
+	public long attackTimer;
 
+	public boolean paused;
+	public boolean pacSafe;
 	public boolean levelStarted;
 	public boolean chasingPhase;
 	public boolean mazeFlashing;
 	public boolean powerPelletsBlinking;
-	public int ghostsKilledByEnergizer;
-	public int pacManLosingPowerTicks = 120; // TODO just a guess
+
 	public int score;
 	public int lives;
-	public final List<Integer> levelCounter = new ArrayList<>();
-
-	public GameLevel level;
+	public int ghostsKilledByEnergizer;
+	public int pacManLosingPowerTicks = 120; // TODO just a guess
 
 	public GameModel() {
 		world = new World();
@@ -83,7 +82,6 @@ public class GameModel {
 				new Ghost(this, Ghost.INKY), //
 				new Ghost(this, Ghost.CLYDE) //
 		};
-		bonus = null;
 	}
 
 	public void setLevel(int levelNumber) {
@@ -180,14 +178,14 @@ public class GameModel {
 	public void updateAttackWave() {
 		if (!chasingPhase) {
 			// is next chasing phase due?
-			int phaseStart = level.chaseStartTicks.indexOf(attackTimer);
-			if (phaseStart != -1) {
+			int phaseStart = Arrays.binarySearch(level.chaseStartTicks, attackTimer);
+			if (phaseStart >= 0) {
 				startChasingPhase(phaseStart);
 			}
 		} else {
 			// is next scattering phase due?
-			int phaseStart = level.scatterStartTicks.indexOf(attackTimer);
-			if (phaseStart != -1) {
+			int phaseStart = Arrays.binarySearch(level.scatterStartTicks, attackTimer);
+			if (phaseStart >= 0) {
 				startScatteringPhase(phaseStart);
 			}
 		}

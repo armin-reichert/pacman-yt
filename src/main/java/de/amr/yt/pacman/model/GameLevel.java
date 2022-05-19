@@ -25,15 +25,13 @@ package de.amr.yt.pacman.model;
 
 import static de.amr.yt.pacman.lib.GameClock.sec;
 
-import java.util.List;
-
 /**
  * @author Armin Reichert
  */
 public class GameLevel {
 	public final int number;
-	public final List<Integer> scatterStartTicks;
-	public final List<Integer> chaseStartTicks;
+	public final long[] scatterStartTicks;
+	public final long[] chaseStartTicks;
 	public final int bonusSymbol;
 	public final int bonusValue;
 	public final float playerSpeed;
@@ -68,16 +66,16 @@ public class GameLevel {
 
 		switch (levelNumber) {
 		case 1 -> {
-			scatterStartTicks = List.of(0, sec(27), sec(54), sec(79));
-			chaseStartTicks = List.of(sec(7), sec(34), sec(59), sec(84));
+			scatterStartTicks = new long[] { 0, sec(27), sec(54), sec(79) };
+			chaseStartTicks = new long[] { sec(7), sec(34), sec(59), sec(84) };
 		}
 		case 2, 3, 4 -> {
-			scatterStartTicks = List.of(0, sec(27), sec(54), sec(1092));
-			chaseStartTicks = List.of(sec(7), sec(34), sec(59), sec(1092) + 1);
+			scatterStartTicks = new long[] { 0, sec(27), sec(54), sec(1092) };
+			chaseStartTicks = new long[] { sec(7), sec(34), sec(59), sec(1092) + 1 };
 		}
 		default -> {
-			scatterStartTicks = List.of(0, sec(25), sec(50), sec(1092));
-			chaseStartTicks = List.of(sec(5), sec(30), sec(55), sec(1092) + 1);
+			scatterStartTicks = new long[] { 0, sec(25), sec(50), sec(1092) };
+			chaseStartTicks = new long[] { sec(5), sec(30), sec(55), sec(1092) + 1 };
 		}
 		}
 	}
