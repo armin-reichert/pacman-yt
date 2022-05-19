@@ -229,30 +229,18 @@ public class GameModel {
 
 	public void unlockGhosts() {
 		for (var ghost : ghosts) {
-			int unlockSeconds = unlockSeconds(ghost);
+			int unlockSeconds = switch (ghost.id) {
+			case Ghost.BLINKY -> 0;
+			case Ghost.PINKY -> 1;
+			case Ghost.INKY -> 5;
+			case Ghost.CLYDE -> 15;
+			default -> 0;
+			};
 			if (ghost.state == GhostState.LOCKED && stateTimer == sec(unlockSeconds)) {
-				ghost.state = unlockState(ghost);
+				ghost.state = ghost.id == Ghost.BLINKY ? GhostState.SCATTERING : GhostState.LEAVING_HOUSE;
 				log("Ghost %d unlocked after %d seconds. State=%s", ghost.id, unlockSeconds, ghost.state);
 			}
 		}
-	}
-
-	private GhostState unlockState(Ghost ghost) {
-		return switch (ghost.id) {
-		case Ghost.BLINKY -> GhostState.SCATTERING;
-		default -> GhostState.LEAVING_HOUSE;
-		};
-	}
-
-	private int unlockSeconds(Ghost ghost) {
-		return switch (ghost.id) {
-		case Ghost.BLINKY -> 0;
-		case Ghost.PINKY -> 1;
-		case Ghost.INKY -> 5;
-		case Ghost.CLYDE -> 15;
-		default -> 0;
-		};
-
 	}
 
 	public void onPacPowerEnding() {
