@@ -28,7 +28,6 @@ import static de.amr.yt.pacman.lib.Logging.log;
 import static de.amr.yt.pacman.lib.Vector2.v;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -175,17 +174,26 @@ public class GameModel {
 		return false;
 	}
 
+	private static int index(long[] array, long value) {
+		for (int i = 0; i < array.length; ++i) {
+			if (array[i] == value) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
 	public void updateAttackWave() {
 		if (!chasingPhase) {
 			// is next chasing phase due?
-			int phaseStart = Arrays.binarySearch(level.chaseStartTicks, attackTimer);
-			if (phaseStart >= 0) {
+			int phaseStart = index(level.chaseStartTicks, attackTimer);
+			if (phaseStart != -1) {
 				startChasingPhase(phaseStart);
 			}
 		} else {
 			// is next scattering phase due?
-			int phaseStart = Arrays.binarySearch(level.scatterStartTicks, attackTimer);
-			if (phaseStart >= 0) {
+			int phaseStart = index(level.scatterStartTicks, attackTimer);
+			if (phaseStart != -1) {
 				startScatteringPhase(phaseStart);
 			}
 		}
