@@ -206,7 +206,7 @@ public class GameModel {
 		for (var ghost : ghosts) {
 			if (ghost.state == GhostState.CHASING) {
 				ghost.state = GhostState.SCATTERING;
-				ghost.reverse();
+				ghost.reverseDirection = true;
 			}
 			chasingPhase = false;
 		}
@@ -217,7 +217,7 @@ public class GameModel {
 		for (var ghost : ghosts) {
 			if (ghost.state == GhostState.SCATTERING) {
 				ghost.state = GhostState.CHASING;
-				ghost.reverse();
+				ghost.reverseDirection = true;
 			}
 			chasingPhase = true;
 		}
@@ -276,7 +276,7 @@ public class GameModel {
 				if (ghost.state == GhostState.CHASING || ghost.state == GhostState.SCATTERING) {
 					ghost.state = GhostState.FRIGHTENED;
 					ghost.animFrightened.setEnabled(true);
-					ghost.reverse();
+					ghost.reverseDirection = true;
 				}
 			}
 			log("Pac-Man gets power for %d ticks", pacMan.powerCountdown);

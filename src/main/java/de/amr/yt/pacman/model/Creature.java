@@ -47,6 +47,7 @@ public abstract class Creature {
 	public float speed;
 	public boolean enteredNewTile;
 	public boolean canReverse;
+	public boolean reverseDirection;
 	public boolean stuck;
 	public boolean visible;
 	public Direction moveDir;
@@ -59,6 +60,7 @@ public abstract class Creature {
 		speed = 0;
 		enteredNewTile = false;
 		canReverse = false;
+		reverseDirection = false;
 		stuck = false;
 		visible = true;
 		moveDir = Direction.LEFT;
@@ -126,15 +128,21 @@ public abstract class Creature {
 		return row() * World.TS + World.HT;
 	}
 
-	public void reverse() {
+	private void reverse() {
 		wishDir = moveDir.opposite();
 		if (tryMove(moveDir, wishDir)) {
 			moveDir = wishDir;
 		}
 		enteredNewTile = true;
+		reverseDirection = false;
 	}
 
 	public void exploreWorld() {
+		if (reverseDirection && enteredNewTile) {
+			reverse();
+			return;
+		}
+
 		var tileBeforeMoving = tile();
 
 		if (x > World.COLS * World.TS + World.HT) {
