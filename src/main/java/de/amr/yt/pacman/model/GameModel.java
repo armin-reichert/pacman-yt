@@ -129,16 +129,15 @@ public class GameModel {
 		log("Level %d created", level.number);
 	}
 
-	public void reset() {
+	public void getReadyToRumble() {
 		attackTimer = 0;
 		bonus = null;
 		chasingPhase = true;
 		powerPelletsBlinking = false;
 		ghostsKilledByEnergizer = 0;
 
-		pacMan.placeAtTile(pacManHome, World.HTS, 0);
-		pacMan.wishDir = Direction.LEFT;
-		pacMan.moveDir = Direction.LEFT;
+		pacMan.placeAtTile(pacManHome, World.HT, 0);
+		pacMan.wishDir = pacMan.moveDir = Direction.LEFT;
 		pacMan.speed = level.playerSpeed;
 		pacMan.state = PacManState.NO_POWER;
 		pacMan.visible = true;
@@ -146,7 +145,7 @@ public class GameModel {
 		pacMan.animation.reset();
 
 		for (var ghost : ghosts) {
-			ghost.placeAtTile(ghostHomes[ghost.id], World.HTS, 0);
+			ghost.placeAtTile(ghostHomes[ghost.id], World.HT, 0);
 			ghost.wishDir = ghost.moveDir = ghostStartDirections[ghost.id];
 			ghost.speed = level.ghostSpeed;
 			ghost.targetTile = null;
@@ -164,12 +163,18 @@ public class GameModel {
 		log("Game state set to %s", state);
 	}
 
-	private void scorePoints(int points) {
+	/**
+	 * @param points points scored
+	 * @return <code>true</code> if an extra life has been won
+	 */
+	public boolean score(int points) {
 		int oldScore = score;
 		score += points;
 		if (oldScore < 10_000 && score >= 10_000) {
 			lives++;
+			return true;
 		}
+		return false;
 	}
 
 	public void updateAttackWave() {
@@ -216,12 +221,12 @@ public class GameModel {
 
 	// TODO this is just some arbitrary logic, the real game uses dot counters and stuff
 	public void unlockGhosts() {
-		final int[] startSeconds = { sec(0), sec(1), sec(5), sec(10) };
-		final GhostState[] startStates = { GhostState.SCATTERING, GhostState.LEAVING_HOUSE, GhostState.LEAVING_HOUSE,
+		final int[] seconds = { 0, 1, 5, 10 };
+		final GhostState[] states = { GhostState.SCATTERING, GhostState.LEAVING_HOUSE, GhostState.LEAVING_HOUSE,
 				GhostState.LEAVING_HOUSE };
 		for (var ghost : ghosts) {
-			if (ghost.state == GhostState.LOCKED && stateTimer == startSeconds[ghost.id]) {
-				ghost.state = startStates[ghost.id];
+			if (ghost.state == GhostState.LOCKED && stateTimer == sec(seconds[ghost.id])) {
+				ghost.state = states[ghost.id];
 			}
 		}
 	}
@@ -239,7 +244,7 @@ public class GameModel {
 	public boolean checkPelletEaten() {
 		if (world.isPelletEaten(pacMan.tile())) {
 			pacMan.restCountdown = 1;
-			scorePoints(10);
+			score(10);
 			checkBonusAwarded();
 			return true;
 		}
@@ -251,7 +256,7 @@ public class GameModel {
 			pacMan.state = PacManState.POWER;
 			pacMan.powerCountdown = sec(level.ghostFrightenedSeconds);
 			pacMan.restCountdown = 3;
-			scorePoints(50);
+			score(50);
 			checkBonusAwarded();
 			ghostsKilledByEnergizer = 0;
 			for (var ghost : ghosts) {
@@ -284,15 +289,12 @@ public class GameModel {
 		if (bonus != null && !bonus.eaten && pacMan.tile().equals(bonusTile)) {
 			bonus.timer = sec(2);
 			bonus.eaten = true;
-			scorePoints(bonus.value);
+			score(bonus.value);
 			return true;
 		}
 		return false;
 	}
 
-	/**
-	 * @return {@code true} if Pac-Man has been killed
-	 */
 	public boolean checkPacManKilledByGhost(Vector2 tile) {
 		if (pacSafe || pacMan.hasPower()) {
 			return false;
@@ -308,9 +310,6 @@ public class GameModel {
 		return false;
 	}
 
-	/**
-	 * @return {@code true} if at least one ghost got killed
-	 */
 	public boolean checkGhostKilledByPacMan() {
 		if (!pacMan.hasPower()) {
 			return false;

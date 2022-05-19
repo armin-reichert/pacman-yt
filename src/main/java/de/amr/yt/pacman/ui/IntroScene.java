@@ -57,7 +57,7 @@ public class IntroScene implements GameScene {
 	private static final int COL_LEFT = t(3), COL_MIDDLE = t(6), COL_RIGHT = t(17);
 
 	private static int row(int ghostID) {
-		return t(6 + 3 * ghostID) + World.HTS;
+		return t(6 + 3 * ghostID) + World.HT;
 	}
 
 	private final GameModel game;
@@ -87,7 +87,7 @@ public class IntroScene implements GameScene {
 
 		game.pacMan.reset();
 		game.pacMan.x = t(World.COLS);
-		game.pacMan.y = t(20) + World.HTS;
+		game.pacMan.y = t(20) + World.HT;
 		game.pacMan.speed = game.level.playerSpeed;
 		game.pacMan.moveDir = Direction.LEFT;
 		game.pacMan.animation = game.pacMan.animWalking;

@@ -144,7 +144,7 @@ public class Renderer {
 				g.setColor(ghostColor(ghost.id));
 				g.fillRect(t(ghost.targetTile.x) + 2, t(ghost.targetTile.y) + 2, 4, 4);
 				g.setStroke(new BasicStroke(0.5f));
-				g.drawLine((int) ghost.x, (int) ghost.y, t(ghost.targetTile.x) + World.HTS, t(ghost.targetTile.y) + World.HTS);
+				g.drawLine((int) ghost.x, (int) ghost.y, t(ghost.targetTile.x) + World.HT, t(ghost.targetTile.y) + World.HT);
 			}
 		}
 	}

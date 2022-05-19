@@ -113,7 +113,7 @@ public class GameController {
 
 	private void update_READY() {
 		if (game.stateTimer == 0) {
-			game.reset();
+			game.getReadyToRumble();
 			if (!game.levelStarted) {
 				Sounds.play("level_start");
 			}

@@ -82,7 +82,7 @@ public class PlayScene implements GameScene {
 		if (game.bonus != null) {
 			BufferedImage sprite = game.bonus.eaten ? Sprites.get().bonusValues.get(game.bonus.value)
 					: Sprites.get().bonusSymbols.get(game.bonus.symbol);
-			g.drawImage(sprite, t(14) - sprite.getWidth() / 2, t(20) - World.HTS, null);
+			g.drawImage(sprite, t(14) - sprite.getWidth() / 2, t(20) - World.HT, null);
 		}
 		drawPacMan(g, game.pacMan);
 		for (Ghost ghost : game.ghosts) {

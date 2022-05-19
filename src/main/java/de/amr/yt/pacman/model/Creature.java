@@ -90,8 +90,8 @@ public abstract class Creature {
 	public abstract float currentSpeed();
 
 	public void placeAtTile(Vector2 tile, float offset_x, float offset_y) {
-		x = tile.x * World.TS + World.HTS + offset_x;
-		y = tile.y * World.TS + World.HTS + offset_y;
+		x = tile.x * World.TS + World.HT + offset_x;
+		y = tile.y * World.TS + World.HT + offset_y;
 	}
 
 	public Vector2 tile() {
@@ -119,11 +119,11 @@ public abstract class Creature {
 	}
 
 	public float centerX() {
-		return col() * World.TS + World.HTS;
+		return col() * World.TS + World.HT;
 	}
 
 	public float centerY() {
-		return row() * World.TS + World.HTS;
+		return row() * World.TS + World.HT;
 	}
 
 	public void reverse() {
@@ -137,7 +137,7 @@ public abstract class Creature {
 	public void exploreWorld() {
 		var tileBeforeMoving = tile();
 
-		if (x > World.COLS * World.TS + World.HTS) {
+		if (x > World.COLS * World.TS + World.HT) {
 			// traverse portal on right edge of world
 			x = 0;
 			enteredNewTile = true;
@@ -146,7 +146,7 @@ public abstract class Creature {
 
 		if (x < 0) {
 			// traverse portal on left edge of world
-			x = World.COLS * World.TS + World.HTS;
+			x = World.COLS * World.TS + World.HT;
 			enteredNewTile = true;
 			return;
 		}
@@ -203,10 +203,10 @@ public abstract class Creature {
 		} else {
 			// check if we can move further towards an inaccessible neighbor tile
 			canMove = switch (newDir) {
-			case UP -> newDir.vector.y * speed + offsetY() > World.HTS;
-			case DOWN -> newDir.vector.y * speed + offsetY() < World.HTS;
-			case LEFT -> newDir.vector.x * speed + offsetX() > World.HTS;
-			case RIGHT -> newDir.vector.x * speed + offsetX() < World.HTS;
+			case UP -> newDir.vector.y * speed + offsetY() > World.HT;
+			case DOWN -> newDir.vector.y * speed + offsetY() < World.HT;
+			case LEFT -> newDir.vector.x * speed + offsetX() > World.HT;
+			case RIGHT -> newDir.vector.x * speed + offsetX() < World.HT;
 			};
 		}
 		if (canMove) {
@@ -216,6 +216,6 @@ public abstract class Creature {
 	}
 
 	protected boolean canTurnSidewards(Direction direction) {
-		return direction.isVertical() ? Math.abs(offsetY() - World.HTS) <= 1 : Math.abs(offsetX() - World.HTS) <= 1;
+		return direction.isVertical() ? Math.abs(offsetY() - World.HT) <= 1 : Math.abs(offsetX() - World.HT) <= 1;
 	}
 }

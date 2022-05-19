@@ -37,7 +37,7 @@ public class World {
 	public static final int COLS = 28;
 
 	public static final int TS = 8;
-	public static final int HTS = 4;
+	public static final int HT = 4;
 
 	//@formatter:off
 	public static final byte SPACE           = 0;
@@ -97,7 +97,7 @@ public class World {
 	/** Left house entry tile */
 	public final Vector2 houseEntryTile = v(13, 14);
 	/** Pixel position of house entry */
-	public final Vector2 houseEntry = v(t(14), t(14) + World.HTS);
+	public final Vector2 houseEntry = v(t(14), t(14) + World.HT);
 	public final float houseTop = t(17);
 	public final float houseBottom = t(18);
 
