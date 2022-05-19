@@ -29,7 +29,6 @@ import de.amr.yt.pacman.lib.Direction;
 import de.amr.yt.pacman.lib.Sounds;
 import de.amr.yt.pacman.model.GameModel;
 import de.amr.yt.pacman.model.GameState;
-import de.amr.yt.pacman.model.Ghost;
 import de.amr.yt.pacman.model.GhostState;
 import de.amr.yt.pacman.ui.GameUI;
 import de.amr.yt.pacman.ui.IntroScene;
@@ -102,7 +101,7 @@ public class GameController {
 			game.levelStarted = false;
 			game.powerPelletsBlinking = false;
 			game.world.resetFood();
-			for (Ghost ghost : game.ghosts) {
+			for (var ghost : game.ghosts) {
 				ghost.visible = false;
 				ghost.elroyState = 0;
 			}
@@ -156,14 +155,13 @@ public class GameController {
 			return;
 		}
 		game.unlockGhosts();
-		for (Ghost ghost : game.ghosts) {
+		for (var ghost : game.ghosts) {
 			ghost.update();
 		}
 		game.updateBonus();
 	}
 
 	private void update_PACMAN_DEAD() {
-
 		if (game.state.timer == 0) {
 			game.attackTimer = 0;
 			game.pacMan.animation = game.pacMan.animDying;
@@ -173,7 +171,7 @@ public class GameController {
 		}
 
 		else if (game.state.timer == sec(1)) {
-			for (Ghost ghost : game.ghosts) {
+			for (var ghost : game.ghosts) {
 				ghost.visible = false;
 			}
 		}
@@ -188,7 +186,7 @@ public class GameController {
 			if (game.lives > 0) {
 				game.setState(GameState.READY);
 			} else {
-				for (Ghost ghost : game.ghosts) {
+				for (var ghost : game.ghosts) {
 					ghost.visible = true;
 				}
 				game.setState(GameState.GAME_OVER);
@@ -210,24 +208,23 @@ public class GameController {
 			return;
 		}
 
-		for (Ghost ghost : game.ghosts) {
+		for (var ghost : game.ghosts) {
 			if (ghost.state == GhostState.EATEN) {
 				ghost.update();
 			}
 		}
-
 	}
 
 	private void update_LEVEL_COMPLETE() {
 		if (game.state.timer == 0) {
 			game.pacMan.animation = game.pacMan.animStanding;
-			for (Ghost ghost : game.ghosts) {
+			for (var ghost : game.ghosts) {
 				ghost.animWalking.setEnabled(false);
 			}
 		}
 
 		else if (game.state.timer == sec(1)) {
-			for (Ghost ghost : game.ghosts) {
+			for (var ghost : game.ghosts) {
 				ghost.visible = false;
 			}
 			game.mazeFlashing = true;
@@ -245,7 +242,7 @@ public class GameController {
 	private void update_GAME_OVER() {
 		if (game.state.timer == 0) {
 			game.powerPelletsBlinking = false;
-			for (Ghost ghost : game.ghosts) {
+			for (var ghost : game.ghosts) {
 				ghost.animation.setEnabled(false);
 			}
 			game.pacMan.animation.setEnabled(false);
