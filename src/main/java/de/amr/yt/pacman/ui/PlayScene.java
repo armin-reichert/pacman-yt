@@ -70,9 +70,9 @@ public class PlayScene implements GameScene {
 		g.setColor(Color.PINK);
 		for (int row = 0; row < World.ROWS; ++row) {
 			for (int col = 0; col < World.COLS; ++col) {
-				if (game.world.isPellet(row, col)) {
+				if (game.world.hasUneatenPelletAt(row, col)) {
 					g.fillOval(t(col) + 3, t(row) + 3, 2, 2);
-				} else if (game.world.isPowerPellet(row, col)) {
+				} else if (game.world.hasUneatenPowerPelletAt(row, col)) {
 					if (!game.powerPelletsBlinking || frame(2, 15) == 0) {
 						g.fillOval(t(col), t(row), t(1), t(1));
 					}

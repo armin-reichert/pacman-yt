@@ -108,7 +108,7 @@ public class World {
 		int count = 0;
 		for (int row = 0; row < ROWS; ++row) {
 			for (int col = 0; col < COLS; ++col) {
-				if (isPellet(row, col) || isPowerPellet(row, col)) {
+				if (hasUneatenPelletAt(row, col) || hasUneatenPowerPelletAt(row, col)) {
 					++count;
 				}
 			}
@@ -154,24 +154,24 @@ public class World {
 		return tile.equals(12, 13) || tile.equals(15, 13) || tile.equals(12, 25) || tile.equals(15, 25);
 	}
 
-	public boolean isPellet(Vector2 tile) {
-		return isPellet(tile.y, tile.x);
+	public boolean hasUneatenPelletAt(Vector2 tile) {
+		return hasUneatenPelletAt(tile.y, tile.x);
 	}
 
-	public boolean isPellet(int row, int col) {
+	public boolean hasUneatenPelletAt(int row, int col) {
 		return inMapRange(row, col) && map[row][col] == PELLET;
 	}
 
-	public boolean isPowerPellet(Vector2 tile) {
-		return isPowerPellet(tile.y, tile.x);
+	public boolean hasUneatenPowerPelletAt(Vector2 tile) {
+		return hasUneatenPowerPelletAt(tile.y, tile.x);
 	}
 
-	public boolean isPowerPellet(int row, int col) {
+	public boolean hasUneatenPowerPelletAt(int row, int col) {
 		return inMapRange(row, col) && map[row][col] == ENERGIZER;
 	}
 
-	public boolean isPelletEaten(Vector2 tile) {
-		if (isPellet(tile)) {
+	public boolean consumePelletAt(Vector2 tile) {
+		if (hasUneatenPelletAt(tile)) {
 			map[tile.y][tile.x] = PELLET_EATEN;
 			eatenFoodCount++;
 			return true;
@@ -179,8 +179,8 @@ public class World {
 		return false;
 	}
 
-	public boolean isPowerPelletEaten(Vector2 tile) {
-		if (isPowerPellet(tile)) {
+	public boolean consumePowerPelletAt(Vector2 tile) {
+		if (hasUneatenPowerPelletAt(tile)) {
 			map[tile.y][tile.x] = ENERGIZER_EATEN;
 			eatenFoodCount++;
 			return true;
