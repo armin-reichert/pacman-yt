@@ -28,6 +28,7 @@ import static de.amr.yt.pacman.lib.GameClock.sec;
 import de.amr.yt.pacman.lib.Direction;
 import de.amr.yt.pacman.lib.Sounds;
 import de.amr.yt.pacman.model.GameModel;
+import de.amr.yt.pacman.model.GameState;
 import de.amr.yt.pacman.model.Ghost;
 import de.amr.yt.pacman.model.GhostState;
 import de.amr.yt.pacman.ui.GameUI;
@@ -73,7 +74,7 @@ public class GameController {
 
 	public void step(boolean singleStepMode) {
 		if (!game.paused || singleStepMode) {
-			++game.stateTimer;
+			++game.state.timer;
 			switch (game.state) {
 			case INTRO -> update_INTRO();
 			case LEVEL_STARTING -> update_LEVEL_STARTING();
@@ -90,13 +91,13 @@ public class GameController {
 	}
 
 	private void update_INTRO() {
-		if (game.stateTimer == IntroScene.EXPIRATION_TIME) {
+		if (game.state.timer == IntroScene.EXPIRATION_TIME) {
 			newGame(); // restart intro
 		}
 	}
 
 	private void update_LEVEL_STARTING() {
-		if (game.stateTimer == 0) {
+		if (game.state.timer == 0) {
 			game.levelStarted = false;
 			game.powerPelletsBlinking = false;
 			game.world.resetFood();
@@ -107,26 +108,26 @@ public class GameController {
 			game.pacMan.visible = false;
 		}
 
-		else if (game.stateTimer == sec(1)) {
+		else if (game.state.timer == sec(1)) {
 			game.setState(GameState.READY);
 		}
 	}
 
 	private void update_READY() {
 		boolean playSound = game.level.number == 1 && !game.levelStarted;
-		if (game.stateTimer == 0) {
+		if (game.state.timer == 0) {
 			game.getReadyToRumble();
 			if (playSound) {
 				Sounds.play("level_start");
 			}
-		} else if (game.stateTimer == sec(playSound ? 5 : 1)) {
+		} else if (game.state.timer == sec(playSound ? 5 : 1)) {
 			game.levelStarted = true;
 			game.setState(GameState.PLAYING);
 		}
 	}
 
 	private void update_PLAYING() {
-		if (game.stateTimer == 0) {
+		if (game.state.timer == 0) {
 			game.powerPelletsBlinking = true;
 			for (var ghost : game.ghosts) {
 				ghost.animation.setEnabled(true);
@@ -163,24 +164,24 @@ public class GameController {
 	private void update_PACMAN_DEAD() {
 		game.pacMan.update();
 
-		if (game.stateTimer == 0) {
+		if (game.state.timer == 0) {
 			game.pacMan.animation.setEnabled(false);
 			game.pacMan.animation.reset();
 			game.bonus = null;
 		}
 
-		else if (game.stateTimer == sec(1)) {
+		else if (game.state.timer == sec(1)) {
 			for (Ghost ghost : game.ghosts) {
 				ghost.visible = false;
 			}
 		}
 
-		else if (game.stateTimer == sec(2)) {
+		else if (game.state.timer == sec(2)) {
 			game.pacMan.animation.setEnabled(true);
 			Sounds.play("pacman_death");
 		}
 
-		else if (game.stateTimer == sec(4)) {
+		else if (game.state.timer == sec(4)) {
 			--game.lives;
 			if (game.lives > 0) {
 				game.setState(GameState.READY);
@@ -194,11 +195,11 @@ public class GameController {
 	}
 
 	private void update_GHOST_DYING() {
-		if (game.stateTimer == 0) {
+		if (game.state.timer == 0) {
 			game.pacMan.visible = false;
 		}
 
-		else if (game.stateTimer == sec(1)) {
+		else if (game.state.timer == sec(1)) {
 			game.pacMan.visible = true;
 			game.setState(GameState.PLAYING);
 			return;
@@ -213,21 +214,21 @@ public class GameController {
 	}
 
 	private void update_LEVEL_COMPLETE() {
-		if (game.stateTimer == 0) {
+		if (game.state.timer == 0) {
 			game.pacMan.animation = game.pacMan.animStanding;
 			for (Ghost ghost : game.ghosts) {
 				ghost.animWalking.setEnabled(false);
 			}
 		}
 
-		else if (game.stateTimer == sec(1)) {
+		else if (game.state.timer == sec(1)) {
 			for (Ghost ghost : game.ghosts) {
 				ghost.visible = false;
 			}
 			game.mazeFlashing = true;
 		}
 
-		else if (game.stateTimer == sec(3)) {
+		else if (game.state.timer == sec(3)) {
 			game.mazeFlashing = false;
 			game.setLevel(game.level.number + 1);
 			game.pacMan.visible = false;
@@ -237,7 +238,7 @@ public class GameController {
 	}
 
 	private void update_GAME_OVER() {
-		if (game.stateTimer == 0) {
+		if (game.state.timer == 0) {
 			game.powerPelletsBlinking = false;
 			for (Ghost ghost : game.ghosts) {
 				ghost.animation.setEnabled(false);
@@ -245,7 +246,7 @@ public class GameController {
 			game.pacMan.animation.setEnabled(false);
 		}
 
-		else if (game.stateTimer == sec(5)) {
+		else if (game.state.timer == sec(5)) {
 			newGame();
 		}
 	}

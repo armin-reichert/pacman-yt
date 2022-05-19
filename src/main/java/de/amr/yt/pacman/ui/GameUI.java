@@ -43,10 +43,10 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 
 import de.amr.yt.pacman.controller.GameController;
-import de.amr.yt.pacman.controller.GameState;
 import de.amr.yt.pacman.lib.Direction;
 import de.amr.yt.pacman.lib.GameClock;
 import de.amr.yt.pacman.model.GameModel;
+import de.amr.yt.pacman.model.GameState;
 import de.amr.yt.pacman.model.World;
 
 /**
@@ -123,7 +123,7 @@ public class GameUI {
 		case KeyEvent.VK_SPACE -> {
 			if (game.paused) {
 				gameController.step(true);
-			} else if (game.state == GameState.INTRO && game.stateTimer >= IntroScene.READY_TO_PLAY_TIME) {
+			} else if (game.state == GameState.INTRO && game.state.timer >= IntroScene.READY_TO_PLAY_TIME) {
 				game.setState(GameState.LEVEL_STARTING);
 			}
 		}
@@ -233,7 +233,7 @@ public class GameUI {
 
 		g.drawString("%2d FPS (Target=%d)".formatted(GameClock.get().getFrameRate(), GameClock.get().getFrequency()), t(1),
 				t(2));
-		String text = "%s (%d)".formatted(game.state.name(), game.stateTimer);
+		String text = "%s (%d)".formatted(game.state.name(), game.state.timer);
 		if (game.state == GameState.PLAYING) {
 			if (game.chasingPhase) {
 				text += " CHASING (%d)".formatted(game.attackTimer);

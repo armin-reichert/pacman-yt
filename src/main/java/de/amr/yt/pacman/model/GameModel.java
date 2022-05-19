@@ -31,7 +31,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import de.amr.yt.pacman.controller.GameState;
 import de.amr.yt.pacman.lib.Direction;
 import de.amr.yt.pacman.lib.GameClock;
 import de.amr.yt.pacman.lib.Vector2;
@@ -41,6 +40,7 @@ import de.amr.yt.pacman.lib.Vector2;
  */
 public class GameModel {
 
+	/** Speed in pixels/tick at 100%. */
 	public static final float BASE_SPEED = 1.25f;
 
 	public final Vector2 pacManHome = v(13, 26);
@@ -57,7 +57,6 @@ public class GameModel {
 
 	public GameLevel level;
 	public GameState state;
-	public long stateTimer;
 	public long attackTimer;
 
 	public boolean paused;
@@ -156,7 +155,7 @@ public class GameModel {
 
 	public void setState(GameState state) {
 		this.state = state;
-		stateTimer = -1;
+		state.timer = -1;
 		log("Game state set to %s", state);
 	}
 
@@ -236,7 +235,7 @@ public class GameModel {
 			case Ghost.CLYDE -> 15;
 			default -> 0;
 			};
-			if (ghost.state == GhostState.LOCKED && stateTimer == sec(unlockSeconds)) {
+			if (ghost.state == GhostState.LOCKED && state.timer == sec(unlockSeconds)) {
 				ghost.state = ghost.id == Ghost.BLINKY ? GhostState.SCATTERING : GhostState.LEAVING_HOUSE;
 				log("Ghost %d unlocked after %d seconds. State=%s", ghost.id, unlockSeconds, ghost.state);
 			}
