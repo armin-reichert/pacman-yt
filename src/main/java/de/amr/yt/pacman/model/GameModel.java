@@ -258,6 +258,7 @@ public class GameModel {
 			pacMan.restCountdown = 1;
 			score(10);
 			checkBonusAwarded();
+			checkBlinkyElroyState();
 			return true;
 		}
 		return false;
@@ -270,6 +271,7 @@ public class GameModel {
 			pacMan.restCountdown = 3;
 			score(50);
 			checkBonusAwarded();
+			checkBlinkyElroyState();
 			ghostsKilledByEnergizer = 0;
 			for (var ghost : ghosts) {
 				if (ghost.state == GhostState.CHASING || ghost.state == GhostState.SCATTERING) {
@@ -282,6 +284,15 @@ public class GameModel {
 			return true;
 		}
 		return false;
+	}
+
+	private void checkBlinkyElroyState() {
+		int foodRemaining = world.totalFoodCount - world.eatenFoodCount;
+		if (foodRemaining == level.elroy2DotsLeft) {
+			ghosts[Ghost.BLINKY].elroyState = 2;
+		} else if (foodRemaining == level.elroy1DotsLeft) {
+			ghosts[Ghost.BLINKY].elroyState = 1;
+		}
 	}
 
 	public boolean checkAllPelletsEaten() {

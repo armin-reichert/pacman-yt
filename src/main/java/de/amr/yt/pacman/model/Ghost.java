@@ -49,6 +49,8 @@ public class Ghost extends Creature {
 	public final SpriteAnimation animFrightened;
 
 	public GhostState state;
+	/** Elroy state: 0=off, 1=Elroy1, 2=Elroy2, -1=Elroy1 disabled, -2=Elroy2 disabled */
+	public int elroyState;
 	public Vector2 targetTile;
 	public long valueTimer;
 	public int value;
@@ -68,6 +70,7 @@ public class Ghost extends Creature {
 		super.reset();
 		canReverse = false;
 		state = GhostState.CHASING;
+		elroyState = 0;
 		targetTile = null;
 		valueTimer = 0;
 		value = 0;
@@ -128,19 +131,18 @@ public class Ghost extends Creature {
 	public float currentSpeed() {
 		boolean tunnel = game.world.isTunnel(tile());
 		return switch (state) {
-		case CHASING -> tunnel ? game.level.ghostSpeedTunnel : game.level.ghostSpeed;
+		case CHASING, SCATTERING -> tunnel ? game.level.ghostSpeedTunnel : chasingOrScatteringSpeed();
 		case EATEN -> 2 * game.level.ghostSpeed; // TODO guess
 		case ENTERING_HOUSE -> 2 * game.level.ghostSpeed;// TODO guess
 		case FRIGHTENED -> tunnel ? game.level.ghostSpeedTunnel : game.level.ghostSpeedFrightened;
 		case LEAVING_HOUSE -> 0.4f * GameModel.BASE_SPEED;// TODO guess
 		case LOCKED -> 0.4f * GameModel.BASE_SPEED;// TODO guess
-		case SCATTERING -> tunnel ? game.level.ghostSpeedTunnel : game.level.ghostSpeed;
 		};
 	}
 
 	private void aimTowardsTarget() {
 		if (enteredNewTile) {
-			targetTile = computeTargetTile();
+			targetTile = targetTile();
 			if (targetTile != null) {
 				takeDirectionTowardsTarget();
 			}
@@ -165,17 +167,32 @@ public class Ghost extends Creature {
 		}
 	}
 
-	private Vector2 computeTargetTile() {
+	private Vector2 targetTile() {
 		return switch (state) {
-		case CHASING -> computeChasingTarget();
+		case CHASING -> chasingTargetTile();
 		case EATEN -> world.houseEntryTile;
-		case FRIGHTENED -> selectRandomNeighbor();
-		case SCATTERING -> game.ghostScatterTargets[id];
+		case FRIGHTENED -> randomAllowedNeighborTile();
+		case SCATTERING -> scatteringTargetTile();
 		default -> null;
 		};
 	}
 
-	private Vector2 selectRandomNeighbor() {
+	private float chasingOrScatteringSpeed() {
+		return switch (elroyState) {
+		case 1 -> game.level.elroy1Speed;
+		case 2 -> game.level.elroy2Speed;
+		default -> game.level.ghostSpeed;
+		};
+	}
+
+	private Vector2 scatteringTargetTile() {
+		return switch (elroyState) {
+		case 1, 2 -> chasingTargetTile();
+		default -> game.ghostScatterTargets[id];
+		};
+	}
+
+	private Vector2 randomAllowedNeighborTile() {
 		for (Direction direction : Direction.valuesShuffled()) {
 			if (direction == moveDir.opposite()) {
 				continue;
@@ -188,7 +205,7 @@ public class Ghost extends Creature {
 		return null;
 	}
 
-	private Vector2 computeChasingTarget() {
+	private Vector2 chasingTargetTile() {
 		var pacMan = game.pacMan;
 		return switch (id) {
 		case BLINKY -> pacMan.tile();

@@ -102,6 +102,7 @@ public class GameController {
 			game.world.resetFood();
 			for (Ghost ghost : game.ghosts) {
 				ghost.visible = false;
+				ghost.elroyState = 0;
 			}
 			game.pacMan.visible = false;
 		}

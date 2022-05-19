@@ -129,6 +129,9 @@ public class Renderer {
 			g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 6));
 			g.setColor(Color.WHITE);
 			String text = ghost.state.name();
+			if (ghost.elroyState > 0) {
+				text += " Elroy " + ghost.elroyState;
+			}
 			int sw = g.getFontMetrics().stringWidth(text);
 			g.drawString(text, (int) ghost.x - sw / 2, (int) ghost.y - 8);
 			text = "(%d,%d)".formatted(ghost.tile().x, ghost.tile().y);
