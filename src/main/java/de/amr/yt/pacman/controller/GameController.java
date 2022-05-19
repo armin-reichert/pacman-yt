@@ -112,12 +112,13 @@ public class GameController {
 	}
 
 	private void update_READY() {
+		boolean playSound = game.level.number == 1 && !game.levelStarted;
 		if (game.stateTimer == 0) {
 			game.getReadyToRumble();
-			if (!game.levelStarted) {
+			if (playSound) {
 				Sounds.play("level_start");
 			}
-		} else if (game.stateTimer == sec(game.levelStarted ? 1 : 5)) {
+		} else if (game.stateTimer == sec(playSound ? 5 : 1)) {
 			game.levelStarted = true;
 			game.setState(GameState.PLAYING);
 		}
