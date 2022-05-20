@@ -59,7 +59,6 @@ public class Sprites {
 	public EnumMap<Direction, List<BufferedImage>> pacWalking = new EnumMap<>(Direction.class);
 	public List<BufferedImage> pacDead;
 	public List<EnumMap<Direction, List<BufferedImage>>> ghosts = new ArrayList<>();
-	public List<BufferedImage> ghostBlue;
 	public EnumMap<Direction, BufferedImage> ghostEyes = new EnumMap<>(Direction.class);
 	public Map<Integer, BufferedImage> ghostValues;
 	public List<BufferedImage> bonusSymbols;
@@ -72,6 +71,15 @@ public class Sprites {
 
 	public BufferedImage s(int x, int y, int w, int h) {
 		return sheetImage.getSubimage(x, y, w, h);
+	}
+
+	public List<BufferedImage> stripe(int col, int row, int numCols) {
+		ArrayList<BufferedImage> stripe = new ArrayList<>();
+		for (int i = 0; i < numCols; ++i) {
+			stripe.add(s(col + i, row));
+		}
+		stripe.trimToSize();
+		return stripe;
 	}
 
 	private BufferedImage image(String path) throws IOException {
@@ -123,8 +131,6 @@ public class Sprites {
 
 			ghosts = List.of(redGhost, pinkGhost, cyanGhost, orangeGhost);
 
-			ghostBlue = List.of(s(8, 4), s(9, 4), s(10, 4), s(11, 4));
-
 			ghostEyes.put(RIGHT, s(8, 5));
 			ghostEyes.put(LEFT, s(9, 5));
 			ghostEyes.put(UP, s(10, 5));
@@ -136,7 +142,7 @@ public class Sprites {
 					800, s(2, 8), //
 					1600, s(3, 8));
 
-			bonusSymbols = List.of(s(2, 3), s(3, 3), s(4, 3), s(5, 3), s(6, 3), s(7, 3), s(8, 3));
+			bonusSymbols = stripe(2, 3, 7);
 
 			bonusValues = Map.of( //
 					100, s(0, 9), //

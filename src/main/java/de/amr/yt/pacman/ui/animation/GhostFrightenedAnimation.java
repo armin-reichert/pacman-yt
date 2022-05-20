@@ -35,6 +35,7 @@ import de.amr.yt.pacman.ui.Sprites;
 public class GhostFrightenedAnimation extends SpriteAnimation {
 
 	private final List<Integer> frames = List.of(0, 1);
+	private final List<BufferedImage> sprites = Sprites.get().stripe(8, 4, 4);
 
 	public GhostFrightenedAnimation() {
 		name = "ghost-frightened";
@@ -50,6 +51,6 @@ public class GhostFrightenedAnimation extends SpriteAnimation {
 
 	@Override
 	public List<BufferedImage> getSprites() {
-		return Sprites.get().ghostBlue;
+		return sprites;
 	}
 }
