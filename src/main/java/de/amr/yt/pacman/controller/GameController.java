@@ -54,8 +54,8 @@ public class GameController {
 		}
 	}
 
-	public void step(boolean singleStepMode) {
-		if (!game.paused || singleStepMode) {
+	public void step(boolean doUpdate) {
+		if (doUpdate) {
 			++game.state.timer;
 			switch (game.state) {
 			case INTRO -> update_INTRO();
