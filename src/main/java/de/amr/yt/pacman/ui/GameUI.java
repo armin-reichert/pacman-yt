@@ -42,9 +42,9 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 
 import de.amr.yt.pacman.controller.GameController;
+import de.amr.yt.pacman.controller.GameState;
 import de.amr.yt.pacman.lib.GameClock;
 import de.amr.yt.pacman.model.GameModel;
-import de.amr.yt.pacman.model.GameState;
 import de.amr.yt.pacman.model.World;
 
 /**

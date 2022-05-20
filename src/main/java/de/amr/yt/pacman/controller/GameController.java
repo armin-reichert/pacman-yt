@@ -27,7 +27,6 @@ import static de.amr.yt.pacman.lib.Logging.log;
 
 import de.amr.yt.pacman.lib.Sounds;
 import de.amr.yt.pacman.model.GameModel;
-import de.amr.yt.pacman.model.GameState;
 import de.amr.yt.pacman.ui.GameUI;
 
 /**

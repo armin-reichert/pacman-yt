@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import de.amr.yt.pacman.controller.GameState;
 import de.amr.yt.pacman.lib.Direction;
 import de.amr.yt.pacman.lib.GameClock;
 import de.amr.yt.pacman.lib.Vector2;
