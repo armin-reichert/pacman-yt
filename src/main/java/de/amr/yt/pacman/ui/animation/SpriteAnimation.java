@@ -37,12 +37,36 @@ import de.amr.yt.pacman.lib.Animation;
 public abstract class SpriteAnimation implements Animation {
 
 	public final String name;
-	public final boolean loop;
-	private boolean enabled;
-	private byte[] frames;
-	private int majorIndex;
-	private int minorIndex;
-	private int frameLength;
+	public boolean loop;
+
+	protected boolean enabled;
+	protected byte[] frames;
+	protected int majorIndex;
+	protected int minorIndex;
+	protected int frameLength;
+
+	public SpriteAnimation(String name) {
+		this.name = name;
+	}
+
+	/**
+	 * Creates a sprite animation (frame pattern).
+	 * <p>
+	 * For example, <code>new SpriteAnimation("my-animation", new byte[] {0,1,2}, 3, true)</code> creates the repeated
+	 * pattern <code>0 0 0 1 1 1 2 2 2</code>.
+	 * 
+	 * @param name        animation name
+	 * @param frames      frame indices
+	 * @param frameLength length of a single frame in ticks
+	 * @param loop        if the animation should repeat from start endlessly
+	 */
+	public SpriteAnimation(String name, byte[] frames, int frameLength, boolean loop) {
+		this.name = name;
+		this.frames = Arrays.copyOf(frames, frames.length);
+		this.frameLength = frameLength;
+		this.loop = loop;
+		this.enabled = true;
+	}
 
 	/**
 	 * Creates a sprite animation (frame pattern) where each frame takes one tick.
@@ -59,25 +83,10 @@ public abstract class SpriteAnimation implements Animation {
 		this(name, frames, 1, loop);
 	}
 
-	/**
-	 * Creates a sprite animation (frame pattern).
-	 * <p>
-	 * For example, <code>new SpriteAnimation("my-animation", new byte[] {0,1,2}, 3, true)</code> creates the repeated
-	 * pattern <code>0 0 0 1 1 1 2 2 2</code>.
-	 * 
-	 * @param name        animation name
-	 * @param frames      frame indices
-	 * @param frameLength length of a single frame in ticks
-	 * @param loop        if the animation should repeat from start endlessly
-	 */
-	public SpriteAnimation(String name, byte[] frames, int frameLength, boolean loop) {
-		this.name = name;
-		this.loop = loop;
-		this.enabled = true;
-		this.frames = Arrays.copyOf(frames, frames.length);
-		this.frameLength = frameLength;
-		this.majorIndex = 0;
-		this.minorIndex = 0;
+	public abstract List<BufferedImage> getSprites();
+
+	public BufferedImage sprite() {
+		return getSprites().get(frame());
 	}
 
 	@Override
@@ -133,11 +142,5 @@ public abstract class SpriteAnimation implements Animation {
 			advanceMajorIndex();
 			minorIndex = 0;
 		}
-	}
-
-	public abstract List<BufferedImage> getSprites();
-
-	public BufferedImage sprite() {
-		return getSprites().get(frame());
 	}
 }
