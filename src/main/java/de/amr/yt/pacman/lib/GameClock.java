@@ -76,6 +76,13 @@ public class GameClock {
 		this.frequency = frequency;
 	}
 
+	public void changeFrequency(int delta) {
+		int newFrequency = frequency + delta;
+		if (newFrequency > 0) {
+			frequency = newFrequency;
+		}
+	}
+
 	public long getFrameRate() {
 		return lastFrameRate;
 	}

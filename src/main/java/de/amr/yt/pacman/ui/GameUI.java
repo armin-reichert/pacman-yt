@@ -125,13 +125,10 @@ public class GameUI {
 			}
 		}
 		case KeyEvent.VK_PLUS -> {
-			int freq = GameClock.get().getFrequency();
-			GameClock.get().setFrequency(freq + 10);
+			GameClock.get().changeFrequency(5);
 		}
 		case KeyEvent.VK_MINUS -> {
-			int freq = GameClock.get().getFrequency();
-			freq = Math.max(10, freq - 10);
-			GameClock.get().setFrequency(freq);
+			GameClock.get().changeFrequency(-5);
 		}
 		}
 	}
