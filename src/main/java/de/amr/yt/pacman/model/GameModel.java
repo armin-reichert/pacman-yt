@@ -236,7 +236,7 @@ public class GameModel {
 			case Ghost.CLYDE -> 15;
 			default -> 0;
 			};
-			if (ghost.state == GhostState.LOCKED && state.timer == sec(unlockSeconds)) {
+			if (ghost.state == GhostState.LOCKED && state.timer >= sec(unlockSeconds)) {
 				ghost.state = ghost.id == Ghost.BLINKY ? GhostState.SCATTERING : GhostState.LEAVING_HOUSE;
 			}
 		}
