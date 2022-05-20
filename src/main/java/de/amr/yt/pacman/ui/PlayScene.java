@@ -62,6 +62,11 @@ public class PlayScene implements GameScene {
 	}
 
 	@Override
+	public boolean expired() {
+		return false;
+	}
+
+	@Override
 	public void onKeyPressed(int key) {
 		switch (key) {
 		case KeyEvent.VK_T -> showTargetTiles = !showTargetTiles;

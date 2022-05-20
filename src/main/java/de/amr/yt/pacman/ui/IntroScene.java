@@ -52,7 +52,6 @@ import de.amr.yt.pacman.model.World;
 public class IntroScene implements GameScene {
 
 	public static final int READY_TO_PLAY_TIME = sec(20);
-	public static final int EXPIRATION_TIME = sec(25);
 
 	private static final String[] GHOST_CHARACTERS = { "SHADOW", "SPEEDY", "BASHFUL", "POKEY" };
 	private static final String[] GHOST_NICKNAMES = { "BLINKY", "PINKY", "INKY", "CLYDE" };
@@ -100,6 +99,11 @@ public class IntroScene implements GameScene {
 	}
 
 	@Override
+	public boolean expired() {
+		return passed >= sec(25);
+	}
+
+	@Override
 	public void init() {
 		log("IntroScene initialized at %s", GameClock.get());
 		passed = 0;
@@ -131,6 +135,8 @@ public class IntroScene implements GameScene {
 	public void update() {
 		if (between(sec(12), READY_TO_PLAY_TIME)) {
 			updateGuys();
+		} else if (expired()) {
+			init();
 		}
 		++passed;
 	}

@@ -37,4 +37,6 @@ public interface GameScene {
 	void draw(Graphics2D g);
 
 	void onKeyPressed(int key);
+
+	boolean expired();
 }

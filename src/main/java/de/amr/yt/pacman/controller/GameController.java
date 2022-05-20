@@ -30,7 +30,6 @@ import de.amr.yt.pacman.model.GameModel;
 import de.amr.yt.pacman.model.GameState;
 import de.amr.yt.pacman.model.GhostState;
 import de.amr.yt.pacman.ui.GameUI;
-import de.amr.yt.pacman.ui.IntroScene;
 
 /**
  * @author Armin Reichert
@@ -46,7 +45,6 @@ public class GameController {
 
 	public synchronized void newGame() {
 		Sounds.stopAll();
-		game.setLevel(1);
 		game.setState(GameState.INTRO);
 		// TODO: avoid having to init scene explicitly
 		if (ui != null) {
@@ -73,9 +71,7 @@ public class GameController {
 	}
 
 	private void update_INTRO() {
-		if (game.state.timer == IntroScene.EXPIRATION_TIME) {
-			newGame(); // restart intro
-		}
+		// intro scene updates everything by itself
 	}
 
 	private void update_LEVEL_STARTING() {
