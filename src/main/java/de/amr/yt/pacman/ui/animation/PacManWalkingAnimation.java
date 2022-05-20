@@ -24,19 +24,33 @@ SOFTWARE.
 
 package de.amr.yt.pacman.ui.animation;
 
+import static de.amr.yt.pacman.lib.Direction.DOWN;
+import static de.amr.yt.pacman.lib.Direction.LEFT;
+import static de.amr.yt.pacman.lib.Direction.RIGHT;
+import static de.amr.yt.pacman.lib.Direction.UP;
+
 import java.awt.image.BufferedImage;
+import java.util.EnumMap;
 import java.util.List;
 
+import de.amr.yt.pacman.lib.Direction;
 import de.amr.yt.pacman.model.PacMan;
 import de.amr.yt.pacman.ui.Sprites;
 
 public class PacManWalkingAnimation extends SpriteAnimation {
 
 	private final List<Integer> frames = List.of(1, 0, 1, 2);
+	private final EnumMap<Direction, List<BufferedImage>> pacWalkingSprites = new EnumMap<>(Direction.class);
+
 	private final PacMan pacMan;
 
 	public PacManWalkingAnimation(PacMan pacMan) {
 		this.pacMan = pacMan;
+		Sprites spr = Sprites.get();
+		pacWalkingSprites.put(RIGHT, List.of(spr.s(0, 0), spr.s(1, 0), spr.s(2, 0)));
+		pacWalkingSprites.put(LEFT, List.of(spr.s(0, 1), spr.s(1, 1), spr.s(2, 0)));
+		pacWalkingSprites.put(UP, List.of(spr.s(0, 2), spr.s(1, 2), spr.s(2, 0)));
+		pacWalkingSprites.put(DOWN, List.of(spr.s(0, 3), spr.s(1, 3), spr.s(2, 0)));
 		name = "pacman-walking";
 		frameLength = 2;
 		loop = true;
@@ -49,6 +63,6 @@ public class PacManWalkingAnimation extends SpriteAnimation {
 
 	@Override
 	public List<BufferedImage> getSprites() {
-		return Sprites.get().pacWalking.get(pacMan.moveDir);
+		return pacWalkingSprites.get(pacMan.moveDir);
 	}
 }

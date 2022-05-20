@@ -27,7 +27,6 @@ package de.amr.yt.pacman.ui.animation;
 import java.awt.image.BufferedImage;
 import java.util.List;
 
-import de.amr.yt.pacman.lib.Direction;
 import de.amr.yt.pacman.ui.Sprites;
 
 /**
@@ -35,7 +34,8 @@ import de.amr.yt.pacman.ui.Sprites;
  */
 public class PacManStandingAnimation extends SpriteAnimation {
 
-	private final List<Integer> frames = List.of(2);
+	private final List<Integer> frames = List.of(0);
+	private final List<BufferedImage> sprites = List.of(Sprites.get().s(2, 0));
 
 	public PacManStandingAnimation() {
 		name = "pacman-standing";
@@ -50,6 +50,6 @@ public class PacManStandingAnimation extends SpriteAnimation {
 
 	@Override
 	public List<BufferedImage> getSprites() {
-		return Sprites.get().pacWalking.get(Direction.RIGHT);
+		return sprites;
 	}
 }
