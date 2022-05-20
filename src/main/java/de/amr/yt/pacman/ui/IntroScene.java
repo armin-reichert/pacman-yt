@@ -86,7 +86,7 @@ public class IntroScene implements GameScene {
 	public void onKeyPressed(int key) {
 		switch (key) {
 		case KeyEvent.VK_SPACE -> {
-			if (game.state.timer >= READY_TO_PLAY_TIME) {
+			if (passed >= READY_TO_PLAY_TIME) {
 				game.setState(GameState.LEVEL_STARTING);
 			}
 		}

@@ -39,17 +39,10 @@ public class GameController {
 	public final GameModel game = new GameModel();
 	public GameUI ui;
 
-	public GameController() {
-		newGame();
-	}
-
 	public synchronized void newGame() {
 		Sounds.stopAll();
+		game.setLevel(1);
 		game.setState(GameState.INTRO);
-		// TODO: avoid having to init scene explicitly
-		if (ui != null) {
-			ui.currentScene().init();
-		}
 	}
 
 	public void step(boolean doUpdate) {

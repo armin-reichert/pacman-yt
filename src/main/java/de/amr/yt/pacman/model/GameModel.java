@@ -81,6 +81,7 @@ public class GameModel {
 				new Ghost(this, Ghost.CLYDE) //
 		};
 		setLevel(1);
+		setState(GameState.INTRO);
 	}
 
 	public void setLevel(int levelNumber) {
