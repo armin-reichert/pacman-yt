@@ -43,7 +43,6 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 
 import de.amr.yt.pacman.controller.GameController;
-import de.amr.yt.pacman.lib.Direction;
 import de.amr.yt.pacman.lib.GameClock;
 import de.amr.yt.pacman.model.GameModel;
 import de.amr.yt.pacman.model.GameState;
@@ -59,6 +58,7 @@ public class GameUI {
 	public boolean showInfo = false;
 	public boolean showTargetTiles = false;
 
+	public final Joystick joystick = new Joystick();
 	private final GameController gameController;
 	private final GameModel game;
 	private final IntroScene introScene;
@@ -77,16 +77,12 @@ public class GameUI {
 		frame = new JFrame("Pac-Man");
 		frame.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyReleased(KeyEvent e) {
-				handleKeyReleased(e.getKeyCode());
-			}
-
-			@Override
 			public void keyPressed(KeyEvent e) {
 				handleKeyPressed(e.getKeyCode());
 			}
 
 		});
+		frame.addKeyListener(joystick);
 		frame.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
@@ -111,10 +107,6 @@ public class GameUI {
 
 	private void handleKeyPressed(int key) {
 		switch (key) {
-		case KeyEvent.VK_UP -> gameController.setJoystickState(Direction.UP);
-		case KeyEvent.VK_DOWN -> gameController.setJoystickState(Direction.DOWN);
-		case KeyEvent.VK_LEFT -> gameController.setJoystickState(Direction.LEFT);
-		case KeyEvent.VK_RIGHT -> gameController.setJoystickState(Direction.RIGHT);
 		case KeyEvent.VK_I -> showInfo = !showInfo;
 		case KeyEvent.VK_P -> game.paused = !game.paused;
 		case KeyEvent.VK_Q -> gameController.newGame();
@@ -140,14 +132,6 @@ public class GameUI {
 			int freq = GameClock.get().getFrequency();
 			freq = Math.max(10, freq - 10);
 			GameClock.get().setFrequency(freq);
-		}
-		}
-	}
-
-	private void handleKeyReleased(int key) {
-		switch (key) {
-		case KeyEvent.VK_UP, KeyEvent.VK_DOWN, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT -> {
-			gameController.setJoystickState(null);
 		}
 		}
 	}
@@ -241,9 +225,8 @@ public class GameUI {
 				text += " SCATTERING (%d)".formatted(game.attackTimer);
 			}
 		}
-		String joystickState = "Joystick %s"
-				.formatted(gameController.getJoystickState() == null ? "middle" : gameController.getJoystickState());
-		g.drawString(joystickState, t(18), t(2));
+		String joystickText = "Joystick: %s".formatted(joystick.state().isEmpty() ? "middle" : joystick.state().get());
+		g.drawString(joystickText, t(18), t(2));
 		g.drawString(text, t(1), t(3));
 		if (game.pacSafe) {
 			g.drawString("Pac-Man is safe", t(18), t(3));

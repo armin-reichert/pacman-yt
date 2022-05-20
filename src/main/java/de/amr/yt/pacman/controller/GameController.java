@@ -25,7 +25,6 @@ package de.amr.yt.pacman.controller;
 
 import static de.amr.yt.pacman.lib.GameClock.sec;
 
-import de.amr.yt.pacman.lib.Direction;
 import de.amr.yt.pacman.lib.Sounds;
 import de.amr.yt.pacman.model.GameModel;
 import de.amr.yt.pacman.model.GameState;
@@ -38,21 +37,11 @@ import de.amr.yt.pacman.ui.IntroScene;
  */
 public class GameController {
 
-	private final GameModel game;
+	private final GameModel game = new GameModel();
 	private GameUI ui;
-	private Direction joystickState;
 
 	public GameController() {
-		game = new GameModel();
 		newGame();
-	}
-
-	public Direction getJoystickState() {
-		return joystickState;
-	}
-
-	public void setJoystickState(Direction position) {
-		joystickState = position;
 	}
 
 	public void newGame() {
@@ -135,9 +124,9 @@ public class GameController {
 		}
 
 		game.updateAttackWave();
-		if (joystickState != null) {
+		ui.joystick.state().ifPresent(joystickState -> {
 			game.pacMan.wishDir = joystickState;
-		}
+		});
 		game.pacMan.update();
 		game.checkPelletEaten();
 		game.checkPowerPelletEaten();
