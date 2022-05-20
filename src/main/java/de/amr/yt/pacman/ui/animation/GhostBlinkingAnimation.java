@@ -24,29 +24,20 @@ SOFTWARE.
 
 package de.amr.yt.pacman.ui.animation;
 
-import java.awt.image.BufferedImage;
-import java.util.List;
-
 import de.amr.yt.pacman.lib.Animation;
-import de.amr.yt.pacman.ui.Sprites;
 
 /**
  * @author Armin Reichert
  */
-public class GhostBlinkingAnimation extends SpriteAnimation {
+public class GhostBlinkingAnimation extends GhostFrightenedAnimation {
 
 	public GhostBlinkingAnimation() {
-		super("ghost-blinking", new byte[] { 0, 1 }, 8, true);
+		name = "ghost-blinking";
 	}
 
 	@Override
-	public List<BufferedImage> getSprites() {
-		return Sprites.get().ghostBlue;
-	}
-
-	@Override
-	public BufferedImage sprite() {
+	public int frame() {
 		int offset = Animation.frame(2, 10) == 0 ? 0 : 2;
-		return getSprites().get(frame() + offset);
+		return super.frame() + offset;
 	}
 }

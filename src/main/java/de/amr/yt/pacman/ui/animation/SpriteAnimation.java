@@ -32,11 +32,10 @@ import de.amr.yt.pacman.lib.Animation;
 
 /**
  * @author Armin Reichert
- *
  */
 public abstract class SpriteAnimation implements Animation {
 
-	public final String name;
+	public String name;
 	public boolean loop;
 
 	protected boolean enabled;

@@ -66,11 +66,11 @@ public class Sprites {
 	public Map<Integer, BufferedImage> bonusValues;
 	public BufferedImage liveCount;
 
-	private BufferedImage s(int col, int row) {
+	public BufferedImage s(int col, int row) {
 		return s(16 * col, 16 * row, 16, 16);
 	}
 
-	private BufferedImage s(int x, int y, int w, int h) {
+	public BufferedImage s(int x, int y, int w, int h) {
 		return sheetImage.getSubimage(x, y, w, h);
 	}
 
