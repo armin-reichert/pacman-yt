@@ -53,7 +53,7 @@ import de.amr.yt.pacman.model.World;
  */
 public class GameUI {
 
-	public static final double SCALE_MAX = -1;
+	public static final double SCALE_MAX = 0;
 
 	public boolean showInfo = false;
 	public boolean showTargetTiles = false;
