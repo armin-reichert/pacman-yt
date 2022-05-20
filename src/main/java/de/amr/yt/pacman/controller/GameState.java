@@ -27,7 +27,6 @@ import static de.amr.yt.pacman.lib.GameClock.sec;
 
 import de.amr.yt.pacman.lib.Sounds;
 import de.amr.yt.pacman.model.GameModel;
-import de.amr.yt.pacman.model.Ghost;
 import de.amr.yt.pacman.model.GhostState;
 import de.amr.yt.pacman.ui.GameUI;
 
