@@ -25,7 +25,6 @@ package de.amr.yt.pacman.controller;
 
 import static de.amr.yt.pacman.lib.Logging.log;
 
-import de.amr.yt.pacman.lib.Sounds;
 import de.amr.yt.pacman.model.GameModel;
 import de.amr.yt.pacman.ui.GameUI;
 
@@ -37,20 +36,14 @@ public class GameController {
 	public final GameModel game = new GameModel();
 	public GameUI ui;
 
-	public synchronized void newGame() {
-		Sounds.stopAll();
-		game.setLevel(1);
-		game.setState(GameState.INTRO);
-	}
-
 	public void step(boolean doUpdate) {
 		if (doUpdate) {
 			++game.state.timer;
 			if (game.state.timer == 0) {
 				log("onEnter(%s)", game.state);
-				game.state.onEnter(this, game, ui);
+				game.state.onEnter(game, ui);
 			} else {
-				game.state.onUpdate(this, game, ui);
+				game.state.onUpdate(game, ui);
 			}
 			ui.update();
 		}

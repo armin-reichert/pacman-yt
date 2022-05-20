@@ -57,7 +57,6 @@ public class GameUI {
 	public static volatile boolean showInfo = false;
 
 	public final Joystick joystick = new Joystick();
-	private final GameController gameController;
 	private final GameModel game;
 	private final IntroScene introScene;
 	private final PlayScene playScene;
@@ -68,19 +67,18 @@ public class GameUI {
 	/**
 	 * Creates and shows the game user interface. This must be called from the event dispatch thread!
 	 * 
-	 * @param controller the game controller
+	 * @param gameController the game controller
 	 * @param scaling    scaling of the canvas displaying the game scenes
 	 */
-	public GameUI(GameController controller, double scaling) {
-		this.gameController = controller;
-		this.game = controller.game;
+	public GameUI(GameController gameController, double scaling) {
+		this.game = gameController.game;
 		this.canvasScaling = (scaling == SCALE_MAX)
 				? 0.9 * Toolkit.getDefaultToolkit().getScreenSize().getHeight() / t(World.ROWS)
 				: scaling;
 		Dimension canvasSize = new Dimension((int) (canvasScaling * t(World.COLS)), (int) (canvasScaling * t(World.ROWS)));
 
-		introScene = new IntroScene(controller);
-		playScene = new PlayScene(controller);
+		introScene = new IntroScene(gameController);
+		playScene = new PlayScene(gameController);
 
 		frame = new JFrame("Pac-Man");
 		frame.addKeyListener(joystick);
@@ -127,7 +125,7 @@ public class GameUI {
 		switch (key) {
 		case KeyEvent.VK_I -> showInfo = !showInfo;
 		case KeyEvent.VK_P -> game.paused = !game.paused;
-		case KeyEvent.VK_Q -> gameController.newGame();
+		case KeyEvent.VK_Q -> game.reset();
 		case KeyEvent.VK_S -> game.pacSafe = !game.pacSafe;
 		case KeyEvent.VK_PLUS -> GameClock.get().changeFrequency(5);
 		case KeyEvent.VK_MINUS -> GameClock.get().changeFrequency(-5);

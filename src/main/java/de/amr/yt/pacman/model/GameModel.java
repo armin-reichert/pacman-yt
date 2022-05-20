@@ -34,6 +34,7 @@ import java.util.Random;
 import de.amr.yt.pacman.controller.GameState;
 import de.amr.yt.pacman.lib.Direction;
 import de.amr.yt.pacman.lib.GameClock;
+import de.amr.yt.pacman.lib.Sounds;
 import de.amr.yt.pacman.lib.Vector2;
 
 /**
@@ -126,6 +127,12 @@ public class GameModel {
 		}
 
 		log("Level %d created", level.number);
+	}
+
+	public synchronized void reset() {
+		Sounds.stopAll();
+		setLevel(1);
+		setState(GameState.INTRO);
 	}
 
 	public void getReadyToRumble() {

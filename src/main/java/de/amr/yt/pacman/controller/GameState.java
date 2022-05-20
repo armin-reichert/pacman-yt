@@ -37,17 +37,17 @@ public enum GameState {
 
 	INTRO {
 		@Override
-		public void onEnter(GameController controller, GameModel game, GameUI ui) {
+		public void onEnter(GameModel game, GameUI ui) {
 		}
 
 		@Override
-		public void onUpdate(GameController controller, GameModel game, GameUI ui) {
+		public void onUpdate(GameModel game, GameUI ui) {
 		}
 	},
 
 	LEVEL_STARTING {
 		@Override
-		public void onEnter(GameController controller, GameModel game, GameUI ui) {
+		public void onEnter(GameModel game, GameUI ui) {
 			game.attackTimer = 0;
 			game.levelStarted = false;
 			game.powerPelletsBlinking = false;
@@ -60,7 +60,7 @@ public enum GameState {
 		}
 
 		@Override
-		public void onUpdate(GameController controller, GameModel game, GameUI ui) {
+		public void onUpdate(GameModel game, GameUI ui) {
 			if (game.state.timer == sec(1)) {
 				game.setState(GameState.READY);
 			}
@@ -69,7 +69,7 @@ public enum GameState {
 
 	READY {
 		@Override
-		public void onEnter(GameController controller, GameModel game, GameUI ui) {
+		public void onEnter(GameModel game, GameUI ui) {
 			game.getReadyToRumble();
 			if (game.level.number == 1 && !game.levelStarted) {
 				Sounds.play("level_start");
@@ -77,7 +77,7 @@ public enum GameState {
 		}
 
 		@Override
-		public void onUpdate(GameController controller, GameModel game, GameUI ui) {
+		public void onUpdate(GameModel game, GameUI ui) {
 			boolean playSound = game.level.number == 1 && !game.levelStarted;
 			if (game.state.timer == sec(playSound ? 5 : 1)) {
 				game.levelStarted = true;
@@ -88,7 +88,7 @@ public enum GameState {
 
 	PLAYING {
 		@Override
-		public void onEnter(GameController controller, GameModel game, GameUI ui) {
+		public void onEnter(GameModel game, GameUI ui) {
 			game.powerPelletsBlinking = true;
 			for (var ghost : game.ghosts) {
 				ghost.animation.setEnabled(true);
@@ -96,7 +96,7 @@ public enum GameState {
 		}
 
 		@Override
-		public void onUpdate(GameController controller, GameModel game, GameUI ui) {
+		public void onUpdate(GameModel game, GameUI ui) {
 			game.updateAttackWave();
 			ui.joystick.state().ifPresent(joystickState -> {
 				game.pacMan.wishDir = joystickState;
@@ -127,7 +127,7 @@ public enum GameState {
 
 	LEVEL_COMPLETE {
 		@Override
-		public void onEnter(GameController controller, GameModel game, GameUI ui) {
+		public void onEnter(GameModel game, GameUI ui) {
 			game.pacMan.animation = game.pacMan.animStanding;
 			for (var ghost : game.ghosts) {
 				ghost.animWalking.setEnabled(false);
@@ -135,7 +135,7 @@ public enum GameState {
 		}
 
 		@Override
-		public void onUpdate(GameController controller, GameModel game, GameUI ui) {
+		public void onUpdate(GameModel game, GameUI ui) {
 			if (game.state.timer == sec(1)) {
 				for (var ghost : game.ghosts) {
 					ghost.visible = false;
@@ -153,7 +153,7 @@ public enum GameState {
 
 	GAME_OVER {
 		@Override
-		public void onEnter(GameController controller, GameModel game, GameUI ui) {
+		public void onEnter(GameModel game, GameUI ui) {
 			game.powerPelletsBlinking = false;
 			for (var ghost : game.ghosts) {
 				ghost.animation.setEnabled(false);
@@ -162,16 +162,16 @@ public enum GameState {
 		}
 
 		@Override
-		public void onUpdate(GameController controller, GameModel game, GameUI ui) {
+		public void onUpdate(GameModel game, GameUI ui) {
 			if (game.state.timer == sec(5)) {
-				controller.newGame();
+				game.reset();
 			}
 		}
 	},
 
 	PACMAN_DYING {
 		@Override
-		public void onEnter(GameController controller, GameModel game, GameUI ui) {
+		public void onEnter(GameModel game, GameUI ui) {
 			game.attackTimer = 0;
 			game.pacMan.animation = game.pacMan.animDying;
 			game.pacMan.animation.setEnabled(false);
@@ -180,7 +180,7 @@ public enum GameState {
 		}
 
 		@Override
-		public void onUpdate(GameController controller, GameModel game, GameUI ui) {
+		public void onUpdate(GameModel game, GameUI ui) {
 			if (game.state.timer == sec(1)) {
 				for (var ghost : game.ghosts) {
 					ghost.visible = false;
@@ -206,12 +206,12 @@ public enum GameState {
 
 	GHOST_DYING {
 		@Override
-		public void onEnter(GameController controller, GameModel game, GameUI ui) {
+		public void onEnter(GameModel game, GameUI ui) {
 			game.pacMan.visible = false;
 		}
 
 		@Override
-		public void onUpdate(GameController controller, GameModel game, GameUI ui) {
+		public void onUpdate(GameModel game, GameUI ui) {
 			if (game.state.timer == sec(1)) {
 				game.pacMan.visible = true;
 				game.setState(GameState.PLAYING);
@@ -227,7 +227,7 @@ public enum GameState {
 
 	public long timer;
 
-	public abstract void onEnter(GameController controller, GameModel game, GameUI ui);
+	public abstract void onEnter(GameModel game, GameUI ui);
 
-	public abstract void onUpdate(GameController controller, GameModel game, GameUI ui);
+	public abstract void onUpdate(GameModel game, GameUI ui);
 }
