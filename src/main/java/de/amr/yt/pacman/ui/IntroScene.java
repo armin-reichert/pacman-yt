@@ -37,6 +37,7 @@ import static de.amr.yt.pacman.ui.Renderer.drawScore;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
 
 import de.amr.yt.pacman.controller.GameController;
 import de.amr.yt.pacman.controller.GameState;
@@ -290,7 +291,14 @@ public class IntroScene implements GameScene {
 	}
 
 	private void drawGhostImage(Graphics2D g, int id) {
-		g.drawImage(Sprites.get().ghosts.get(id).get(Direction.RIGHT).get(0), COL_LEFT, row(id), null);
+		BufferedImage sprite = switch (id) {
+		case Ghost.BLINKY -> Sprites.get().s(0, 4);
+		case Ghost.PINKY -> Sprites.get().s(0, 5);
+		case Ghost.INKY -> Sprites.get().s(0, 6);
+		case Ghost.CLYDE -> Sprites.get().s(0, 7);
+		default -> null;
+		};
+		g.drawImage(sprite, COL_LEFT, row(id), null);
 	}
 
 	private void drawGhostCharacter(Graphics2D g, int id) {

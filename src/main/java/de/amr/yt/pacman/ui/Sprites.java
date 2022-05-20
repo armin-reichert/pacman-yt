@@ -56,7 +56,6 @@ public class Sprites {
 	public BufferedImage sheetImage;
 
 	// sprite caches
-	public List<EnumMap<Direction, List<BufferedImage>>> ghosts = new ArrayList<>();
 	public EnumMap<Direction, BufferedImage> ghostEyes = new EnumMap<>(Direction.class);
 	public Map<Integer, BufferedImage> ghostValues;
 	public List<BufferedImage> bonusSymbols;
@@ -92,32 +91,6 @@ public class Sprites {
 		try {
 			sheetImage = image("/sprites.png");
 			mazeImage = image("/maze_empty.png");
-
-			EnumMap<Direction, List<BufferedImage>> redGhost = new EnumMap<>(Direction.class);
-			redGhost.put(RIGHT, stripe(0, 4, 2));
-			redGhost.put(LEFT, stripe(2, 4, 2));
-			redGhost.put(UP, stripe(4, 4, 2));
-			redGhost.put(DOWN, stripe(6, 4, 2));
-
-			EnumMap<Direction, List<BufferedImage>> pinkGhost = new EnumMap<>(Direction.class);
-			pinkGhost.put(RIGHT, stripe(0, 5, 2));
-			pinkGhost.put(LEFT, stripe(2, 5, 2));
-			pinkGhost.put(UP, stripe(4, 5, 2));
-			pinkGhost.put(DOWN, stripe(6, 5, 2));
-
-			EnumMap<Direction, List<BufferedImage>> cyanGhost = new EnumMap<>(Direction.class);
-			cyanGhost.put(RIGHT, stripe(0, 6, 2));
-			cyanGhost.put(LEFT, stripe(2, 6, 2));
-			cyanGhost.put(UP, stripe(4, 6, 2));
-			cyanGhost.put(DOWN, stripe(6, 6, 2));
-
-			EnumMap<Direction, List<BufferedImage>> orangeGhost = new EnumMap<>(Direction.class);
-			orangeGhost.put(RIGHT, stripe(0, 7, 2));
-			orangeGhost.put(LEFT, stripe(2, 7, 2));
-			orangeGhost.put(UP, stripe(4, 7, 2));
-			orangeGhost.put(DOWN, stripe(6, 7, 2));
-
-			ghosts = List.of(redGhost, pinkGhost, cyanGhost, orangeGhost);
 
 			ghostEyes.put(RIGHT, s(8, 5));
 			ghostEyes.put(LEFT, s(9, 5));
