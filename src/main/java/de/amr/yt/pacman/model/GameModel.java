@@ -31,7 +31,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import de.amr.yt.pacman.controller.GameState;
 import de.amr.yt.pacman.lib.Direction;
 import de.amr.yt.pacman.lib.GameClock;
 import de.amr.yt.pacman.lib.Sounds;
@@ -60,7 +59,6 @@ public class GameModel {
 	public Bonus bonus;
 
 	public GameLevel level;
-	public GameState state;
 	public long attackTimer;
 
 	public volatile boolean paused;
@@ -85,7 +83,6 @@ public class GameModel {
 				new Ghost(this, Ghost.CLYDE) //
 		};
 		setLevel(1);
-		setState(GameState.INTRO);
 	}
 
 	public void setLevel(int levelNumber) {
@@ -134,7 +131,6 @@ public class GameModel {
 	public synchronized void reset() {
 		Sounds.stopAll();
 		setLevel(1);
-		setState(GameState.INTRO);
 	}
 
 	public void getReadyToRumble() {
@@ -162,12 +158,6 @@ public class GameModel {
 			ghost.animation.reset();
 			ghost.animation.setEnabled(false);
 		}
-	}
-
-	public void setState(GameState state) {
-		this.state = state;
-		state.timer = -1;
-		log("Game state set to %s", state);
 	}
 
 	/**
@@ -233,23 +223,6 @@ public class GameModel {
 			chasingPhase = true;
 		}
 		log("Chasing phase %d started at %s", phase + 1, GameClock.get());
-	}
-
-	// TODO this is just some arbitrary sample logic, the real game uses dot counters and stuff
-
-	public void unlockGhosts() {
-		for (var ghost : ghosts) {
-			int unlockSeconds = switch (ghost.id) {
-			case Ghost.BLINKY -> 0;
-			case Ghost.PINKY -> 1;
-			case Ghost.INKY -> 5;
-			case Ghost.CLYDE -> 15;
-			default -> 0;
-			};
-			if (ghost.state == GhostState.LOCKED && state.timer >= sec(unlockSeconds)) {
-				ghost.state = ghost.id == Ghost.BLINKY ? GhostState.SCATTERING : GhostState.LEAVING_HOUSE;
-			}
-		}
 	}
 
 	public void onPacPowerEnding() {

@@ -57,6 +57,7 @@ public class GameUI {
 	public static volatile boolean showInfo = false;
 
 	public final Joystick joystick = new Joystick();
+	private final GameController gameController;
 	private final GameModel game;
 	private final IntroScene introScene;
 	private final PlayScene playScene;
@@ -68,9 +69,10 @@ public class GameUI {
 	 * Creates and shows the game user interface. This must be called from the event dispatch thread!
 	 * 
 	 * @param gameController the game controller
-	 * @param scaling    scaling of the canvas displaying the game scenes
+	 * @param scaling        scaling of the canvas displaying the game scenes
 	 */
 	public GameUI(GameController gameController, double scaling) {
+		this.gameController = gameController;
 		this.game = gameController.game;
 		this.canvasScaling = (scaling == SCALE_MAX)
 				? 0.9 * Toolkit.getDefaultToolkit().getScreenSize().getHeight() / t(World.ROWS)
@@ -125,7 +127,11 @@ public class GameUI {
 		switch (key) {
 		case KeyEvent.VK_I -> showInfo = !showInfo;
 		case KeyEvent.VK_P -> game.paused = !game.paused;
-		case KeyEvent.VK_Q -> game.reset();
+		case KeyEvent.VK_Q -> {
+			game.reset();
+			gameController.setState(GameState.INTRO);
+		}
+
 		case KeyEvent.VK_S -> game.pacSafe = !game.pacSafe;
 		case KeyEvent.VK_PLUS -> GameClock.get().changeFrequency(5);
 		case KeyEvent.VK_MINUS -> GameClock.get().changeFrequency(-5);
@@ -149,7 +155,7 @@ public class GameUI {
 	}
 
 	public GameScene currentScene() {
-		return switch (game.state) {
+		return switch (gameController.state) {
 		case INTRO -> introScene;
 		default -> playScene;
 		};
@@ -184,8 +190,8 @@ public class GameUI {
 
 		g.drawString("%2d FPS (Target=%d)".formatted(GameClock.get().getFrameRate(), GameClock.get().getFrequency()), t(1),
 				t(2));
-		String text = "%s (%d)".formatted(game.state.name(), game.state.timer);
-		if (game.state == GameState.PLAYING) {
+		String text = "%s (%d)".formatted(gameController.state.name(), gameController.state.timer);
+		if (gameController.state == GameState.PLAYING) {
 			if (game.chasingPhase) {
 				text += " CHASING (%d)".formatted(game.attackTimer);
 			} else {

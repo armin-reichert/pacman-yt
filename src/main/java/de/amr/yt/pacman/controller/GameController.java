@@ -23,9 +23,12 @@ SOFTWARE.
 */
 package de.amr.yt.pacman.controller;
 
+import static de.amr.yt.pacman.lib.GameClock.sec;
 import static de.amr.yt.pacman.lib.Logging.log;
 
 import de.amr.yt.pacman.model.GameModel;
+import de.amr.yt.pacman.model.Ghost;
+import de.amr.yt.pacman.model.GhostState;
 import de.amr.yt.pacman.ui.GameUI;
 
 /**
@@ -35,18 +38,49 @@ public class GameController {
 
 	public final GameModel game = new GameModel();
 	public GameUI ui;
+	public GameState state;
+
+	public GameController() {
+		for (var gameState : GameState.values()) {
+			gameState.gameController = this;
+		}
+		setState(GameState.INTRO);
+	}
+
+	public void setState(GameState state) {
+		this.state = state;
+		state.timer = -1;
+		log("Game state set to %s", state);
+	}
 
 	public void step(boolean doUpdate) {
 		if (doUpdate) {
-			++game.state.timer;
-			if (game.state.timer == 0) {
-				log("onEnter(%s)", game.state);
-				game.state.onEnter(game, ui);
+			++state.timer;
+			if (state.timer == 0) {
+				log("onEnter(%s)", state);
+				state.onEnter(game, ui);
 			} else {
-				game.state.onUpdate(game, ui);
+				state.onUpdate(game, ui);
 			}
 			ui.update();
 		}
 		ui.render();
 	}
+
+	// TODO this is just some arbitrary sample logic, the real game uses dot counters and stuff
+	public void unlockGhosts(Ghost[] ghosts) {
+		for (var ghost : ghosts) {
+			int unlockSeconds = switch (ghost.id) {
+			case Ghost.BLINKY -> 0;
+			case Ghost.PINKY -> 1;
+			case Ghost.INKY -> 5;
+			case Ghost.CLYDE -> 15;
+			default -> 0;
+			};
+			if (ghost.state == GhostState.LOCKED && state.timer >= sec(unlockSeconds)) {
+				ghost.state = ghost.id == Ghost.BLINKY ? GhostState.SCATTERING : GhostState.LEAVING_HOUSE;
+			}
+		}
+	}
+
 }

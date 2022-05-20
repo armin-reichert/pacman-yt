@@ -61,8 +61,8 @@ public enum GameState {
 
 		@Override
 		public void onUpdate(GameModel game, GameUI ui) {
-			if (game.state.timer == sec(1)) {
-				game.setState(GameState.READY);
+			if (timer == sec(1)) {
+				gameController.setState(GameState.READY);
 			}
 		}
 	},
@@ -79,9 +79,9 @@ public enum GameState {
 		@Override
 		public void onUpdate(GameModel game, GameUI ui) {
 			boolean playSound = game.level.number == 1 && !game.levelStarted;
-			if (game.state.timer == sec(playSound ? 5 : 1)) {
+			if (timer == sec(playSound ? 5 : 1)) {
 				game.levelStarted = true;
-				game.setState(GameState.PLAYING);
+				gameController.setState(GameState.PLAYING);
 			}
 		}
 	},
@@ -106,18 +106,18 @@ public enum GameState {
 			game.checkPowerPelletEaten();
 			game.checkBonusEaten();
 			if (game.checkAllPelletsEaten()) {
-				game.setState(GameState.LEVEL_COMPLETE);
+				gameController.setState(GameState.LEVEL_COMPLETE);
 				return;
 			}
 			if (game.checkPacManKilledByGhost(game.pacMan.tile())) {
-				game.setState(GameState.PACMAN_DYING);
+				gameController.setState(GameState.PACMAN_DYING);
 				return;
 			}
 			if (game.checkGhostKilledByPacMan()) {
-				game.setState(GameState.GHOST_DYING);
+				gameController.setState(GameState.GHOST_DYING);
 				return;
 			}
-			game.unlockGhosts();
+			gameController.unlockGhosts(game.ghosts);
 			for (var ghost : game.ghosts) {
 				ghost.update();
 			}
@@ -136,17 +136,17 @@ public enum GameState {
 
 		@Override
 		public void onUpdate(GameModel game, GameUI ui) {
-			if (game.state.timer == sec(1)) {
+			if (timer == sec(1)) {
 				for (var ghost : game.ghosts) {
 					ghost.visible = false;
 				}
 				game.mazeFlashing = true;
-			} else if (game.state.timer == sec(3)) {
+			} else if (timer == sec(3)) {
 				game.mazeFlashing = false;
 				game.setLevel(game.level.number + 1);
 				game.pacMan.visible = false;
 				game.pacMan.animation = game.pacMan.animWalking;
-				game.setState(GameState.LEVEL_STARTING);
+				gameController.setState(GameState.LEVEL_STARTING);
 			}
 		}
 	},
@@ -163,7 +163,7 @@ public enum GameState {
 
 		@Override
 		public void onUpdate(GameModel game, GameUI ui) {
-			if (game.state.timer == sec(5)) {
+			if (timer == sec(5)) {
 				game.reset();
 			}
 		}
@@ -181,22 +181,22 @@ public enum GameState {
 
 		@Override
 		public void onUpdate(GameModel game, GameUI ui) {
-			if (game.state.timer == sec(1)) {
+			if (timer == sec(1)) {
 				for (var ghost : game.ghosts) {
 					ghost.visible = false;
 				}
-			} else if (game.state.timer == sec(2)) {
+			} else if (timer == sec(2)) {
 				game.pacMan.animation.setEnabled(true);
 				Sounds.play("pacman_death");
-			} else if (game.state.timer == sec(4)) {
+			} else if (timer == sec(4)) {
 				--game.lives;
 				if (game.lives > 0) {
-					game.setState(GameState.READY);
+					gameController.setState(GameState.READY);
 				} else {
 					for (var ghost : game.ghosts) {
 						ghost.visible = true;
 					}
-					game.setState(GameState.GAME_OVER);
+					gameController.setState(GameState.GAME_OVER);
 					return;
 				}
 			}
@@ -212,9 +212,9 @@ public enum GameState {
 
 		@Override
 		public void onUpdate(GameModel game, GameUI ui) {
-			if (game.state.timer == sec(1)) {
+			if (timer == sec(1)) {
 				game.pacMan.visible = true;
-				game.setState(GameState.PLAYING);
+				gameController.setState(GameState.PLAYING);
 				return;
 			}
 			for (var ghost : game.ghosts) {
@@ -225,6 +225,7 @@ public enum GameState {
 		}
 	};
 
+	public GameController gameController;
 	public long timer;
 
 	public abstract void onEnter(GameModel game, GameUI ui);

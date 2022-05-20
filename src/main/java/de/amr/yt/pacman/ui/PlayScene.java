@@ -114,16 +114,17 @@ public class PlayScene implements GameScene {
 		for (Ghost ghost : game.ghosts) {
 			drawGhost(g, ghost, game.pacMan.isLosingPower());
 		}
-		if (game.state == GameState.READY) {
+		if (gameController.state == GameState.READY) {
 			g.setColor(Color.YELLOW);
 			g.setFont(Renderer.ARCADE_FONT.deriveFont(Font.ITALIC | Font.BOLD));
 			g.drawString("READY!", t(11), t(21));
-		} else if (game.state == GameState.GAME_OVER) {
+		} else if (gameController.state == GameState.GAME_OVER) {
 			g.setColor(Color.RED);
 			g.setFont(Renderer.ARCADE_FONT.deriveFont(Font.ITALIC | Font.BOLD));
 			g.drawString("GAME  OVER", t(9), t(21));
 		}
-		int livesDisplayed = game.score == 0 && game.state == GameState.LEVEL_STARTING ? game.lives : game.lives - 1;
+		int livesDisplayed = game.score == 0 && gameController.state == GameState.LEVEL_STARTING ? game.lives
+				: game.lives - 1;
 		for (int i = 0; i < livesDisplayed; ++i) {
 			g.drawImage(Sprites.get().liveCount, t(2 + 2 * i), t(World.ROWS - 2), null);
 		}

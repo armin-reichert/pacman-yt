@@ -87,12 +87,12 @@ public class IntroScene implements GameScene {
 		switch (key) {
 		case KeyEvent.VK_SPACE -> {
 			if (passed >= READY_TO_PLAY_TIME) {
-				game.setState(GameState.LEVEL_STARTING);
+				gameController.setState(GameState.LEVEL_STARTING);
 			}
 		}
 		case KeyEvent.VK_ENTER -> {
 			if (!game.paused) {
-				game.setState(GameState.LEVEL_STARTING);
+				gameController.setState(GameState.LEVEL_STARTING);
 			}
 		}
 		}
