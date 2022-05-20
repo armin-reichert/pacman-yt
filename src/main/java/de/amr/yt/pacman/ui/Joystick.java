@@ -35,9 +35,9 @@ import de.amr.yt.pacman.lib.Direction;
  */
 public class Joystick extends KeyAdapter {
 
-	private volatile Direction state;
+	private Direction state;
 
-	public Optional<Direction> state() {
+	public synchronized Optional<Direction> state() {
 		return Optional.ofNullable(state);
 	}
 

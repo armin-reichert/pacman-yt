@@ -118,7 +118,7 @@ public class GameUI {
 				g.setColor(Color.BLACK);
 				g.fillRect(0, 0, getWidth(), getHeight());
 				drawCurrentGameScene(g);
-				drawInfoLayer(g);
+				drawTopLayer(g);
 			}
 		};
 	}
@@ -174,7 +174,7 @@ public class GameUI {
 		g2D.dispose();
 	}
 
-	private void drawInfoLayer(Graphics g) {
+	private void drawTopLayer(Graphics g) {
 		if (game.paused) {
 			String text = "PAUSED";
 			g.setColor(Color.RED);
