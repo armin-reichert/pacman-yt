@@ -64,16 +64,27 @@ public class GameUI {
 	private final IntroScene introScene;
 	private final PlayScene playScene;
 	private final JFrame frame;
-	private JComponent canvas;
 	private double canvasScaling;
 	private GameScene previousScene;
 	private boolean scoreVisible;
 
+	/**
+	 * Creates and shows the game user interface. This must be called from the event dispatch thread!
+	 * 
+	 * @param controller the game controller
+	 * @param scaling    scaling of the canvas displaying the game scenes
+	 */
 	public GameUI(GameController controller, double scaling) {
 		this.gameController = controller;
 		this.game = controller.game;
+		this.canvasScaling = (scaling == SCALE_MAX)
+				? 0.9 * Toolkit.getDefaultToolkit().getScreenSize().getHeight() / t(World.ROWS)
+				: scaling;
+		Dimension canvasSize = new Dimension((int) (canvasScaling * t(World.COLS)), (int) (canvasScaling * t(World.ROWS)));
+
 		introScene = new IntroScene(game);
 		playScene = new PlayScene(game);
+
 		frame = new JFrame("Pac-Man");
 		frame.addKeyListener(new KeyAdapter() {
 			@Override
@@ -90,7 +101,22 @@ public class GameUI {
 				System.exit(0);
 			}
 		});
-		canvas = new JComponent() {
+		frame.add(createCanvas(canvasSize));
+		frame.setResizable(false);
+		frame.setVisible(true);
+		frame.pack();
+		frame.setLocationRelativeTo(null);
+		frame.requestFocus();
+	}
+
+	private JComponent createCanvas(Dimension size) {
+		return new JComponent() {
+			{
+				setPreferredSize(size);
+				setSize(size);
+				log("Game canvas size is %dx%s pixels", getWidth(), getHeight());
+			}
+
 			@Override
 			protected void paintComponent(Graphics g) {
 				super.paintComponent(g);
@@ -100,13 +126,6 @@ public class GameUI {
 				drawPauseText(g);
 			}
 		};
-		setCanvasScaling(scaling);
-		frame.add(canvas);
-		frame.setResizable(false);
-		frame.setVisible(true);
-		frame.pack();
-		frame.setLocationRelativeTo(null);
-		frame.requestFocus();
 	}
 
 	private void handleKeyPressed(int key) {
@@ -135,16 +154,6 @@ public class GameUI {
 			GameClock.get().changeFrequency(-5);
 		}
 		}
-	}
-
-	public void setCanvasScaling(double scaling) {
-		canvasScaling = (scaling == SCALE_MAX)
-				? 0.9 * Toolkit.getDefaultToolkit().getScreenSize().getHeight() / t(World.ROWS)
-				: scaling;
-		Dimension size = new Dimension((int) (canvasScaling * t(World.COLS)), (int) (canvasScaling * t(World.ROWS)));
-		canvas.setPreferredSize(size);
-		canvas.setSize(size);
-		log("Game canvas size=%dx%s", canvas.getWidth(), canvas.getHeight());
 	}
 
 	public void render() {
