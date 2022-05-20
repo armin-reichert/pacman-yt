@@ -35,10 +35,10 @@ public class PacManApp {
 
 	public static void main(String[] args) {
 		Sprites.get(); // when failing, fail early
-		double scale = args.length > 0 ? Double.parseDouble(args[0]) : 2.0;
+		double canvasScaling = args.length > 0 ? Double.parseDouble(args[0]) : 2.0;
 		GameController controller = new GameController();
 		SwingUtilities.invokeLater(() -> {
-			controller.createAndShowUI(scale);
+			controller.createAndShowUI(canvasScaling);
 			GameClock.get().start(() -> controller.step(false));
 		});
 	}
