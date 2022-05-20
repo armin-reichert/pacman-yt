@@ -117,7 +117,7 @@ public class IntroScene implements GameScene {
 		game.pacMan.y = t(20) + World.HT;
 		game.pacMan.speed = game.level.playerSpeed;
 		game.pacMan.moveDir = Direction.LEFT;
-		game.pacMan.setWalkingAnimation();
+		game.pacMan.showWalking();
 		game.pacMan.animation().setEnabled(true);
 
 		for (var ghost : game.ghosts) {
@@ -126,7 +126,7 @@ public class IntroScene implements GameScene {
 			ghost.y = game.pacMan.y;
 			ghost.speed = game.pacMan.speed * 1.05f;
 			ghost.moveDir = Direction.LEFT;
-			ghost.setWalkingAnimation();
+			ghost.showWalking();
 			ghost.animation().setEnabled(true);
 		}
 	}
@@ -246,7 +246,7 @@ public class IntroScene implements GameScene {
 			for (var ghost : game.ghosts) {
 				ghost.moveDir = Direction.RIGHT;
 				ghost.speed = game.level.ghostSpeedFrightened;
-				ghost.setFrightenedAnimation();
+				ghost.showFrightened();
 			}
 			pacManChasingGhosts = true;
 		}

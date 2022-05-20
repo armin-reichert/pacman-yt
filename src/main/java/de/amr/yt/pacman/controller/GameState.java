@@ -130,7 +130,7 @@ public enum GameState {
 	LEVEL_COMPLETE {
 		@Override
 		public void onEnter(GameModel game, GameUI ui) {
-			game.pacMan.setStandingAnimation();
+			game.pacMan.showStanding();
 			for (var ghost : game.ghosts) {
 				ghost.animWalking.setEnabled(false);
 			}
@@ -147,7 +147,7 @@ public enum GameState {
 				game.mazeFlashing = false;
 				game.setLevel(game.level.number + 1);
 				game.pacMan.visible = false;
-				game.pacMan.setWalkingAnimation();
+				game.pacMan.showWalking();
 				gameController.enterState(GameState.LEVEL_STARTING);
 			}
 		}
@@ -175,7 +175,7 @@ public enum GameState {
 		@Override
 		public void onEnter(GameModel game, GameUI ui) {
 			game.attackTimer = 0;
-			game.pacMan.setDyingAnimation();
+			game.pacMan.showDying();
 			game.pacMan.animation().setEnabled(false);
 			game.pacMan.animation().reset();
 			game.bonus = null;

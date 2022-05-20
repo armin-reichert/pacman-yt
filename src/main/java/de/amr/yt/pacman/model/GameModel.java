@@ -144,7 +144,7 @@ public class GameModel {
 		pacMan.speed = level.playerSpeed;
 		pacMan.state = PacManState.NO_POWER;
 		pacMan.visible = true;
-		pacMan.setStandingAnimation();
+		pacMan.showStanding();
 		pacMan.animation().reset();
 
 		for (var ghost : ghosts) {
@@ -154,7 +154,7 @@ public class GameModel {
 			ghost.targetTile = null;
 			ghost.state = GhostState.LOCKED;
 			ghost.visible = true;
-			ghost.setWalkingAnimation();
+			ghost.showWalking();
 			ghost.animation().reset();
 			ghost.animation().setEnabled(false);
 		}

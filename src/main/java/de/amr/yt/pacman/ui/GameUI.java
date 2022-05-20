@@ -79,6 +79,15 @@ public class GameUI {
 				: scaling;
 		Dimension canvasSize = new Dimension((int) (canvasScaling * t(World.COLS)), (int) (canvasScaling * t(World.ROWS)));
 
+		game.pacMan.animWalking = Renderer.createPacManWalkingAnimation();
+		game.pacMan.animStanding = Renderer.createPacManStandingAnimation();
+		game.pacMan.animDying = Renderer.createPacManDyingAnimation();
+
+		for (var ghost : game.ghosts) {
+			ghost.animWalking = Renderer.createGhostWalkingAnimation();
+			ghost.animFrightened = Renderer.createGhostFrightenedAnimation();
+		}
+
 		introScene = new IntroScene(gameController);
 		playScene = new PlayScene(gameController);
 

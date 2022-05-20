@@ -31,9 +31,7 @@ import de.amr.yt.pacman.lib.Vector2;
  */
 public class PacMan extends Creature {
 
-	public final SpriteAnimation animStanding;
-	public final SpriteAnimation animWalking;
-	public final SpriteAnimation animDying;
+	public SpriteAnimation animStanding, animWalking, animDying;
 
 	public final GameModel game;
 	public PacManState state;
@@ -43,9 +41,6 @@ public class PacMan extends Creature {
 	public PacMan(GameModel game) {
 		super(game.world);
 		this.game = game;
-		animStanding = new SpriteAnimation("standing", 2);
-		animWalking = new SpriteAnimation("walking", new byte[] { 1, 0, 1, 2 }, 2, true);
-		animDying = new SpriteAnimation("dying", new byte[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }, 6, false);
 		reset();
 	}
 
@@ -56,19 +51,17 @@ public class PacMan extends Creature {
 		state = PacManState.NO_POWER;
 		powerCountdown = 0;
 		restCountdown = 0;
-		setStandingAnimation();
-		animation().setEnabled(true);
 	}
 
-	public void setStandingAnimation() {
+	public void showStanding() {
 		setAnimation(animStanding);
 	}
 
-	public void setWalkingAnimation() {
+	public void showWalking() {
 		setAnimation(animWalking);
 	}
 
-	public void setDyingAnimation() {
+	public void showDying() {
 		setAnimation(animDying);
 	}
 
@@ -78,7 +71,7 @@ public class PacMan extends Creature {
 		} else {
 			exploreWorld();
 		}
-		setWalkingAnimation();
+		showWalking();
 		animation().setEnabled(!stuck);
 	}
 
@@ -97,7 +90,7 @@ public class PacMan extends Creature {
 			}
 		}
 		case DYING -> {
-			setDyingAnimation();
+			showDying();
 		}
 		}
 		animation().advance();

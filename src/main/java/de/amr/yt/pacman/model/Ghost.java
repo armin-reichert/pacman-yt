@@ -45,8 +45,8 @@ public class Ghost extends Creature {
 
 	public final int id;
 	public final GameModel game;
-	public final SpriteAnimation animWalking;
-	public final SpriteAnimation animFrightened;
+
+	public SpriteAnimation animWalking, animFrightened;
 
 	public GhostState state;
 	/** Elroy state: 0=off, 1=Elroy1, 2=Elroy2, -1=Elroy1 disabled, -2=Elroy2 disabled */
@@ -59,16 +59,14 @@ public class Ghost extends Creature {
 		super(game.world);
 		this.game = game;
 		this.id = id;
-		animWalking = new SpriteAnimation("walking", new byte[] { 0, 1 }, 8, true);
-		animFrightened = new SpriteAnimation("frightened", new byte[] { 0, 1 }, 8, true);
 		reset();
 	}
 
-	public void setWalkingAnimation() {
+	public void showWalking() {
 		setAnimation(animWalking);
 	}
 
-	public void setFrightenedAnimation() {
+	public void showFrightened() {
 		setAnimation(animFrightened);
 	}
 
@@ -81,8 +79,6 @@ public class Ghost extends Creature {
 		targetTile = null;
 		valueTimer = 0;
 		value = 0;
-		setWalkingAnimation();
-		animation().reset();
 	}
 
 	public void update() {
@@ -92,9 +88,9 @@ public class Ghost extends Creature {
 				bounce(world.houseTop, world.houseBottom);
 			}
 			if (game.pacMan.hasPower()) {
-				setFrightenedAnimation();
+				showFrightened();
 			} else {
-				setWalkingAnimation();
+				showWalking();
 			}
 		}
 		case ENTERING_HOUSE -> {
@@ -102,15 +98,15 @@ public class Ghost extends Creature {
 		}
 		case LEAVING_HOUSE -> {
 			leaveGhostHouse(world.houseEntry);
-			setWalkingAnimation();
+			showWalking();
 		}
 		case CHASING, SCATTERING -> {
 			aimTowardsTarget();
-			setWalkingAnimation();
+			showWalking();
 		}
 		case FRIGHTENED -> {
 			aimTowardsTarget();
-			setFrightenedAnimation();
+			showFrightened();
 		}
 		case EATEN -> {
 			returnToGhostHouse(world.houseEntry);
