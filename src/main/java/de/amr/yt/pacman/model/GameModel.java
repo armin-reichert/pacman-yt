@@ -38,6 +38,8 @@ import de.amr.yt.pacman.lib.Sounds;
 import de.amr.yt.pacman.lib.Vector2;
 
 /**
+ * TODO: should not have dependency to controller package
+ *
  * @author Armin Reichert
  */
 public class GameModel {
