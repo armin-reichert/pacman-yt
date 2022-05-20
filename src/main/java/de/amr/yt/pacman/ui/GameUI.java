@@ -190,7 +190,7 @@ public class GameUI {
 
 		g.drawString("%2d FPS (Target=%d)".formatted(GameClock.get().getFrameRate(), GameClock.get().getFrequency()), t(1),
 				t(2));
-		String text = "%s (%d)".formatted(gameController.state().name(), gameController.state().timer);
+		String text = "%s (%d)".formatted(gameController.state().name(), gameController.state().timer());
 		if (gameController.state() == GameState.PLAYING) {
 			if (game.chasingPhase) {
 				text += " CHASING (%d)".formatted(game.attackTimer);

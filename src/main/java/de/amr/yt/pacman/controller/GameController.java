@@ -41,9 +41,7 @@ public class GameController {
 	private GameState state;
 
 	public GameController() {
-		for (var gameState : GameState.values()) {
-			gameState.gameController = this;
-		}
+		GameState.setGameController(this);
 		enterState(GameState.INTRO);
 	}
 

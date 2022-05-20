@@ -228,8 +228,18 @@ public enum GameState {
 		}
 	};
 
-	public GameController gameController;
-	public long timer;
+	public static void setGameController(GameController gameController) {
+		for (var state : values()) {
+			state.gameController = gameController;
+		}
+	}
+
+	protected GameController gameController;
+	protected long timer;
+
+	public long timer() {
+		return timer;
+	}
 
 	public abstract void onEnter(GameModel game, GameUI ui);
 
