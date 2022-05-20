@@ -69,9 +69,9 @@ public class GameUI {
 	private GameScene previousScene;
 	private boolean scoreVisible;
 
-	public GameUI(GameController gameController, GameModel game, double scaling) {
-		this.gameController = gameController;
-		this.game = game;
+	public GameUI(GameController controller, double scaling) {
+		this.gameController = controller;
+		this.game = controller.game;
 		introScene = new IntroScene(game);
 		playScene = new PlayScene(game);
 		frame = new JFrame("Pac-Man");
@@ -103,6 +103,10 @@ public class GameUI {
 		setCanvasScaling(scaling);
 		frame.add(canvas);
 		frame.setResizable(false);
+		frame.setVisible(true);
+		frame.pack();
+		frame.setLocationRelativeTo(null);
+		frame.requestFocus();
 	}
 
 	private void handleKeyPressed(int key) {
@@ -141,13 +145,6 @@ public class GameUI {
 		canvas.setPreferredSize(size);
 		canvas.setSize(size);
 		log("Game canvas size=%dx%s", canvas.getWidth(), canvas.getHeight());
-	}
-
-	public void show() {
-		frame.setVisible(true);
-		frame.pack();
-		frame.setLocationRelativeTo(null);
-		frame.requestFocus();
 	}
 
 	public void render() {

@@ -39,9 +39,7 @@ public class PacManApp {
 		double canvasScaling = args.length > 0 ? Double.parseDouble(args[0]) : 2.0;
 		GameController controller = new GameController();
 		SwingUtilities.invokeLater(() -> {
-			GameUI ui = new GameUI(controller, controller.game, canvasScaling);
-			controller.ui = ui;
-			ui.show();
+			controller.ui = new GameUI(controller, canvasScaling);
 			GameClock.get().start(() -> controller.step(false));
 		});
 	}
