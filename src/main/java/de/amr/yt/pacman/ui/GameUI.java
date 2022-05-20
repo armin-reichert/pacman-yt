@@ -65,11 +65,11 @@ public class GameUI {
 	private final PlayScene playScene;
 	private final JFrame frame;
 	private JComponent canvas;
-	private double scale;
+	private double canvasScaling;
 	private GameScene previousScene;
 	private boolean scoreVisible;
 
-	public GameUI(GameController gameController, GameModel game, double scaleValue) {
+	public GameUI(GameController gameController, GameModel game, double scaling) {
 		this.gameController = gameController;
 		this.game = game;
 		introScene = new IntroScene(game);
@@ -96,11 +96,11 @@ public class GameUI {
 				super.paintComponent(g);
 				g.setColor(Color.BLACK);
 				g.fillRect(0, 0, getWidth(), getHeight());
-				drawCurrentGameScene(scale, g);
+				drawCurrentGameScene(canvasScaling, g);
 				drawPauseText(g);
 			}
 		};
-		setScale(scaleValue);
+		setCanvasScaling(scaling);
 		frame.add(canvas);
 		frame.setResizable(false);
 	}
@@ -133,9 +133,11 @@ public class GameUI {
 		}
 	}
 
-	public void setScale(double value) {
-		scale = (value == SCALE_MAX) ? Toolkit.getDefaultToolkit().getScreenSize().getHeight() / t(World.ROWS) : value;
-		Dimension size = new Dimension((int) (scale * t(World.COLS)), (int) (scale * t(World.ROWS)));
+	public void setCanvasScaling(double scaling) {
+		canvasScaling = (scaling == SCALE_MAX)
+				? 0.9 * Toolkit.getDefaultToolkit().getScreenSize().getHeight() / t(World.ROWS)
+				: scaling;
+		Dimension size = new Dimension((int) (canvasScaling * t(World.COLS)), (int) (canvasScaling * t(World.ROWS)));
 		canvas.setPreferredSize(size);
 		canvas.setSize(size);
 		log("Game canvas size=%dx%s", canvas.getWidth(), canvas.getHeight());

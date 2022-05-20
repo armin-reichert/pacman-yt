@@ -25,6 +25,8 @@ package de.amr.yt.pacman.controller;
 
 import static de.amr.yt.pacman.lib.GameClock.sec;
 
+import java.awt.EventQueue;
+
 import de.amr.yt.pacman.lib.Sounds;
 import de.amr.yt.pacman.model.GameModel;
 import de.amr.yt.pacman.model.GameState;
@@ -55,8 +57,13 @@ public class GameController {
 		}
 	}
 
-	public void createAndShowUI(double scale) {
-		ui = new GameUI(this, game, scale);
+	/**
+	 * This method must be called on the event dispatch thread using {@link EventQueue#invokeLater(Runnable)}.
+	 * 
+	 * @param canvasScaling scaling of canvas wrt. logical game size
+	 */
+	public void createAndShowUI(double canvasScaling) {
+		ui = new GameUI(this, game, canvasScaling);
 		ui.show();
 	}
 
