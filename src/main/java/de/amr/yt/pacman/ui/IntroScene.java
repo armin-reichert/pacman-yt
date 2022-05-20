@@ -137,6 +137,7 @@ public class IntroScene implements GameScene {
 			updateGuys();
 		} else if (expired()) {
 			init();
+			return;
 		}
 		++passed;
 	}
