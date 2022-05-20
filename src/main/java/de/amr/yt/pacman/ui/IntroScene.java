@@ -23,9 +23,9 @@ SOFTWARE.
 */
 package de.amr.yt.pacman.ui;
 
+import static de.amr.yt.pacman.lib.Animation.frame;
 import static de.amr.yt.pacman.lib.GameClock.sec;
 import static de.amr.yt.pacman.lib.Logging.log;
-import static de.amr.yt.pacman.lib.Animation.frame;
 import static de.amr.yt.pacman.model.World.t;
 import static de.amr.yt.pacman.ui.Renderer.drawGhost;
 import static de.amr.yt.pacman.ui.Renderer.drawGhostValue;
@@ -197,7 +197,7 @@ public class IntroScene implements GameScene {
 				drawPacManChasingGhosts(g);
 			} else {
 				for (var ghost : game.ghosts) {
-					drawGhost(g, ghost, false);
+					drawGhost(g, ghost);
 				}
 				drawPacMan(g, game.pacMan);
 			}
@@ -210,7 +210,7 @@ public class IntroScene implements GameScene {
 	private void drawPacManChasingGhosts(Graphics2D g) {
 		for (var ghost : game.ghosts) {
 			if (ghost.id > ghostEaten) {
-				drawGhost(g, ghost, false);
+				drawGhost(g, ghost);
 			} else if (ghost.id == ghostEaten) {
 				drawGhostValue(g, ghost, GHOST_VALUES[ghost.id]);
 			}

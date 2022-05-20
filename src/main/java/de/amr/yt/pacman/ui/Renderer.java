@@ -36,7 +36,6 @@ import de.amr.yt.pacman.model.Ghost;
 import de.amr.yt.pacman.model.GhostState;
 import de.amr.yt.pacman.model.PacMan;
 import de.amr.yt.pacman.model.World;
-import de.amr.yt.pacman.ui.animation.GhostFrightenedAnimation;
 import de.amr.yt.pacman.ui.animation.SpriteAnimation;
 
 /**
@@ -87,7 +86,7 @@ public class Renderer {
 		return GHOST_COLORS[id];
 	}
 
-	public static void drawGhost(Graphics2D g, Ghost ghost, boolean blinking) {
+	public static void drawGhost(Graphics2D g, Ghost ghost) {
 		SpriteAnimation sa = (SpriteAnimation) ghost.animation();
 		if (ghost.state == GhostState.EATEN || ghost.state == GhostState.ENTERING_HOUSE) {
 			if (ghost.valueTimer > 0) {
@@ -96,10 +95,6 @@ public class Renderer {
 				drawGuy(g, ghost, Sprites.get().ghostEyes.get(ghost.moveDir));
 			}
 		} else {
-			if (sa instanceof GhostFrightenedAnimation) {
-				GhostFrightenedAnimation gfa = (GhostFrightenedAnimation) sa;
-				gfa.blinking = blinking;
-			}
 			drawGuy(g, ghost, sa.sprite());
 		}
 	}

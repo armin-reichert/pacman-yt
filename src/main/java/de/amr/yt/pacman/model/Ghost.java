@@ -30,8 +30,8 @@ import static de.amr.yt.pacman.lib.Direction.UP;
 import static de.amr.yt.pacman.lib.Vector2.v;
 import static de.amr.yt.pacman.model.World.t;
 
-import de.amr.yt.pacman.lib.Direction;
 import de.amr.yt.pacman.lib.Animation;
+import de.amr.yt.pacman.lib.Direction;
 import de.amr.yt.pacman.lib.Vector2;
 
 /**
@@ -46,7 +46,7 @@ public class Ghost extends Creature {
 	public final int id;
 	public final GameModel game;
 
-	public Animation animWalking, animFrightened;
+	public Animation animWalking, animFrightened, animBlinking;
 
 	public GhostState state;
 	/** Elroy state: 0=off, 1=Elroy1, 2=Elroy2, -1=Elroy1 disabled, -2=Elroy2 disabled */
@@ -70,6 +70,10 @@ public class Ghost extends Creature {
 		setAnimation(animFrightened);
 	}
 
+	public void showBlinking() {
+		setAnimation(animBlinking);
+	}
+
 	@Override
 	public void reset() {
 		super.reset();
@@ -88,7 +92,11 @@ public class Ghost extends Creature {
 				bounce(world.houseTop, world.houseBottom);
 			}
 			if (game.pacMan.hasPower()) {
-				showFrightened();
+				if (game.pacMan.isLosingPower()) {
+					showBlinking();
+				} else {
+					showFrightened();
+				}
 			} else {
 				showWalking();
 			}
@@ -106,7 +114,11 @@ public class Ghost extends Creature {
 		}
 		case FRIGHTENED -> {
 			aimTowardsTarget();
-			showFrightened();
+			if (game.pacMan.isLosingPower()) {
+				showBlinking();
+			} else {
+				showFrightened();
+			}
 		}
 		case EATEN -> {
 			returnToGhostHouse(world.houseEntry);

@@ -23,8 +23,8 @@ SOFTWARE.
 */
 package de.amr.yt.pacman.ui;
 
-import static de.amr.yt.pacman.lib.Logging.log;
 import static de.amr.yt.pacman.lib.Animation.frame;
+import static de.amr.yt.pacman.lib.Logging.log;
 import static de.amr.yt.pacman.model.World.t;
 import static de.amr.yt.pacman.ui.Renderer.drawGhost;
 import static de.amr.yt.pacman.ui.Renderer.drawGhostState;
@@ -112,7 +112,7 @@ public class PlayScene implements GameScene {
 		}
 		drawPacMan(g, game.pacMan);
 		for (Ghost ghost : game.ghosts) {
-			drawGhost(g, ghost, game.pacMan.isLosingPower());
+			drawGhost(g, ghost);
 		}
 		if (gameController.state() == GameState.READY) {
 			g.setColor(Color.YELLOW);
