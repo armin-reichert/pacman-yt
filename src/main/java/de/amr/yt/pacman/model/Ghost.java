@@ -54,7 +54,6 @@ public class Ghost extends Creature {
 	public Vector2 targetTile;
 	public long valueTimer;
 	public int value;
-	public SpriteAnimation animation;
 
 	public Ghost(GameModel game, int id) {
 		super(game.world);
@@ -63,6 +62,14 @@ public class Ghost extends Creature {
 		animWalking = new SpriteAnimation("walking", new byte[] { 0, 1 }, 8, true);
 		animFrightened = new SpriteAnimation("frightened", new byte[] { 0, 1 }, 8, true);
 		reset();
+	}
+
+	public void setWalkingAnimation() {
+		setAnimation(animWalking);
+	}
+
+	public void setFrightenedAnimation() {
+		setAnimation(animFrightened);
 	}
 
 	@Override
@@ -74,7 +81,8 @@ public class Ghost extends Creature {
 		targetTile = null;
 		valueTimer = 0;
 		value = 0;
-		animation = animWalking;
+		setWalkingAnimation();
+		animation().reset();
 	}
 
 	public void update() {
@@ -83,28 +91,32 @@ public class Ghost extends Creature {
 			if (id != BLINKY) {
 				bounce(world.houseTop, world.houseBottom);
 			}
-			animation = game.pacMan.hasPower() ? animFrightened : animWalking;
+			if (game.pacMan.hasPower()) {
+				setFrightenedAnimation();
+			} else {
+				setWalkingAnimation();
+			}
 		}
 		case ENTERING_HOUSE -> {
 			enterGhostHouse(world.houseEntry);
 		}
 		case LEAVING_HOUSE -> {
 			leaveGhostHouse(world.houseEntry);
-			animation = animWalking;
+			setWalkingAnimation();
 		}
 		case CHASING, SCATTERING -> {
 			aimTowardsTarget();
-			animation = animWalking;
+			setWalkingAnimation();
 		}
 		case FRIGHTENED -> {
 			aimTowardsTarget();
-			animation = animFrightened;
+			setFrightenedAnimation();
 		}
 		case EATEN -> {
 			returnToGhostHouse(world.houseEntry);
 		}
 		}
-		animation.advance();
+		animation().advance();
 	}
 
 	@Override

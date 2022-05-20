@@ -27,5 +27,5 @@ package de.amr.yt.pacman.model;
  * @author Armin Reichert
  */
 public enum PacManState {
-	NO_POWER, POWER, DEAD;
+	NO_POWER, POWER, DYING;
 }

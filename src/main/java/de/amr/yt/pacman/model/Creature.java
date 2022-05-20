@@ -23,7 +23,10 @@ SOFTWARE.
 */
 package de.amr.yt.pacman.model;
 
+import static de.amr.yt.pacman.lib.Logging.log;
+
 import de.amr.yt.pacman.lib.Direction;
+import de.amr.yt.pacman.lib.SpriteAnimation;
 import de.amr.yt.pacman.lib.Vector2;
 
 /**
@@ -53,6 +56,8 @@ public abstract class Creature {
 	public Direction moveDir;
 	public Direction wishDir;
 
+	private SpriteAnimation animation;
+
 	protected Creature(World world) {
 		this.world = world;
 		x = Float.MIN_VALUE;
@@ -65,6 +70,18 @@ public abstract class Creature {
 		visible = true;
 		moveDir = Direction.LEFT;
 		wishDir = Direction.LEFT;
+	}
+
+	public SpriteAnimation animation() {
+		return animation;
+	}
+
+	protected void setAnimation(SpriteAnimation animation) {
+		if (this.animation != animation) {
+			this.animation = animation;
+			animation.reset();
+			log("Animation set to '%s' for %s", animation, this);
+		}
 	}
 
 	public void reset() {

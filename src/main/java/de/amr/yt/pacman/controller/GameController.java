@@ -38,30 +38,34 @@ public class GameController {
 
 	public final GameModel game = new GameModel();
 	public GameUI ui;
-	public GameState state;
+	private GameState state;
 
 	public GameController() {
 		for (var gameState : GameState.values()) {
 			gameState.gameController = this;
 		}
-		setState(GameState.INTRO);
+		enterState(GameState.INTRO);
 	}
 
-	public void setState(GameState state) {
-		this.state = state;
-		state.timer = -1;
-		log("Game state set to %s", state);
+	public GameState state() {
+		return state;
+	}
+
+	public void enterState(GameState state) {
+		if (this.state != state) {
+			GameState prevState = this.state;
+			this.state = state;
+			state.timer = 0;
+			log("onEnter(%s)", state);
+			state.onEnter(game, ui);
+			log("Game changed from %s to %s", prevState, state);
+		}
 	}
 
 	public void step(boolean doUpdate) {
 		if (doUpdate) {
+			state.onUpdate(game, ui);
 			++state.timer;
-			if (state.timer == 0) {
-				log("onEnter(%s)", state);
-				state.onEnter(game, ui);
-			} else {
-				state.onUpdate(game, ui);
-			}
 			ui.update();
 		}
 		ui.render();

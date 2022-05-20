@@ -37,7 +37,6 @@ public class PacMan extends Creature {
 
 	public final GameModel game;
 	public PacManState state;
-	public SpriteAnimation animation;
 	public int powerCountdown;
 	public int restCountdown;
 
@@ -57,8 +56,20 @@ public class PacMan extends Creature {
 		state = PacManState.NO_POWER;
 		powerCountdown = 0;
 		restCountdown = 0;
-		animation = animStanding;
-		animation.setEnabled(true);
+		setStandingAnimation();
+		animation().setEnabled(true);
+	}
+
+	public void setStandingAnimation() {
+		setAnimation(animStanding);
+	}
+
+	public void setWalkingAnimation() {
+		setAnimation(animWalking);
+	}
+
+	public void setDyingAnimation() {
+		setAnimation(animDying);
 	}
 
 	private void restOrWalk() {
@@ -67,8 +78,8 @@ public class PacMan extends Creature {
 		} else {
 			exploreWorld();
 		}
-		animation = animWalking;
-		animation.setEnabled(!stuck);
+		setWalkingAnimation();
+		animation().setEnabled(!stuck);
 	}
 
 	public void update() {
@@ -85,11 +96,11 @@ public class PacMan extends Creature {
 				--powerCountdown;
 			}
 		}
-		case DEAD -> {
-			animation = animDying;
+		case DYING -> {
+			setDyingAnimation();
 		}
 		}
-		animation.advance();
+		animation().advance();
 	}
 
 	@Override

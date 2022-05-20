@@ -129,7 +129,7 @@ public class GameUI {
 		case KeyEvent.VK_P -> game.paused = !game.paused;
 		case KeyEvent.VK_Q -> {
 			game.reset();
-			gameController.setState(GameState.INTRO);
+			gameController.enterState(GameState.INTRO);
 		}
 
 		case KeyEvent.VK_S -> game.pacSafe = !game.pacSafe;
@@ -155,7 +155,7 @@ public class GameUI {
 	}
 
 	public GameScene currentScene() {
-		return switch (gameController.state) {
+		return switch (gameController.state()) {
 		case INTRO -> introScene;
 		default -> playScene;
 		};
@@ -190,8 +190,8 @@ public class GameUI {
 
 		g.drawString("%2d FPS (Target=%d)".formatted(GameClock.get().getFrameRate(), GameClock.get().getFrequency()), t(1),
 				t(2));
-		String text = "%s (%d)".formatted(gameController.state.name(), gameController.state.timer);
-		if (gameController.state == GameState.PLAYING) {
+		String text = "%s (%d)".formatted(gameController.state().name(), gameController.state().timer);
+		if (gameController.state() == GameState.PLAYING) {
 			if (game.chasingPhase) {
 				text += " CHASING (%d)".formatted(game.attackTimer);
 			} else {

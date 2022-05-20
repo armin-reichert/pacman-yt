@@ -25,6 +25,7 @@ package de.amr.yt.pacman.controller;
 
 import static de.amr.yt.pacman.lib.GameClock.sec;
 
+import de.amr.yt.pacman.lib.Logging;
 import de.amr.yt.pacman.lib.Sounds;
 import de.amr.yt.pacman.model.GameModel;
 import de.amr.yt.pacman.model.GhostState;
@@ -62,7 +63,7 @@ public enum GameState {
 		@Override
 		public void onUpdate(GameModel game, GameUI ui) {
 			if (timer == sec(1)) {
-				gameController.setState(GameState.READY);
+				gameController.enterState(GameState.READY);
 			}
 		}
 	},
@@ -74,6 +75,7 @@ public enum GameState {
 			if (game.level.number == 1 && !game.levelStarted) {
 				Sounds.play("level_start");
 			}
+			Logging.log("onEnter(%s): Pac-Man animation is %s", this, game.pacMan.animation());
 		}
 
 		@Override
@@ -81,7 +83,7 @@ public enum GameState {
 			boolean playSound = game.level.number == 1 && !game.levelStarted;
 			if (timer == sec(playSound ? 5 : 1)) {
 				game.levelStarted = true;
-				gameController.setState(GameState.PLAYING);
+				gameController.enterState(GameState.PLAYING);
 			}
 		}
 	},
@@ -91,7 +93,7 @@ public enum GameState {
 		public void onEnter(GameModel game, GameUI ui) {
 			game.powerPelletsBlinking = true;
 			for (var ghost : game.ghosts) {
-				ghost.animation.setEnabled(true);
+				ghost.animation().setEnabled(true);
 			}
 		}
 
@@ -106,15 +108,15 @@ public enum GameState {
 			game.checkPowerPelletEaten();
 			game.checkBonusEaten();
 			if (game.checkAllPelletsEaten()) {
-				gameController.setState(GameState.LEVEL_COMPLETE);
+				gameController.enterState(GameState.LEVEL_COMPLETE);
 				return;
 			}
 			if (game.checkPacManKilledByGhost(game.pacMan.tile())) {
-				gameController.setState(GameState.PACMAN_DYING);
+				gameController.enterState(GameState.PACMAN_DYING);
 				return;
 			}
 			if (game.checkGhostKilledByPacMan()) {
-				gameController.setState(GameState.GHOST_DYING);
+				gameController.enterState(GameState.GHOST_DYING);
 				return;
 			}
 			gameController.unlockGhosts(game.ghosts);
@@ -128,7 +130,7 @@ public enum GameState {
 	LEVEL_COMPLETE {
 		@Override
 		public void onEnter(GameModel game, GameUI ui) {
-			game.pacMan.animation = game.pacMan.animStanding;
+			game.pacMan.setStandingAnimation();
 			for (var ghost : game.ghosts) {
 				ghost.animWalking.setEnabled(false);
 			}
@@ -145,8 +147,8 @@ public enum GameState {
 				game.mazeFlashing = false;
 				game.setLevel(game.level.number + 1);
 				game.pacMan.visible = false;
-				game.pacMan.animation = game.pacMan.animWalking;
-				gameController.setState(GameState.LEVEL_STARTING);
+				game.pacMan.setWalkingAnimation();
+				gameController.enterState(GameState.LEVEL_STARTING);
 			}
 		}
 	},
@@ -156,9 +158,9 @@ public enum GameState {
 		public void onEnter(GameModel game, GameUI ui) {
 			game.powerPelletsBlinking = false;
 			for (var ghost : game.ghosts) {
-				ghost.animation.setEnabled(false);
+				ghost.animation().setEnabled(false);
 			}
-			game.pacMan.animation.setEnabled(false);
+			game.pacMan.animation().setEnabled(false);
 		}
 
 		@Override
@@ -173,9 +175,9 @@ public enum GameState {
 		@Override
 		public void onEnter(GameModel game, GameUI ui) {
 			game.attackTimer = 0;
-			game.pacMan.animation = game.pacMan.animDying;
-			game.pacMan.animation.setEnabled(false);
-			game.pacMan.animation.reset();
+			game.pacMan.setDyingAnimation();
+			game.pacMan.animation().setEnabled(false);
+			game.pacMan.animation().reset();
 			game.bonus = null;
 		}
 
@@ -186,21 +188,22 @@ public enum GameState {
 					ghost.visible = false;
 				}
 			} else if (timer == sec(2)) {
-				game.pacMan.animation.setEnabled(true);
+				game.pacMan.animation().setEnabled(true);
 				Sounds.play("pacman_death");
 			} else if (timer == sec(4)) {
 				--game.lives;
 				if (game.lives > 0) {
-					gameController.setState(GameState.READY);
+					gameController.enterState(GameState.READY);
 				} else {
 					for (var ghost : game.ghosts) {
 						ghost.visible = true;
 					}
-					gameController.setState(GameState.GAME_OVER);
+					gameController.enterState(GameState.GAME_OVER);
 					return;
 				}
+			} else {
+				game.pacMan.update();
 			}
-			game.pacMan.update();
 		}
 	},
 
@@ -214,7 +217,7 @@ public enum GameState {
 		public void onUpdate(GameModel game, GameUI ui) {
 			if (timer == sec(1)) {
 				game.pacMan.visible = true;
-				gameController.setState(GameState.PLAYING);
+				gameController.enterState(GameState.PLAYING);
 				return;
 			}
 			for (var ghost : game.ghosts) {

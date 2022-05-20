@@ -144,8 +144,8 @@ public class GameModel {
 		pacMan.speed = level.playerSpeed;
 		pacMan.state = PacManState.NO_POWER;
 		pacMan.visible = true;
-		pacMan.animation = pacMan.animStanding;
-		pacMan.animation.reset();
+		pacMan.setStandingAnimation();
+		pacMan.animation().reset();
 
 		for (var ghost : ghosts) {
 			ghost.placeAtTile(ghostHomes[ghost.id], World.HT, 0);
@@ -154,9 +154,9 @@ public class GameModel {
 			ghost.targetTile = null;
 			ghost.state = GhostState.LOCKED;
 			ghost.visible = true;
-			ghost.animation = ghost.animWalking;
-			ghost.animation.reset();
-			ghost.animation.setEnabled(false);
+			ghost.setWalkingAnimation();
+			ghost.animation().reset();
+			ghost.animation().setEnabled(false);
 		}
 	}
 
@@ -307,7 +307,7 @@ public class GameModel {
 		for (var ghost : ghosts) {
 			if (ghost.tile().equals(tile)) {
 				if (ghost.state == GhostState.CHASING || ghost.state == GhostState.SCATTERING) {
-					pacMan.state = PacManState.DEAD;
+					pacMan.state = PacManState.DYING;
 					return true;
 				}
 			}

@@ -56,7 +56,7 @@ public class Sprites {
 	public BufferedImage sheetImage;
 
 	// sprite caches
-	public EnumMap<Direction, List<BufferedImage>> pac = new EnumMap<>(Direction.class);
+	public EnumMap<Direction, List<BufferedImage>> pacWalking = new EnumMap<>(Direction.class);
 	public List<BufferedImage> pacDead;
 	public List<EnumMap<Direction, List<BufferedImage>>> ghosts = new ArrayList<>();
 	public List<BufferedImage> ghostBlue;
@@ -87,10 +87,10 @@ public class Sprites {
 			sheetImage = image("/sprites.png");
 			mazeImage = image("/maze_empty.png");
 
-			pac.put(RIGHT, List.of(s(0, 0), s(1, 0), s(2, 0)));
-			pac.put(LEFT, List.of(s(0, 1), s(1, 1), s(2, 0)));
-			pac.put(UP, List.of(s(0, 2), s(1, 2), s(2, 0)));
-			pac.put(DOWN, List.of(s(0, 3), s(1, 3), s(2, 0)));
+			pacWalking.put(RIGHT, List.of(s(0, 0), s(1, 0), s(2, 0)));
+			pacWalking.put(LEFT, List.of(s(0, 1), s(1, 1), s(2, 0)));
+			pacWalking.put(UP, List.of(s(0, 2), s(1, 2), s(2, 0)));
+			pacWalking.put(DOWN, List.of(s(0, 3), s(1, 3), s(2, 0)));
 
 			pacDead = new ArrayList<>();
 			for (int col = 3; col <= 13; ++col) {

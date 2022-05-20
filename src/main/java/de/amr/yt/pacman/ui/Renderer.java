@@ -79,10 +79,10 @@ public class Renderer {
 	}
 
 	public static void drawPacMan(Graphics2D g, PacMan pacMan) {
-		if (pacMan.animation == pacMan.animDying) {
-			drawGuy(g, pacMan, Sprites.get().pacDead.get(pacMan.animation.frame()));
+		if (pacMan.animation() == pacMan.animDying) {
+			drawGuy(g, pacMan, Sprites.get().pacDead.get(pacMan.animation().frame()));
 		} else {
-			drawGuy(g, pacMan, Sprites.get().pac.get(pacMan.moveDir).get(pacMan.animation.frame()));
+			drawGuy(g, pacMan, Sprites.get().pacWalking.get(pacMan.moveDir).get(pacMan.animation().frame()));
 		}
 	}
 
@@ -99,13 +99,13 @@ public class Renderer {
 			}
 		}
 
-		else if (ghost.animation == ghost.animFrightened) {
+		else if (ghost.animation() == ghost.animFrightened) {
 			int blinkingOffset = !blinking || frame(2, 10) == 0 ? 0 : 2;
-			drawGuy(g, ghost, Sprites.get().ghostBlue.get(ghost.animation.frame() + blinkingOffset));
+			drawGuy(g, ghost, Sprites.get().ghostBlue.get(ghost.animation().frame() + blinkingOffset));
 		}
 
 		else {
-			drawGuy(g, ghost, Sprites.get().ghosts.get(ghost.id).get(ghost.moveDir).get(ghost.animation.frame()));
+			drawGuy(g, ghost, Sprites.get().ghosts.get(ghost.id).get(ghost.moveDir).get(ghost.animation().frame()));
 		}
 	}
 
@@ -134,7 +134,7 @@ public class Renderer {
 			g.drawString(textAbove, (int) pacMan.x + offset, (int) pacMan.y - 8);
 
 			String textBelow = "(%d,%d)".formatted(pacMan.tile().x, pacMan.tile().y);
-			textBelow += " " + pacMan.animation;
+			textBelow += " " + pacMan.animation();
 			offset = -g.getFontMetrics().stringWidth(textBelow) / 2;
 			g.drawString(textBelow, (int) pacMan.x + offset, (int) pacMan.y + 12);
 		}
@@ -154,7 +154,7 @@ public class Renderer {
 			g.drawString(textAbove, (int) ghost.x + offset, (int) ghost.y - 8);
 
 			String textBelow = "(%d,%d)".formatted(ghost.tile().x, ghost.tile().y);
-			textBelow += " " + ghost.animation;
+			textBelow += " " + ghost.animation();
 			offset = -g.getFontMetrics().stringWidth(textBelow) / 2;
 			g.drawString(textBelow, (int) ghost.x + offset, (int) ghost.y + 12);
 		}

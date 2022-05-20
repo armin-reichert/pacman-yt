@@ -87,12 +87,12 @@ public class IntroScene implements GameScene {
 		switch (key) {
 		case KeyEvent.VK_SPACE -> {
 			if (passed >= READY_TO_PLAY_TIME) {
-				gameController.setState(GameState.LEVEL_STARTING);
+				gameController.enterState(GameState.LEVEL_STARTING);
 			}
 		}
 		case KeyEvent.VK_ENTER -> {
 			if (!game.paused) {
-				gameController.setState(GameState.LEVEL_STARTING);
+				gameController.enterState(GameState.LEVEL_STARTING);
 			}
 		}
 		}
@@ -117,8 +117,8 @@ public class IntroScene implements GameScene {
 		game.pacMan.y = t(20) + World.HT;
 		game.pacMan.speed = game.level.playerSpeed;
 		game.pacMan.moveDir = Direction.LEFT;
-		game.pacMan.animation = game.pacMan.animWalking;
-		game.pacMan.animation.setEnabled(true);
+		game.pacMan.setWalkingAnimation();
+		game.pacMan.animation().setEnabled(true);
 
 		for (var ghost : game.ghosts) {
 			ghost.reset();
@@ -126,8 +126,8 @@ public class IntroScene implements GameScene {
 			ghost.y = game.pacMan.y;
 			ghost.speed = game.pacMan.speed * 1.05f;
 			ghost.moveDir = Direction.LEFT;
-			ghost.animation = ghost.animWalking;
-			ghost.animation.setEnabled(true);
+			ghost.setWalkingAnimation();
+			ghost.animation().setEnabled(true);
 		}
 	}
 
@@ -228,10 +228,10 @@ public class IntroScene implements GameScene {
 
 	private void moveGuys() {
 		game.pacMan.move(game.pacMan.moveDir);
-		game.pacMan.animation.advance();
+		game.pacMan.animation().advance();
 		for (var ghost : game.ghosts) {
 			ghost.move(ghost.moveDir);
-			ghost.animation.advance();
+			ghost.animation().advance();
 		}
 	}
 
@@ -246,7 +246,7 @@ public class IntroScene implements GameScene {
 			for (var ghost : game.ghosts) {
 				ghost.moveDir = Direction.RIGHT;
 				ghost.speed = game.level.ghostSpeedFrightened;
-				ghost.animation = ghost.animFrightened;
+				ghost.setFrightenedAnimation();
 			}
 			pacManChasingGhosts = true;
 		}
