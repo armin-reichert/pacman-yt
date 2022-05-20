@@ -31,6 +31,7 @@ import static de.amr.yt.pacman.ui.Renderer.drawGhostState;
 import static de.amr.yt.pacman.ui.Renderer.drawGhostTargetTiles;
 import static de.amr.yt.pacman.ui.Renderer.drawPacMan;
 import static de.amr.yt.pacman.ui.Renderer.drawPacManState;
+import static de.amr.yt.pacman.ui.Renderer.drawScore;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -67,6 +68,7 @@ public class PlayScene implements GameScene {
 
 	@Override
 	public void draw(Graphics2D g) {
+		drawScore(g, game.score, game.level.number, true);
 		if (!game.mazeFlashing || frame(2, 15) == 0) {
 			g.drawImage(Sprites.get().mazeImage, 0, t(3), null);
 		}

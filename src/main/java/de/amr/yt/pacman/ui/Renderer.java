@@ -57,6 +57,17 @@ public class Renderer {
 		ARCADE_FONT = font;
 	}
 
+	public static void drawScore(Graphics2D g, int score, int levelNumber, boolean contentVisible) {
+		g.setColor(Color.WHITE);
+		g.setFont(Renderer.ARCADE_FONT);
+		g.drawString("SCORE", t(1), t(1));
+		g.drawString("LEVEL", t(18), t(1));
+		if (contentVisible) {
+			g.drawString("%07d".formatted(score), t(7), t(1));
+			g.drawString("%03d".formatted(levelNumber), t(24), t(1));
+		}
+	}
+
 	public static void drawPellet(Graphics2D g, int x, int y) {
 		g.setColor(Color.PINK);
 		g.fillOval(x + 3, y + 3, 2, 2);

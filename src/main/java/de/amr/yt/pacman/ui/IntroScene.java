@@ -32,6 +32,7 @@ import static de.amr.yt.pacman.ui.Renderer.drawGhostValue;
 import static de.amr.yt.pacman.ui.Renderer.drawPacMan;
 import static de.amr.yt.pacman.ui.Renderer.drawPellet;
 import static de.amr.yt.pacman.ui.Renderer.drawPowerPellet;
+import static de.amr.yt.pacman.ui.Renderer.drawScore;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -114,6 +115,7 @@ public class IntroScene implements GameScene {
 
 	@Override
 	public void draw(Graphics2D g) {
+		drawScore(g, 0, 0, false);
 		if (passed >= sec(1.0)) {
 			drawHeading(g);
 		}

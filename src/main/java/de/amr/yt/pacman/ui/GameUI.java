@@ -64,7 +64,6 @@ public class GameUI {
 	private final JFrame frame;
 	private double canvasScaling;
 	private GameScene previousScene;
-	private boolean scoreVisible;
 
 	/**
 	 * Creates and shows the game user interface. This must be called from the event dispatch thread!
@@ -159,7 +158,6 @@ public class GameUI {
 	}
 
 	public void update() {
-		scoreVisible = game.state != GameState.INTRO;
 		GameScene scene = currentScene();
 		if (previousScene != scene) {
 			scene.init();
@@ -182,7 +180,6 @@ public class GameUI {
 		g2D.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 		g2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 		g2D.scale(canvasScaling, canvasScaling);
-		drawScore(g2D);
 		currentScene().draw(g2D);
 		if (showInfo) {
 			drawInfo(g2D);
@@ -197,17 +194,6 @@ public class GameUI {
 			g.setFont(new Font(Font.MONOSPACED, Font.BOLD, 36));
 			int sw = g.getFontMetrics().stringWidth(text);
 			g.drawString(text, (frame.getWidth() - sw) / 2, frame.getHeight() * 3 / 4);
-		}
-	}
-
-	private void drawScore(Graphics2D g) {
-		g.setColor(Color.WHITE);
-		g.setFont(Renderer.ARCADE_FONT);
-		g.drawString("SCORE", t(1), t(1));
-		g.drawString("LEVEL", t(18), t(1));
-		if (scoreVisible) {
-			g.drawString("%07d".formatted(game.score), t(7), t(1));
-			g.drawString("%03d".formatted(game.level.number), t(24), t(1));
 		}
 	}
 
