@@ -36,10 +36,13 @@ import static de.amr.yt.pacman.ui.Renderer.drawScore;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.event.KeyEvent;
 
+import de.amr.yt.pacman.controller.GameController;
 import de.amr.yt.pacman.lib.Direction;
 import de.amr.yt.pacman.lib.GameClock;
 import de.amr.yt.pacman.model.GameModel;
+import de.amr.yt.pacman.model.GameState;
 import de.amr.yt.pacman.model.Ghost;
 import de.amr.yt.pacman.model.World;
 
@@ -61,6 +64,8 @@ public class IntroScene implements GameScene {
 		return t(6 + 3 * ghostID) + World.HT;
 	}
 
+	@SuppressWarnings("unused")
+	private final GameController gameController;
 	private final GameModel game;
 
 	private long passed;
@@ -69,12 +74,29 @@ public class IntroScene implements GameScene {
 	private int ghostEaten;
 	private int ghostEatenCountdown;
 
-	public IntroScene(GameModel game) {
-		this.game = game;
+	public IntroScene(GameController gameController) {
+		this.gameController = gameController;
+		this.game = gameController.game;
 	}
 
 	private boolean between(long begin, long end) {
 		return begin <= passed && passed <= end;
+	}
+
+	@Override
+	public void onKeyPressed(int key) {
+		switch (key) {
+		case KeyEvent.VK_SPACE -> {
+			if (game.state.timer >= READY_TO_PLAY_TIME) {
+				game.setState(GameState.LEVEL_STARTING);
+			}
+		}
+		case KeyEvent.VK_ENTER -> {
+			if (!game.paused) {
+				game.setState(GameState.LEVEL_STARTING);
+			}
+		}
+		}
 	}
 
 	@Override

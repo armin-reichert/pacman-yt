@@ -54,7 +54,7 @@ public class GameUI {
 
 	public static final double SCALE_MAX = 0;
 
-	public boolean showInfo = false;
+	public static volatile boolean showInfo = false;
 
 	public final Joystick joystick = new Joystick();
 	private final GameController gameController;
@@ -79,18 +79,17 @@ public class GameUI {
 				: scaling;
 		Dimension canvasSize = new Dimension((int) (canvasScaling * t(World.COLS)), (int) (canvasScaling * t(World.ROWS)));
 
-		introScene = new IntroScene(game);
-		playScene = new PlayScene(game);
+		introScene = new IntroScene(controller);
+		playScene = new PlayScene(controller);
 
 		frame = new JFrame("Pac-Man");
+		frame.addKeyListener(joystick);
 		frame.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
-				handleKeyPressed(e.getKeyCode());
+				onKeyPressed(e.getKeyCode());
 			}
-
 		});
-		frame.addKeyListener(joystick);
 		frame.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
@@ -103,7 +102,6 @@ public class GameUI {
 		frame.setVisible(true);
 		frame.pack();
 		frame.setLocationRelativeTo(null);
-		frame.requestFocus();
 	}
 
 	private JComponent createCanvas(Dimension size) {
@@ -125,35 +123,17 @@ public class GameUI {
 		};
 	}
 
-	private void handleKeyPressed(int key) {
+	private void onKeyPressed(int key) {
 		switch (key) {
-		case KeyEvent.VK_I -> {
-			showInfo = !showInfo;
-			playScene.showInfo = showInfo;
-		}
+		case KeyEvent.VK_I -> showInfo = !showInfo;
 		case KeyEvent.VK_P -> game.paused = !game.paused;
 		case KeyEvent.VK_Q -> gameController.newGame();
 		case KeyEvent.VK_S -> game.pacSafe = !game.pacSafe;
-		case KeyEvent.VK_T -> playScene.showTargetTiles = !playScene.showTargetTiles;
-		case KeyEvent.VK_SPACE -> {
-			if (game.paused) {
-				gameController.step(true);
-			} else if (game.state == GameState.INTRO && game.state.timer >= IntroScene.READY_TO_PLAY_TIME) {
-				game.setState(GameState.LEVEL_STARTING);
-			}
+		case KeyEvent.VK_PLUS -> GameClock.get().changeFrequency(5);
+		case KeyEvent.VK_MINUS -> GameClock.get().changeFrequency(-5);
 		}
-		case KeyEvent.VK_ENTER -> {
-			if (!game.paused && game.state == GameState.INTRO) {
-				game.setState(GameState.LEVEL_STARTING);
-			}
-		}
-		case KeyEvent.VK_PLUS -> {
-			GameClock.get().changeFrequency(5);
-		}
-		case KeyEvent.VK_MINUS -> {
-			GameClock.get().changeFrequency(-5);
-		}
-		}
+		// dispatch to current scene
+		currentScene().onKeyPressed(key);
 	}
 
 	public void render() {

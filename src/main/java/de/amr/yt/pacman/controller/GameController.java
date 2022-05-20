@@ -44,7 +44,7 @@ public class GameController {
 		newGame();
 	}
 
-	public void newGame() {
+	public synchronized void newGame() {
 		Sounds.stopAll();
 		game.setLevel(1);
 		game.setState(GameState.INTRO);

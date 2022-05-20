@@ -59,8 +59,8 @@ public class GameModel {
 	public GameState state;
 	public long attackTimer;
 
-	public boolean paused;
-	public boolean pacSafe;
+	public volatile boolean paused;
+	public volatile boolean pacSafe;
 	public boolean levelStarted;
 	public boolean chasingPhase;
 	public boolean mazeFlashing;

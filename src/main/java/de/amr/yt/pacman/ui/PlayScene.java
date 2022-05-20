@@ -36,8 +36,10 @@ import static de.amr.yt.pacman.ui.Renderer.drawScore;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 
+import de.amr.yt.pacman.controller.GameController;
 import de.amr.yt.pacman.lib.GameClock;
 import de.amr.yt.pacman.model.GameModel;
 import de.amr.yt.pacman.model.GameState;
@@ -49,13 +51,26 @@ import de.amr.yt.pacman.model.World;
  */
 public class PlayScene implements GameScene {
 
-	public boolean showInfo = false;
 	public boolean showTargetTiles = false;
 
+	private final GameController gameController;
 	private final GameModel game;
 
-	public PlayScene(GameModel game) {
-		this.game = game;
+	public PlayScene(GameController gameController) {
+		this.gameController = gameController;
+		game = gameController.game;
+	}
+
+	@Override
+	public void onKeyPressed(int key) {
+		switch (key) {
+		case KeyEvent.VK_T -> showTargetTiles = !showTargetTiles;
+		case KeyEvent.VK_SPACE -> {
+			if (game.paused) {
+				gameController.step(true);
+			}
+		}
+		}
 	}
 
 	@Override
@@ -116,7 +131,7 @@ public class PlayScene implements GameScene {
 		if (showTargetTiles) {
 			drawGhostTargetTiles(g, game.ghosts);
 		}
-		if (showInfo) {
+		if (GameUI.showInfo) {
 			drawGuysState(g);
 		}
 	}

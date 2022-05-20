@@ -35,4 +35,6 @@ public interface GameScene {
 	void update();
 
 	void draw(Graphics2D g);
+
+	void onKeyPressed(int key);
 }

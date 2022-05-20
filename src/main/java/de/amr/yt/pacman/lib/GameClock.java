@@ -72,11 +72,11 @@ public class GameClock {
 		return frequency;
 	}
 
-	public void setFrequency(int frequency) {
+	public synchronized void setFrequency(int frequency) {
 		this.frequency = frequency;
 	}
 
-	public void changeFrequency(int delta) {
+	public synchronized void changeFrequency(int delta) {
 		int newFrequency = frequency + delta;
 		if (newFrequency > 0) {
 			frequency = newFrequency;
@@ -87,7 +87,7 @@ public class GameClock {
 		return lastFrameRate;
 	}
 
-	public void start(Runnable onTick) {
+	public synchronized void start(Runnable onTick) {
 		this.onTick = onTick;
 		thread = new Thread(this::loop, "GameClock");
 		running = true;
@@ -124,7 +124,7 @@ public class GameClock {
 		}
 	}
 
-	public void stop() {
+	public synchronized void stop() {
 		running = false;
 		try {
 			thread.join();
