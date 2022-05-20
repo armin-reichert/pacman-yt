@@ -22,22 +22,24 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package de.amr.yt.pacman.ui;
+package de.amr.yt.pacman.ui.animation;
 
 import java.awt.image.BufferedImage;
 import java.util.List;
 
+import de.amr.yt.pacman.ui.Sprites;
+
 /**
  * @author Armin Reichert
  */
-public class PacManDyingAnimation extends SpriteAnimation {
+public class GhostFrightenedAnimation extends SpriteAnimation {
 
-	public PacManDyingAnimation() {
-		super("pacman-dying", new byte[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }, 6, false);
+	public GhostFrightenedAnimation() {
+		super("ghost-frightened", new byte[] { 0, 1 }, 8, true);
 	}
 
 	@Override
 	public List<BufferedImage> getSprites() {
-		return Sprites.get().pacDead;
+		return Sprites.get().ghostBlue;
 	}
 }

@@ -37,6 +37,7 @@ import de.amr.yt.pacman.model.Ghost;
 import de.amr.yt.pacman.model.GhostState;
 import de.amr.yt.pacman.model.PacMan;
 import de.amr.yt.pacman.model.World;
+import de.amr.yt.pacman.ui.animation.SpriteAnimation;
 
 /**
  * @author Armin Reichert
@@ -79,11 +80,7 @@ public class Renderer {
 	}
 
 	public static void drawPacMan(Graphics2D g, PacMan pacMan) {
-		if (pacMan.animation() == pacMan.animDying) {
-			drawGuy(g, pacMan, Sprites.get().pacDead.get(pacMan.animation().frame()));
-		} else {
-			drawGuy(g, pacMan, Sprites.get().pacWalking.get(pacMan.moveDir).get(pacMan.animation().frame()));
-		}
+		drawGuy(g, pacMan, ((SpriteAnimation) pacMan.animation()).sprite());
 	}
 
 	public static Color ghostColor(int id) {
@@ -105,7 +102,7 @@ public class Renderer {
 		}
 
 		else {
-			drawGuy(g, ghost, Sprites.get().ghosts.get(ghost.id).get(ghost.moveDir).get(ghost.animation().frame()));
+			drawGuy(g, ghost, ((SpriteAnimation) ghost.animation()).sprite());
 		}
 	}
 

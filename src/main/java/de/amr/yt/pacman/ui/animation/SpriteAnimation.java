@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package de.amr.yt.pacman.ui;
+package de.amr.yt.pacman.ui.animation;
 
 import java.awt.image.BufferedImage;
 import java.util.Arrays;

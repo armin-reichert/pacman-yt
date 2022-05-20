@@ -46,6 +46,11 @@ import de.amr.yt.pacman.controller.GameState;
 import de.amr.yt.pacman.lib.GameClock;
 import de.amr.yt.pacman.model.GameModel;
 import de.amr.yt.pacman.model.World;
+import de.amr.yt.pacman.ui.animation.GhostFrightenedAnimation;
+import de.amr.yt.pacman.ui.animation.GhostWalkingAnimation;
+import de.amr.yt.pacman.ui.animation.PacManDyingAnimation;
+import de.amr.yt.pacman.ui.animation.PacManStandingAnimation;
+import de.amr.yt.pacman.ui.animation.PacManWalkingAnimation;
 
 /**
  * @author Armin Reichert
