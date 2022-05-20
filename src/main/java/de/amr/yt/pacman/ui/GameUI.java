@@ -127,7 +127,10 @@ public class GameUI {
 
 	private void handleKeyPressed(int key) {
 		switch (key) {
-		case KeyEvent.VK_I -> showInfo = !showInfo;
+		case KeyEvent.VK_I -> {
+			showInfo = !showInfo;
+			playScene.showInfo = showInfo;
+		}
 		case KeyEvent.VK_P -> game.paused = !game.paused;
 		case KeyEvent.VK_Q -> gameController.newGame();
 		case KeyEvent.VK_S -> game.pacSafe = !game.pacSafe;
@@ -216,9 +219,6 @@ public class GameUI {
 		g.drawString(text, t(1), t(3));
 		if (game.pacSafe) {
 			g.drawString("Pac-Man is safe", t(18), t(3));
-		}
-		if (game.state != GameState.INTRO) {
-			playScene.drawInfo(g);
 		}
 	}
 }

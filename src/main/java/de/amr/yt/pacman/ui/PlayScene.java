@@ -49,6 +49,7 @@ import de.amr.yt.pacman.model.World;
  */
 public class PlayScene implements GameScene {
 
+	public boolean showInfo = false;
 	public boolean showTargetTiles = false;
 
 	private final GameModel game;
@@ -115,16 +116,17 @@ public class PlayScene implements GameScene {
 		if (showTargetTiles) {
 			drawGhostTargetTiles(g, game.ghosts);
 		}
+		if (showInfo) {
+			drawGuysState(g);
+		}
 	}
 
-	public void drawInfo(Graphics2D g) {
+	private void drawGuysState(Graphics2D g) {
 		g.setColor(Color.WHITE);
 		g.setFont(new Font(Font.MONOSPACED, Font.BOLD, 8));
-		if (game.state != GameState.INTRO) {
-			drawPacManState(g, game.pacMan);
-			for (Ghost ghost : game.ghosts) {
-				drawGhostState(g, ghost);
-			}
+		drawPacManState(g, game.pacMan);
+		for (Ghost ghost : game.ghosts) {
+			drawGhostState(g, ghost);
 		}
 	}
 }
