@@ -25,6 +25,7 @@ SOFTWARE.
 package de.amr.yt.pacman.ui.animation;
 
 import java.awt.image.BufferedImage;
+import java.util.Arrays;
 import java.util.List;
 
 import de.amr.yt.pacman.model.PacMan;
@@ -32,14 +33,19 @@ import de.amr.yt.pacman.ui.Sprites;
 
 public class PacManWalkingAnimation extends SpriteAnimation {
 
+	private final List<Integer> frames = Arrays.asList(1, 0, 1, 2);
 	private final PacMan pacMan;
 
 	public PacManWalkingAnimation(PacMan pacMan) {
+		this.pacMan = pacMan;
 		name = "pacman-walking";
-		frames = new byte[] { 1, 0, 1, 2 };
 		frameLength = 2;
 		loop = true;
-		this.pacMan = pacMan;
+	}
+
+	@Override
+	public List<Integer> getFrames() {
+		return frames;
 	}
 
 	@Override

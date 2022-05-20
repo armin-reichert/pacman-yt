@@ -37,10 +37,11 @@ public abstract class SpriteAnimation implements Animation {
 	protected String name;
 	protected boolean loop = false;
 	protected boolean enabled = true;;
-	protected byte[] frames;
 	protected int majorIndex;
 	protected int minorIndex;
 	protected int frameLength = 1;
+
+	public abstract List<Integer> getFrames();
 
 	public abstract List<BufferedImage> getSprites();
 
@@ -71,7 +72,7 @@ public abstract class SpriteAnimation implements Animation {
 
 	@Override
 	public int frame() {
-		return frames[majorIndex];
+		return getFrames().get(majorIndex);
 	}
 
 	@Override
@@ -87,10 +88,10 @@ public abstract class SpriteAnimation implements Animation {
 	}
 
 	private void advanceMajorIndex() {
-		if (majorIndex < frames.length - 1) {
+		if (majorIndex < getFrames().size() - 1) {
 			++majorIndex;
 		} else {
-			majorIndex = loop ? 0 : frames.length - 1;
+			majorIndex = loop ? 0 : getFrames().size() - 1;
 		}
 	}
 

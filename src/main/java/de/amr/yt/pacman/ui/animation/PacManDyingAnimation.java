@@ -25,6 +25,7 @@ SOFTWARE.
 package de.amr.yt.pacman.ui.animation;
 
 import java.awt.image.BufferedImage;
+import java.util.Arrays;
 import java.util.List;
 
 import de.amr.yt.pacman.ui.Sprites;
@@ -34,11 +35,17 @@ import de.amr.yt.pacman.ui.Sprites;
  */
 public class PacManDyingAnimation extends SpriteAnimation {
 
+	private final List<Integer> frames = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+
 	public PacManDyingAnimation() {
 		name = "pacman-dying";
-		frames = new byte[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
 		frameLength = 6;
 		loop = false;
+	}
+
+	@Override
+	public List<Integer> getFrames() {
+		return frames;
 	}
 
 	@Override

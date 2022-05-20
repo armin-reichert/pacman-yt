@@ -25,6 +25,7 @@ SOFTWARE.
 package de.amr.yt.pacman.ui.animation;
 
 import java.awt.image.BufferedImage;
+import java.util.Collections;
 import java.util.List;
 
 import de.amr.yt.pacman.lib.Direction;
@@ -35,11 +36,17 @@ import de.amr.yt.pacman.ui.Sprites;
  */
 public class PacManStandingAnimation extends SpriteAnimation {
 
+	private final List<Integer> frames = Collections.singletonList(2);
+
 	public PacManStandingAnimation() {
 		name = "pacman-standing";
-		frames = new byte[] { 2 };
 		frameLength = 1;
 		loop = false;
+	}
+
+	@Override
+	public List<Integer> getFrames() {
+		return frames;
 	}
 
 	@Override
