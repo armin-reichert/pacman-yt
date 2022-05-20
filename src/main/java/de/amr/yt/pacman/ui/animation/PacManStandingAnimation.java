@@ -36,7 +36,10 @@ import de.amr.yt.pacman.ui.Sprites;
 public class PacManStandingAnimation extends SpriteAnimation {
 
 	public PacManStandingAnimation() {
-		super("pacman-standing", new byte[] { 2 }, 1, false);
+		name = "pacman-standing";
+		frames = new byte[] { 2 };
+		frameLength = 1;
+		loop = false;
 	}
 
 	@Override

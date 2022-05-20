@@ -35,7 +35,10 @@ public class PacManWalkingAnimation extends SpriteAnimation {
 	private final PacMan pacMan;
 
 	public PacManWalkingAnimation(PacMan pacMan) {
-		super("pacman-walking", new byte[] { 1, 0, 1, 2 }, 2, true);
+		name = "pacman-walking";
+		frames = new byte[] { 1, 0, 1, 2 };
+		frameLength = 2;
+		loop = true;
 		this.pacMan = pacMan;
 	}
 

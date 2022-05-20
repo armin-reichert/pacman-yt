@@ -25,7 +25,6 @@ SOFTWARE.
 package de.amr.yt.pacman.ui.animation;
 
 import java.awt.image.BufferedImage;
-import java.util.Arrays;
 import java.util.List;
 
 import de.amr.yt.pacman.lib.Animation;
@@ -35,52 +34,13 @@ import de.amr.yt.pacman.lib.Animation;
  */
 public abstract class SpriteAnimation implements Animation {
 
-	public String name;
-	public boolean loop;
-
-	protected boolean enabled;
+	protected String name;
+	protected boolean loop = false;
+	protected boolean enabled = true;;
 	protected byte[] frames;
 	protected int majorIndex;
 	protected int minorIndex;
-	protected int frameLength;
-
-	public SpriteAnimation(String name) {
-		this.name = name;
-	}
-
-	/**
-	 * Creates a sprite animation (frame pattern).
-	 * <p>
-	 * For example, <code>new SpriteAnimation("my-animation", new byte[] {0,1,2}, 3, true)</code> creates the repeated
-	 * pattern <code>0 0 0 1 1 1 2 2 2</code>.
-	 * 
-	 * @param name        animation name
-	 * @param frames      frame indices
-	 * @param frameLength length of a single frame in ticks
-	 * @param loop        if the animation should repeat from start endlessly
-	 */
-	public SpriteAnimation(String name, byte[] frames, int frameLength, boolean loop) {
-		this.name = name;
-		this.frames = Arrays.copyOf(frames, frames.length);
-		this.frameLength = frameLength;
-		this.loop = loop;
-		this.enabled = true;
-	}
-
-	/**
-	 * Creates a sprite animation (frame pattern) where each frame takes one tick.
-	 * <p>
-	 * For example, <code>new SpriteAnimation("my-animation", new byte[] {0,1,2}, true)</code> creates the repeated
-	 * pattern <code>0 1 2</code>.
-	 * 
-	 * @param name        animation name
-	 * @param frames      frame indices
-	 * @param frameLength length of a single frame in ticks
-	 * @param loop        if the animation should repeat from start endlessly
-	 */
-	public SpriteAnimation(String name, byte[] frames, boolean loop) {
-		this(name, frames, 1, loop);
-	}
+	protected int frameLength = 1;
 
 	public abstract List<BufferedImage> getSprites();
 

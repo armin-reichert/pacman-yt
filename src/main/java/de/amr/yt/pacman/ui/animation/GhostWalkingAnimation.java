@@ -39,8 +39,11 @@ public class GhostWalkingAnimation extends SpriteAnimation {
 	private final Ghost ghost;
 
 	public GhostWalkingAnimation(Ghost ghost) {
-		super("ghost-walking", new byte[] { 0, 1 }, 8, true);
 		this.ghost = ghost;
+		name = "ghost-walking";
+		frames = new byte[] { 0, 1 };
+		frameLength = 8;
+		loop = true;
 	}
 
 	@Override

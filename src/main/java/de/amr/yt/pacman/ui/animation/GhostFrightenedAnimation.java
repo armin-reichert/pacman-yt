@@ -35,7 +35,7 @@ import de.amr.yt.pacman.ui.Sprites;
 public class GhostFrightenedAnimation extends SpriteAnimation {
 
 	public GhostFrightenedAnimation() {
-		super("ghost-frightened");
+		name = "ghost-frightened";
 		frames = new byte[] { 0, 1 };
 		frameLength = 8;
 		loop = true;
