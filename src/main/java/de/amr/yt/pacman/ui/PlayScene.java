@@ -28,6 +28,7 @@ import static de.amr.yt.pacman.lib.SpriteAnimation.frame;
 import static de.amr.yt.pacman.model.World.t;
 import static de.amr.yt.pacman.ui.Renderer.drawGhost;
 import static de.amr.yt.pacman.ui.Renderer.drawGhostState;
+import static de.amr.yt.pacman.ui.Renderer.drawGhostTargetTiles;
 import static de.amr.yt.pacman.ui.Renderer.drawPacMan;
 import static de.amr.yt.pacman.ui.Renderer.drawPacManState;
 
@@ -46,6 +47,8 @@ import de.amr.yt.pacman.model.World;
  * @author Armin Reichert
  */
 public class PlayScene implements GameScene {
+
+	public boolean showTargetTiles = false;
 
 	private final GameModel game;
 
@@ -106,6 +109,9 @@ public class PlayScene implements GameScene {
 			int y = t(World.ROWS - 2);
 			int symbol = game.levelCounter.get(i);
 			g.drawImage(Sprites.get().bonusSymbols.get(symbol), x, y, null);
+		}
+		if (showTargetTiles) {
+			drawGhostTargetTiles(g, game.ghosts);
 		}
 	}
 

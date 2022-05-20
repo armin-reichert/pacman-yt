@@ -25,7 +25,6 @@ package de.amr.yt.pacman.ui;
 
 import static de.amr.yt.pacman.lib.Logging.log;
 import static de.amr.yt.pacman.model.World.t;
-import static de.amr.yt.pacman.ui.Renderer.drawGhostTargetTiles;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -56,7 +55,6 @@ public class GameUI {
 	public static final double SCALE_MAX = 0;
 
 	public boolean showInfo = false;
-	public boolean showTargetTiles = false;
 
 	public final Joystick joystick = new Joystick();
 	private final GameController gameController;
@@ -123,7 +121,7 @@ public class GameUI {
 				g.setColor(Color.BLACK);
 				g.fillRect(0, 0, getWidth(), getHeight());
 				drawCurrentGameScene(g);
-				drawPauseText(g);
+				drawInfoLayer(g);
 			}
 		};
 	}
@@ -134,7 +132,7 @@ public class GameUI {
 		case KeyEvent.VK_P -> game.paused = !game.paused;
 		case KeyEvent.VK_Q -> gameController.newGame();
 		case KeyEvent.VK_S -> game.pacSafe = !game.pacSafe;
-		case KeyEvent.VK_T -> showTargetTiles = !showTargetTiles;
+		case KeyEvent.VK_T -> playScene.showTargetTiles = !playScene.showTargetTiles;
 		case KeyEvent.VK_SPACE -> {
 			if (game.paused) {
 				gameController.step(true);
@@ -178,16 +176,6 @@ public class GameUI {
 		};
 	}
 
-	private void drawPauseText(Graphics g) {
-		if (game.paused) {
-			String text = "PAUSED";
-			g.setColor(Color.RED);
-			g.setFont(new Font(Font.MONOSPACED, Font.BOLD, 36));
-			int sw = g.getFontMetrics().stringWidth(text);
-			g.drawString(text, (frame.getWidth() - sw) / 2, frame.getHeight() * 3 / 4);
-		}
-	}
-
 	private void drawCurrentGameScene(Graphics g) {
 		Graphics2D g2D = (Graphics2D) g.create();
 		g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -199,10 +187,17 @@ public class GameUI {
 		if (showInfo) {
 			drawInfo(g2D);
 		}
-		if (showTargetTiles) {
-			drawGhostTargetTiles(g2D, game.ghosts);
-		}
 		g2D.dispose();
+	}
+
+	private void drawInfoLayer(Graphics g) {
+		if (game.paused) {
+			String text = "PAUSED";
+			g.setColor(Color.RED);
+			g.setFont(new Font(Font.MONOSPACED, Font.BOLD, 36));
+			int sw = g.getFontMetrics().stringWidth(text);
+			g.drawString(text, (frame.getWidth() - sw) / 2, frame.getHeight() * 3 / 4);
+		}
 	}
 
 	private void drawScore(Graphics2D g) {
