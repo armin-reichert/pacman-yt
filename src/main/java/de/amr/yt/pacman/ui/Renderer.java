@@ -23,7 +23,6 @@ SOFTWARE.
 */
 package de.amr.yt.pacman.ui;
 
-import static de.amr.yt.pacman.lib.Animation.frame;
 import static de.amr.yt.pacman.model.World.t;
 
 import java.awt.BasicStroke;
@@ -37,6 +36,7 @@ import de.amr.yt.pacman.model.Ghost;
 import de.amr.yt.pacman.model.GhostState;
 import de.amr.yt.pacman.model.PacMan;
 import de.amr.yt.pacman.model.World;
+import de.amr.yt.pacman.ui.animation.GhostFrightenedAnimation;
 import de.amr.yt.pacman.ui.animation.SpriteAnimation;
 
 /**
@@ -88,21 +88,19 @@ public class Renderer {
 	}
 
 	public static void drawGhost(Graphics2D g, Ghost ghost, boolean blinking) {
+		SpriteAnimation sa = (SpriteAnimation) ghost.animation();
 		if (ghost.state == GhostState.EATEN || ghost.state == GhostState.ENTERING_HOUSE) {
 			if (ghost.valueTimer > 0) {
 				drawGuy(g, ghost, Sprites.get().ghostValues.get(ghost.value));
 			} else {
 				drawGuy(g, ghost, Sprites.get().ghostEyes.get(ghost.moveDir));
 			}
-		}
-
-		else if (ghost.animation() == ghost.animFrightened) {
-			int blinkingOffset = !blinking || frame(2, 10) == 0 ? 0 : 2;
-			drawGuy(g, ghost, Sprites.get().ghostBlue.get(ghost.animation().frame() + blinkingOffset));
-		}
-
-		else {
-			drawGuy(g, ghost, ((SpriteAnimation) ghost.animation()).sprite());
+		} else {
+			if (sa instanceof GhostFrightenedAnimation) {
+				GhostFrightenedAnimation gfa = (GhostFrightenedAnimation) sa;
+				gfa.blinking = blinking;
+			}
+			drawGuy(g, ghost, sa.sprite());
 		}
 	}
 

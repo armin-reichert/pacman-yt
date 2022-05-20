@@ -27,12 +27,15 @@ package de.amr.yt.pacman.ui.animation;
 import java.awt.image.BufferedImage;
 import java.util.List;
 
+import de.amr.yt.pacman.lib.Animation;
 import de.amr.yt.pacman.ui.Sprites;
 
 /**
  * @author Armin Reichert
  */
 public class GhostFrightenedAnimation extends SpriteAnimation {
+
+	public boolean blinking;
 
 	public GhostFrightenedAnimation() {
 		super("ghost-frightened", new byte[] { 0, 1 }, 8, true);
@@ -41,5 +44,15 @@ public class GhostFrightenedAnimation extends SpriteAnimation {
 	@Override
 	public List<BufferedImage> getSprites() {
 		return Sprites.get().ghostBlue;
+	}
+
+	@Override
+	public BufferedImage sprite() {
+		if (blinking) {
+			int offset = !blinking || Animation.frame(2, 10) == 0 ? 0 : 2;
+			return getSprites().get(frame() + offset);
+		} else {
+			return getSprites().get(frame());
+		}
 	}
 }
