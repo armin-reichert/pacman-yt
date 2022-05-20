@@ -25,8 +25,6 @@ package de.amr.yt.pacman.controller;
 
 import static de.amr.yt.pacman.lib.GameClock.sec;
 
-import java.awt.EventQueue;
-
 import de.amr.yt.pacman.lib.Sounds;
 import de.amr.yt.pacman.model.GameModel;
 import de.amr.yt.pacman.model.GameState;
@@ -39,32 +37,21 @@ import de.amr.yt.pacman.ui.IntroScene;
  */
 public class GameController {
 
-	private final GameModel game = new GameModel();
-	private GameUI ui;
+	public final GameModel game = new GameModel();
+	public GameUI ui;
 
 	public GameController() {
 		newGame();
 	}
 
 	public void newGame() {
+		Sounds.stopAll();
 		game.setLevel(1);
 		game.setState(GameState.INTRO);
-		Sounds.stopAll();
-
-		// TODO: avoid need for calling init() explicitly
+		// TODO: avoid having to init scene explicitly
 		if (ui != null) {
 			ui.currentScene().init();
 		}
-	}
-
-	/**
-	 * This method must be called on the event dispatch thread using {@link EventQueue#invokeLater(Runnable)}.
-	 * 
-	 * @param canvasScaling scaling of canvas wrt. logical game size
-	 */
-	public void createAndShowUI(double canvasScaling) {
-		ui = new GameUI(this, game, canvasScaling);
-		ui.show();
 	}
 
 	public void step(boolean singleStepMode) {

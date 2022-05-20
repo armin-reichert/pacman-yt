@@ -26,6 +26,7 @@ package de.amr.yt.pacman.controller;
 import javax.swing.SwingUtilities;
 
 import de.amr.yt.pacman.lib.GameClock;
+import de.amr.yt.pacman.ui.GameUI;
 import de.amr.yt.pacman.ui.Sprites;
 
 /**
@@ -34,11 +35,13 @@ import de.amr.yt.pacman.ui.Sprites;
 public class PacManApp {
 
 	public static void main(String[] args) {
-		Sprites.get(); // when failing, fail early
+		Sprites.get(); // fail fast
 		double canvasScaling = args.length > 0 ? Double.parseDouble(args[0]) : 2.0;
 		GameController controller = new GameController();
 		SwingUtilities.invokeLater(() -> {
-			controller.createAndShowUI(canvasScaling);
+			GameUI ui = new GameUI(controller, controller.game, canvasScaling);
+			controller.ui = ui;
+			ui.show();
 			GameClock.get().start(() -> controller.step(false));
 		});
 	}
