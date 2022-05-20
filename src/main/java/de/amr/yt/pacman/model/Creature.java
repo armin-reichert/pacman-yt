@@ -25,8 +25,8 @@ package de.amr.yt.pacman.model;
 
 import static de.amr.yt.pacman.lib.Logging.log;
 
-import de.amr.yt.pacman.lib.Direction;
 import de.amr.yt.pacman.lib.Animation;
+import de.amr.yt.pacman.lib.Direction;
 import de.amr.yt.pacman.lib.Vector2;
 
 /**

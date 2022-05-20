@@ -25,7 +25,6 @@ SOFTWARE.
 package de.amr.yt.pacman.ui.animation;
 
 import java.awt.image.BufferedImage;
-import java.util.Arrays;
 import java.util.List;
 
 import de.amr.yt.pacman.model.Ghost;
@@ -38,7 +37,7 @@ import de.amr.yt.pacman.ui.Sprites;
 public class GhostWalkingAnimation extends SpriteAnimation {
 
 	private final Ghost ghost;
-	private final List<Integer> frames = Arrays.asList(0, 1);
+	private final List<Integer> frames = List.of(0, 1);
 
 	public GhostWalkingAnimation(Ghost ghost) {
 		this.ghost = ghost;
