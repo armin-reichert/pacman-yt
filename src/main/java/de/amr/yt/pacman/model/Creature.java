@@ -26,7 +26,7 @@ package de.amr.yt.pacman.model;
 import static de.amr.yt.pacman.lib.Logging.log;
 
 import de.amr.yt.pacman.lib.Direction;
-import de.amr.yt.pacman.lib.SpriteAnimation;
+import de.amr.yt.pacman.lib.Animation;
 import de.amr.yt.pacman.lib.Vector2;
 
 /**
@@ -56,7 +56,7 @@ public abstract class Creature {
 	public Direction moveDir;
 	public Direction wishDir;
 
-	private SpriteAnimation animation;
+	private Animation animation;
 
 	protected Creature(World world) {
 		this.world = world;
@@ -72,11 +72,11 @@ public abstract class Creature {
 		wishDir = Direction.LEFT;
 	}
 
-	public SpriteAnimation animation() {
+	public Animation animation() {
 		return animation;
 	}
 
-	protected void setAnimation(SpriteAnimation animation) {
+	protected void setAnimation(Animation animation) {
 		if (this.animation != animation) {
 			this.animation = animation;
 			animation.reset();

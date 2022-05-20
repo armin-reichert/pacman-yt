@@ -24,7 +24,7 @@ SOFTWARE.
 package de.amr.yt.pacman.ui;
 
 import static de.amr.yt.pacman.lib.Logging.log;
-import static de.amr.yt.pacman.lib.SpriteAnimation.frame;
+import static de.amr.yt.pacman.lib.Animation.frame;
 import static de.amr.yt.pacman.model.World.t;
 import static de.amr.yt.pacman.ui.Renderer.drawGhost;
 import static de.amr.yt.pacman.ui.Renderer.drawGhostState;

@@ -28,7 +28,7 @@ import java.util.Arrays;
 /**
  * @author Armin Reichert
  */
-public class SpriteAnimation {
+public class Animation {
 
 	/**
 	 * Returns an animation frame for the current game clock time.
@@ -74,7 +74,7 @@ public class SpriteAnimation {
 	 * @param frameLength length of a single frame in ticks
 	 * @param loop        if the animation should repeat from start endlessly
 	 */
-	public SpriteAnimation(String name, byte[] frames, int frameLength, boolean loop) {
+	public Animation(String name, byte[] frames, int frameLength, boolean loop) {
 		this.name = name;
 		this.loop = loop;
 		this.enabled = true;
@@ -95,7 +95,7 @@ public class SpriteAnimation {
 	 * @param frameLength length of a single frame in ticks
 	 * @param loop        if the animation should repeat from start endlessly
 	 */
-	public SpriteAnimation(String name, byte[] frames, boolean loop) {
+	public Animation(String name, byte[] frames, boolean loop) {
 		this(name, frames, 1, loop);
 	}
 
@@ -108,7 +108,7 @@ public class SpriteAnimation {
 	 * @param frames      frame indices
 	 * @param frameLength length of a single frame in ticks
 	 */
-	public SpriteAnimation(String name, int singleFrame) {
+	public Animation(String name, int singleFrame) {
 		this(name, new byte[] { (byte) singleFrame }, false);
 	}
 

@@ -31,7 +31,7 @@ import static de.amr.yt.pacman.lib.Vector2.v;
 import static de.amr.yt.pacman.model.World.t;
 
 import de.amr.yt.pacman.lib.Direction;
-import de.amr.yt.pacman.lib.SpriteAnimation;
+import de.amr.yt.pacman.lib.Animation;
 import de.amr.yt.pacman.lib.Vector2;
 
 /**
@@ -46,7 +46,7 @@ public class Ghost extends Creature {
 	public final int id;
 	public final GameModel game;
 
-	public SpriteAnimation animWalking, animFrightened;
+	public Animation animWalking, animFrightened;
 
 	public GhostState state;
 	/** Elroy state: 0=off, 1=Elroy1, 2=Elroy2, -1=Elroy1 disabled, -2=Elroy2 disabled */
