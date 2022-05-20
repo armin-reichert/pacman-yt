@@ -35,6 +35,7 @@ import de.amr.yt.pacman.ui.Sprites;
 public class PacManDyingAnimation extends SpriteAnimation {
 
 	private final List<Integer> frames = List.of(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+	private final List<BufferedImage> sprites = Sprites.get().stripe(3, 0, 11);
 
 	public PacManDyingAnimation() {
 		name = "pacman-dying";
@@ -49,6 +50,6 @@ public class PacManDyingAnimation extends SpriteAnimation {
 
 	@Override
 	public List<BufferedImage> getSprites() {
-		return Sprites.get().pacDead;
+		return sprites;
 	}
 }
