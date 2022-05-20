@@ -122,7 +122,7 @@ public class GameUI {
 				super.paintComponent(g);
 				g.setColor(Color.BLACK);
 				g.fillRect(0, 0, getWidth(), getHeight());
-				drawCurrentGameScene(canvasScaling, g);
+				drawCurrentGameScene(g);
 				drawPauseText(g);
 			}
 		};
@@ -188,12 +188,12 @@ public class GameUI {
 		}
 	}
 
-	private void drawCurrentGameScene(double scale, Graphics g) {
+	private void drawCurrentGameScene(Graphics g) {
 		Graphics2D g2D = (Graphics2D) g.create();
 		g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2D.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 		g2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-		g2D.scale(scale, scale);
+		g2D.scale(canvasScaling, canvasScaling);
 		drawScore(g2D);
 		currentScene().draw(g2D);
 		if (showInfo) {
