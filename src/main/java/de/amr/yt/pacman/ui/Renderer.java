@@ -32,7 +32,6 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
-import de.amr.yt.pacman.lib.Animation;
 import de.amr.yt.pacman.model.Creature;
 import de.amr.yt.pacman.model.Ghost;
 import de.amr.yt.pacman.model.GhostState;
@@ -56,26 +55,6 @@ public class Renderer {
 			font = new Font(Font.SANS_SERIF, Font.BOLD, 8);
 		}
 		ARCADE_FONT = font;
-	}
-
-	public static Animation createPacManWalkingAnimation() {
-		return new Animation("pacman-walking", new byte[] { 1, 0, 1, 2 }, 2, true);
-	}
-
-	public static Animation createPacManStandingAnimation() {
-		return new Animation("pacman-standing", 2);
-	}
-
-	public static Animation createPacManDyingAnimation() {
-		return new Animation("dying", new byte[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }, 6, false);
-	}
-
-	public static Animation createGhostWalkingAnimation() {
-		return new Animation("ghost-walking", new byte[] { 0, 1 }, 8, true);
-	}
-
-	public static Animation createGhostFrightenedAnimation() {
-		return new Animation("ghost-frightened", new byte[] { 0, 1 }, 8, true);
 	}
 
 	public static void drawScore(Graphics2D g, int score, int levelNumber, boolean contentVisible) {
