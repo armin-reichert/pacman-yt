@@ -23,6 +23,8 @@ SOFTWARE.
 */
 package de.amr.yt.pacman.lib;
 
+import static de.amr.yt.pacman.lib.Logging.log;
+
 /**
  * @author Armin Reichert
  */
@@ -48,7 +50,7 @@ public class GameClock {
 	private int frequency;
 	private Runnable onTick = () -> Logging.log("Tick");
 	private Thread thread;
-	private boolean running;
+	private volatile boolean running;
 	private long lastFrameRate;
 	private long frameCount;
 	private long frameCountStart;
@@ -83,6 +85,7 @@ public class GameClock {
 		thread = new Thread(this::loop, "GameClock");
 		running = true;
 		thread.start();
+		log("Clock started with %d Hz", frequency);
 	}
 
 	private void loop() {
@@ -118,6 +121,7 @@ public class GameClock {
 		running = false;
 		try {
 			thread.join();
+			log("Clock stopped");
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
