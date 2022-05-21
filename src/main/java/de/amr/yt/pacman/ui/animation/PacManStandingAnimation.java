@@ -44,12 +44,12 @@ public class PacManStandingAnimation extends SpriteAnimation {
 	}
 
 	@Override
-	public List<Integer> getFrames() {
-		return frames;
+	public int numFrames() {
+		return frames.size();
 	}
 
 	@Override
-	public List<BufferedImage> getSprites() {
-		return sprites;
+	public BufferedImage sprite() {
+		return sprites.get(frames.get(majorIndex));
 	}
 }

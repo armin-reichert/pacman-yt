@@ -31,7 +31,6 @@ import static de.amr.yt.pacman.lib.Direction.UP;
 
 import java.awt.image.BufferedImage;
 import java.util.EnumMap;
-import java.util.List;
 
 import de.amr.yt.pacman.lib.Direction;
 import de.amr.yt.pacman.model.Ghost;
@@ -45,7 +44,6 @@ public class GhostDeadAnimation extends SpriteAnimation {
 
 	private EnumMap<Direction, BufferedImage> ghostEyes = new EnumMap<>(Direction.class);
 	private final Ghost ghost;
-	private final List<Integer> frames = List.of(0);
 
 	public GhostDeadAnimation(Ghost ghost) {
 		this.ghost = ghost;
@@ -61,12 +59,12 @@ public class GhostDeadAnimation extends SpriteAnimation {
 	}
 
 	@Override
-	public List<Integer> getFrames() {
-		return frames;
+	public int numFrames() {
+		return 1;
 	}
 
 	@Override
-	public List<BufferedImage> getSprites() {
-		return List.of(ghostEyes.get(ghost.moveDir));
+	public BufferedImage sprite() {
+		return ghostEyes.get(ghost.moveDir);
 	}
 }

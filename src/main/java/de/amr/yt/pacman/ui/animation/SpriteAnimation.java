@@ -25,7 +25,6 @@ SOFTWARE.
 package de.amr.yt.pacman.ui.animation;
 
 import java.awt.image.BufferedImage;
-import java.util.List;
 
 import de.amr.yt.pacman.lib.Animation;
 
@@ -41,13 +40,7 @@ public abstract class SpriteAnimation implements Animation {
 	protected int minorIndex;
 	protected int frameLength = 1;
 
-	public abstract List<Integer> getFrames();
-
-	public abstract List<BufferedImage> getSprites();
-
-	public BufferedImage sprite() {
-		return getSprites().get(frame());
-	}
+	public abstract BufferedImage sprite();
 
 	@Override
 	public String toString() {
@@ -71,11 +64,6 @@ public abstract class SpriteAnimation implements Animation {
 	}
 
 	@Override
-	public int frame() {
-		return getFrames().get(majorIndex);
-	}
-
-	@Override
 	public void advance() {
 		if (!enabled) {
 			return;
@@ -88,10 +76,10 @@ public abstract class SpriteAnimation implements Animation {
 	}
 
 	private void advanceMajorIndex() {
-		if (majorIndex < getFrames().size() - 1) {
+		if (majorIndex < numFrames() - 1) {
 			++majorIndex;
 		} else {
-			majorIndex = loop ? 0 : getFrames().size() - 1;
+			majorIndex = loop ? 0 : numFrames() - 1;
 		}
 	}
 

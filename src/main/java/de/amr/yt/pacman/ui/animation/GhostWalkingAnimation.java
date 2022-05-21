@@ -82,12 +82,12 @@ public class GhostWalkingAnimation extends SpriteAnimation {
 	}
 
 	@Override
-	public List<Integer> getFrames() {
-		return frames;
+	public int numFrames() {
+		return frames.size();
 	}
 
 	@Override
-	public List<BufferedImage> getSprites() {
-		return ghostsWalkingSprites.get(ghost.id).get(ghost.moveDir);
+	public BufferedImage sprite() {
+		return ghostsWalkingSprites.get(ghost.id).get(ghost.moveDir).get(frames.get(majorIndex));
 	}
 }

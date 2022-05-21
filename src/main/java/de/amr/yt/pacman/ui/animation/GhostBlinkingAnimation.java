@@ -24,6 +24,8 @@ SOFTWARE.
 
 package de.amr.yt.pacman.ui.animation;
 
+import java.awt.image.BufferedImage;
+
 import de.amr.yt.pacman.lib.Animation;
 
 /**
@@ -36,8 +38,8 @@ public class GhostBlinkingAnimation extends GhostFrightenedAnimation {
 	}
 
 	@Override
-	public int frame() {
+	public BufferedImage sprite() {
 		int offset = Animation.frame(2, 10) == 0 ? 0 : 2;
-		return super.frame() + offset;
+		return sprites.get(majorIndex + offset);
 	}
 }

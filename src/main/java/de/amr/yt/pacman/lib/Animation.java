@@ -59,7 +59,7 @@ public interface Animation {
 
 	public void reset();
 
-	public int frame();
+	public int numFrames();
 
 	public void advance();
 }

@@ -40,29 +40,29 @@ import de.amr.yt.pacman.ui.Sprites;
 public class PacManWalkingAnimation extends SpriteAnimation {
 
 	private final List<Integer> frames = List.of(1, 0, 1, 2);
-	private final EnumMap<Direction, List<BufferedImage>> pacWalkingSprites = new EnumMap<>(Direction.class);
+	private final EnumMap<Direction, List<BufferedImage>> sprites = new EnumMap<>(Direction.class);
 
 	private final PacMan pacMan;
 
 	public PacManWalkingAnimation(PacMan pacMan) {
 		this.pacMan = pacMan;
 		Sprites spr = Sprites.get();
-		pacWalkingSprites.put(RIGHT, List.of(spr.s(0, 0), spr.s(1, 0), spr.s(2, 0)));
-		pacWalkingSprites.put(LEFT, List.of(spr.s(0, 1), spr.s(1, 1), spr.s(2, 0)));
-		pacWalkingSprites.put(UP, List.of(spr.s(0, 2), spr.s(1, 2), spr.s(2, 0)));
-		pacWalkingSprites.put(DOWN, List.of(spr.s(0, 3), spr.s(1, 3), spr.s(2, 0)));
+		sprites.put(RIGHT, List.of(spr.s(0, 0), spr.s(1, 0), spr.s(2, 0)));
+		sprites.put(LEFT, List.of(spr.s(0, 1), spr.s(1, 1), spr.s(2, 0)));
+		sprites.put(UP, List.of(spr.s(0, 2), spr.s(1, 2), spr.s(2, 0)));
+		sprites.put(DOWN, List.of(spr.s(0, 3), spr.s(1, 3), spr.s(2, 0)));
 		name = "pacman-walking";
 		frameLength = 2;
 		loop = true;
 	}
 
 	@Override
-	public List<Integer> getFrames() {
-		return frames;
+	public int numFrames() {
+		return frames.size();
 	}
 
 	@Override
-	public List<BufferedImage> getSprites() {
-		return pacWalkingSprites.get(pacMan.moveDir);
+	public BufferedImage sprite() {
+		return sprites.get(pacMan.moveDir).get(frames.get(majorIndex));
 	}
 }
