@@ -23,6 +23,8 @@ SOFTWARE.
 */
 package de.amr.yt.pacman.ui;
 
+import static de.amr.yt.pacman.lib.Logging.log;
+
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,8 +33,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
-
-import de.amr.yt.pacman.lib.Logging;
 
 /**
  * @author Armin Reichert
@@ -49,9 +49,7 @@ public class Sprites {
 		try {
 			sheetImage = image("/sprites.png");
 			mazeImage = image("/maze_empty.png");
-
 			bonusSymbols = stripe(2, 3, 7);
-
 			bonusValues = Map.of( //
 					100, s(0, 9), //
 					300, s(1, 9), //
@@ -61,11 +59,8 @@ public class Sprites {
 					2000, s(60, 160, 24, 16), //
 					3000, s(60, 176, 24, 16), //
 					5000, s(60, 192, 24, 16)); //
-
 			liveCount = s(8, 1);
-
-			Logging.log("Sprites loaded successfully");
-
+			log("Sprites loaded successfully");
 		} catch (Exception x) {
 			x.printStackTrace();
 			System.exit(42);

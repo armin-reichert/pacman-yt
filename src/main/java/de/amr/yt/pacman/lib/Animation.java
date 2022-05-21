@@ -72,7 +72,7 @@ public abstract class Animation<T> {
 
 	@Override
 	public String toString() {
-		return "%s %s".formatted(name, enabled ? "" : "disabled");
+		return "%s%s".formatted(name, enabled ? "" : " disabled");
 	}
 
 	public boolean isEnabled() {

@@ -45,6 +45,7 @@ public class GhostValueAnimation extends Animation<BufferedImage> {
 
 	public GhostValueAnimation(Ghost ghost) {
 		this.ghost = ghost;
+		name = "ghost-value";
 	}
 
 	@Override
