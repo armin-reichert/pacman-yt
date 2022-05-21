@@ -39,12 +39,12 @@ public class AnimationMap<KEY extends Enum<KEY>> {
 		animations = new EnumMap<>(keyClass);
 	}
 
-	public Animation<?> selected() {
-		return animations.get(selectedKey);
-	}
-
 	public void put(KEY key, Animation<?> animation) {
 		animations.put(key, animation);
+	}
+
+	public Animation<?> selected() {
+		return animations.get(selectedKey);
 	}
 
 	public boolean select(KEY key) {
