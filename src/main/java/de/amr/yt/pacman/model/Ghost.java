@@ -43,19 +43,16 @@ import de.amr.yt.pacman.lib.Vector2;
  */
 public class Ghost extends Creature {
 
-	public static final int BLINKY = 0, PINKY = 1, INKY = 2, CLYDE = 3;
-
-	static final Direction[] DIR_ORDER = { UP, LEFT, DOWN, RIGHT };
-
 	public enum AnimationKey {
 		WALKING, FRIGHTENED, BLINKING, DEAD, VALUE
 	};
 
+	public static final int BLINKY = 0, PINKY = 1, INKY = 2, CLYDE = 3;
+
+	private static final Direction[] DIR_ORDER = { UP, LEFT, DOWN, RIGHT };
+
 	public final int id;
 	public final GameModel game;
-
-	public final Map<AnimationKey, Animation<?>> animations = new EnumMap<>(AnimationKey.class);
-	private AnimationKey animationKey;
 
 	public GhostState state;
 	/** Elroy state: 0=off, 1=Elroy1, 2=Elroy2, -1=Elroy1 disabled, -2=Elroy2 disabled */
@@ -63,6 +60,9 @@ public class Ghost extends Creature {
 	public Vector2 targetTile;
 	public long valueTimer;
 	public int value;
+
+	public final Map<AnimationKey, Animation<?>> animations = new EnumMap<>(AnimationKey.class);
+	private AnimationKey animationKey;
 
 	public Ghost(GameModel game, int id) {
 		super(game.world);

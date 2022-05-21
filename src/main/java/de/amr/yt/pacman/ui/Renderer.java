@@ -41,18 +41,17 @@ import de.amr.yt.pacman.model.World;
  */
 public class Renderer {
 
-	public static Color[] GHOST_COLORS = { Color.RED, new Color(252, 181, 255), Color.CYAN, new Color(253, 192, 90) };
-	public static final Font ARCADE_FONT;
+	public static final Color[] GHOST_COLORS = { //
+			Color.RED, new Color(252, 181, 255), Color.CYAN, new Color(253, 192, 90) };
 
-	static {
-		Font font;
+	public static final Font ARCADE_FONT = loadTrueTypeFont("/emulogic.ttf", 8);
+
+	public static Font loadTrueTypeFont(String path, float size) {
 		try {
-			font = Font.createFont(Font.TRUETYPE_FONT, Renderer.class.getResourceAsStream("/emulogic.ttf")).deriveFont(8f);
-		} catch (Exception e) {
-			e.printStackTrace();
-			font = new Font(Font.SANS_SERIF, Font.BOLD, 8);
+			return Font.createFont(Font.TRUETYPE_FONT, Renderer.class.getResourceAsStream(path)).deriveFont(size);
+		} catch (Exception x) {
+			throw new RuntimeException(x);
 		}
-		ARCADE_FONT = font;
 	}
 
 	public static void drawScore(Graphics2D g, int score, int levelNumber, boolean contentVisible) {
