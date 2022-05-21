@@ -54,6 +54,10 @@ public class Renderer {
 		}
 	}
 
+	public static void drawMaze(Graphics2D g, int x, int y) {
+		g.drawImage(Sprites.mazeImage, 0, t(3), null);
+	}
+
 	public static void drawScore(Graphics2D g, int score, int levelNumber, boolean contentVisible) {
 		g.setColor(Color.WHITE);
 		g.setFont(Renderer.ARCADE_FONT);

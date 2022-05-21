@@ -29,6 +29,7 @@ import static de.amr.yt.pacman.model.World.t;
 import static de.amr.yt.pacman.ui.Renderer.drawGhost;
 import static de.amr.yt.pacman.ui.Renderer.drawGhostState;
 import static de.amr.yt.pacman.ui.Renderer.drawGhostTargetTiles;
+import static de.amr.yt.pacman.ui.Renderer.drawMaze;
 import static de.amr.yt.pacman.ui.Renderer.drawPacMan;
 import static de.amr.yt.pacman.ui.Renderer.drawPacManState;
 import static de.amr.yt.pacman.ui.Renderer.drawScore;
@@ -91,7 +92,7 @@ public class PlayScene implements GameScene {
 	public void draw(Graphics2D g) {
 		drawScore(g, game.score, game.level.number, true);
 		if (!game.mazeFlashing || frame(2, 15) == 0) {
-			g.drawImage(Sprites.mazeImage, 0, t(3), null);
+			drawMaze(g, 0, t(3));
 		}
 		g.setColor(Color.PINK);
 		for (int row = 0; row < World.ROWS; ++row) {
