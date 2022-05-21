@@ -43,8 +43,8 @@ public class Sprites {
 
 	static BufferedImage mazeImage;
 	static List<BufferedImage> bonusSymbols;
-	public static Map<Integer, BufferedImage> bonusValues;
-	public static BufferedImage liveCount;
+	static Map<Integer, BufferedImage> bonusValues;
+	static BufferedImage liveCount;
 
 	public static void load() {
 		try {

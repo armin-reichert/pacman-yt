@@ -49,7 +49,6 @@ import de.amr.yt.pacman.model.Ghost;
 import de.amr.yt.pacman.model.World;
 import de.amr.yt.pacman.ui.GameUI;
 import de.amr.yt.pacman.ui.render.Renderer;
-import de.amr.yt.pacman.ui.render.Sprites;
 
 /**
  * @author Armin Reichert
@@ -133,7 +132,9 @@ public class PlayScene implements GameScene {
 		int livesDisplayed = game.score == 0 && gameController.state() == GameState.LEVEL_STARTING ? game.lives
 				: game.lives - 1;
 		for (int i = 0; i < livesDisplayed; ++i) {
-			g.drawImage(Sprites.liveCount, t(2 + 2 * i), t(World.ROWS - 2), null);
+			int centerX = t(2 + 2 * i) + World.HT;
+			int centerY = t(World.ROWS - 2) + World.TS;
+			Renderer.drawLifeSymbol(g, centerX, centerY);
 		}
 		for (int i = 0; i < game.levelCounter.size(); ++i) {
 			int centerX = t(World.COLS - 4 - 2 * i) + World.HT;

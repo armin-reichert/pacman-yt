@@ -68,6 +68,11 @@ public class Renderer {
 		g.drawImage(sprite, centerX - sprite.getWidth() / 2, centerY - sprite.getHeight() / 2, null);
 	}
 
+	public static void drawLifeSymbol(Graphics2D g, int centerX, int centerY) {
+		BufferedImage sprite = Sprites.liveCount;
+		g.drawImage(sprite, centerX - sprite.getWidth() / 2, centerY - sprite.getHeight() / 2, null);
+	}
+
 	public static void drawScore(Graphics2D g, int score, int levelNumber, boolean contentVisible) {
 		g.setColor(Color.WHITE);
 		g.setFont(Renderer.ARCADE_FONT);
