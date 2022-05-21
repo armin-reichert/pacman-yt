@@ -44,7 +44,7 @@ public class AnimationMap<KEY extends Enum<KEY>> {
 	}
 
 	public Animation<?> selected() {
-		return animations.get(selectedKey);
+		return animations.getOrDefault(selectedKey, Animation.DEFAULT);
 	}
 
 	public boolean select(KEY key) {

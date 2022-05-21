@@ -28,6 +28,24 @@ package de.amr.yt.pacman.lib;
  */
 public abstract class Animation<T> {
 
+	public static final Animation<Object> DEFAULT = new Animation<Object>() {
+		{
+			name = "Missing-Animation";
+			loop = false;
+			enabled = true;
+		}
+
+		@Override
+		public int numFrames() {
+			return 0;
+		}
+
+		@Override
+		public Object sprite() {
+			return null;
+		}
+	};
+
 	/**
 	 * Returns an animation frame for the given time (tick).
 	 * 
