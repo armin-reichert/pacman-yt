@@ -132,7 +132,7 @@ public class IntroScene implements GameScene {
 			case Ghost.CLYDE -> 1600;
 			default -> 0;
 			};
-			ghost.showWalking();
+			ghost.show(Ghost.AnimationKey.WALKING);
 			ghost.animation().setEnabled(true);
 		}
 	}
@@ -216,7 +216,7 @@ public class IntroScene implements GameScene {
 	private void drawPacManChasingGhosts(Graphics2D g) {
 		for (var ghost : game.ghosts) {
 			if (ghost.id == ghostEaten) {
-				ghost.showValue();
+				ghost.show(Ghost.AnimationKey.VALUE);
 			}
 			if (ghost.id >= ghostEaten) {
 				drawGhost(g, ghost);
@@ -253,7 +253,7 @@ public class IntroScene implements GameScene {
 			for (var ghost : game.ghosts) {
 				ghost.moveDir = Direction.RIGHT;
 				ghost.speed = game.level.ghostSpeedFrightened;
-				ghost.showFrightened();
+				ghost.show(Ghost.AnimationKey.FRIGHTENED);
 			}
 			pacManChasingGhosts = true;
 		}

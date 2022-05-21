@@ -45,6 +45,7 @@ import de.amr.yt.pacman.controller.GameController;
 import de.amr.yt.pacman.controller.GameState;
 import de.amr.yt.pacman.lib.GameClock;
 import de.amr.yt.pacman.model.GameModel;
+import de.amr.yt.pacman.model.Ghost;
 import de.amr.yt.pacman.model.World;
 import de.amr.yt.pacman.ui.animation.GhostBlinkingAnimation;
 import de.amr.yt.pacman.ui.animation.GhostDeadAnimation;
@@ -92,11 +93,11 @@ public class GameUI {
 		game.pacMan.animDying = new PacManDyingAnimation();
 
 		for (var ghost : game.ghosts) {
-			ghost.animWalking = new GhostWalkingAnimation(ghost);
-			ghost.animFrightened = new GhostFrightenedAnimation();
-			ghost.animBlinking = new GhostBlinkingAnimation();
-			ghost.animDead = new GhostDeadAnimation(ghost);
-			ghost.animValue = new GhostValueAnimation(ghost);
+			ghost.animations.put(Ghost.AnimationKey.WALKING, new GhostWalkingAnimation(ghost));
+			ghost.animations.put(Ghost.AnimationKey.FRIGHTENED, new GhostFrightenedAnimation());
+			ghost.animations.put(Ghost.AnimationKey.BLINKING, new GhostBlinkingAnimation());
+			ghost.animations.put(Ghost.AnimationKey.DEAD, new GhostDeadAnimation(ghost));
+			ghost.animations.put(Ghost.AnimationKey.VALUE, new GhostValueAnimation(ghost));
 		}
 
 		introScene = new IntroScene(gameController);

@@ -132,7 +132,7 @@ public enum GameState {
 		public void onEnter(GameModel game, GameUI ui) {
 			game.pacMan.showStanding();
 			for (var ghost : game.ghosts) {
-				ghost.animWalking.setEnabled(false);
+				ghost.animation().setEnabled(false);
 			}
 		}
 

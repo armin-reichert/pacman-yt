@@ -30,6 +30,9 @@ import static de.amr.yt.pacman.lib.Direction.UP;
 import static de.amr.yt.pacman.lib.Vector2.v;
 import static de.amr.yt.pacman.model.World.t;
 
+import java.util.EnumMap;
+import java.util.Map;
+
 import de.amr.yt.pacman.lib.Animation;
 import de.amr.yt.pacman.lib.Direction;
 import de.amr.yt.pacman.lib.Vector2;
@@ -43,10 +46,14 @@ public class Ghost extends Creature {
 
 	static final Direction[] DIR_ORDER = { UP, LEFT, DOWN, RIGHT };
 
+	public enum AnimationKey {
+		WALKING, FRIGHTENED, BLINKING, DEAD, VALUE
+	};
+
 	public final int id;
 	public final GameModel game;
 
-	public Animation<?> animWalking, animFrightened, animBlinking, animDead, animValue;
+	public final Map<AnimationKey, Animation<?>> animations = new EnumMap<>(AnimationKey.class);
 
 	public GhostState state;
 	/** Elroy state: 0=off, 1=Elroy1, 2=Elroy2, -1=Elroy1 disabled, -2=Elroy2 disabled */
@@ -62,24 +69,8 @@ public class Ghost extends Creature {
 		reset();
 	}
 
-	public void showWalking() {
-		setAnimation(animWalking);
-	}
-
-	public void showFrightened() {
-		setAnimation(animFrightened);
-	}
-
-	public void showBlinking() {
-		setAnimation(animBlinking);
-	}
-
-	public void showValue() {
-		setAnimation(animValue);
-	}
-
-	public void showDead() {
-		setAnimation(animDead);
+	public void show(AnimationKey animationKey) {
+		setAnimation(animations.get(animationKey));
 	}
 
 	@Override
@@ -101,40 +92,40 @@ public class Ghost extends Creature {
 			}
 			if (game.pacMan.hasPower()) {
 				if (game.pacMan.isLosingPower()) {
-					showBlinking();
+					show(AnimationKey.BLINKING);
 				} else {
-					showFrightened();
+					show(AnimationKey.FRIGHTENED);
 				}
 			} else {
-				showWalking();
+				show(AnimationKey.WALKING);
 			}
 		}
 		case ENTERING_HOUSE -> {
 			enterGhostHouse(world.houseEntry);
-			showDead();
+			show(AnimationKey.DEAD);
 		}
 		case LEAVING_HOUSE -> {
 			leaveGhostHouse(world.houseEntry);
-			showWalking();
+			show(AnimationKey.WALKING);
 		}
 		case CHASING, SCATTERING -> {
 			aimTowardsTarget();
-			showWalking();
+			show(AnimationKey.WALKING);
 		}
 		case FRIGHTENED -> {
 			aimTowardsTarget();
 			if (game.pacMan.isLosingPower()) {
-				showBlinking();
+				show(AnimationKey.BLINKING);
 			} else {
-				showFrightened();
+				show(AnimationKey.FRIGHTENED);
 			}
 		}
 		case EATEN -> {
 			returnToGhostHouse(world.houseEntry);
 			if (valueTimer > 0) {
-				showValue();
+				show(AnimationKey.VALUE);
 			} else {
-				showDead();
+				show(AnimationKey.DEAD);
 			}
 		}
 		}

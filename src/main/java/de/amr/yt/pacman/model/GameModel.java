@@ -154,8 +154,8 @@ public class GameModel {
 			ghost.targetTile = null;
 			ghost.state = GhostState.LOCKED;
 			ghost.visible = true;
-			ghost.showWalking();
-			ghost.animation().reset();
+			ghost.show(Ghost.AnimationKey.WALKING);
+			ghost.animation().reset(); // TODO needed?
 			ghost.animation().setEnabled(false);
 		}
 	}
@@ -258,7 +258,6 @@ public class GameModel {
 			for (var ghost : ghosts) {
 				if (ghost.state == GhostState.CHASING || ghost.state == GhostState.SCATTERING) {
 					ghost.state = GhostState.FRIGHTENED;
-					ghost.animFrightened.setEnabled(true);
 					ghost.reverseDirection = true;
 				}
 			}
