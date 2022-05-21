@@ -168,6 +168,7 @@ public enum GameState {
 		public void onUpdate(GameModel game, GameUI ui) {
 			if (timer == sec(5)) {
 				game.reset();
+				gameController.enterState(INTRO);
 			}
 		}
 	},
