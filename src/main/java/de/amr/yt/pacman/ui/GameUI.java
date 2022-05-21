@@ -47,6 +47,7 @@ import de.amr.yt.pacman.lib.GameClock;
 import de.amr.yt.pacman.model.GameModel;
 import de.amr.yt.pacman.model.World;
 import de.amr.yt.pacman.ui.animation.GhostBlinkingAnimation;
+import de.amr.yt.pacman.ui.animation.GhostDeadAnimation;
 import de.amr.yt.pacman.ui.animation.GhostFrightenedAnimation;
 import de.amr.yt.pacman.ui.animation.GhostWalkingAnimation;
 import de.amr.yt.pacman.ui.animation.PacManDyingAnimation;
@@ -93,6 +94,7 @@ public class GameUI {
 			ghost.animWalking = new GhostWalkingAnimation(ghost);
 			ghost.animFrightened = new GhostFrightenedAnimation();
 			ghost.animBlinking = new GhostBlinkingAnimation();
+			ghost.animDead = new GhostDeadAnimation(ghost);
 		}
 
 		introScene = new IntroScene(gameController);

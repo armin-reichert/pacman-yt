@@ -23,22 +23,15 @@ SOFTWARE.
 */
 package de.amr.yt.pacman.ui;
 
-import static de.amr.yt.pacman.lib.Direction.DOWN;
-import static de.amr.yt.pacman.lib.Direction.LEFT;
-import static de.amr.yt.pacman.lib.Direction.RIGHT;
-import static de.amr.yt.pacman.lib.Direction.UP;
-
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
 
-import de.amr.yt.pacman.lib.Direction;
 import de.amr.yt.pacman.lib.Logging;
 
 /**
@@ -56,7 +49,6 @@ public class Sprites {
 	public BufferedImage sheetImage;
 
 	// sprite caches
-	public EnumMap<Direction, BufferedImage> ghostEyes = new EnumMap<>(Direction.class);
 	public Map<Integer, BufferedImage> ghostValues;
 	public List<BufferedImage> bonusSymbols;
 	public Map<Integer, BufferedImage> bonusValues;
@@ -91,11 +83,6 @@ public class Sprites {
 		try {
 			sheetImage = image("/sprites.png");
 			mazeImage = image("/maze_empty.png");
-
-			ghostEyes.put(RIGHT, s(8, 5));
-			ghostEyes.put(LEFT, s(9, 5));
-			ghostEyes.put(UP, s(10, 5));
-			ghostEyes.put(DOWN, s(11, 5));
 
 			ghostValues = Map.of( //
 					200, s(0, 8), //

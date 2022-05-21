@@ -33,7 +33,6 @@ import java.awt.image.BufferedImage;
 
 import de.amr.yt.pacman.model.Creature;
 import de.amr.yt.pacman.model.Ghost;
-import de.amr.yt.pacman.model.GhostState;
 import de.amr.yt.pacman.model.PacMan;
 import de.amr.yt.pacman.model.World;
 import de.amr.yt.pacman.ui.animation.SpriteAnimation;
@@ -87,15 +86,10 @@ public class Renderer {
 	}
 
 	public static void drawGhost(Graphics2D g, Ghost ghost) {
-		SpriteAnimation sa = (SpriteAnimation) ghost.animation();
-		if (ghost.state == GhostState.EATEN || ghost.state == GhostState.ENTERING_HOUSE) {
-			if (ghost.valueTimer > 0) {
-				drawGuy(g, ghost, Sprites.get().ghostValues.get(ghost.value));
-			} else {
-				drawGuy(g, ghost, Sprites.get().ghostEyes.get(ghost.moveDir));
-			}
+		if (ghost.valueTimer > 0) {
+			drawGuy(g, ghost, Sprites.get().ghostValues.get(ghost.value));
 		} else {
-			drawGuy(g, ghost, sa.sprite());
+			drawGuy(g, ghost, ((SpriteAnimation) ghost.animation()).sprite());
 		}
 	}
 
