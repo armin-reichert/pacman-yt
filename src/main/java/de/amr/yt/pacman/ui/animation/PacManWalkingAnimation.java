@@ -52,7 +52,7 @@ public class PacManWalkingAnimation extends SpriteAnimation {
 		sprites.put(UP, List.of(spr.s(0, 2), spr.s(1, 2), spr.s(2, 0)));
 		sprites.put(DOWN, List.of(spr.s(0, 3), spr.s(1, 3), spr.s(2, 0)));
 		name = "pacman-walking";
-		frameLength = 2;
+		frameDuration = 2;
 		loop = true;
 	}
 
@@ -63,6 +63,6 @@ public class PacManWalkingAnimation extends SpriteAnimation {
 
 	@Override
 	public BufferedImage sprite() {
-		return sprites.get(pacMan.moveDir).get(frames.get(majorIndex));
+		return sprites.get(pacMan.moveDir).get(frames.get(frameIndex));
 	}
 }

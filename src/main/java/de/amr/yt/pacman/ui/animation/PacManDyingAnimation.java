@@ -34,22 +34,21 @@ import de.amr.yt.pacman.ui.Sprites;
  */
 public class PacManDyingAnimation extends SpriteAnimation {
 
-	private final List<Integer> frames = List.of(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
 	private final List<BufferedImage> sprites = Sprites.get().stripe(3, 0, 11);
 
 	public PacManDyingAnimation() {
 		name = "pacman-dying";
-		frameLength = 6;
+		frameDuration = 6;
 		loop = false;
 	}
 
 	@Override
 	public int numFrames() {
-		return frames.size();
+		return sprites.size();
 	}
 
 	@Override
 	public BufferedImage sprite() {
-		return sprites.get(frames.get(majorIndex));
+		return sprites.get(frameIndex);
 	}
 }

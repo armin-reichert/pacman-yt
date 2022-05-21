@@ -93,7 +93,7 @@ public class PacMan extends Creature {
 			showDying();
 		}
 		}
-		animation().advance();
+		animation().tick();
 	}
 
 	@Override

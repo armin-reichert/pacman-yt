@@ -36,9 +36,9 @@ public abstract class SpriteAnimation implements Animation {
 	protected String name;
 	protected boolean loop = false;
 	protected boolean enabled = true;;
-	protected int majorIndex;
-	protected int minorIndex;
-	protected int frameLength = 1;
+	protected int frameIndex;
+	protected int tickIndex;
+	protected int frameDuration = 1;
 
 	public abstract BufferedImage sprite();
 
@@ -59,36 +59,36 @@ public abstract class SpriteAnimation implements Animation {
 
 	@Override
 	public void reset() {
-		majorIndex = 0;
-		minorIndex = 0;
+		frameIndex = 0;
+		tickIndex = 0;
 	}
 
 	@Override
-	public void advance() {
+	public void tick() {
 		if (!enabled) {
 			return;
 		}
-		if (frameLength == 1) {
-			advanceMajorIndex();
+		if (frameDuration == 1) {
+			advanceFrameIndex();
 		} else {
-			advanceMinorIndex();
+			advanceTickIndex();
 		}
 	}
 
-	private void advanceMajorIndex() {
-		if (majorIndex < numFrames() - 1) {
-			++majorIndex;
+	private void advanceFrameIndex() {
+		if (frameIndex < numFrames() - 1) {
+			++frameIndex;
 		} else {
-			majorIndex = loop ? 0 : numFrames() - 1;
+			frameIndex = loop ? 0 : numFrames() - 1;
 		}
 	}
 
-	private void advanceMinorIndex() {
-		if (minorIndex < frameLength - 1) {
-			++minorIndex;
+	private void advanceTickIndex() {
+		if (tickIndex < frameDuration - 1) {
+			++tickIndex;
 		} else {
-			advanceMajorIndex();
-			minorIndex = 0;
+			advanceFrameIndex();
+			tickIndex = 0;
 		}
 	}
 }

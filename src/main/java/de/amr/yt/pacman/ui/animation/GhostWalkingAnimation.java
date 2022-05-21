@@ -50,7 +50,7 @@ public class GhostWalkingAnimation extends SpriteAnimation {
 	public GhostWalkingAnimation(Ghost ghost) {
 		this.ghost = ghost;
 		name = "ghost-walking";
-		frameLength = 8;
+		frameDuration = 8;
 		loop = true;
 
 		Sprites spr = Sprites.get();
@@ -88,6 +88,6 @@ public class GhostWalkingAnimation extends SpriteAnimation {
 
 	@Override
 	public BufferedImage sprite() {
-		return ghostsWalkingSprites.get(ghost.id).get(ghost.moveDir).get(frames.get(majorIndex));
+		return ghostsWalkingSprites.get(ghost.id).get(ghost.moveDir).get(frames.get(frameIndex));
 	}
 }

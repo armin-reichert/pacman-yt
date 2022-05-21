@@ -40,6 +40,6 @@ public class GhostBlinkingAnimation extends GhostFrightenedAnimation {
 	@Override
 	public BufferedImage sprite() {
 		int offset = Animation.frame(2, 10) == 0 ? 0 : 2;
-		return sprites.get(majorIndex + offset);
+		return sprites.get(frameIndex + offset);
 	}
 }

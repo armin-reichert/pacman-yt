@@ -229,10 +229,10 @@ public class IntroScene implements GameScene {
 
 	private void moveGuys() {
 		game.pacMan.move(game.pacMan.moveDir);
-		game.pacMan.animation().advance();
+		game.pacMan.animation().tick();
 		for (var ghost : game.ghosts) {
 			ghost.move(ghost.moveDir);
-			ghost.animation().advance();
+			ghost.animation().tick();
 		}
 	}
 

@@ -39,7 +39,7 @@ public class PacManStandingAnimation extends SpriteAnimation {
 
 	public PacManStandingAnimation() {
 		name = "pacman-standing";
-		frameLength = 1;
+		frameDuration = 1;
 		loop = false;
 	}
 
@@ -50,6 +50,6 @@ public class PacManStandingAnimation extends SpriteAnimation {
 
 	@Override
 	public BufferedImage sprite() {
-		return sprites.get(frames.get(majorIndex));
+		return sprites.get(frames.get(frameIndex));
 	}
 }

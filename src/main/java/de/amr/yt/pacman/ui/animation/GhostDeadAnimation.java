@@ -48,7 +48,7 @@ public class GhostDeadAnimation extends SpriteAnimation {
 	public GhostDeadAnimation(Ghost ghost) {
 		this.ghost = ghost;
 		name = "ghost-dead";
-		frameLength = 1;
+		frameDuration = 1;
 		loop = false;
 
 		Sprites spr = Sprites.get();

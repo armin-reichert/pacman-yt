@@ -61,5 +61,5 @@ public interface Animation {
 
 	public int numFrames();
 
-	public void advance();
+	public void tick();
 }

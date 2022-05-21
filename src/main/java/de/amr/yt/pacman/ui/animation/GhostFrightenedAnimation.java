@@ -39,7 +39,7 @@ public class GhostFrightenedAnimation extends SpriteAnimation {
 
 	public GhostFrightenedAnimation() {
 		name = "ghost-frightened";
-		frameLength = 8;
+		frameDuration = 8;
 		loop = true;
 		enabled = true;
 	}
@@ -51,6 +51,6 @@ public class GhostFrightenedAnimation extends SpriteAnimation {
 
 	@Override
 	public BufferedImage sprite() {
-		return sprites.get(frames.get(majorIndex));
+		return sprites.get(frames.get(frameIndex));
 	}
 }

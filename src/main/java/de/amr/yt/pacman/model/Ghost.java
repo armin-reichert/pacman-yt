@@ -130,7 +130,7 @@ public class Ghost extends Creature {
 			showDead();
 		}
 		}
-		animation().advance();
+		animation().tick();
 	}
 
 	@Override
