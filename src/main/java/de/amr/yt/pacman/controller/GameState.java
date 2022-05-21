@@ -29,6 +29,7 @@ import de.amr.yt.pacman.lib.Logging;
 import de.amr.yt.pacman.lib.Sounds;
 import de.amr.yt.pacman.model.GameModel;
 import de.amr.yt.pacman.model.GhostState;
+import de.amr.yt.pacman.model.PacMan;
 import de.amr.yt.pacman.ui.GameUI;
 
 /**
@@ -130,7 +131,7 @@ public enum GameState {
 	LEVEL_COMPLETE {
 		@Override
 		public void onEnter(GameModel game, GameUI ui) {
-			game.pacMan.showStanding();
+			game.pacMan.selectAnimation(PacMan.AnimationKey.STANDING);
 			for (var ghost : game.ghosts) {
 				ghost.animation().setEnabled(false);
 			}
@@ -147,7 +148,7 @@ public enum GameState {
 				game.mazeFlashing = false;
 				game.setLevel(game.level.number + 1);
 				game.pacMan.visible = false;
-				game.pacMan.showWalking();
+				game.pacMan.selectAnimation(PacMan.AnimationKey.WALKING);
 				gameController.enterState(GameState.LEVEL_STARTING);
 			}
 		}
@@ -175,9 +176,8 @@ public enum GameState {
 		@Override
 		public void onEnter(GameModel game, GameUI ui) {
 			game.attackTimer = 0;
-			game.pacMan.showDying();
+			game.pacMan.selectAnimation(PacMan.AnimationKey.DYING);
 			game.pacMan.animation().setEnabled(false);
-			game.pacMan.animation().reset();
 			game.bonus = null;
 		}
 

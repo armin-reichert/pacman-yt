@@ -23,6 +23,11 @@ SOFTWARE.
 */
 package de.amr.yt.pacman.model;
 
+import static de.amr.yt.pacman.lib.Logging.log;
+
+import java.util.EnumMap;
+import java.util.Map;
+
 import de.amr.yt.pacman.lib.Animation;
 import de.amr.yt.pacman.lib.Vector2;
 
@@ -31,7 +36,12 @@ import de.amr.yt.pacman.lib.Vector2;
  */
 public class PacMan extends Creature {
 
-	public Animation<?> animStanding, animWalking, animDying;
+	public enum AnimationKey {
+		STANDING, WALKING, DYING
+	};
+
+	public final Map<AnimationKey, Animation<?>> animations = new EnumMap<>(AnimationKey.class);
+	private AnimationKey animationKey;
 
 	public final GameModel game;
 	public PacManState state;
@@ -44,6 +54,18 @@ public class PacMan extends Creature {
 		reset();
 	}
 
+	public Animation<?> animation() {
+		return animations.get(animationKey);
+	}
+
+	public void selectAnimation(AnimationKey animationKey) {
+		if (this.animationKey != animationKey) {
+			this.animationKey = animationKey;
+			animation().reset();
+			log("Animation set to '%s' for %s", animationKey, this);
+		}
+	}
+
 	@Override
 	public void reset() {
 		super.reset();
@@ -53,25 +75,13 @@ public class PacMan extends Creature {
 		restCountdown = 0;
 	}
 
-	public void showStanding() {
-		setAnimation(animStanding);
-	}
-
-	public void showWalking() {
-		setAnimation(animWalking);
-	}
-
-	public void showDying() {
-		setAnimation(animDying);
-	}
-
 	private void restOrWalk() {
 		if (restCountdown > 0) {
 			--restCountdown;
 		} else {
 			exploreWorld();
 		}
-		showWalking();
+		selectAnimation(AnimationKey.WALKING);
 		animation().setEnabled(!stuck);
 	}
 
@@ -90,7 +100,7 @@ public class PacMan extends Creature {
 			}
 		}
 		case DYING -> {
-			showDying();
+			selectAnimation(AnimationKey.DYING);
 		}
 		}
 		animation().tick();

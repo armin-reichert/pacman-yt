@@ -33,12 +33,12 @@ import de.amr.yt.pacman.ui.Sprites;
 /**
  * @author Armin Reichert
  */
-public class GhostFrightenedAnimation extends Animation<BufferedImage> {
+public class GhostBlueAnimation extends Animation<BufferedImage> {
 
 	static final List<BufferedImage> sprites = Sprites.stripe(8, 4, 4);
 
-	public GhostFrightenedAnimation() {
-		name = "ghost-frightened";
+	public GhostBlueAnimation() {
+		name = "ghost-blue";
 		frameDuration = 8;
 		loop = true;
 		enabled = true;

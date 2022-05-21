@@ -45,6 +45,7 @@ import de.amr.yt.pacman.lib.Direction;
 import de.amr.yt.pacman.lib.GameClock;
 import de.amr.yt.pacman.model.GameModel;
 import de.amr.yt.pacman.model.Ghost;
+import de.amr.yt.pacman.model.PacMan;
 import de.amr.yt.pacman.model.World;
 
 /**
@@ -116,7 +117,7 @@ public class IntroScene implements GameScene {
 		game.pacMan.y = t(20) + World.HT;
 		game.pacMan.speed = game.level.playerSpeed;
 		game.pacMan.moveDir = Direction.LEFT;
-		game.pacMan.showWalking();
+		game.pacMan.selectAnimation(PacMan.AnimationKey.WALKING);
 		game.pacMan.animation().setEnabled(true);
 
 		for (var ghost : game.ghosts) {
@@ -132,7 +133,7 @@ public class IntroScene implements GameScene {
 			case Ghost.CLYDE -> 1600;
 			default -> 0;
 			};
-			ghost.show(Ghost.AnimationKey.WALKING);
+			ghost.selectAnimation(Ghost.AnimationKey.WALKING);
 			ghost.animation().setEnabled(true);
 		}
 	}
@@ -216,7 +217,7 @@ public class IntroScene implements GameScene {
 	private void drawPacManChasingGhosts(Graphics2D g) {
 		for (var ghost : game.ghosts) {
 			if (ghost.id == ghostEaten) {
-				ghost.show(Ghost.AnimationKey.VALUE);
+				ghost.selectAnimation(Ghost.AnimationKey.VALUE);
 			}
 			if (ghost.id >= ghostEaten) {
 				drawGhost(g, ghost);
@@ -253,7 +254,7 @@ public class IntroScene implements GameScene {
 			for (var ghost : game.ghosts) {
 				ghost.moveDir = Direction.RIGHT;
 				ghost.speed = game.level.ghostSpeedFrightened;
-				ghost.show(Ghost.AnimationKey.FRIGHTENED);
+				ghost.selectAnimation(Ghost.AnimationKey.FRIGHTENED);
 			}
 			pacManChasingGhosts = true;
 		}

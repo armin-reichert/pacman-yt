@@ -40,7 +40,7 @@ import de.amr.yt.pacman.model.Ghost;
 /**
  * @author Armin Reichert
  */
-public class GhostDeadAnimation extends Animation<BufferedImage> {
+public class GhostEyesAnimation extends Animation<BufferedImage> {
 
 	static final EnumMap<Direction, BufferedImage> ghostEyes = new EnumMap<>(Direction.class);
 
@@ -53,9 +53,9 @@ public class GhostDeadAnimation extends Animation<BufferedImage> {
 
 	private final Ghost ghost;
 
-	public GhostDeadAnimation(Ghost ghost) {
+	public GhostEyesAnimation(Ghost ghost) {
 		this.ghost = ghost;
-		name = "ghost-dead";
+		name = "ghost-eyes";
 	}
 
 	@Override

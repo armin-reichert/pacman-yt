@@ -46,10 +46,11 @@ import de.amr.yt.pacman.controller.GameState;
 import de.amr.yt.pacman.lib.GameClock;
 import de.amr.yt.pacman.model.GameModel;
 import de.amr.yt.pacman.model.Ghost;
+import de.amr.yt.pacman.model.PacMan;
 import de.amr.yt.pacman.model.World;
 import de.amr.yt.pacman.ui.animation.GhostBlinkingAnimation;
-import de.amr.yt.pacman.ui.animation.GhostDeadAnimation;
-import de.amr.yt.pacman.ui.animation.GhostFrightenedAnimation;
+import de.amr.yt.pacman.ui.animation.GhostEyesAnimation;
+import de.amr.yt.pacman.ui.animation.GhostBlueAnimation;
 import de.amr.yt.pacman.ui.animation.GhostValueAnimation;
 import de.amr.yt.pacman.ui.animation.GhostWalkingAnimation;
 import de.amr.yt.pacman.ui.animation.PacManDyingAnimation;
@@ -88,15 +89,15 @@ public class GameUI {
 				: scaling;
 		Dimension canvasSize = new Dimension((int) (canvasScaling * t(World.COLS)), (int) (canvasScaling * t(World.ROWS)));
 
-		game.pacMan.animWalking = new PacManWalkingAnimation(game.pacMan);
-		game.pacMan.animStanding = new PacManStandingAnimation();
-		game.pacMan.animDying = new PacManDyingAnimation();
+		game.pacMan.animations.put(PacMan.AnimationKey.WALKING, new PacManWalkingAnimation(game.pacMan));
+		game.pacMan.animations.put(PacMan.AnimationKey.STANDING, new PacManStandingAnimation());
+		game.pacMan.animations.put(PacMan.AnimationKey.DYING, new PacManDyingAnimation());
 
 		for (var ghost : game.ghosts) {
 			ghost.animations.put(Ghost.AnimationKey.WALKING, new GhostWalkingAnimation(ghost));
-			ghost.animations.put(Ghost.AnimationKey.FRIGHTENED, new GhostFrightenedAnimation());
+			ghost.animations.put(Ghost.AnimationKey.FRIGHTENED, new GhostBlueAnimation());
 			ghost.animations.put(Ghost.AnimationKey.BLINKING, new GhostBlinkingAnimation());
-			ghost.animations.put(Ghost.AnimationKey.DEAD, new GhostDeadAnimation(ghost));
+			ghost.animations.put(Ghost.AnimationKey.DEAD, new GhostEyesAnimation(ghost));
 			ghost.animations.put(Ghost.AnimationKey.VALUE, new GhostValueAnimation(ghost));
 		}
 

@@ -31,7 +31,7 @@ import de.amr.yt.pacman.lib.Animation;
 /**
  * @author Armin Reichert
  */
-public class GhostBlinkingAnimation extends GhostFrightenedAnimation {
+public class GhostBlinkingAnimation extends GhostBlueAnimation {
 
 	public GhostBlinkingAnimation() {
 		name = "ghost-blinking";
