@@ -24,8 +24,8 @@ SOFTWARE.
 package de.amr.yt.pacman.controller;
 
 import static de.amr.yt.pacman.lib.GameClock.sec;
+import static de.amr.yt.pacman.lib.Logging.log;
 
-import de.amr.yt.pacman.lib.Logging;
 import de.amr.yt.pacman.lib.Sounds;
 import de.amr.yt.pacman.model.GameModel;
 import de.amr.yt.pacman.model.Ghost;
@@ -77,7 +77,7 @@ public enum GameState {
 			if (game.level.number == 1 && !game.levelStarted) {
 				Sounds.play("level_start");
 			}
-			Logging.log("onEnter(%s): Pac-Man animation is %s", this, game.pacMan.animations.selected());
+			log("onEnter(%s): Pac-Man animation is %s", this, game.pacMan.animations.selected());
 		}
 
 		@Override
@@ -247,9 +247,9 @@ public enum GameState {
 		}
 	};
 
-	public static void setGameController(GameController gameController) {
+	public static void setMaster(GameController master) {
 		for (var state : values()) {
-			state.gameController = gameController;
+			state.gameController = master;
 		}
 	}
 

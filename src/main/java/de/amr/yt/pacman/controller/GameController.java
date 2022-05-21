@@ -38,7 +38,7 @@ public class GameController {
 	private GameState state;
 
 	public GameController() {
-		GameState.setGameController(this);
+		GameState.setMaster(this);
 		enterState(GameState.INTRO);
 	}
 
@@ -65,5 +65,4 @@ public class GameController {
 		}
 		ui.render();
 	}
-
 }
