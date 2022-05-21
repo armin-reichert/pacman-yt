@@ -28,6 +28,7 @@ import static de.amr.yt.pacman.lib.GameClock.sec;
 import de.amr.yt.pacman.lib.Logging;
 import de.amr.yt.pacman.lib.Sounds;
 import de.amr.yt.pacman.model.GameModel;
+import de.amr.yt.pacman.model.Ghost;
 import de.amr.yt.pacman.model.GhostState;
 import de.amr.yt.pacman.model.PacMan;
 import de.amr.yt.pacman.ui.GameUI;
@@ -120,12 +121,29 @@ public enum GameState {
 				gameController.enterState(GameState.GHOST_DYING);
 				return;
 			}
-			gameController.unlockGhosts(game.ghosts);
+			unlockGhosts(game.ghosts);
 			for (var ghost : game.ghosts) {
 				ghost.update();
 			}
 			game.updateBonus();
 		}
+
+		// TODO this is just some arbitrary sample logic, the real game uses dot counters and stuff
+		private void unlockGhosts(Ghost[] ghosts) {
+			for (var ghost : ghosts) {
+				int unlockSeconds = switch (ghost.id) {
+				case Ghost.BLINKY -> 0;
+				case Ghost.PINKY -> 1;
+				case Ghost.INKY -> 5;
+				case Ghost.CLYDE -> 15;
+				default -> 0;
+				};
+				if (ghost.state == GhostState.LOCKED && timer >= sec(unlockSeconds)) {
+					ghost.state = ghost.id == Ghost.BLINKY ? GhostState.SCATTERING : GhostState.LEAVING_HOUSE;
+				}
+			}
+		}
+
 	},
 
 	LEVEL_COMPLETE {

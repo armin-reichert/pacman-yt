@@ -23,12 +23,9 @@ SOFTWARE.
 */
 package de.amr.yt.pacman.controller;
 
-import static de.amr.yt.pacman.lib.GameClock.sec;
 import static de.amr.yt.pacman.lib.Logging.log;
 
 import de.amr.yt.pacman.model.GameModel;
-import de.amr.yt.pacman.model.Ghost;
-import de.amr.yt.pacman.model.GhostState;
 import de.amr.yt.pacman.ui.GameUI;
 
 /**
@@ -67,22 +64,6 @@ public class GameController {
 			ui.update();
 		}
 		ui.render();
-	}
-
-	// TODO this is just some arbitrary sample logic, the real game uses dot counters and stuff
-	public void unlockGhosts(Ghost[] ghosts) {
-		for (var ghost : ghosts) {
-			int unlockSeconds = switch (ghost.id) {
-			case Ghost.BLINKY -> 0;
-			case Ghost.PINKY -> 1;
-			case Ghost.INKY -> 5;
-			case Ghost.CLYDE -> 15;
-			default -> 0;
-			};
-			if (ghost.state == GhostState.LOCKED && state.timer >= sec(unlockSeconds)) {
-				ghost.state = ghost.id == Ghost.BLINKY ? GhostState.SCATTERING : GhostState.LEAVING_HOUSE;
-			}
-		}
 	}
 
 }
