@@ -47,10 +47,12 @@ public class AnimationMap<KEY extends Enum<KEY>> {
 		animations.put(key, animation);
 	}
 
-	public void select(KEY key) {
+	public boolean select(KEY key) {
 		if (key != selectedKey) {
 			selectedKey = key;
 			selected().reset();
+			return true;
 		}
+		return false;
 	}
 }

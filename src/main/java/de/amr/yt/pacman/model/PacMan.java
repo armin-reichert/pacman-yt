@@ -25,10 +25,7 @@ package de.amr.yt.pacman.model;
 
 import static de.amr.yt.pacman.lib.Logging.log;
 
-import java.util.EnumMap;
-import java.util.Map;
-
-import de.amr.yt.pacman.lib.Animation;
+import de.amr.yt.pacman.lib.AnimationMap;
 import de.amr.yt.pacman.lib.Vector2;
 
 /**
@@ -40,8 +37,7 @@ public class PacMan extends Creature {
 		STANDING, WALKING, DYING
 	};
 
-	public final Map<AnimationKey, Animation<?>> animations = new EnumMap<>(AnimationKey.class);
-	private AnimationKey animationKey;
+	public final AnimationMap<AnimationKey> animations = new AnimationMap<>(AnimationKey.class);
 
 	public final GameModel game;
 	public PacManState state;
@@ -54,15 +50,9 @@ public class PacMan extends Creature {
 		reset();
 	}
 
-	public Animation<?> animation() {
-		return animations.get(animationKey);
-	}
-
 	public void selectAnimation(AnimationKey animationKey) {
-		if (this.animationKey != animationKey) {
-			this.animationKey = animationKey;
-			animation().reset();
-			log("Animation set to '%s' for %s", animationKey, this);
+		if (animations.select(animationKey)) {
+			log("Select animation '%s' for %s", animations.selected(), this);
 		}
 	}
 
@@ -82,7 +72,7 @@ public class PacMan extends Creature {
 			exploreWorld();
 		}
 		selectAnimation(AnimationKey.WALKING);
-		animation().setEnabled(!stuck);
+		animations.selected().setEnabled(!stuck);
 	}
 
 	public void update() {
@@ -103,7 +93,7 @@ public class PacMan extends Creature {
 			selectAnimation(AnimationKey.DYING);
 		}
 		}
-		animation().tick();
+		animations.selected().tick();
 	}
 
 	@Override

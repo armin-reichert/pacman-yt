@@ -27,12 +27,12 @@ import static de.amr.yt.pacman.lib.Direction.DOWN;
 import static de.amr.yt.pacman.lib.Direction.LEFT;
 import static de.amr.yt.pacman.lib.Direction.RIGHT;
 import static de.amr.yt.pacman.lib.Direction.UP;
+import static de.amr.yt.pacman.lib.Logging.log;
 import static de.amr.yt.pacman.lib.Vector2.v;
 import static de.amr.yt.pacman.model.World.t;
 
 import de.amr.yt.pacman.lib.AnimationMap;
 import de.amr.yt.pacman.lib.Direction;
-import de.amr.yt.pacman.lib.Logging;
 import de.amr.yt.pacman.lib.Vector2;
 
 /**
@@ -68,8 +68,9 @@ public class Ghost extends Creature {
 	}
 
 	public void selectAnimation(AnimationKey key) {
-		animations.select(key);
-		Logging.log("Select animation '%s' for %s", animations.selected(), this);
+		if (animations.select(key)) {
+			log("Select animation '%s' for %s", animations.selected(), this);
+		}
 	}
 
 	@Override

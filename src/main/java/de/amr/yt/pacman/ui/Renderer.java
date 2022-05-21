@@ -76,7 +76,7 @@ public class Renderer {
 	}
 
 	public static void drawPacMan(Graphics2D g, PacMan pacMan) {
-		drawGuy(g, pacMan, pacMan.animation().sprite());
+		drawGuy(g, pacMan, pacMan.animations.selected().sprite());
 	}
 
 	public static Color ghostColor(int id) {
@@ -109,7 +109,7 @@ public class Renderer {
 			g.drawString(textAbove, (int) pacMan.x + offset, (int) pacMan.y - 8);
 
 			String textBelow = "(%d,%d)".formatted(pacMan.tile().x, pacMan.tile().y);
-			textBelow += " " + pacMan.animation();
+			textBelow += " " + pacMan.animations.selected();
 			offset = -g.getFontMetrics().stringWidth(textBelow) / 2;
 			g.drawString(textBelow, (int) pacMan.x + offset, (int) pacMan.y + 12);
 		}

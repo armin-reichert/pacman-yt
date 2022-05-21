@@ -118,7 +118,7 @@ public class IntroScene implements GameScene {
 		game.pacMan.speed = game.level.playerSpeed;
 		game.pacMan.moveDir = Direction.LEFT;
 		game.pacMan.selectAnimation(PacMan.AnimationKey.WALKING);
-		game.pacMan.animation().setEnabled(true);
+		game.pacMan.animations.selected().setEnabled(true);
 
 		for (var ghost : game.ghosts) {
 			ghost.reset();
@@ -236,7 +236,7 @@ public class IntroScene implements GameScene {
 
 	private void moveGuys() {
 		game.pacMan.move(game.pacMan.moveDir);
-		game.pacMan.animation().tick();
+		game.pacMan.animations.selected().tick();
 		for (var ghost : game.ghosts) {
 			ghost.move(ghost.moveDir);
 			ghost.animations.selected().tick();

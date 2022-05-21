@@ -145,7 +145,7 @@ public class GameModel {
 		pacMan.state = PacManState.NO_POWER;
 		pacMan.visible = true;
 		pacMan.selectAnimation(PacMan.AnimationKey.STANDING);
-		pacMan.animation().reset();
+		pacMan.animations.selected().reset();
 
 		for (var ghost : ghosts) {
 			ghost.placeAtTile(ghostHomes[ghost.id], World.HT, 0);

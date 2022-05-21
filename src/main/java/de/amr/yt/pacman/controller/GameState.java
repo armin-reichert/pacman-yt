@@ -76,7 +76,7 @@ public enum GameState {
 			if (game.level.number == 1 && !game.levelStarted) {
 				Sounds.play("level_start");
 			}
-			Logging.log("onEnter(%s): Pac-Man animation is %s", this, game.pacMan.animation());
+			Logging.log("onEnter(%s): Pac-Man animation is %s", this, game.pacMan.animations.selected());
 		}
 
 		@Override
@@ -161,7 +161,7 @@ public enum GameState {
 			for (var ghost : game.ghosts) {
 				ghost.animations.selected().setEnabled(false);
 			}
-			game.pacMan.animation().setEnabled(false);
+			game.pacMan.animations.selected().setEnabled(false);
 		}
 
 		@Override
@@ -177,7 +177,7 @@ public enum GameState {
 		public void onEnter(GameModel game, GameUI ui) {
 			game.attackTimer = 0;
 			game.pacMan.selectAnimation(PacMan.AnimationKey.DYING);
-			game.pacMan.animation().setEnabled(false);
+			game.pacMan.animations.selected().setEnabled(false);
 			game.bonus = null;
 		}
 
@@ -188,7 +188,7 @@ public enum GameState {
 					ghost.visible = false;
 				}
 			} else if (timer == sec(2)) {
-				game.pacMan.animation().setEnabled(true);
+				game.pacMan.animations.selected().setEnabled(true);
 				Sounds.play("pacman_death");
 			} else if (timer == sec(4)) {
 				--game.lives;
