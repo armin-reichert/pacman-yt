@@ -84,7 +84,7 @@ public class Renderer {
 	}
 
 	public static void drawGhost(Graphics2D g, Ghost ghost) {
-		drawGuy(g, ghost, ghost.animation().sprite());
+		drawGuy(g, ghost, ghost.animations.selected().sprite());
 	}
 
 	public static void drawGuy(Graphics2D g, Creature guy, Object spriteObject) {
@@ -129,7 +129,7 @@ public class Renderer {
 			g.drawString(textAbove, (int) ghost.x + offset, (int) ghost.y - 8);
 
 			String textBelow = "(%d,%d)".formatted(ghost.tile().x, ghost.tile().y);
-			textBelow += " " + ghost.animation();
+			textBelow += " " + ghost.animations.selected();
 			offset = -g.getFontMetrics().stringWidth(textBelow) / 2;
 			g.drawString(textBelow, (int) ghost.x + offset, (int) ghost.y + 12);
 		}

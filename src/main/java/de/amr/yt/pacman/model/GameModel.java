@@ -155,8 +155,7 @@ public class GameModel {
 			ghost.state = GhostState.LOCKED;
 			ghost.visible = true;
 			ghost.selectAnimation(Ghost.AnimationKey.WALKING);
-			ghost.animation().reset(); // TODO needed?
-			ghost.animation().setEnabled(false);
+			ghost.animations.selected().setEnabled(false);
 		}
 	}
 

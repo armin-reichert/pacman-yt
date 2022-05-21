@@ -134,7 +134,7 @@ public class IntroScene implements GameScene {
 			default -> 0;
 			};
 			ghost.selectAnimation(Ghost.AnimationKey.WALKING);
-			ghost.animation().setEnabled(true);
+			ghost.animations.selected().setEnabled(true);
 		}
 	}
 
@@ -239,7 +239,7 @@ public class IntroScene implements GameScene {
 		game.pacMan.animation().tick();
 		for (var ghost : game.ghosts) {
 			ghost.move(ghost.moveDir);
-			ghost.animation().tick();
+			ghost.animations.selected().tick();
 		}
 	}
 

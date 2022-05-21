@@ -94,7 +94,7 @@ public enum GameState {
 		public void onEnter(GameModel game, GameUI ui) {
 			game.powerPelletsBlinking = true;
 			for (var ghost : game.ghosts) {
-				ghost.animation().setEnabled(true);
+				ghost.animations.selected().setEnabled(true);
 			}
 		}
 
@@ -133,7 +133,7 @@ public enum GameState {
 		public void onEnter(GameModel game, GameUI ui) {
 			game.pacMan.selectAnimation(PacMan.AnimationKey.STANDING);
 			for (var ghost : game.ghosts) {
-				ghost.animation().setEnabled(false);
+				ghost.animations.selected().setEnabled(false);
 			}
 		}
 
@@ -159,7 +159,7 @@ public enum GameState {
 		public void onEnter(GameModel game, GameUI ui) {
 			game.powerPelletsBlinking = false;
 			for (var ghost : game.ghosts) {
-				ghost.animation().setEnabled(false);
+				ghost.animations.selected().setEnabled(false);
 			}
 			game.pacMan.animation().setEnabled(false);
 		}

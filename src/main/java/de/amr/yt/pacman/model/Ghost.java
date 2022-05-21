@@ -27,15 +27,12 @@ import static de.amr.yt.pacman.lib.Direction.DOWN;
 import static de.amr.yt.pacman.lib.Direction.LEFT;
 import static de.amr.yt.pacman.lib.Direction.RIGHT;
 import static de.amr.yt.pacman.lib.Direction.UP;
-import static de.amr.yt.pacman.lib.Logging.log;
 import static de.amr.yt.pacman.lib.Vector2.v;
 import static de.amr.yt.pacman.model.World.t;
 
-import java.util.EnumMap;
-import java.util.Map;
-
-import de.amr.yt.pacman.lib.Animation;
+import de.amr.yt.pacman.lib.AnimationMap;
 import de.amr.yt.pacman.lib.Direction;
+import de.amr.yt.pacman.lib.Logging;
 import de.amr.yt.pacman.lib.Vector2;
 
 /**
@@ -61,8 +58,7 @@ public class Ghost extends Creature {
 	public long valueTimer;
 	public int value;
 
-	public final Map<AnimationKey, Animation<?>> animations = new EnumMap<>(AnimationKey.class);
-	private AnimationKey animationKey;
+	public final AnimationMap<AnimationKey> animations = new AnimationMap<>(AnimationKey.class);
 
 	public Ghost(GameModel game, int id) {
 		super(game.world);
@@ -71,16 +67,9 @@ public class Ghost extends Creature {
 		reset();
 	}
 
-	public Animation<?> animation() {
-		return animations.get(animationKey);
-	}
-
-	public void selectAnimation(AnimationKey animationKey) {
-		if (this.animationKey != animationKey) {
-			this.animationKey = animationKey;
-			animation().reset();
-			log("Animation set to '%s' for %s", animationKey, this);
-		}
+	public void selectAnimation(AnimationKey key) {
+		animations.select(key);
+		Logging.log("Select animation '%s' for %s", animations.selected(), this);
 	}
 
 	@Override
@@ -139,7 +128,7 @@ public class Ghost extends Creature {
 			}
 		}
 		}
-		animation().tick();
+		animations.selected().tick();
 	}
 
 	@Override
