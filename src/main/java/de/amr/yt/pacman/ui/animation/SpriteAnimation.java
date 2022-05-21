@@ -31,64 +31,7 @@ import de.amr.yt.pacman.lib.Animation;
 /**
  * @author Armin Reichert
  */
-public abstract class SpriteAnimation implements Animation {
-
-	protected String name;
-	protected boolean loop = false;
-	protected boolean enabled = true;;
-	protected int frameIndex;
-	protected int tickIndex;
-	protected int frameDuration = 1;
+public abstract class SpriteAnimation extends Animation {
 
 	public abstract BufferedImage sprite();
-
-	@Override
-	public String toString() {
-		return "%s %s".formatted(name, enabled ? "" : "disabled");
-	}
-
-	@Override
-	public boolean isEnabled() {
-		return enabled;
-	}
-
-	@Override
-	public void setEnabled(boolean enabled) {
-		this.enabled = enabled;
-	}
-
-	@Override
-	public void reset() {
-		frameIndex = 0;
-		tickIndex = 0;
-	}
-
-	@Override
-	public void tick() {
-		if (!enabled) {
-			return;
-		}
-		if (frameDuration == 1) {
-			advanceFrameIndex();
-		} else {
-			advanceTickIndex();
-		}
-	}
-
-	private void advanceFrameIndex() {
-		if (frameIndex < numFrames() - 1) {
-			++frameIndex;
-		} else {
-			frameIndex = loop ? 0 : numFrames() - 1;
-		}
-	}
-
-	private void advanceTickIndex() {
-		if (tickIndex < frameDuration - 1) {
-			++tickIndex;
-		} else {
-			advanceFrameIndex();
-			tickIndex = 0;
-		}
-	}
 }

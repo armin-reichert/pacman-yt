@@ -26,7 +26,7 @@ package de.amr.yt.pacman.lib;
 /**
  * @author Armin Reichert
  */
-public interface Animation {
+public abstract class Animation {
 
 	/**
 	 * Returns an animation frame for the given time (tick).
@@ -53,13 +53,58 @@ public interface Animation {
 		return frame(GameClock.get().getTicks(), numFrames, frameTicks);
 	}
 
-	public boolean isEnabled();
+	protected String name;
+	protected boolean loop = false;
+	protected boolean enabled = true;;
+	protected int frameIndex;
+	protected int tickIndex;
+	protected int frameDuration = 1;
 
-	public void setEnabled(boolean enabled);
+	public abstract int numFrames();
 
-	public void reset();
+	@Override
+	public String toString() {
+		return "%s %s".formatted(name, enabled ? "" : "disabled");
+	}
 
-	public int numFrames();
+	public boolean isEnabled() {
+		return enabled;
+	}
 
-	public void tick();
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+
+	public void reset() {
+		frameIndex = 0;
+		tickIndex = 0;
+	}
+
+	public void tick() {
+		if (!enabled) {
+			return;
+		}
+		if (frameDuration == 1) {
+			advanceFrameIndex();
+		} else {
+			advanceTickIndex();
+		}
+	}
+
+	private void advanceFrameIndex() {
+		if (frameIndex < numFrames() - 1) {
+			++frameIndex;
+		} else {
+			frameIndex = loop ? 0 : numFrames() - 1;
+		}
+	}
+
+	private void advanceTickIndex() {
+		if (tickIndex < frameDuration - 1) {
+			++tickIndex;
+		} else {
+			advanceFrameIndex();
+			tickIndex = 0;
+		}
+	}
 }
