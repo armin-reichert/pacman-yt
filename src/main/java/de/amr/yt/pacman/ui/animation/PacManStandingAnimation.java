@@ -34,7 +34,7 @@ import de.amr.yt.pacman.ui.Sprites;
  */
 public class PacManStandingAnimation extends Animation<BufferedImage> {
 
-	static final BufferedImage sprite = Sprites.get().s(2, 0);
+	static final BufferedImage sprite = Sprites.s(2, 0);
 
 	public PacManStandingAnimation() {
 		name = "pacman-standing";

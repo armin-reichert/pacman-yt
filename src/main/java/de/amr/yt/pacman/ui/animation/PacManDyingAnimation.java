@@ -35,7 +35,7 @@ import de.amr.yt.pacman.ui.Sprites;
  */
 public class PacManDyingAnimation extends Animation<BufferedImage> {
 
-	static final List<BufferedImage> sprites = Sprites.get().stripe(3, 0, 11);
+	static final List<BufferedImage> sprites = Sprites.stripe(3, 0, 11);
 
 	public PacManDyingAnimation() {
 		name = "pacman-dying";

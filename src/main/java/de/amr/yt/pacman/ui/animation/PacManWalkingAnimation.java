@@ -28,6 +28,7 @@ import static de.amr.yt.pacman.lib.Direction.DOWN;
 import static de.amr.yt.pacman.lib.Direction.LEFT;
 import static de.amr.yt.pacman.lib.Direction.RIGHT;
 import static de.amr.yt.pacman.lib.Direction.UP;
+import static de.amr.yt.pacman.ui.Sprites.s;
 
 import java.awt.image.BufferedImage;
 import java.util.EnumMap;
@@ -36,7 +37,6 @@ import java.util.List;
 import de.amr.yt.pacman.lib.Animation;
 import de.amr.yt.pacman.lib.Direction;
 import de.amr.yt.pacman.model.PacMan;
-import de.amr.yt.pacman.ui.Sprites;
 
 public class PacManWalkingAnimation extends Animation<BufferedImage> {
 
@@ -44,11 +44,10 @@ public class PacManWalkingAnimation extends Animation<BufferedImage> {
 	static final EnumMap<Direction, List<BufferedImage>> sprites = new EnumMap<>(Direction.class);
 
 	static {
-		Sprites spr = Sprites.get();
-		sprites.put(RIGHT, List.of(spr.s(0, 0), spr.s(1, 0), spr.s(2, 0)));
-		sprites.put(LEFT, List.of(spr.s(0, 1), spr.s(1, 1), spr.s(2, 0)));
-		sprites.put(UP, List.of(spr.s(0, 2), spr.s(1, 2), spr.s(2, 0)));
-		sprites.put(DOWN, List.of(spr.s(0, 3), spr.s(1, 3), spr.s(2, 0)));
+		sprites.put(RIGHT, List.of(s(0, 0), s(1, 0), s(2, 0)));
+		sprites.put(LEFT, List.of(s(0, 1), s(1, 1), s(2, 0)));
+		sprites.put(UP, List.of(s(0, 2), s(1, 2), s(2, 0)));
+		sprites.put(DOWN, List.of(s(0, 3), s(1, 3), s(2, 0)));
 	}
 
 	private final PacMan pacMan;

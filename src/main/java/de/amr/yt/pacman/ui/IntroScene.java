@@ -32,6 +32,7 @@ import static de.amr.yt.pacman.ui.Renderer.drawPacMan;
 import static de.amr.yt.pacman.ui.Renderer.drawPellet;
 import static de.amr.yt.pacman.ui.Renderer.drawPowerPellet;
 import static de.amr.yt.pacman.ui.Renderer.drawScore;
+import static de.amr.yt.pacman.ui.Sprites.s;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -62,7 +63,6 @@ public class IntroScene implements GameScene {
 		return t(6 + 3 * ghostID) + World.HT;
 	}
 
-	@SuppressWarnings("unused")
 	private final GameController gameController;
 	private final GameModel game;
 
@@ -298,10 +298,10 @@ public class IntroScene implements GameScene {
 
 	private void drawGhostImage(Graphics2D g, int id) {
 		BufferedImage sprite = switch (id) {
-		case Ghost.BLINKY -> Sprites.get().s(0, 4);
-		case Ghost.PINKY -> Sprites.get().s(0, 5);
-		case Ghost.INKY -> Sprites.get().s(0, 6);
-		case Ghost.CLYDE -> Sprites.get().s(0, 7);
+		case Ghost.BLINKY -> s(0, 4);
+		case Ghost.PINKY -> s(0, 5);
+		case Ghost.INKY -> s(0, 6);
+		case Ghost.CLYDE -> s(0, 7);
 		default -> null;
 		};
 		g.drawImage(sprite, COL_LEFT, row(id), null);

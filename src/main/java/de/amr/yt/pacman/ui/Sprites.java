@@ -39,46 +39,13 @@ import de.amr.yt.pacman.lib.Logging;
  */
 public class Sprites {
 
-	private static Sprites theSprites = new Sprites();
+	private static BufferedImage sheetImage;
+	public static BufferedImage mazeImage;
+	public static List<BufferedImage> bonusSymbols;
+	public static Map<Integer, BufferedImage> bonusValues;
+	public static BufferedImage liveCount;
 
-	public static Sprites get() {
-		return theSprites;
-	}
-
-	public BufferedImage mazeImage;
-	public BufferedImage sheetImage;
-
-	// sprite caches
-	public List<BufferedImage> bonusSymbols;
-	public Map<Integer, BufferedImage> bonusValues;
-	public BufferedImage liveCount;
-
-	public BufferedImage s(int col, int row) {
-		return s(16 * col, 16 * row, 16, 16);
-	}
-
-	public BufferedImage s(int x, int y, int w, int h) {
-		return sheetImage.getSubimage(x, y, w, h);
-	}
-
-	public List<BufferedImage> stripe(int col, int row, int numCols) {
-		ArrayList<BufferedImage> stripe = new ArrayList<>();
-		for (int i = 0; i < numCols; ++i) {
-			stripe.add(s(col + i, row));
-		}
-		stripe.trimToSize();
-		return stripe;
-	}
-
-	private BufferedImage image(String path) throws IOException {
-		InputStream is = getClass().getResourceAsStream(path);
-		if (is == null) {
-			throw new RuntimeException("Resource '%s' does not exist or is not accessible".formatted(path));
-		}
-		return ImageIO.read(is);
-	}
-
-	private Sprites() {
+	static {
 		try {
 			sheetImage = image("/sprites.png");
 			mazeImage = image("/maze_empty.png");
@@ -103,5 +70,30 @@ public class Sprites {
 			x.printStackTrace();
 			System.exit(42);
 		}
+	}
+
+	public static BufferedImage s(int col, int row) {
+		return s(16 * col, 16 * row, 16, 16);
+	}
+
+	public static BufferedImage s(int x, int y, int w, int h) {
+		return sheetImage.getSubimage(x, y, w, h);
+	}
+
+	public static List<BufferedImage> stripe(int col, int row, int numCols) {
+		ArrayList<BufferedImage> stripe = new ArrayList<>();
+		for (int i = 0; i < numCols; ++i) {
+			stripe.add(s(col + i, row));
+		}
+		stripe.trimToSize();
+		return stripe;
+	}
+
+	private static BufferedImage image(String path) throws IOException {
+		InputStream is = Sprites.class.getResourceAsStream(path);
+		if (is == null) {
+			throw new RuntimeException("Resource '%s' does not exist or is not accessible".formatted(path));
+		}
+		return ImageIO.read(is);
 	}
 }

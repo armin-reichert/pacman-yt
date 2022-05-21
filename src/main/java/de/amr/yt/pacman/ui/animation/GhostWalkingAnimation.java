@@ -28,6 +28,7 @@ import static de.amr.yt.pacman.lib.Direction.DOWN;
 import static de.amr.yt.pacman.lib.Direction.LEFT;
 import static de.amr.yt.pacman.lib.Direction.RIGHT;
 import static de.amr.yt.pacman.lib.Direction.UP;
+import static de.amr.yt.pacman.ui.Sprites.stripe;
 
 import java.awt.image.BufferedImage;
 import java.util.EnumMap;
@@ -36,7 +37,6 @@ import java.util.List;
 import de.amr.yt.pacman.lib.Animation;
 import de.amr.yt.pacman.lib.Direction;
 import de.amr.yt.pacman.model.Ghost;
-import de.amr.yt.pacman.ui.Sprites;
 
 /**
  * @author Armin Reichert
@@ -47,30 +47,29 @@ public class GhostWalkingAnimation extends Animation<BufferedImage> {
 	static final List<EnumMap<Direction, List<BufferedImage>>> ghostsWalkingSprites;
 
 	static {
-		Sprites spr = Sprites.get();
 		EnumMap<Direction, List<BufferedImage>> redGhost = new EnumMap<>(Direction.class);
-		redGhost.put(RIGHT, spr.stripe(0, 4, 2));
-		redGhost.put(LEFT, spr.stripe(2, 4, 2));
-		redGhost.put(UP, spr.stripe(4, 4, 2));
-		redGhost.put(DOWN, spr.stripe(6, 4, 2));
+		redGhost.put(RIGHT, stripe(0, 4, 2));
+		redGhost.put(LEFT, stripe(2, 4, 2));
+		redGhost.put(UP, stripe(4, 4, 2));
+		redGhost.put(DOWN, stripe(6, 4, 2));
 
 		EnumMap<Direction, List<BufferedImage>> pinkGhost = new EnumMap<>(Direction.class);
-		pinkGhost.put(RIGHT, spr.stripe(0, 5, 2));
-		pinkGhost.put(LEFT, spr.stripe(2, 5, 2));
-		pinkGhost.put(UP, spr.stripe(4, 5, 2));
-		pinkGhost.put(DOWN, spr.stripe(6, 5, 2));
+		pinkGhost.put(RIGHT, stripe(0, 5, 2));
+		pinkGhost.put(LEFT, stripe(2, 5, 2));
+		pinkGhost.put(UP, stripe(4, 5, 2));
+		pinkGhost.put(DOWN, stripe(6, 5, 2));
 
 		EnumMap<Direction, List<BufferedImage>> cyanGhost = new EnumMap<>(Direction.class);
-		cyanGhost.put(RIGHT, spr.stripe(0, 6, 2));
-		cyanGhost.put(LEFT, spr.stripe(2, 6, 2));
-		cyanGhost.put(UP, spr.stripe(4, 6, 2));
-		cyanGhost.put(DOWN, spr.stripe(6, 6, 2));
+		cyanGhost.put(RIGHT, stripe(0, 6, 2));
+		cyanGhost.put(LEFT, stripe(2, 6, 2));
+		cyanGhost.put(UP, stripe(4, 6, 2));
+		cyanGhost.put(DOWN, stripe(6, 6, 2));
 
 		EnumMap<Direction, List<BufferedImage>> orangeGhost = new EnumMap<>(Direction.class);
-		orangeGhost.put(RIGHT, spr.stripe(0, 7, 2));
-		orangeGhost.put(LEFT, spr.stripe(2, 7, 2));
-		orangeGhost.put(UP, spr.stripe(4, 7, 2));
-		orangeGhost.put(DOWN, spr.stripe(6, 7, 2));
+		orangeGhost.put(RIGHT, stripe(0, 7, 2));
+		orangeGhost.put(LEFT, stripe(2, 7, 2));
+		orangeGhost.put(UP, stripe(4, 7, 2));
+		orangeGhost.put(DOWN, stripe(6, 7, 2));
 
 		ghostsWalkingSprites = List.of(redGhost, pinkGhost, cyanGhost, orangeGhost);
 	}

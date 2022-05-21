@@ -28,6 +28,7 @@ import static de.amr.yt.pacman.lib.Direction.DOWN;
 import static de.amr.yt.pacman.lib.Direction.LEFT;
 import static de.amr.yt.pacman.lib.Direction.RIGHT;
 import static de.amr.yt.pacman.lib.Direction.UP;
+import static de.amr.yt.pacman.ui.Sprites.s;
 
 import java.awt.image.BufferedImage;
 import java.util.EnumMap;
@@ -35,7 +36,6 @@ import java.util.EnumMap;
 import de.amr.yt.pacman.lib.Animation;
 import de.amr.yt.pacman.lib.Direction;
 import de.amr.yt.pacman.model.Ghost;
-import de.amr.yt.pacman.ui.Sprites;
 
 /**
  * @author Armin Reichert
@@ -45,11 +45,10 @@ public class GhostDeadAnimation extends Animation<BufferedImage> {
 	static final EnumMap<Direction, BufferedImage> ghostEyes = new EnumMap<>(Direction.class);
 
 	static {
-		Sprites spr = Sprites.get();
-		ghostEyes.put(RIGHT, spr.s(8, 5));
-		ghostEyes.put(LEFT, spr.s(9, 5));
-		ghostEyes.put(UP, spr.s(10, 5));
-		ghostEyes.put(DOWN, spr.s(11, 5));
+		ghostEyes.put(RIGHT, s(8, 5));
+		ghostEyes.put(LEFT, s(9, 5));
+		ghostEyes.put(UP, s(10, 5));
+		ghostEyes.put(DOWN, s(11, 5));
 	}
 
 	private final Ghost ghost;

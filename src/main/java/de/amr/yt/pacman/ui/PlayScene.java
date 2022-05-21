@@ -91,7 +91,7 @@ public class PlayScene implements GameScene {
 	public void draw(Graphics2D g) {
 		drawScore(g, game.score, game.level.number, true);
 		if (!game.mazeFlashing || frame(2, 15) == 0) {
-			g.drawImage(Sprites.get().mazeImage, 0, t(3), null);
+			g.drawImage(Sprites.mazeImage, 0, t(3), null);
 		}
 		g.setColor(Color.PINK);
 		for (int row = 0; row < World.ROWS; ++row) {
@@ -106,8 +106,8 @@ public class PlayScene implements GameScene {
 			}
 		}
 		if (game.bonus != null) {
-			BufferedImage sprite = game.bonus.eaten ? Sprites.get().bonusValues.get(game.bonus.value)
-					: Sprites.get().bonusSymbols.get(game.bonus.symbol);
+			BufferedImage sprite = game.bonus.eaten ? Sprites.bonusValues.get(game.bonus.value)
+					: Sprites.bonusSymbols.get(game.bonus.symbol);
 			g.drawImage(sprite, t(14) - sprite.getWidth() / 2, t(20) - World.HT, null);
 		}
 		drawPacMan(g, game.pacMan);
@@ -126,13 +126,13 @@ public class PlayScene implements GameScene {
 		int livesDisplayed = game.score == 0 && gameController.state() == GameState.LEVEL_STARTING ? game.lives
 				: game.lives - 1;
 		for (int i = 0; i < livesDisplayed; ++i) {
-			g.drawImage(Sprites.get().liveCount, t(2 + 2 * i), t(World.ROWS - 2), null);
+			g.drawImage(Sprites.liveCount, t(2 + 2 * i), t(World.ROWS - 2), null);
 		}
 		for (int i = 0; i < game.levelCounter.size(); ++i) {
 			int x = t(World.COLS - 4 - 2 * i);
 			int y = t(World.ROWS - 2);
 			int symbol = game.levelCounter.get(i);
-			g.drawImage(Sprites.get().bonusSymbols.get(symbol), x, y, null);
+			g.drawImage(Sprites.bonusSymbols.get(symbol), x, y, null);
 		}
 		if (showTargetTiles) {
 			drawGhostTargetTiles(g, game.ghosts);
