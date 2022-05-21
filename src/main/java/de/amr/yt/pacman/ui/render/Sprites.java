@@ -41,8 +41,8 @@ public class Sprites {
 
 	private static BufferedImage sheet;
 
-	public static BufferedImage mazeImage;
-	public static List<BufferedImage> bonusSymbols;
+	static BufferedImage mazeImage;
+	static List<BufferedImage> bonusSymbols;
 	public static Map<Integer, BufferedImage> bonusValues;
 	public static BufferedImage liveCount;
 

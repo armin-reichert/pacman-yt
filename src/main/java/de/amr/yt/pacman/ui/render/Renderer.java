@@ -58,6 +58,16 @@ public class Renderer {
 		g.drawImage(Sprites.mazeImage, 0, t(3), null);
 	}
 
+	public static void drawBonusValue(Graphics2D g, int value, int centerX, int centerY) {
+		BufferedImage sprite = Sprites.bonusValues.get(value);
+		g.drawImage(sprite, centerX - sprite.getWidth() / 2, centerY - sprite.getHeight() / 2, null);
+	}
+
+	public static void drawBonusSymbol(Graphics2D g, int symbol, int centerX, int centerY) {
+		BufferedImage sprite = Sprites.bonusSymbols.get(symbol);
+		g.drawImage(sprite, centerX - sprite.getWidth() / 2, centerY - sprite.getHeight() / 2, null);
+	}
+
 	public static void drawScore(Graphics2D g, int score, int levelNumber, boolean contentVisible) {
 		g.setColor(Color.WHITE);
 		g.setFont(Renderer.ARCADE_FONT);

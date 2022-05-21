@@ -26,6 +26,8 @@ package de.amr.yt.pacman.ui.scene;
 import static de.amr.yt.pacman.lib.Animation.frame;
 import static de.amr.yt.pacman.lib.Logging.log;
 import static de.amr.yt.pacman.model.World.t;
+import static de.amr.yt.pacman.ui.render.Renderer.drawBonusSymbol;
+import static de.amr.yt.pacman.ui.render.Renderer.drawBonusValue;
 import static de.amr.yt.pacman.ui.render.Renderer.drawGhost;
 import static de.amr.yt.pacman.ui.render.Renderer.drawGhostState;
 import static de.amr.yt.pacman.ui.render.Renderer.drawGhostTargetTiles;
@@ -38,7 +40,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
-import java.awt.image.BufferedImage;
 
 import de.amr.yt.pacman.controller.GameController;
 import de.amr.yt.pacman.controller.GameState;
@@ -110,9 +111,11 @@ public class PlayScene implements GameScene {
 			}
 		}
 		if (game.bonus != null) {
-			BufferedImage sprite = game.bonus.eaten ? Sprites.bonusValues.get(game.bonus.value)
-					: Sprites.bonusSymbols.get(game.bonus.symbol);
-			g.drawImage(sprite, t(14) - sprite.getWidth() / 2, t(20) - World.HT, null);
+			if (game.bonus.eaten) {
+				drawBonusValue(g, game.bonus.value, t(game.bonusTile.x + 1), t(game.bonusTile.y) + World.HT);
+			} else {
+				drawBonusSymbol(g, game.bonus.symbol, t(game.bonusTile.x) + World.TS, t(game.bonusTile.y) + World.HT);
+			}
 		}
 		drawPacMan(g, game.pacMan);
 		for (Ghost ghost : game.ghosts) {
@@ -133,10 +136,9 @@ public class PlayScene implements GameScene {
 			g.drawImage(Sprites.liveCount, t(2 + 2 * i), t(World.ROWS - 2), null);
 		}
 		for (int i = 0; i < game.levelCounter.size(); ++i) {
-			int x = t(World.COLS - 4 - 2 * i);
-			int y = t(World.ROWS - 2);
-			int symbol = game.levelCounter.get(i);
-			g.drawImage(Sprites.bonusSymbols.get(symbol), x, y, null);
+			int centerX = t(World.COLS - 4 - 2 * i) + World.HT;
+			int centerY = t(World.ROWS - 2) + World.TS;
+			drawBonusSymbol(g, game.levelCounter.get(i), centerX, centerY);
 		}
 		if (showTargetTiles) {
 			drawGhostTargetTiles(g, game.ghosts);
