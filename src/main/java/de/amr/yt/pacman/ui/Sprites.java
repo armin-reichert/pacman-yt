@@ -39,15 +39,16 @@ import javax.imageio.ImageIO;
  */
 public class Sprites {
 
-	private static BufferedImage sheetImage;
+	private static BufferedImage sheet;
+
 	public static BufferedImage mazeImage;
 	public static List<BufferedImage> bonusSymbols;
 	public static Map<Integer, BufferedImage> bonusValues;
 	public static BufferedImage liveCount;
 
-	static {
+	public static void load() {
 		try {
-			sheetImage = image("/sprites.png");
+			sheet = image("/sprites.png");
 			mazeImage = image("/maze_empty.png");
 			bonusSymbols = stripe(2, 3, 7);
 			bonusValues = Map.of( //
@@ -72,7 +73,7 @@ public class Sprites {
 	}
 
 	public static BufferedImage s(int x, int y, int w, int h) {
-		return sheetImage.getSubimage(x, y, w, h);
+		return sheet.getSubimage(x, y, w, h);
 	}
 
 	public static List<BufferedImage> stripe(int col, int row, int numCols) {

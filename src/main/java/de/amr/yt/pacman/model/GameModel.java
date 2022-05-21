@@ -125,7 +125,7 @@ public class GameModel {
 			levelCounter.remove(0);
 		}
 
-		log("Level %d created", level.number);
+		log("Game level %d created", level.number);
 	}
 
 	public synchronized void reset() {
