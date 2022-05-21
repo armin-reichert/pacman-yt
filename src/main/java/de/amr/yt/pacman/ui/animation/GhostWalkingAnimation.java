@@ -28,7 +28,7 @@ import static de.amr.yt.pacman.lib.Direction.DOWN;
 import static de.amr.yt.pacman.lib.Direction.LEFT;
 import static de.amr.yt.pacman.lib.Direction.RIGHT;
 import static de.amr.yt.pacman.lib.Direction.UP;
-import static de.amr.yt.pacman.ui.Sprites.stripe;
+import static de.amr.yt.pacman.ui.render.Sprites.stripe;
 
 import java.awt.image.BufferedImage;
 import java.util.EnumMap;

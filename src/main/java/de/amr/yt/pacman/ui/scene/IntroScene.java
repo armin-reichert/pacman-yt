@@ -21,18 +21,18 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-package de.amr.yt.pacman.ui;
+package de.amr.yt.pacman.ui.scene;
 
 import static de.amr.yt.pacman.lib.Animation.frame;
 import static de.amr.yt.pacman.lib.GameClock.sec;
 import static de.amr.yt.pacman.lib.Logging.log;
 import static de.amr.yt.pacman.model.World.t;
-import static de.amr.yt.pacman.ui.Renderer.drawGhost;
-import static de.amr.yt.pacman.ui.Renderer.drawPacMan;
-import static de.amr.yt.pacman.ui.Renderer.drawPellet;
-import static de.amr.yt.pacman.ui.Renderer.drawPowerPellet;
-import static de.amr.yt.pacman.ui.Renderer.drawScore;
-import static de.amr.yt.pacman.ui.Sprites.s;
+import static de.amr.yt.pacman.ui.render.Renderer.drawGhost;
+import static de.amr.yt.pacman.ui.render.Renderer.drawPacMan;
+import static de.amr.yt.pacman.ui.render.Renderer.drawPellet;
+import static de.amr.yt.pacman.ui.render.Renderer.drawPowerPellet;
+import static de.amr.yt.pacman.ui.render.Renderer.drawScore;
+import static de.amr.yt.pacman.ui.render.Sprites.s;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -47,6 +47,7 @@ import de.amr.yt.pacman.model.GameModel;
 import de.amr.yt.pacman.model.Ghost;
 import de.amr.yt.pacman.model.PacMan;
 import de.amr.yt.pacman.model.World;
+import de.amr.yt.pacman.ui.render.Renderer;
 
 /**
  * @author Armin Reichert

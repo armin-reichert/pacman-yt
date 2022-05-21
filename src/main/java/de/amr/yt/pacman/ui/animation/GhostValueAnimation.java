@@ -24,7 +24,7 @@ SOFTWARE.
 
 package de.amr.yt.pacman.ui.animation;
 
-import static de.amr.yt.pacman.ui.Sprites.s;
+import static de.amr.yt.pacman.ui.render.Sprites.s;
 
 import java.awt.image.BufferedImage;
 import java.util.Map;

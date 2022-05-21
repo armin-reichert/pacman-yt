@@ -28,7 +28,7 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 
 import de.amr.yt.pacman.lib.Animation;
-import de.amr.yt.pacman.ui.Sprites;
+import de.amr.yt.pacman.ui.render.Sprites;
 
 /**
  * @author Armin Reichert

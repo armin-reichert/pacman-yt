@@ -27,7 +27,7 @@ import javax.swing.SwingUtilities;
 
 import de.amr.yt.pacman.lib.GameClock;
 import de.amr.yt.pacman.ui.GameUI;
-import de.amr.yt.pacman.ui.Sprites;
+import de.amr.yt.pacman.ui.render.Sprites;
 
 /**
  * @author Armin Reichert

@@ -21,18 +21,18 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-package de.amr.yt.pacman.ui;
+package de.amr.yt.pacman.ui.scene;
 
 import static de.amr.yt.pacman.lib.Animation.frame;
 import static de.amr.yt.pacman.lib.Logging.log;
 import static de.amr.yt.pacman.model.World.t;
-import static de.amr.yt.pacman.ui.Renderer.drawGhost;
-import static de.amr.yt.pacman.ui.Renderer.drawGhostState;
-import static de.amr.yt.pacman.ui.Renderer.drawGhostTargetTiles;
-import static de.amr.yt.pacman.ui.Renderer.drawMaze;
-import static de.amr.yt.pacman.ui.Renderer.drawPacMan;
-import static de.amr.yt.pacman.ui.Renderer.drawPacManState;
-import static de.amr.yt.pacman.ui.Renderer.drawScore;
+import static de.amr.yt.pacman.ui.render.Renderer.drawGhost;
+import static de.amr.yt.pacman.ui.render.Renderer.drawGhostState;
+import static de.amr.yt.pacman.ui.render.Renderer.drawGhostTargetTiles;
+import static de.amr.yt.pacman.ui.render.Renderer.drawMaze;
+import static de.amr.yt.pacman.ui.render.Renderer.drawPacMan;
+import static de.amr.yt.pacman.ui.render.Renderer.drawPacManState;
+import static de.amr.yt.pacman.ui.render.Renderer.drawScore;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -46,6 +46,9 @@ import de.amr.yt.pacman.lib.GameClock;
 import de.amr.yt.pacman.model.GameModel;
 import de.amr.yt.pacman.model.Ghost;
 import de.amr.yt.pacman.model.World;
+import de.amr.yt.pacman.ui.GameUI;
+import de.amr.yt.pacman.ui.render.Renderer;
+import de.amr.yt.pacman.ui.render.Sprites;
 
 /**
  * @author Armin Reichert

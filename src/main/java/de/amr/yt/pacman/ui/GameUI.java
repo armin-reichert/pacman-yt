@@ -56,6 +56,9 @@ import de.amr.yt.pacman.ui.animation.GhostWalkingAnimation;
 import de.amr.yt.pacman.ui.animation.PacManDyingAnimation;
 import de.amr.yt.pacman.ui.animation.PacManStandingAnimation;
 import de.amr.yt.pacman.ui.animation.PacManWalkingAnimation;
+import de.amr.yt.pacman.ui.scene.GameScene;
+import de.amr.yt.pacman.ui.scene.IntroScene;
+import de.amr.yt.pacman.ui.scene.PlayScene;
 
 /**
  * @author Armin Reichert
