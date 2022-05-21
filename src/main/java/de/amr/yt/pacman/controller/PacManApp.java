@@ -40,7 +40,7 @@ public class PacManApp {
 		GameController controller = new GameController();
 		SwingUtilities.invokeLater(() -> {
 			controller.ui = new GameUI(controller, canvasScaling);
-			GameClock.get().start(() -> controller.step(!controller.game.paused));
+			GameClock.get().start(controller::update);
 		});
 	}
 }

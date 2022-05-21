@@ -74,11 +74,7 @@ public class PlayScene implements GameScene {
 	public void onKeyPressed(int key) {
 		switch (key) {
 		case KeyEvent.VK_T -> showTargetTiles = !showTargetTiles;
-		case KeyEvent.VK_SPACE -> {
-			if (game.paused) {
-				gameController.step(true);
-			}
-		}
+		case KeyEvent.VK_SPACE -> gameController.step();
 		}
 	}
 

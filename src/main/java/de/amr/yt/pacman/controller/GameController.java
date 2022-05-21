@@ -57,12 +57,19 @@ public class GameController {
 		}
 	}
 
-	public void step(boolean doUpdate) {
-		if (doUpdate) {
+	public void update() {
+		if (!game.paused) {
 			state.onUpdate(game, ui);
 			++state.timer;
 			ui.update();
 		}
+		ui.render();
+	}
+
+	public void step() {
+		state.onUpdate(game, ui);
+		++state.timer;
+		ui.update();
 		ui.render();
 	}
 }
