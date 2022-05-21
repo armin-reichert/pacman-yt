@@ -39,10 +39,7 @@ import de.amr.yt.pacman.model.Ghost;
 public class GhostValueAnimation extends Animation<BufferedImage> {
 
 	static final Map<Integer, BufferedImage> sprites = Map.of( //
-			200, s(0, 8), //
-			400, s(1, 8), //
-			800, s(2, 8), //
-			1600, s(3, 8));
+			200, s(0, 8), 400, s(1, 8), 800, s(2, 8), 1600, s(3, 8));
 
 	private final Ghost ghost;
 
