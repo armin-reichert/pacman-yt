@@ -85,18 +85,10 @@ public class Renderer {
 	}
 
 	public static void drawGhost(Graphics2D g, Ghost ghost) {
-		if (ghost.valueTimer > 0) {
-			drawGuy(g, ghost, Sprites.get().ghostValues.get(ghost.value));
-		} else {
-			drawGuy(g, ghost, ghost.animation().sprite());
-		}
+		drawGuy(g, ghost, ghost.animation().sprite());
 	}
 
-	public static void drawGhostValue(Graphics2D g, Ghost ghost, int value) {
-		drawGuy(g, ghost, Sprites.get().ghostValues.get(value));
-	}
-
-	private static void drawGuy(Graphics2D g, Creature guy, Object spriteObject) {
+	public static void drawGuy(Graphics2D g, Creature guy, Object spriteObject) {
 		BufferedImage sprite = (BufferedImage) spriteObject;
 		if (guy.visible && sprite != null) {
 			int x = (int) guy.x - sprite.getWidth() / 2;

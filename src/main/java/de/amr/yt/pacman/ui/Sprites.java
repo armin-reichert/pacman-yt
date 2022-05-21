@@ -49,7 +49,6 @@ public class Sprites {
 	public BufferedImage sheetImage;
 
 	// sprite caches
-	public Map<Integer, BufferedImage> ghostValues;
 	public List<BufferedImage> bonusSymbols;
 	public Map<Integer, BufferedImage> bonusValues;
 	public BufferedImage liveCount;
@@ -83,12 +82,6 @@ public class Sprites {
 		try {
 			sheetImage = image("/sprites.png");
 			mazeImage = image("/maze_empty.png");
-
-			ghostValues = Map.of( //
-					200, s(0, 8), //
-					400, s(1, 8), //
-					800, s(2, 8), //
-					1600, s(3, 8));
 
 			bonusSymbols = stripe(2, 3, 7);
 

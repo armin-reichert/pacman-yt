@@ -28,7 +28,6 @@ import static de.amr.yt.pacman.lib.GameClock.sec;
 import static de.amr.yt.pacman.lib.Logging.log;
 import static de.amr.yt.pacman.model.World.t;
 import static de.amr.yt.pacman.ui.Renderer.drawGhost;
-import static de.amr.yt.pacman.ui.Renderer.drawGhostValue;
 import static de.amr.yt.pacman.ui.Renderer.drawPacMan;
 import static de.amr.yt.pacman.ui.Renderer.drawPellet;
 import static de.amr.yt.pacman.ui.Renderer.drawPowerPellet;
@@ -56,7 +55,6 @@ public class IntroScene implements GameScene {
 
 	private static final String[] GHOST_CHARACTERS = { "SHADOW", "SPEEDY", "BASHFUL", "POKEY" };
 	private static final String[] GHOST_NICKNAMES = { "BLINKY", "PINKY", "INKY", "CLYDE" };
-	private static final int[] GHOST_VALUES = { 200, 400, 800, 1600 };
 
 	private static final int COL_LEFT = t(3), COL_MIDDLE = t(6), COL_RIGHT = t(17);
 
@@ -127,6 +125,13 @@ public class IntroScene implements GameScene {
 			ghost.y = game.pacMan.y;
 			ghost.speed = game.pacMan.speed * 1.05f;
 			ghost.moveDir = Direction.LEFT;
+			ghost.value = switch (ghost.id) {
+			case Ghost.BLINKY -> 200;
+			case Ghost.PINKY -> 400;
+			case Ghost.INKY -> 800;
+			case Ghost.CLYDE -> 1600;
+			default -> 0;
+			};
 			ghost.showWalking();
 			ghost.animation().setEnabled(true);
 		}
@@ -210,10 +215,11 @@ public class IntroScene implements GameScene {
 
 	private void drawPacManChasingGhosts(Graphics2D g) {
 		for (var ghost : game.ghosts) {
-			if (ghost.id > ghostEaten) {
+			if (ghost.id == ghostEaten) {
+				ghost.showValue();
+			}
+			if (ghost.id >= ghostEaten) {
 				drawGhost(g, ghost);
-			} else if (ghost.id == ghostEaten) {
-				drawGhostValue(g, ghost, GHOST_VALUES[ghost.id]);
 			}
 		}
 		drawPacMan(g, game.pacMan);

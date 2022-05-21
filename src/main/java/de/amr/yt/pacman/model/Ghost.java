@@ -46,7 +46,7 @@ public class Ghost extends Creature {
 	public final int id;
 	public final GameModel game;
 
-	public Animation<?> animWalking, animFrightened, animBlinking, animDead;
+	public Animation<?> animWalking, animFrightened, animBlinking, animDead, animValue;
 
 	public GhostState state;
 	/** Elroy state: 0=off, 1=Elroy1, 2=Elroy2, -1=Elroy1 disabled, -2=Elroy2 disabled */
@@ -72,6 +72,10 @@ public class Ghost extends Creature {
 
 	public void showBlinking() {
 		setAnimation(animBlinking);
+	}
+
+	public void showValue() {
+		setAnimation(animValue);
 	}
 
 	public void showDead() {
@@ -127,7 +131,11 @@ public class Ghost extends Creature {
 		}
 		case EATEN -> {
 			returnToGhostHouse(world.houseEntry);
-			showDead();
+			if (valueTimer > 0) {
+				showValue();
+			} else {
+				showDead();
+			}
 		}
 		}
 		animation().tick();
