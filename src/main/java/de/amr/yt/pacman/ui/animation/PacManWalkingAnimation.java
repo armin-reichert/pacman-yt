@@ -33,24 +33,28 @@ import java.awt.image.BufferedImage;
 import java.util.EnumMap;
 import java.util.List;
 
+import de.amr.yt.pacman.lib.Animation;
 import de.amr.yt.pacman.lib.Direction;
 import de.amr.yt.pacman.model.PacMan;
 import de.amr.yt.pacman.ui.Sprites;
 
-public class PacManWalkingAnimation extends SpriteAnimation {
+public class PacManWalkingAnimation extends Animation<BufferedImage> {
 
-	private final List<Integer> frames = List.of(1, 0, 1, 2);
-	private final EnumMap<Direction, List<BufferedImage>> sprites = new EnumMap<>(Direction.class);
+	static final List<Integer> frames = List.of(1, 0, 1, 2);
+	static final EnumMap<Direction, List<BufferedImage>> sprites = new EnumMap<>(Direction.class);
 
-	private final PacMan pacMan;
-
-	public PacManWalkingAnimation(PacMan pacMan) {
-		this.pacMan = pacMan;
+	static {
 		Sprites spr = Sprites.get();
 		sprites.put(RIGHT, List.of(spr.s(0, 0), spr.s(1, 0), spr.s(2, 0)));
 		sprites.put(LEFT, List.of(spr.s(0, 1), spr.s(1, 1), spr.s(2, 0)));
 		sprites.put(UP, List.of(spr.s(0, 2), spr.s(1, 2), spr.s(2, 0)));
 		sprites.put(DOWN, List.of(spr.s(0, 3), spr.s(1, 3), spr.s(2, 0)));
+	}
+
+	private final PacMan pacMan;
+
+	public PacManWalkingAnimation(PacMan pacMan) {
+		this.pacMan = pacMan;
 		name = "pacman-walking";
 		frameDuration = 2;
 		loop = true;

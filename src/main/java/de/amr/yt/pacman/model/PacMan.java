@@ -31,7 +31,7 @@ import de.amr.yt.pacman.lib.Vector2;
  */
 public class PacMan extends Creature {
 
-	public Animation animStanding, animWalking, animDying;
+	public Animation<?> animStanding, animWalking, animDying;
 
 	public final GameModel game;
 	public PacManState state;

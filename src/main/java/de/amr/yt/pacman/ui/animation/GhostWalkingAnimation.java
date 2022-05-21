@@ -33,6 +33,7 @@ import java.awt.image.BufferedImage;
 import java.util.EnumMap;
 import java.util.List;
 
+import de.amr.yt.pacman.lib.Animation;
 import de.amr.yt.pacman.lib.Direction;
 import de.amr.yt.pacman.model.Ghost;
 import de.amr.yt.pacman.ui.Sprites;
@@ -41,18 +42,11 @@ import de.amr.yt.pacman.ui.Sprites;
  * @author Armin Reichert
  *
  */
-public class GhostWalkingAnimation extends SpriteAnimation {
+public class GhostWalkingAnimation extends Animation<BufferedImage> {
 
-	private final Ghost ghost;
-	private final List<EnumMap<Direction, List<BufferedImage>>> ghostsWalkingSprites;
-	private final List<Integer> frames = List.of(0, 1);
+	static final List<EnumMap<Direction, List<BufferedImage>>> ghostsWalkingSprites;
 
-	public GhostWalkingAnimation(Ghost ghost) {
-		this.ghost = ghost;
-		name = "ghost-walking";
-		frameDuration = 8;
-		loop = true;
-
+	static {
 		Sprites spr = Sprites.get();
 		EnumMap<Direction, List<BufferedImage>> redGhost = new EnumMap<>(Direction.class);
 		redGhost.put(RIGHT, spr.stripe(0, 4, 2));
@@ -81,13 +75,22 @@ public class GhostWalkingAnimation extends SpriteAnimation {
 		ghostsWalkingSprites = List.of(redGhost, pinkGhost, cyanGhost, orangeGhost);
 	}
 
+	private final Ghost ghost;
+
+	public GhostWalkingAnimation(Ghost ghost) {
+		this.ghost = ghost;
+		name = "ghost-walking";
+		frameDuration = 8;
+		loop = true;
+	}
+
 	@Override
 	public int numFrames() {
-		return frames.size();
+		return 2;
 	}
 
 	@Override
 	public BufferedImage sprite() {
-		return ghostsWalkingSprites.get(ghost.id).get(ghost.moveDir).get(frames.get(frameIndex));
+		return ghostsWalkingSprites.get(ghost.id).get(ghost.moveDir).get(frameIndex);
 	}
 }

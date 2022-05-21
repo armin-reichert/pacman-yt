@@ -27,14 +27,15 @@ package de.amr.yt.pacman.ui.animation;
 import java.awt.image.BufferedImage;
 import java.util.List;
 
+import de.amr.yt.pacman.lib.Animation;
 import de.amr.yt.pacman.ui.Sprites;
 
 /**
  * @author Armin Reichert
  */
-public class PacManDyingAnimation extends SpriteAnimation {
+public class PacManDyingAnimation extends Animation<BufferedImage> {
 
-	private final List<BufferedImage> sprites = Sprites.get().stripe(3, 0, 11);
+	static final List<BufferedImage> sprites = Sprites.get().stripe(3, 0, 11);
 
 	public PacManDyingAnimation() {
 		name = "pacman-dying";

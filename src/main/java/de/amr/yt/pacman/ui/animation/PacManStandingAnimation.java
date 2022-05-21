@@ -25,31 +25,28 @@ SOFTWARE.
 package de.amr.yt.pacman.ui.animation;
 
 import java.awt.image.BufferedImage;
-import java.util.List;
 
+import de.amr.yt.pacman.lib.Animation;
 import de.amr.yt.pacman.ui.Sprites;
 
 /**
  * @author Armin Reichert
  */
-public class PacManStandingAnimation extends SpriteAnimation {
+public class PacManStandingAnimation extends Animation<BufferedImage> {
 
-	private final List<Integer> frames = List.of(0);
-	private final List<BufferedImage> sprites = List.of(Sprites.get().s(2, 0));
+	static final BufferedImage sprite = Sprites.get().s(2, 0);
 
 	public PacManStandingAnimation() {
 		name = "pacman-standing";
-		frameDuration = 1;
-		loop = false;
 	}
 
 	@Override
 	public int numFrames() {
-		return frames.size();
+		return 1;
 	}
 
 	@Override
 	public BufferedImage sprite() {
-		return sprites.get(frames.get(frameIndex));
+		return sprite;
 	}
 }

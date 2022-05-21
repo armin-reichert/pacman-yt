@@ -35,7 +35,6 @@ import de.amr.yt.pacman.model.Creature;
 import de.amr.yt.pacman.model.Ghost;
 import de.amr.yt.pacman.model.PacMan;
 import de.amr.yt.pacman.model.World;
-import de.amr.yt.pacman.ui.animation.SpriteAnimation;
 
 /**
  * @author Armin Reichert
@@ -78,7 +77,7 @@ public class Renderer {
 	}
 
 	public static void drawPacMan(Graphics2D g, PacMan pacMan) {
-		drawGuy(g, pacMan, ((SpriteAnimation) pacMan.animation()).sprite());
+		drawGuy(g, pacMan, pacMan.animation().sprite());
 	}
 
 	public static Color ghostColor(int id) {
@@ -89,7 +88,7 @@ public class Renderer {
 		if (ghost.valueTimer > 0) {
 			drawGuy(g, ghost, Sprites.get().ghostValues.get(ghost.value));
 		} else {
-			drawGuy(g, ghost, ((SpriteAnimation) ghost.animation()).sprite());
+			drawGuy(g, ghost, ghost.animation().sprite());
 		}
 	}
 
@@ -97,7 +96,8 @@ public class Renderer {
 		drawGuy(g, ghost, Sprites.get().ghostValues.get(value));
 	}
 
-	private static void drawGuy(Graphics2D g, Creature guy, BufferedImage sprite) {
+	private static void drawGuy(Graphics2D g, Creature guy, Object spriteObject) {
+		BufferedImage sprite = (BufferedImage) spriteObject;
 		if (guy.visible && sprite != null) {
 			int x = (int) guy.x - sprite.getWidth() / 2;
 			int y = (int) guy.y - sprite.getHeight() / 2;

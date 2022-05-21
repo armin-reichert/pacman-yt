@@ -26,7 +26,7 @@ package de.amr.yt.pacman.lib;
 /**
  * @author Armin Reichert
  */
-public abstract class Animation {
+public abstract class Animation<T> {
 
 	/**
 	 * Returns an animation frame for the given time (tick).
@@ -54,13 +54,21 @@ public abstract class Animation {
 	}
 
 	protected String name;
-	protected boolean loop = false;
-	protected boolean enabled = true;;
+	protected boolean loop;
+	protected boolean enabled;
 	protected int frameIndex;
 	protected int tickIndex;
-	protected int frameDuration = 1;
+	protected int frameDuration;
+
+	public Animation() {
+		loop = false;
+		enabled = true;
+		frameDuration = 1;
+	}
 
 	public abstract int numFrames();
+
+	public abstract T sprite();
 
 	@Override
 	public String toString() {

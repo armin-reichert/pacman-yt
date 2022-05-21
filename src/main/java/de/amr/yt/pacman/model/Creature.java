@@ -56,7 +56,7 @@ public abstract class Creature {
 	public Direction moveDir;
 	public Direction wishDir;
 
-	private Animation animation;
+	private Animation<?> animation;
 
 	protected Creature(World world) {
 		this.world = world;
@@ -72,11 +72,11 @@ public abstract class Creature {
 		wishDir = Direction.LEFT;
 	}
 
-	public Animation animation() {
+	public Animation<?> animation() {
 		return animation;
 	}
 
-	protected void setAnimation(Animation animation) {
+	protected void setAnimation(Animation<?> animation) {
 		if (this.animation != animation) {
 			this.animation = animation;
 			animation.reset();
