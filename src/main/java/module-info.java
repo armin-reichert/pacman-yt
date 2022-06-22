@@ -8,4 +8,5 @@ module de.amr.yt.pacman {
 	exports de.amr.yt.pacman.ui.scene;
 
 	requires transitive java.desktop;
+	requires org.apache.logging.log4j;
 }

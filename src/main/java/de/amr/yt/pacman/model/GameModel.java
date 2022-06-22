@@ -24,12 +24,14 @@ SOFTWARE.
 package de.amr.yt.pacman.model;
 
 import static de.amr.yt.pacman.lib.GameClock.sec;
-import static de.amr.yt.pacman.lib.Logging.log;
 import static de.amr.yt.pacman.lib.Vector2.v;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import de.amr.yt.pacman.lib.Direction;
 import de.amr.yt.pacman.lib.GameClock;
@@ -37,11 +39,11 @@ import de.amr.yt.pacman.lib.Sounds;
 import de.amr.yt.pacman.lib.Vector2;
 
 /**
- * TODO: should not have dependency to controller package
- *
  * @author Armin Reichert
  */
 public class GameModel {
+
+	private static final Logger logger = LogManager.getFormatterLogger();
 
 	/** Speed in pixels/tick at 100%. */
 	public static final float BASE_SPEED = 1.25f;
@@ -125,7 +127,7 @@ public class GameModel {
 			levelCounter.remove(0);
 		}
 
-		log("Game level %d created", level.number);
+		logger.info("Game level %d created", level.number);
 	}
 
 	public synchronized void reset() {
@@ -210,7 +212,7 @@ public class GameModel {
 			}
 			chasingPhase = false;
 		}
-		log("Scatter phase %d started at %s", phase + 1, GameClock.get());
+		logger.info("Scatter phase %d started at %s", phase + 1, GameClock.get());
 	}
 
 	private void startChasingPhase(int phase) {
@@ -221,7 +223,7 @@ public class GameModel {
 			}
 			chasingPhase = true;
 		}
-		log("Chasing phase %d started at %s", phase + 1, GameClock.get());
+		logger.info("Chasing phase %d started at %s", phase + 1, GameClock.get());
 	}
 
 	public void onPacPowerEnding() {
@@ -260,7 +262,7 @@ public class GameModel {
 					ghost.reverseDirection = true;
 				}
 			}
-			log("Pac-Man gets power for %d ticks", pacMan.powerCountdown);
+			logger.info("Pac-Man gets power for %d ticks", pacMan.powerCountdown);
 			return true;
 		}
 		return false;
