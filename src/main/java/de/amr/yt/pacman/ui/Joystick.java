@@ -60,6 +60,9 @@ public class Joystick extends KeyAdapter {
 			if (state == null)
 				state = Direction.RIGHT;
 		}
+		default -> {
+			// ignore
+		}
 		}
 	}
 
@@ -81,6 +84,9 @@ public class Joystick extends KeyAdapter {
 		case KeyEvent.VK_RIGHT -> {
 			if (state == Direction.RIGHT)
 				state = null;
+		}
+		default -> {
+			// ignore
 		}
 		}
 	}

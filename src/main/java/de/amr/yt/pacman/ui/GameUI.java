@@ -163,6 +163,9 @@ public class GameUI {
 		case KeyEvent.VK_S -> game.pacSafe = !game.pacSafe;
 		case KeyEvent.VK_PLUS -> GameClock.get().changeFrequency(5);
 		case KeyEvent.VK_MINUS -> GameClock.get().changeFrequency(-5);
+		default -> {
+			// ignore
+		}
 		}
 		// dispatch to current scene
 		currentScene().onKeyPressed(key);

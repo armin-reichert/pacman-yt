@@ -128,6 +128,7 @@ public class Ghost extends Creature {
 				selectAnimation(AnimationKey.DEAD);
 			}
 		}
+		default -> throw new IllegalArgumentException("Unexpected value: " + state);
 		}
 		animations.selected().tick();
 	}

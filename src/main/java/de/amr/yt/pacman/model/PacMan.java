@@ -92,6 +92,7 @@ public class PacMan extends Creature {
 		case DYING -> {
 			selectAnimation(AnimationKey.DYING);
 		}
+		default -> throw new IllegalArgumentException("Unexpected value: " + state);
 		}
 		animations.selected().tick();
 	}
