@@ -75,6 +75,8 @@ public class PlayScene implements GameScene {
 		switch (key) {
 		case KeyEvent.VK_T -> showTargetTiles = !showTargetTiles;
 		case KeyEvent.VK_SPACE -> gameController.step();
+		default -> {
+		}
 		}
 	}
 

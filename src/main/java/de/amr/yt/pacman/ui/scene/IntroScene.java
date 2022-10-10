@@ -96,6 +96,8 @@ public class IntroScene implements GameScene {
 				gameController.enterState(GameState.LEVEL_STARTING);
 			}
 		}
+		default -> {
+		}
 		}
 	}
 
